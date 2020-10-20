@@ -10,9 +10,11 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
         aliases = {"radio"}
 )
 public class MusicHelp implements Command {
-
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+        // Check for no arguments
+        if (arguments.length != 0) return;
+        // Run command
         event.getChannel().sendMessage(new CommandEmbeds().music(event.getGuild(), event.getAuthor().getEffectiveAvatarUrl()).build()).queue();
     }
 }

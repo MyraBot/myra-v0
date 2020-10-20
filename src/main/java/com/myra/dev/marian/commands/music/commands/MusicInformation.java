@@ -17,6 +17,9 @@ import java.util.concurrent.TimeUnit;
 public class MusicInformation implements Command {
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+        // Check for no arguments
+        if (arguments.length != 0) return;
+
         AudioPlayer player = PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player;
         //the bot isn´t connected to any voice channel
         if (!event.getGuild().getAudioManager().isConnected()) {

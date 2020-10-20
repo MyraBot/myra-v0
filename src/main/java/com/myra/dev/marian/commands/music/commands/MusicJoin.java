@@ -11,6 +11,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 public class MusicJoin implements Command {
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+        // Check for no arguments
+        if (arguments.length != 0) return;
         //already joined voice call
         if (event.getGuild().getAudioManager().isConnected()) {
             Manager.getUtilities().error(

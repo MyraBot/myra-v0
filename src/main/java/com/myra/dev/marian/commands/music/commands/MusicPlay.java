@@ -31,6 +31,8 @@ public class MusicPlay extends Events implements Command {
 
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+        // Check for no arguments
+        if (arguments.length != 0) return;
         //split message
         String[] sentMessage = event.getMessage().getContentRaw().split("\\s+", 2);
         //command usage

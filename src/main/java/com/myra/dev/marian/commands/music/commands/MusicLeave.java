@@ -12,6 +12,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 public class MusicLeave implements Command {
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+        // Check for no arguments
+        if (arguments.length != 0) return;
         //not connected to a voice channel
         if (!event.getGuild().getAudioManager().isConnected()) {
             Manager.getUtilities().error(event.getChannel(),
