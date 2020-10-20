@@ -9,7 +9,6 @@ public class AutoroleAssign extends Events {
 
     public void onGuildMemberJoin(GuildMemberJoinEvent event) throws Exception {
         Database db = new Database(event.getGuild());
-
         //if feature is disabled
         if (!db.getListenerManager().check("autoRole")) return;
         //get role

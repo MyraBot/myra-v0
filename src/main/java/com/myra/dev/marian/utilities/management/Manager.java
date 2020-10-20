@@ -29,6 +29,8 @@ import com.myra.dev.marian.commands.music.commands.*;
 import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.MongoDbUpdate;
 import com.myra.dev.marian.database.allMethods.Database;
+import com.myra.dev.marian.listeners.autorole.AutoRoleSet;
+import com.myra.dev.marian.listeners.autorole.AutoroleToggle;
 import com.myra.dev.marian.listeners.leveling.Leveling;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.commands.CommandService;
@@ -121,7 +123,10 @@ public class Manager {
                 new MusicQueue(),
                 new MusicSkip(),
                 new MusicClearQueue(),
-                new MusicController()
+                new MusicController(),
+                //autorole
+                new AutoRoleSet(),
+                new AutoroleToggle()
         );
         LISTENER_SERVICE.register(
                 new Someone()

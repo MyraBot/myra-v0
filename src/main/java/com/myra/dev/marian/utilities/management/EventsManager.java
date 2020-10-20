@@ -13,6 +13,7 @@ import com.myra.dev.marian.commands.music.commands.MusicController;
 import com.myra.dev.marian.commands.music.commands.MusicPlay;
 import com.myra.dev.marian.database.MongoDbUpdate;
 import com.myra.dev.marian.database.Prefix;
+import com.myra.dev.marian.listeners.autorole.AutoroleAssign;
 import com.myra.dev.marian.listeners.notification.Notification;
 import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessage;
 import com.myra.dev.marian.listeners.welcome.welcomeImage.WelcomeImage;
@@ -103,6 +104,9 @@ public class EventsManager extends ListenerAdapter {
             new WelcomeImage().memberJoined(event);
             //welcome direct message
             new WelcomeDirectMessage().memberJoined(event);
+
+            // Autorole
+            new AutoroleAssign().onGuildMemberJoin(event);
         } catch (Exception e) {
             e.printStackTrace();
         }

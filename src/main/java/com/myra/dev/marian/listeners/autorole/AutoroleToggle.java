@@ -14,10 +14,13 @@ public class AutoroleToggle implements Command {
 
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
-        Database db = new Database(event.getGuild());
+        // Check for no arguments
+        if (arguments.length != 0) return;
         //missing permissions
         if (!event.getMember().hasPermission(Permission.ADMINISTRATOR)) return;
-        //toggle listener
+        // Get database
+        Database db = new Database(event.getGuild());
+        // Toggle listener
         db.getListenerManager().toggle("autoRole", "\u2709\uFE0F", event);
     }
 }
