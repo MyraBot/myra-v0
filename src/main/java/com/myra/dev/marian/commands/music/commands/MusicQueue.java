@@ -20,6 +20,8 @@ public class MusicQueue implements Command {
 
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+        // Check for no arguments
+        if (arguments.length != 0) return;
         //not connected to a voice channel
         if (!event.getGuild().getAudioManager().isConnected()) {
             Manager.getUtilities().error(
@@ -40,6 +42,7 @@ public class MusicQueue implements Command {
                     event.getAuthor().getEffectiveAvatarUrl());
             return;
         }
+        // Get queue
         BlockingQueue<AudioTrack> queue = PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).scheduler.getQueue();
         int trackCount = Math.min(queue.size(), 20);
         List<AudioTrack> tracks = new ArrayList<>(queue);
@@ -52,7 +55,7 @@ public class MusicQueue implements Command {
                 .setAuthor("queue", null, event.getAuthor().getEffectiveAvatarUrl())
                 .setColor(Manager.getUtilities().blue)
                 .addField("\uD83D\uDCC3 │ queued songs", songs, false)
-                .addField("total songs", Integer.toString(queue.size()), false);
+                .addField("\uD83D\uDCDA │ total songs", Integer.toString(queue.size()), false);
         event.getChannel().sendMessage(queuedSongs.build()).queue();
     }
 }
