@@ -18,6 +18,8 @@ import java.util.List;
 public class Clear implements Command {
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+        // If amount isn't a number
+        if (!arguments[0].matches("\\d+")) return;
         // Missing permissions
         if (!Permissions.isModerator(event.getMember())) return;
         // Get utilities

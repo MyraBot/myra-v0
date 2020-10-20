@@ -26,9 +26,9 @@ public class AutoRoleSet implements Command {
         //command usage
         if (arguments.length != 1) {
             EmbedBuilder usage = new EmbedBuilder()
-                    .setAuthor("│ auto role", null, event.getAuthor().getEffectiveAvatarUrl())
+                    .setAuthor("auto role", null, event.getAuthor().getEffectiveAvatarUrl())
                     .setColor(utilities.gray)
-                    .addField("`" + Prefix.getPrefix(event.getGuild()) + "autorole @role`", "\uD83D\uDCDD │ Give a new joined member automatic a certain role", true);
+                    .addField("`" + Prefix.getPrefix(event.getGuild()) + "autorole <role>`", "\uD83D\uDCDD │ Give a new joined member automatic a certain role", true);
             event.getChannel().sendMessage(usage.build()).queue();
             return;
         }

@@ -39,7 +39,7 @@ public class Unban implements Command {
         //get utilities
         Utilities utilities = Manager.getUtilities();
         //get user
-        User user = utilities.getModifiedUser(event, arguments[0], "unban", "\uD83D\uDD13");
+        User user = utilities.getUser(event, arguments[0], "unban", "\uD83D\uDD13");
         if (user == null) return;
         //user isn´t banned
         if (event.getGuild().getMember(user) != null) {

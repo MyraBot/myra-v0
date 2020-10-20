@@ -233,7 +233,7 @@ public class Utilities {
         }
         // If user is given by id
         if (user == null && userRaw.matches("\\d+")) {
-            user = jda.getUserByTag(userRaw);
+            user = jda.getUserById(userRaw);
         }
         // If no user is given
         if (user == null) {
