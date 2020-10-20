@@ -1,16 +1,18 @@
 package com.myra.dev.marian.commands.music.Music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
 import com.sedmelluq.discord.lavaplayer.track.playback.MutableAudioFrame;
 import net.dv8tion.jda.api.audio.AudioSendHandler;
 
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 
 public class AudioPlayerSendHandler implements AudioSendHandler {
     private final AudioPlayer audioPlayer;
     private final ByteBuffer buffer;
     private final MutableAudioFrame frame;
+
+    private AudioFrame lastFrame;
 
     /**
      * @param audioPlayer Audio player to wrap.
@@ -24,15 +26,13 @@ public class AudioPlayerSendHandler implements AudioSendHandler {
 
     @Override
     public boolean canProvide() {
-        // returns true if audio was provided
-        return audioPlayer.provide(frame);
+        lastFrame = audioPlayer.provide();
+        return lastFrame != null;
     }
 
     @Override
     public ByteBuffer provide20MsAudio() {
-        // flip to make it a read buffer
-        ((Buffer) buffer).flip();
-        return buffer;
+        return ByteBuffer.wrap(lastFrame.getData());
     }
 
     @Override

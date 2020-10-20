@@ -48,12 +48,11 @@ public class MessageReaction extends Events {
         message.clearReactions().queue();
     }
     public static boolean check(GuildMessageReactionAddEvent event, String command) {
-        //if reaction was added on the wrong message return
+        // If reaction was added on the wrong message return
         if (MessageReaction.hashMap.get(command) == null) return false;
         if (!Arrays.stream(MessageReaction.hashMap.get(command).toArray()).anyMatch(event.getMessageId()::equals) || event.getUser().isBot())
             return false;
-
-        //remove id from hashmap
+        // Remove id from hashmap
         MessageReaction.hashMap.get(command).remove(event.getMessageId());
         return true;
     }

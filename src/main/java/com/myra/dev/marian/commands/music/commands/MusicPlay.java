@@ -7,123 +7,127 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.YouTubeRequestInitializer;
 import com.google.api.services.youtube.model.SearchResult;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
-import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.commands.music.Music.PlayerManager;
 import com.myra.dev.marian.database.Prefix;
-import com.myra.dev.marian.utilities.management.Events;
 import com.myra.dev.marian.utilities.MessageReaction;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.utilities.management.Events;
+import com.myra.dev.marian.utilities.management.Manager;
+import com.myra.dev.marian.utilities.management.commands.Command;
+import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+
 @CommandSubscribe(
         name = "play"
 )
 public class MusicPlay extends Events implements Command {
-    private YouTube youtube;
-    static List<SearchResult> results;
+    private static HashMap<String, List<SearchResult>> results = new HashMap<>();
 
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
-        // Check for no arguments
-        if (arguments.length != 0) return;
-        //split message
-        String[] sentMessage = event.getMessage().getContentRaw().split("\\s+", 2);
+        // Get utilities
+        Utilities utilities = Manager.getUtilities();
         //command usage
-        if (sentMessage.length == 1) {
+        if (arguments.length == 0) {
             EmbedBuilder usage = new EmbedBuilder()
-                    .setAuthor("│ add song", null, event.getAuthor().getEffectiveAvatarUrl())
+                    .setAuthor("play", null, event.getAuthor().getEffectiveAvatarUrl())
                     .setColor(Manager.getUtilities().gray)
                     .addField("`" + Prefix.getPrefix(event.getGuild()) + "play <song>`", "\uD83D\uDCBF │ add a song to the queue*", false)
                     .setFooter("supported platforms: YoutTube, SoundCloud, Bandcamp, Vimeo, Twitch streams");
             event.getChannel().sendMessage(usage.build()).queue();
             return;
         }
-        //add song from url
-        if (sentMessage[1].startsWith("https://")) {
-            //delete messages
+        // Get song
+        String song = utilities.getString(arguments);
+        // If song is url
+        try {
+            new URL(song).toURI();
+            // Delete message
             event.getMessage().delete().queue();
-            //play song
-            PlayerManager.getInstance().loadAndPlay(event.getChannel(), sentMessage[1], event.getAuthor().getEffectiveAvatarUrl(), null);
-            PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player.setVolume(25);
+            // Play song
+            PlayerManager.getInstance().loadAndPlay(event.getChannel(), song, event.getAuthor().getEffectiveAvatarUrl(), null);
         }
-        //connect to YouTube
-        youtube = new YouTube.Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance(), new HttpRequestInitializer() {
-            public void initialize(HttpRequest request) throws IOException {
-            }
-        }).setApplicationName("Myra").setYouTubeRequestInitializer(new YouTubeRequestInitializer(Manager.getUtilities().youTubeKey)).build();
-        //search YouTube
-        if (!sentMessage[1].startsWith("https://")) {
-            YouTube.Search.List search = youtube.search().list("id,snippet");
-            //search keyword eg. "Sean Paul - She Doesn't Mind"
-            search.setQ(sentMessage[1]);
-            //return only video type data
-            search.setType("video");
-            // number of video data new Return(). maximum is 50
-            search.setMaxResults(5L);
-            search.setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url)");
-            //save results in variable
-            results = search.execute().getItems();
-            //nothing found
+        // If song is given by name
+        catch (Exception e) {
+            // Connect to YouTube
+            YouTube youTube = new YouTube.Builder(
+                    GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance(), new HttpRequestInitializer() {
+                public void initialize(HttpRequest request) throws IOException {
+                }
+            }).setApplicationName("Myra").setYouTubeRequestInitializer(new YouTubeRequestInitializer(utilities.youTubeKey)).build();
+
+            YouTube.Search.List search = youTube.search().list("id,snippet")
+                    //Search for keyword
+                    .setQ(song)
+                    // Return only videos
+                    .setType("video")
+                    // Number of returned videos (maximum is 50)
+                    .setMaxResults(5L)
+                    .setFields("items(id/kind,id/videoId,snippet/title,snippet/thumbnails/default/url)");
+            // Save results in variable
+            List<SearchResult> searchResults = search.execute().getItems();
+            // Nothing found
             if (results == null) {
-                Manager.getUtilities().error(
+                utilities.error(
                         event.getChannel(),
                         "play", "\uD83D\uDCBF",
                         "No results",
-                        "YouTube could not find **" + sentMessage[1] + "**",
+                        "YouTube could not find **" + song + "**",
                         event.getAuthor().getEffectiveAvatarUrl());
                 return;
             }
-            //choose song
-            if (!results.isEmpty()) {
-                EmbedBuilder songs = new EmbedBuilder()
-                        .setAuthor("choose a song", null, event.getAuthor().getEffectiveAvatarUrl())
-                        .setColor(Manager.getUtilities().blue)
-                        .addField("\uD83D\uDD0D │ track 1\uFE0F\u20E3", results.get(0).getSnippet().getTitle(), false)
-                        .addField("\uD83D\uDD0D │ track 2\uFE0F\u20E3", results.get(1).getSnippet().getTitle(), false)
-                        .addField("\uD83D\uDD0D │track 3\uFE0F\u20E3", results.get(2).getSnippet().getTitle(), false)
-                        .addField("\uD83D\uDD0D │track 4\uFE0F\u20E3", results.get(3).getSnippet().getTitle(), false)
-                        .addField("\uD83D\uDD0D │ track 5\uFE0F\u20E3", results.get(4).getSnippet().getTitle(), false);
-                Message message = event.getChannel().sendMessage(songs.build()).complete();
-                //add reactions
-                message.addReaction("1\uFE0F\u20E3").queue();
-                message.addReaction("2\uFE0F\u20E3").queue();
-                message.addReaction("3\uFE0F\u20E3").queue();
-                message.addReaction("4\uFE0F\u20E3").queue();
-                message.addReaction("5\uFE0F\u20E3").queue();
+            // Song menu
+            EmbedBuilder songs = new EmbedBuilder()
+                    .setAuthor("choose a song", null, event.getAuthor().getEffectiveAvatarUrl())
+                    .setColor(Manager.getUtilities().blue)
+                    .addField("\uD83D\uDD0D │ track 1\uFE0F\u20E3", searchResults.get(0).getSnippet().getTitle(), false)
+                    .addField("\uD83D\uDD0D │ track 2\uFE0F\u20E3", searchResults.get(1).getSnippet().getTitle(), false)
+                    .addField("\uD83D\uDD0D │track 3\uFE0F\u20E3", searchResults.get(2).getSnippet().getTitle(), false)
+                    .addField("\uD83D\uDD0D │track 4\uFE0F\u20E3", searchResults.get(3).getSnippet().getTitle(), false)
+                    .addField("\uD83D\uDD0D │ track 5\uFE0F\u20E3", searchResults.get(4).getSnippet().getTitle(), false);
+            Message message = event.getChannel().sendMessage(songs.build()).complete();
+            // Save results in HashMap
+            results.put(message.getId(), search.execute().getItems());
+            //add reactions
+            message.addReaction("1\uFE0F\u20E3").queue();
+            message.addReaction("2\uFE0F\u20E3").queue();
+            message.addReaction("3\uFE0F\u20E3").queue();
+            message.addReaction("4\uFE0F\u20E3").queue();
+            message.addReaction("5\uFE0F\u20E3").queue();
 
-                message.addReaction("\uD83D\uDEAB").queue();
-                //add to HashMap
-                MessageReaction.add("musicPlay", message.getId(), event.getChannel(), false);
-            }
+            message.addReaction("\uD83D\uDEAB").queue();
+            // Add reaction to HashMap
+            MessageReaction.add("play", message.getId(), event.getChannel(), false);
         }
+        // Set volume
+        PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player.setVolume(25);
     }
 
     //chose song
     @Override
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) throws Exception {
-        //if reaction was added on the wrong message return
-        if (MessageReaction.hashMap.get("musicPlay") == null) return;
-        if (!Arrays.stream(MessageReaction.hashMap.get("musicPlay").toArray()).anyMatch(event.getMessageId()::equals) || event.getUser().isBot())
-            return;
+        // Return if author is bot
+        if (event.getUser().isBot()) return;
+        // Get chosen song
+        SearchResult song = results.get(event.getMessageId()).get(Integer.parseInt(event.getReactionEmote().getEmoji().replace("1️⃣", "0").replace("2️⃣", "1").replace("3️⃣", "2").replace("4️⃣", "3").replace("5️⃣", "4")));
+        if (song == null) return;
+        // Check for right reaction
+        if (!MessageReaction.check(event, "play")) return;
 
-        if (event.getReaction().getReactionEmote().getEmoji().equals("\uD83D\uDEAB")) {
-            event.getChannel().retrieveMessageById(event.getMessageId()).complete().delete().queue();
-            return;
-        }
-
-        //get id of video
-        SearchResult song = results.get(Integer.parseInt(event.getReactionEmote().getEmoji().replace("1️⃣", "0").replace("2️⃣", "1").replace("3️⃣", "2").replace("4️⃣", "3").replace("5️⃣", "4")));
         //get video url
         String videoUrl = "https://www.youtube.com/watch?v=" + song.getId().getVideoId();
         //play song
         PlayerManager.getInstance().loadAndPlay(event.getChannel(), videoUrl, event.getUser().getEffectiveAvatarUrl(), "https://img.youtube.com/vi/" + song.getId().getVideoId() + "/maxresdefault.jpg");
+        // Set volume
         PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player.setVolume(25);
         //delete track selector
         event.getChannel().deleteMessageById(event.getMessageId()).queue();

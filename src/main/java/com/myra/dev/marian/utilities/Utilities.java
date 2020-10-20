@@ -87,8 +87,8 @@ public class Utilities {
         for (String s : array) {
             string += s + " ";
         }
-        // Remove last space
-        //       string = staff.substring(0, string.length() - 1);
+        //Remove last space
+        string = string.substring(0, string.length() - 1);
         return string;
     }
 
