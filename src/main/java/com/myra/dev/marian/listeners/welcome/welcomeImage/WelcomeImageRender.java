@@ -1,0 +1,175 @@
+package com.myra.dev.marian.listeners.welcome.welcomeImage;
+
+import com.myra.dev.marian.database.allMethods.Database;
+import com.myra.dev.marian.utilities.Graphic;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.URL;
+
+public class WelcomeImageRender {
+
+    /**
+     * @param user The user who is greeted.
+     * @param guild The guild the new user joined.
+     * @param channel The channel the greeting will be send.
+     */
+    public void welcomeImage(Guild guild, User user, TextChannel channel) throws Exception {
+        //database
+        Database db = new Database(guild);
+        //get welcome image background
+        BufferedImage background;
+        //if no background is set
+        if (db.getNested("welcome").get("welcomeImageBackground").equals("not set")) {
+            background = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("welcomeImage.png"));
+        }
+        //if guild has a custom background
+        else {
+            background = ImageIO.read(new URL(db.getNested("welcome").get("welcomeImageBackground")));
+        }
+        //get font
+        String font = db.getNested("welcome").get("welcomeImageFont");
+        InputStream inputStream;
+        switch (font) {
+            case "modern":
+                inputStream = this.getClass().getClassLoader().getResourceAsStream("modern.ttf");
+            case    "handwritten":
+                inputStream = this.getClass().getClassLoader().getResourceAsStream("handwritten.ttf");
+            default:
+                inputStream = this.getClass().getClassLoader().getResourceAsStream("default.ttf");
+        }
+        //graphics
+        Graphic graphic = new Graphic();
+        Graphics graphics = background.getGraphics();
+        Graphics2D graphics2D = (Graphics2D) graphics;
+        //enable anti aliasing
+        graphic.enableAntiAliasing(graphics);
+        //choose format
+        if (background.getHeight() > background.getWidth()) {
+            portrait(background, user, graphic, graphics, graphics2D, inputStream);
+        } else {
+            landscape(background, user, graphic, graphics, graphics2D, inputStream);
+        }
+
+        /**
+         * send message
+         */
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        ImageIO.write(background, "png", outStream);
+        channel.sendFile(
+                new ByteArrayInputStream(outStream.toByteArray()),
+                user.getName().toLowerCase() + "_welcome.png"
+        ).queue();
+    }
+
+    private void landscape(BufferedImage background, User user, Graphic graphic, Graphics graphics, Graphics2D graphics2D, InputStream inputStream) throws Exception {
+        //resize avatar
+        BufferedImage avatar = graphic.getAvatar(user.getEffectiveAvatarUrl());
+        avatar = graphic.resizeSquaredImage(avatar, background.getHeight() / 350f);
+        //load font
+        Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+        //draw avatar
+        graphics2D.drawImage(
+                avatar,
+                graphic.imageCenter('x', avatar, background),
+                graphic.imageCenter('y', avatar, background) - background.getHeight() / 4,
+                null);
+        //draw circle around avatar
+        graphics2D.setColor(Color.white);
+        graphics2D.setStroke(new BasicStroke(
+                background.getHeight() / 250f,
+                BasicStroke.CAP_ROUND,
+                BasicStroke.JOIN_ROUND
+        ));
+        graphics2D.drawOval(
+                graphic.imageCenter('x', avatar, background),
+                graphic.imageCenter('y', avatar, background) - background.getHeight() / 4,
+                avatar.getWidth(), avatar.getHeight()
+        );
+        //draw 'welcome'
+        font = font.deriveFont(background.getWidth() / 15f);
+        graphics.setFont(font);
+        //draw 'level'
+        graphics.drawString("welcome",
+                graphic.textCenter('x', "welcome", font, background),
+                graphic.textCenter('y', "welcome", font, background) + background.getHeight() / 5
+        );
+        //draw user name
+
+        //make font size smaller if text is too big
+        FontRenderContext fontRenderContext = new FontRenderContext(new AffineTransform(), true, true);
+        float size = background.getWidth() / 10f;
+
+        while (Math.round(font.getStringBounds(user.getName(), fontRenderContext).getWidth()) > background.getWidth()) {
+            size = size - 1.0F;
+            font = font.deriveFont(size);
+        }
+        //set font
+        graphics.setFont(font);
+        //draw user name
+        graphics.drawString(user.getName(),
+                graphic.textCenter('x', user.getName(), font, background),
+                (int) (graphic.textCenter('y', user.getName(), font, background) + background.getHeight() / 2.25)
+        );
+    }
+
+    private void portrait(BufferedImage background, User user, Graphic graphic, Graphics graphics, Graphics2D graphics2D, InputStream inputStream) throws Exception {
+        //resize avatar
+        BufferedImage avatar = graphic.getAvatar(user.getEffectiveAvatarUrl());
+        avatar = graphic.resizeSquaredImage(avatar, background.getWidth() / 250f);
+        //load font
+        Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+        //draw avatar
+        graphics2D.drawImage(
+                avatar,
+                graphic.imageCenter('x', avatar, background),
+                graphic.imageCenter('y', avatar, background) - background.getHeight() / 3,
+                null);
+        //draw circle around avatar
+        graphics2D.setColor(Color.white);
+        graphics2D.setStroke(new BasicStroke(
+                background.getHeight() / 250f,
+                BasicStroke.CAP_ROUND,
+                BasicStroke.JOIN_ROUND
+        ));
+        graphics2D.drawOval(
+                graphic.imageCenter('x', avatar, background),
+                graphic.imageCenter('y', avatar, background) - background.getHeight() / 3,
+                avatar.getWidth(), avatar.getHeight()
+        );
+        //draw 'welcome'
+        font = font.deriveFont(background.getWidth() / 6f);
+        graphics.setFont(font);
+        //draw 'level'
+        graphics.drawString("welcome",
+                graphic.textCenter('x', "welcome", font, background),
+                graphic.textCenter('y', "welcome", font, background)
+        );
+        //draw user name
+
+        //make font size smaller if text is too big
+        FontRenderContext fontRenderContext = new FontRenderContext(new AffineTransform(), true, true);
+        float size = background.getWidth() / 5f;
+
+        while (Math.round(font.getStringBounds(user.getName(), fontRenderContext).getWidth()) > background.getWidth()) {
+            size = size - 1.0F;
+            font = font.deriveFont(size);
+        }
+        //set font
+        graphics.setFont(font);
+        //draw user name
+        graphics.drawString(user.getName(),
+                graphic.textCenter('x', user.getName(), font, background),
+                (graphic.textCenter('y', user.getName(), font, background) + background.getHeight() / 5)
+        );
+    }
+}

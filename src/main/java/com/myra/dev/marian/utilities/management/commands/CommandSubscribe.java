@@ -1,0 +1,28 @@
+package com.myra.dev.marian.utilities.management.commands;
+
+import java.lang.annotation.*;
+
+/**
+ * This annotation marks an implementation of the {@link Command}.
+ * <p>
+ * So the {@link CommandService} can know if the registered command is really a command.
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@Documented
+public @interface CommandSubscribe {
+
+    /**
+     * Retrieves the name of the command.
+     *
+     * @return The command name.
+     */
+    String name();
+
+    /**
+     * Retrieves all aliases of the command.
+     *
+     * @return The command aliases.
+     */
+    String[] aliases() default "";
+}
