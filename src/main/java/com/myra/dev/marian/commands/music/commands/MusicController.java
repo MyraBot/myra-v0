@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -21,7 +22,7 @@ import java.util.TimerTask;
         name = "music controller"
 )
 public class MusicController extends Events implements Command {
-    private boolean cancelTimer = false;
+    private static HashMap<Message, Boolean> cancelTIMERS;
 
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
@@ -32,12 +33,13 @@ public class MusicController extends Events implements Command {
                 .setColor(Manager.getUtilities().blue)
                 .addField("current playing track", PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player.getPlayingTrack().getInfo().title, false)
                 .setFooter(displayPosition(player));
-
+        Message message = event.getChannel().sendMessage(musicController.build()).complete();
         //updating embed
         Timer update = new Timer();
         Timer cancel = new Timer();
         Timer removeHashMap = new Timer();
-        Message message = event.getChannel().sendMessage(musicController.build()).complete();
+        // Add to HashMap
+        cancelTIMERS.put(message, false);
 
         update.scheduleAtFixedRate(new TimerTask() {
             public void run() {
@@ -68,12 +70,12 @@ public class MusicController extends Events implements Command {
         MessageReaction.add("musicController", message.getId(), event.getChannel(), false);
 
         //cancel timer
-
         cancel.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 if (PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player.getPlayingTrack() == null) {
-                    cancelTimer = true;
+                    // Save boolean value
+                    cancelTIMERS.put(message, true);
 
                     removeHashMap.schedule(new TimerTask() {
                         @Override
@@ -83,15 +85,18 @@ public class MusicController extends Events implements Command {
                                 update.cancel();
                                 cancel.cancel();
                                 removeHashMap.cancel();
+                                cancelTIMERS.remove(message);
                                 System.out.println("removing command from hashmap");
                             }
                         }
                     }, 5 * 1000);
                 }
                 //cancel timers
-                if (cancelTimer) {
+                if (cancelTIMERS.get(message)) {
                     update.cancel();
                     cancel.cancel();
+                    // Remove from HashMap
+                    cancelTIMERS.remove(message);
                 }
             }
         }, 5 * 1000, 5 * 1000);
