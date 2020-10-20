@@ -1,15 +1,15 @@
 package com.myra.dev.marian.commands.music.commands;
 
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
-import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.commands.music.Music.PlayerManager;
 import com.myra.dev.marian.database.Prefix;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.utilities.management.Manager;
+import com.myra.dev.marian.utilities.management.commands.Command;
+import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import java.util.concurrent.TimeUnit;
 @CommandSubscribe(
         name = "music information",
         aliases = {"music info", "track information", "track info", "track", "song", "song information", "song info"}
@@ -19,11 +19,13 @@ public class MusicInformation implements Command {
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
         // Check for no arguments
         if (arguments.length != 0) return;
-
+        // Get audio player
         AudioPlayer player = PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player;
+        // Get utilities
+        Utilities utilities = Manager.getUtilities();
         //the bot isn´t connected to any voice channel
         if (!event.getGuild().getAudioManager().isConnected()) {
-            Manager.getUtilities().error(
+            utilities.error(
                     event.getChannel(),
                     "track information", "\uD83D\uDDD2",
                     "I´m not connected to a voice channel",
@@ -31,9 +33,9 @@ public class MusicInformation implements Command {
                     event.getAuthor().getEffectiveAvatarUrl());
             return;
         }
-        //bot isn´t playing any song
+        //bot isn't playing any song
         if (PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player.getPlayingTrack() == null) {
-            Manager.getUtilities().error(event.getChannel(),
+            utilities.error(event.getChannel(),
                     "track information", "\uD83D\uDDD2",
                     "The player isn`t playing any song",
                     "Use `" + Prefix.getPrefix(event.getGuild()) + "play <song>` to play a song",
@@ -41,19 +43,11 @@ public class MusicInformation implements Command {
             return;
         }
         EmbedBuilder info = new EmbedBuilder()
-                .setAuthor("│ " + player.getPlayingTrack().getInfo().title + " by " + player.getPlayingTrack().getInfo().author, player.getPlayingTrack().getInfo().uri, event.getAuthor().getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().blue)
-                .setDescription(player.isPaused() ? "\u23F8\uFE0F " : "\u23F8\uFE0F " + formatTime(player.getPlayingTrack().getPosition()) + " - " + formatTime(player.getPlayingTrack().getDuration()))
+                .setAuthor(player.getPlayingTrack().getInfo().title + " by " + player.getPlayingTrack().getInfo().author, player.getPlayingTrack().getInfo().uri, event.getAuthor().getEffectiveAvatarUrl())
+                .setColor(utilities.blue)
+                .setDescription(player.isPaused() ? "\u23F8\uFE0F " : "\u23F8\uFE0F " + utilities.formatTime(player.getPlayingTrack().getPosition()) + " - " + utilities.formatTime(player.getPlayingTrack().getDuration()))
                 .setFooter(displayPosition(player));
         event.getChannel().sendMessage(info.build()).queue();
-    }
-
-    private String formatTime(long timeInMillis) {
-        final long hours = timeInMillis / TimeUnit.HOURS.toMillis(1);
-        final long minutes = timeInMillis / TimeUnit.MINUTES.toMillis(1);
-        final long seconds = timeInMillis % TimeUnit.MINUTES.toMillis(1) / TimeUnit.SECONDS.toMillis(1);
-
-        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
     private String displayPosition(AudioPlayer player) {
