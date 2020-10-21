@@ -121,4 +121,36 @@ public class GetMember {
                 guildDocument
         );
     }
+
+    // Get last claimed reward
+    public long getLastClaim() {
+        return memberDocument.getLong("lastClaim");
+    }
+
+    // Update last claimed reward
+    public void updateClaimedReward() {
+        // Replace 'lastClaim'
+        memberDocument.replace("lastClaim", System.currentTimeMillis());
+        // Update guild document
+        mongoDb.getCollection("guilds").findOneAndReplace(
+                mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first(),
+                guildDocument
+        );
+    }
+
+    // Get daily reward streak
+    public int getDailyStreak() {
+        return memberDocument.getInteger("dailyStreak");
+    }
+
+    // Update last claimed reward
+    public void setDailyStreak(int newStreak) {
+        // Replace 'dailyStreak' with new value
+        memberDocument.replace("dailyStreak", newStreak);
+        // Update guild document
+        mongoDb.getCollection("guilds").findOneAndReplace(
+                mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first(),
+                guildDocument
+        );
+    }
 }

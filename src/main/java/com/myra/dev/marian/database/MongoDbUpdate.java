@@ -143,12 +143,7 @@ public class MongoDbUpdate extends Events implements Command {
                 //if member is already in guild document
                 if (members.containsKey(member.getId())) continue;
                 // Create new member document
-                Document memberDocument = new Document()
-                        .append("id", member.getId())
-                        .append("name", member.getUser().getName() + "#" + member.getUser().getDiscriminator())
-                        .append("level", 0)
-                        .append("xp", 0)
-                        .append("invites", 0);
+                Document memberDocument = MongoDbDocuments.member(member);
                 //add new document
                 members.put(member.getId(), memberDocument);
                 //update 'members' Object

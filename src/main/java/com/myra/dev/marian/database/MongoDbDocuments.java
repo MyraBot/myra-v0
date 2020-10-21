@@ -19,20 +19,15 @@ public class MongoDbDocuments {
             MongoCollection<Document> guilds = db.getCollection("guilds");
 
             // Create members Document
-            Document members = new Document();
+            Document membersDocument = new Document();
             //for each member
             for (Member member : guild.getMembers()) {
                 // If member isn't a bot
                 if (!member.getUser().isBot()) {
                     // Create
-                    Document membersDocument = new Document()
-                            .append("id", member.getId())
-                            .append("name", member.getUser().getName() + "#" + member.getUser().getDiscriminator())
-                            .append("balance", 0)
-                            .append("dailyStreak", 0)
-                            .append("lastClaim", System.currentTimeMillis())
-                            .append("invites", 0);
-                    members.append(member.getId(), membersDocument);
+                    Document memberDocument = member(member);
+                    // Add to members
+                    membersDocument.put(member.getId(), memberDocument);
                 }
             }
             // Economy
@@ -102,7 +97,7 @@ public class MongoDbDocuments {
                         .append("guildName", guild.getName())
                         .append("prefix", Main.prefix)
                         .append("economy", economy)
-                        .append("members", members)
+                        .append("members", membersDocument)
                         .append("notificationChannel", "not set")
                         .append("streamers", streamers)
                         .append("suggestionsChannel", "not set")
@@ -126,6 +121,8 @@ public class MongoDbDocuments {
         Document membersDocument = new Document()
                 .append("id", member.getId())
                 .append("name", member.getUser().getName() + "#" + member.getUser().getDiscriminator())
+                .append("level", 0)
+                .append("xp", 0)
                 .append("balance", 0)
                 .append("dailyStreak", 0)
                 .append("lastClaim", System.currentTimeMillis())
