@@ -26,14 +26,34 @@ public class Daily implements Command {
         long lastClaim = member.getLastClaim();
         // Get duration, which passed
         long passedTime = System.currentTimeMillis() - lastClaim;
-        // If 24 hours are passed
-        if (TimeUnit.MILLISECONDS.toHours(passedTime) > 24) {
+        // Get currency
+        String currency = new Database(event.getGuild()).getNested("economy").get("currency");
+        // Missed reward
+        if (TimeUnit.MILLISECONDS.toHours(passedTime) > 48) {
             // Create embed builder
             EmbedBuilder daily = new EmbedBuilder()
                     .setAuthor("daily", null, event.getAuthor().getEffectiveAvatarUrl())
                     .setColor(Manager.getUtilities().getMemberRoleColour(event.getMember()));
-            // Get currency
-            String currency = new Database(event.getGuild()).getNested("economy").get("currency");
+            // Get balance without bonus (With the streak of 1, you can't get a bonus)
+            int balance = 100 + member.getBalance();
+            daily.setDescription("**+" + 100 + "** " + currency + "! Now you have `" + balance + "` " + currency);
+            // Show streak
+            daily.setFooter("streak: 1/14");
+            // Update balance
+            member.setBalance(member.getBalance() + 100);
+            // Update
+            member.updateClaimedReward();
+            // Update streak
+            member.setDailyStreak(1);
+            // Send daily reward
+            event.getChannel().sendMessage(daily.build()).queue();
+        }
+        // If 24 hours are passed
+        else if (TimeUnit.MILLISECONDS.toHours(passedTime) > 24) {
+            // Create embed builder
+            EmbedBuilder daily = new EmbedBuilder()
+                    .setAuthor("daily", null, event.getAuthor().getEffectiveAvatarUrl())
+                    .setColor(Manager.getUtilities().getMemberRoleColour(event.getMember()));
             // Get streak
             int streak = member.getDailyStreak();
             // Update streak if it's not 14 (maximum)
@@ -45,23 +65,28 @@ public class Daily implements Command {
             int dailyReward = streak * 100;
             int balance = dailyReward + member.getBalance();
             daily.setDescription("**+" + dailyReward + "** " + currency + "! Now you have `" + balance + "` " + currency);
-            // Set probability
-            int percent = streak / 100 * 2;
-            Random random = new Random();
-            // If bonus is reached
-            if (random.nextInt() <= percent) {
-                dailyReward = +500;
-                daily.addField("\uD83D\uDCB0 │ bonus", "You got a bonus! Congratulations! **+ 500**", false);
-            }
-            // If bonus isn't reached
-            else {
-                daily.addField("\uD83D\uDCB0 │ bonus", "You could have got a bonus here \uD83D\uDE14, BUT YOU DIDN'T <:lmao:768519476400095262>", false);
+            // If streak isn't one (With a streak of 1, you can't get a bonus)
+            if (streak != 1) {
+                // Set probability
+                int percent = streak / 100 * 2;
+                Random random = new Random();
+                // If bonus is reached
+                if (random.nextInt() <= percent) {
+                    dailyReward = +500;
+                    daily.addField("\uD83D\uDCB0 │ bonus", "You got a bonus! Congratulations! **+ 500**", false);
+                }
+                // If bonus isn't reached
+                else {
+                    daily.addField("\uD83D\uDCB0 │ bonus", "You could have got a bonus here \uD83D\uDE14, BUT YOU DIDN'T <:lmao:768519476400095262>", false);
+                }
             }
             // Show streak
             daily.setFooter("streak: " + streak + "/14");
             // Update balance
             member.setBalance(member.getBalance() + dailyReward);
-            // Update
+            // Update streak
+            member.setDailyStreak(streak);
+            // Update last claim
             member.updateClaimedReward();
             // Send daily reward
             event.getChannel().sendMessage(daily.build()).queue();
