@@ -49,9 +49,9 @@ public class GetCommandManager {
         mongoDb.getCollection("guilds").findOneAndReplace(mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first(), updatedDocument);
         //success information
         if (newValue) {
-            Manager.getUtilities().success(event.getChannel(), "toggle", "\uD83D\uDD11", "`" + command + "` got toggled on", "Members can now use the command `" + command + "` again", event.getAuthor().getEffectiveAvatarUrl(), false, false, null);
+            Manager.getUtilities().success(event.getChannel(), "toggle", "\uD83D\uDD11", "`" + command + "` got toggled on", "Members can now use the command `" + command + "` again", event.getAuthor().getEffectiveAvatarUrl(), false, null);
         } else {
-            Manager.getUtilities().success(event.getChannel(), "toggle", "\uD83D\uDD11", "`" + command + "` got toggled off", "From now on members can no longer use the command `" + command + "`", event.getAuthor().getEffectiveAvatarUrl(), false, false, null);
+            Manager.getUtilities().success(event.getChannel(), "toggle", "\uD83D\uDD11", "`" + command + "` got toggled off", "From now on members can no longer use the command `" + command + "`", event.getAuthor().getEffectiveAvatarUrl(), false, null);
         }
     }
 }

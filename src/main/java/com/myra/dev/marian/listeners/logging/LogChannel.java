@@ -42,7 +42,7 @@ public class LogChannel extends Events {
                 //database
                 db.set("logChannel", "not set");
                 //success
-                Manager.getUtilities().success(event.getChannel(), "log channel", "\uD83E\uDDFE", "Log channel removed", "Log are no longer send in " + channel.getAsMention(), event.getAuthor().getEffectiveAvatarUrl(), false, false, null);
+                Manager.getUtilities().success(event.getChannel(), "log channel", "\uD83E\uDDFE", "Log channel removed", "Log are no longer send in " + channel.getAsMention(), event.getAuthor().getEffectiveAvatarUrl(), false, null);
                 return;
             }
             //Database

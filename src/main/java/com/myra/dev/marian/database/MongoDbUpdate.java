@@ -1,7 +1,6 @@
 package com.myra.dev.marian.database;
 
 import com.myra.dev.marian.utilities.management.Events;
-import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.entities.Guild;
@@ -15,7 +14,6 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
-import javax.print.Doc;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -42,6 +40,7 @@ public class MongoDbUpdate extends Events implements Command {
                 String guildId = doc.getString("guildId");
                 String guildName = doc.getString("guildName");
                 String prefix = doc.getString("prefix");
+                Document economy = (Document) doc.get("economy");
                 List<Document> members = doc.getList("members", Document.class);
                 String notificationChannel = doc.getString("notificationChannel");
                 List<String> streamers = doc.getList("streamers", String.class);
@@ -53,15 +52,21 @@ public class MongoDbUpdate extends Events implements Command {
                 Document commands = (Document) doc.get("commands");
                 Document listeners = (Document) doc.get("listeners");
 
+/*
                 for (Document member : members) {
                     //get id of user
                     String id = member.toString().split("=")[2].split(",")[0];
                     //get member document
                     Document memberDocument = (Document) member.get(id);
-                    //memberDocument.remove("invites");
+                    memberDocument.remove("invites");
+                    memberDocument.append("dailyStreak", 0);
+                    memberDocument.append("lastClaim", System.currentTimeMillis())
+                            .append("invites", 0);
                 }
 
-                /*Document welcomeNested = new Document()
+                Document economy = new Document()
+                        .append("currency", Manager.getUtilities().coin);
+                Document welcomeNested = new Document()
                         .append("welcomeChannel", "not set")
                         .append("welcomeColour", Manager.getUtilities().blue)
                         .append("welcomeImageBackground", "not set")
@@ -93,6 +98,7 @@ public class MongoDbUpdate extends Events implements Command {
                 Document guildDoc = new Document("guildId", guildId)
                         .append("guildName", guildName)
                         .append("prefix", prefix)
+                        .append("economy", economy)
                         .append("members", members)
                         .append("notificationChannel", notificationChannel)
                         .append("streamers", streamers)
@@ -130,21 +136,18 @@ public class MongoDbUpdate extends Events implements Command {
                 //check if member is a bot
                 if (member.getUser().isBot()) continue;
                 //get current document
-                List<Document> members = mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first().getList("members", Document.class);
+                Document members = (Document) mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first().get("members");
                 //if member is already in guild document
-                if (members.toString().contains(member.getId())) continue;
-                //create new Member document
-                Document memberDocument = new Document(
-                        member.getId(),
-                        new Document()
-                                .append("id", member.getId())
-                                .append("name", member.getUser().getName() + "#" + member.getUser().getDiscriminator())
-                                .append("level", 0)
-                                .append("xp", 0)
-                                .append("invites", 0)
-                );
+                if (members.containsKey(member.getId())) continue;
+                // Create new member document
+                Document memberDocument = new Document()
+                        .append("id", member.getId())
+                        .append("name", member.getUser().getName() + "#" + member.getUser().getDiscriminator())
+                        .append("level", 0)
+                        .append("xp", 0)
+                        .append("invites", 0);
                 //add new document
-                members.add(memberDocument);
+                members.put(member.getId(), memberDocument);
                 //update 'members' Object
                 Document updatedDocument = mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first();
                 updatedDocument.replace("members", members);

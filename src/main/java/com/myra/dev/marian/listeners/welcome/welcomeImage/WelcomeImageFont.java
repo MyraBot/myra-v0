@@ -60,15 +60,15 @@ public class WelcomeImageFont extends Events implements Command {
         switch (event.getReaction().getReactionEmote().getEmoji()) {
             case "1\uFE0F\u20E3":
                 db.getNested("welcome").set("welcomeImageFont", "default");
-                Manager.getUtilities().success(event.getChannel(), "welcome image font", "\uD83D\uDDDB", "Changed welcome image font", "You have changed the font to `default`", event.getUser().getEffectiveAvatarUrl(), false, false, null);
+                Manager.getUtilities().success(event.getChannel(), "welcome image font", "\uD83D\uDDDB", "Changed welcome image font", "You have changed the font to `default`", event.getUser().getEffectiveAvatarUrl(), false, null);
                 break;
             case "2\uFE0F\u20E3":
                 db.getNested("welcome").set("welcomeImageFont", "modern");
-                Manager.getUtilities().success(event.getChannel(), "welcome image font", "\uD83D\uDDDB", "Changed welcome image font", "You have changed the font to `modern`", event.getUser().getEffectiveAvatarUrl(), false, false, null);
+                Manager.getUtilities().success(event.getChannel(), "welcome image font", "\uD83D\uDDDB", "Changed welcome image font", "You have changed the font to `modern`", event.getUser().getEffectiveAvatarUrl(), false, null);
                 break;
             case "3\uFE0F\u20E3":
                 db.getNested("welcome").set("welcomeImageFont", "handwritten");
-                Manager.getUtilities().success(event.getChannel(), "welcome image font", "\uD83D\uDDDB", "Changed welcome image font", "You have changed the font to `handwritten`", event.getUser().getEffectiveAvatarUrl(), false, false, null);
+                Manager.getUtilities().success(event.getChannel(), "welcome image font", "\uD83D\uDDDB", "Changed welcome image font", "You have changed the font to `handwritten`", event.getUser().getEffectiveAvatarUrl(), false, null);
                 break;
         }
     }

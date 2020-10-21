@@ -37,6 +37,6 @@ public class LevelingSet implements Command {
         //replace level in database
         db.getMembers().getMember(event.getGuild().getMember(user)).setLevel(Integer.parseInt(arguments[1]));
         //send success message
-        Manager.getUtilities().success(event.getChannel(), "leveling set", "\uD83C\uDFC5", user.getName() + "'s level changed", user.getAsMention() + " is now level `" + arguments[1] + "`", event.getAuthor().getEffectiveAvatarUrl(), false, false, null);
+        Manager.getUtilities().success(event.getChannel(), "leveling set", "\uD83C\uDFC5", user.getName() + "'s level changed", user.getAsMention() + " is now level `" + arguments[1] + "`", event.getAuthor().getEffectiveAvatarUrl(), false, null);
     }
 }

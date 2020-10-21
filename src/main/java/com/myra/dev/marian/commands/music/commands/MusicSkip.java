@@ -45,7 +45,7 @@ public class MusicSkip implements Command {
                 "skipped song",
                 "skipped **" + PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player.getPlayingTrack().getInfo().title + "**",
                 event.getAuthor().getEffectiveAvatarUrl(),
-                false, false, null);
+                false, null);
         PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).scheduler.nextTrack();
     }
 }

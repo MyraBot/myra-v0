@@ -2,9 +2,9 @@ package com.myra.dev.marian.listeners.welcome.welcomeImage;
 
 import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.database.allMethods.Database;
+import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
-import com.myra.dev.marian.utilities.management.Manager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.net.URL;
+
 @CommandSubscribe(
         name = "welcome image background",
         aliases = {"welcome image image"}
@@ -57,6 +58,6 @@ public class WelcomeImageBackground implements Command {
                 "Changed welcome image background",
                 "The background has been changed to:",
                 event.getAuthor().getEffectiveAvatarUrl(),
-                false, true, db.getNested("welcome").get("welcomeImageBackground"));
+                false, db.getNested("welcome").get("welcomeImageBackground"));
     }
 }

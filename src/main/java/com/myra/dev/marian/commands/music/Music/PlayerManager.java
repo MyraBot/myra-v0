@@ -50,7 +50,7 @@ public class PlayerManager {
                         "play", "\uD83D\uDCBF",
                         "Added track to queue", "**" + Manager.getUtilities().hyperlink(track.getInfo().title, trackUrl) + "** has been added to the queue",
                         authorAvatar,
-                        false, true, thumbnailUrl);
+                        false, thumbnailUrl);
                 play(musicManager, track);
             }
 
@@ -66,7 +66,7 @@ public class PlayerManager {
                         "Added playlist to queue",
                         "The playlist **" + Manager.getUtilities().hyperlink(playlist.getName(), trackUrl) + "** has been added to the queue",
                         authorAvatar,
-                        false, false, null);
+                        false, null);
                 play(musicManager, firstTrack);
                 playlist.getTracks().forEach(musicManager.scheduler::queue);
             }

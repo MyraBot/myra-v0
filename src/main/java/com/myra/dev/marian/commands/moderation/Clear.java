@@ -43,7 +43,7 @@ public class Clear implements Command {
             // Delete messages
             event.getChannel().deleteMessages(messages).queue();
             // Success information
-            utilities.success(event.getChannel(), "clear", "\uD83D\uDDD1", "the message were deleted successfully", "`" + arguments[0] + "` messages have been deleted", event.getJDA().getSelfUser().getEffectiveAvatarUrl(), true, false, null);
+            utilities.success(event.getChannel(), "clear", "\uD83D\uDDD1", "the message were deleted successfully", "`" + arguments[0] + "` messages have been deleted", event.getJDA().getSelfUser().getEffectiveAvatarUrl(), true, null);
         }
         // Errors
         catch (Exception exception) {

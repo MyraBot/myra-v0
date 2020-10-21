@@ -48,6 +48,6 @@ public class MusicClearQueue implements Command {
                 "Queue cleared",
                 "All songs have been removed from the queue",
                 event.getAuthor().getEffectiveAvatarUrl(),
-                false, false, null);
+                false, null);
     }
 }

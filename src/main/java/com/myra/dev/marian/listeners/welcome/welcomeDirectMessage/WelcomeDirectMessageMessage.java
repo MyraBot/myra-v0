@@ -34,6 +34,6 @@ public class WelcomeDirectMessageMessage implements Command {
                         .replace("{user}", event.getAuthor().getAsMention())
                         .replace("{server}", event.getGuild().getName())
                         .replace("{count}", Integer.toString(event.getGuild().getMemberCount())),
-                event.getAuthor().getEffectiveAvatarUrl(), false, false, null);
+                event.getAuthor().getEffectiveAvatarUrl(), false, null);
     }
 }

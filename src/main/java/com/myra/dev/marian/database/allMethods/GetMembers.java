@@ -30,32 +30,24 @@ public class GetMembers {
      */
     //get member
     public GetMember getMember(Member member) {
-        //variable
-        Document memberDocument = null;
-        //get members Document
-        List<Document> membersDocument = guildDocument.getList("members", Document.class);
-        //get member
-        for (Document document : membersDocument) {
-            if (document.containsKey(member.getId())) {
-                memberDocument = (Document) document.get(member.getId());
-            }
-        }
+        // Get document with all members
+        Document membersDocument = (Document) guildDocument.get("members");
+        // Get member document
+        Document memberDocument = (Document) membersDocument.get(member.getId());
         return new GetMember(mongoDb, guild, guildDocument, memberDocument);
     }
 
     //get sorted members
     public List<MemberDocument> getLeaderboard() {
-        //get members Document
-        List<Document> membersDocument = guildDocument.getList("members", Document.class);
         //create leaderboard
         List<MemberDocument> leaderboard = new ArrayList<>();
+        // Get document with all members
+        Document membersDocument = (Document) guildDocument.get("members");
         //get every member
-        for (Document document : membersDocument) {
-            //get id of user
-            String id = document.toString().split("=")[2].split(",")[0];
-            //get member document
-            Document memberDocument = (Document) document.get(id);
-            //add xp to leaderboard
+        for (Object document : membersDocument.values()) {
+            // Parse Object to Document
+            Document memberDocument = (Document) document;
+            // Add member document to leaderboard
             leaderboard.add(new MemberDocument(memberDocument));
         }
         //sort list

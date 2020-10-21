@@ -50,7 +50,7 @@ public class WelcomeColour implements Command {
             //save in database
             db.getNested("welcome").set("welcomeColour", hex);
             //success
-            Manager.getUtilities().success(event.getChannel(), "welcome embed colour", "\uD83C\uDFA8", "Updated Colour", "Colour changed to `" + db.getNested("welcome").get("welcomeColour").replace("0x", "#") + "`", event.getAuthor().getEffectiveAvatarUrl(), false, false, null);
+            Manager.getUtilities().success(event.getChannel(), "welcome embed colour", "\uD83C\uDFA8", "Updated Colour", "Colour changed to `" + db.getNested("welcome").get("welcomeColour").replace("0x", "#") + "`", event.getAuthor().getEffectiveAvatarUrl(), false, null);
         }
     }
 }

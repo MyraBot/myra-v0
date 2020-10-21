@@ -32,13 +32,13 @@ public class WelcomeChannel implements Command {
             //remove channel id
             db.getNested("welcome").set("welcomeChannel", "not set");
             //success
-            Manager.getUtilities().success(event.getChannel(), "welcome channel", "\uD83D\uDCC1", "Welcome channel removed", "Welcome are no longer send in " + channel.getAsMention(), event.getAuthor().getEffectiveAvatarUrl(), false, false, null);
+            Manager.getUtilities().success(event.getChannel(), "welcome channel", "\uD83D\uDCC1", "Welcome channel removed", "Welcome are no longer send in " + channel.getAsMention(), event.getAuthor().getEffectiveAvatarUrl(), false, null);
             return;
         }
         //Database
         db.getNested("welcome").set("welcomeChannel", channel.getId());
         //success message
-        Manager.getUtilities().success(event.getChannel(), "welcome channel", "\uD83D\uDCC1", "Welcome channel changed", "Welcome messages are now send in " + channel.getAsMention(), event.getAuthor().getEffectiveAvatarUrl(), false, false, null);
+        Manager.getUtilities().success(event.getChannel(), "welcome channel", "\uD83D\uDCC1", "Welcome channel changed", "Welcome messages are now send in " + channel.getAsMention(), event.getAuthor().getEffectiveAvatarUrl(), false, null);
         //success message in welcome  channel
         EmbedBuilder logChannelInfo = new EmbedBuilder()
                 .setAuthor("welcome channel", null, event.getAuthor().getEffectiveAvatarUrl())

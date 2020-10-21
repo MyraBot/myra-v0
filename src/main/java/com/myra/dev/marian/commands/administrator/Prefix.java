@@ -37,7 +37,7 @@ public class Prefix implements Command {
                 "Prefix changed",
                 "Prefix changed to `" + com.myra.dev.marian.database.Prefix.getPrefix(event.getGuild()) + "`",
                 event.getAuthor().getEffectiveAvatarUrl(),
-                false, false, null);
+                false, null);
         //prefix reset
         if (event.getMessage().getContentRaw().equalsIgnoreCase(event.getJDA().getSelfUser().getAsMention().replace("<@", "<@!") + "prefix")) {
             //Database
@@ -48,7 +48,7 @@ public class Prefix implements Command {
                     "Prefix reset",
                     "Prefix changed to `" + Main.prefix + "`",
                     event.getAuthor().getEffectiveAvatarUrl(),
-                    false, false, null);
+                    false, null);
         }
     }
 }

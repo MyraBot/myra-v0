@@ -46,13 +46,13 @@ public class NotificationChannel implements Command {
             //remove channel id
             db.set("notificationChannel", "not set");
             //success
-            utilities.success(event.getChannel(), "notification channel", "\uD83D\uDD14", "Notification channel removed", "Notifications are no longer send in " + channel.getAsMention(), event.getAuthor().getEffectiveAvatarUrl(), false, false, null);
+            utilities.success(event.getChannel(), "notification channel", "\uD83D\uDD14", "Notification channel removed", "Notifications are no longer send in " + channel.getAsMention(), event.getAuthor().getEffectiveAvatarUrl(), false, null);
             return;
         }
         //change notification channel
         db.set("notificationChannel", channel.getId());
         //success
-        utilities.success(event.getChannel(), "notification channel", "\uD83D\uDD14", "Notification channel changed", "Notifications are now send in " + channel.getAsMention(), event.getAuthor().getEffectiveAvatarUrl(), false, false, null);
+        utilities.success(event.getChannel(), "notification channel", "\uD83D\uDD14", "Notification channel changed", "Notifications are now send in " + channel.getAsMention(), event.getAuthor().getEffectiveAvatarUrl(), false, null);
         EmbedBuilder success = new EmbedBuilder()
                 .setAuthor("notification channel", null, event.getAuthor().getEffectiveAvatarUrl())
                 .setColor(Manager.getUtilities().blue)

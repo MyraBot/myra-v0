@@ -37,6 +37,7 @@ public class Utilities {
     public String online;
 
     public String nitroBoost;
+    public String coin;
 
     public String bugHunter;
     public String bugHunterLvl2;
@@ -64,6 +65,7 @@ public class Utilities {
         online = "<:Online:749616597647491154>";
 
         nitroBoost = "<:NitroBoost:726467129217646634>";
+        coin = "<:coin:768420796157919232>";
 
         bugHunter = "<:BugHunter:751101984756465805>";
         bugHunterLvl2 = "<:BugHunterLvl2:751101984769310732>";
@@ -173,7 +175,7 @@ public class Utilities {
     }
 
     //success info
-    public void success(TextChannel textChannel, String command, String commandEmoji, String successHeader, String success, String authorAvatar, boolean deleteAfter5Seconds, boolean addImage, String imageUrl) {
+    public void success(TextChannel textChannel, String command, String commandEmoji, String successHeader, String success, String authorAvatar, boolean deleteAfter5Seconds, String imageUrl) {
         if (deleteAfter5Seconds) {
             textChannel.sendMessage(new EmbedBuilder()
                     .setAuthor(command, null, authorAvatar)
@@ -181,14 +183,6 @@ public class Utilities {
                     .addField("\uD83C\uDFC1 │ " + successHeader, success, false)
                     .build()
             ).queue((message -> message.delete().queueAfter(5, TimeUnit.SECONDS)));
-        } else if (addImage) {
-            textChannel.sendMessage(new EmbedBuilder()
-                    .setAuthor(command, null, authorAvatar)
-                    .setColor(Manager.getUtilities().green)
-                    .addField("\uD83C\uDFC1 │ " + successHeader, success, false)
-                    .setImage(imageUrl)
-                    .build()
-            ).queue();
         } else {
             textChannel.sendMessage(new EmbedBuilder()
                     .setAuthor(command, null, authorAvatar)

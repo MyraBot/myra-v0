@@ -55,6 +55,6 @@ public class MusicShuffle implements Command {
                 "The queue was successfully shuffled",
                 "The current queue was jumbled",
                 event.getAuthor().getEffectiveAvatarUrl(),
-                false, false, null);
+                false, null);
     }
 }

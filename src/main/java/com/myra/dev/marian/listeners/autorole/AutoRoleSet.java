@@ -3,7 +3,6 @@ package com.myra.dev.marian.listeners.autorole;
 import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.Permissions;
-import com.myra.dev.marian.utilities.Return;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
@@ -43,7 +42,7 @@ public class AutoRoleSet implements Command {
         //remove autorole
         if (db.get("autoRole").equals(role.getId())) {
             //error
-           utilities.success(event.getChannel(), "auto role", "\uD83D\uDCDD", "Removed auto role", "New members no longer get the " + event.getGuild().getRoleById(db.get("autoRole")).getAsMention() + " role", event.getAuthor().getEffectiveAvatarUrl(), false, false, null);
+            utilities.success(event.getChannel(), "auto role", "\uD83D\uDCDD", "Removed auto role", "New members no longer get the " + event.getGuild().getRoleById(db.get("autoRole")).getAsMention() + " role", event.getAuthor().getEffectiveAvatarUrl(), false, null);
             //database
             db.set("autoRole", "not set");
             return;
@@ -51,11 +50,11 @@ public class AutoRoleSet implements Command {
         //Database
         db.set("autoRole", role.getId());
         //success
-       utilities.success(event.getChannel(),
+        utilities.success(event.getChannel(),
                 "auto role", "\uD83D\uDCDD",
                 "Added auto role",
                 "New members get now the " + role.getAsMention() + " role",
                 event.getAuthor().getEffectiveAvatarUrl(),
-                false, false, null);
+                false, null);
     }
 }

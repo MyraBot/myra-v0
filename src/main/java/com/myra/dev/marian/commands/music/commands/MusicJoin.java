@@ -54,6 +54,6 @@ public class MusicJoin implements Command {
                 "Joined voice channel",
                 "I joined **" + event.getMember().getVoiceState().getChannel().getName() + "**",
                 event.getAuthor().getEffectiveAvatarUrl(),
-                false, false, null);
+                false, null);
     }
 }

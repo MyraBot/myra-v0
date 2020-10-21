@@ -40,6 +40,6 @@ public class MusicLeave implements Command {
                 "Left voice channel",
                 "I left **" + event.getGuild().getAudioManager().getConnectedChannel().getName() + "**",
                 event.getAuthor().getEffectiveAvatarUrl(),
-                false, false, null);
+                false, null);
     }
 }

@@ -42,7 +42,7 @@ public class MuteRole implements Command {
         //remove mute role
         if (role.getId().equals(muteRoleId)) {
             //success
-            utilities.success(event.getChannel(), "mute role", "\uD83D\uDD07", "Removed mute role", "The mute role will no longer be " + event.getGuild().getRoleById(muteRoleId).getAsMention(), event.getAuthor().getEffectiveAvatarUrl(), false, false, null);
+            utilities.success(event.getChannel(), "mute role", "\uD83D\uDD07", "Removed mute role", "The mute role will no longer be " + event.getGuild().getRoleById(muteRoleId).getAsMention(), event.getAuthor().getEffectiveAvatarUrl(), false, null);
             //database
             db.set("muteRole", role.getId());
             return;
@@ -50,6 +50,6 @@ public class MuteRole implements Command {
         //change mute role
         db.set("muteRole", role.getId());
         //role changed
-        utilities.success(event.getChannel(), "mute role", "\uD83D\uDCC4", "muted role successfuly changed", "mute role set to " + role.getAsMention(), event.getAuthor().getEffectiveAvatarUrl(), false, false, null);
+        utilities.success(event.getChannel(), "mute role", "\uD83D\uDCC4", "muted role successfuly changed", "mute role set to " + role.getAsMention(), event.getAuthor().getEffectiveAvatarUrl(), false, null);
     }
 }

@@ -31,7 +31,7 @@ public class SuggestionsChannel implements Command {
                     "removed suggestions channel",
                     "Suggestions are no longer sent in " + event.getGuild().getTextChannelById(db.get("suggestionsChannel")).getAsMention(),
                     event.getAuthor().getEffectiveAvatarUrl(),
-                    false, false, null);
+                    false, null);
             //database
             db.set("suggestionsChannel", "not set");
             return;
@@ -44,7 +44,7 @@ public class SuggestionsChannel implements Command {
                 "Suggestions channel changed",
                 "Suggestions are now sent in " + channel.getAsMention(),
                 event.getAuthor().getEffectiveAvatarUrl(),
-                false, false, null);
+                false, null);
         EmbedBuilder success = new EmbedBuilder()
                 .setAuthor("suggestions channel", null, event.getAuthor().getEffectiveAvatarUrl())
                 .setColor(Manager.getUtilities().blue)

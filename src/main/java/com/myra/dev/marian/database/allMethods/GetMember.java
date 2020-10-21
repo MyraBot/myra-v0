@@ -83,30 +83,42 @@ public class GetMember {
         //create leaderboard
         List<MemberDocument> leaderboard = new ArrayList<>();
         //get every member
-        for (Document document : guildDocument.getList("members", Document.class)) {
-            //get id of user
-            String id = document.toString().split("=")[2].split(",")[0];
-            //get member document
-            Document memberDocument = (Document) document.get(id);
-            //add xp to leaderboard
-            leaderboard.add(new MemberDocument(memberDocument));
+        Document membersDocument = (Document) guildDocument.get("members");
+        // For every member document
+        for (Object document : membersDocument.values()) {
+            // Parse Object to Document
+            Document member = (Document) document;
+            // Add member to leaderboard
+            leaderboard.add(new MemberDocument(member));
         }
-        //sort list
+        // Sort list
         Collections.sort(leaderboard, Comparator.comparing(MemberDocument::getXp).reversed());
-        //get rank
+        // Get rank
         int rank = 0;
-        //search user
+        // Search for member
         for (MemberDocument doc : leaderboard) {
             if (doc.getId().equals(memberDocument.getString("id"))) {
                 rank = leaderboard.indexOf(doc) + 1;
                 break;
             }
         }
+        // Return rank
         return rank;
     }
 
     //get balance
     public int getBalance() {
         return memberDocument.getInteger("balance");
+    }
+
+    // Set balance
+    public void setBalance(int balance) {
+        //replace balance
+        memberDocument.replace("balance", balance);
+        //update Document
+        mongoDb.getCollection("guilds").findOneAndReplace(
+                mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first(),
+                guildDocument
+        );
     }
 }

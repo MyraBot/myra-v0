@@ -46,9 +46,9 @@ public class GetListenerManager {
         mongoDb.getCollection("guilds").findOneAndReplace(guildDocument, updatedDocument);
         //success information
         if (newValue) {
-            Manager.getUtilities().success(event.getChannel(), listener, commandEmoji, "`" + listener + "` got toggled on", "`" + listener + "` is now enabled", event.getAuthor().getEffectiveAvatarUrl(), false, false, null);
+            Manager.getUtilities().success(event.getChannel(), listener, commandEmoji, "`" + listener + "` got toggled on", "`" + listener + "` is now enabled", event.getAuthor().getEffectiveAvatarUrl(), false, null);
         } else {
-            Manager.getUtilities().success(event.getChannel(), listener, commandEmoji, "`" + listener + "` got toggled off", "`" + listener + "` is now disabled", event.getAuthor().getEffectiveAvatarUrl(), false, false, null);
+            Manager.getUtilities().success(event.getChannel(), listener, commandEmoji, "`" + listener + "` got toggled off", "`" + listener + "` is now disabled", event.getAuthor().getEffectiveAvatarUrl(), false, null);
         }
     }
 }
