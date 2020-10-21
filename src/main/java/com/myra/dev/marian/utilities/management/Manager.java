@@ -31,7 +31,7 @@ import com.myra.dev.marian.database.MongoDbUpdate;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.listeners.autorole.AutoRoleSet;
 import com.myra.dev.marian.listeners.autorole.AutoroleToggle;
-import com.myra.dev.marian.listeners.leveling.Leveling;
+import com.myra.dev.marian.listeners.leveling.*;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.commands.CommandService;
 import com.myra.dev.marian.utilities.management.commands.DefaultCommandService;
@@ -95,6 +95,12 @@ public class Manager {
                 new Avatar(),
                 new Calculate(),
                 new Reminder(),
+                // Leveling
+                new LevelingHelp(),
+                new LevelingSet(),
+
+                new Rank(),
+                new Leaderboard(),
                 // Fun
                 new Meme(),
                 new TextFormatter(),
@@ -129,6 +135,8 @@ public class Manager {
                 new AutoroleToggle()
         );
         LISTENER_SERVICE.register(
+                new LevelingListener(),
+
                 new Someone()
         );
     }

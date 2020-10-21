@@ -13,22 +13,24 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 @CommandSubscribe(
         name = "leveling set"
 )
-public class SetLevel implements Command {
+public class LevelingSet implements Command {
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
         //missing permissions
         if (!Permissions.isAdministrator(event.getMember())) return;
-        if (arguments.length == 0) {
+        // Get utilities
+        Utilities utilities = Manager.getUtilities();
+        // Usage
+        if (arguments.length != 2) {
             EmbedBuilder usage = new EmbedBuilder()
                     .setAuthor("leveling set", null, event.getAuthor().getEffectiveAvatarUrl())
-                    .setColor(Manager.getUtilities().gray)
+                    .setColor(utilities.gray)
                     .addField("`" + Prefix.getPrefix(event.getGuild()) + "leveling set <user> <level>`", "\uD83C\uDF96 │ Change the level of a user", false);
             event.getChannel().sendMessage(usage.build()).queue();
             return;
         }
-        //connect to database
+        // Get database
         Database db = new Database(event.getGuild());
-        Utilities utilities = Manager.getUtilities();
         //get provided member
         User user = utilities.getUser(event, arguments[0], "leveling set", "\uD83C\uDFC5");
         if (user == null) return;

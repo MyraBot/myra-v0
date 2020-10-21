@@ -1,12 +1,14 @@
 package com.myra.dev.marian.listeners.leveling;
 
+import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.database.allMethods.GetMember;
 import com.myra.dev.marian.utilities.Graphic;
 import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
-import com.myra.dev.marian.utilities.management.Manager;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -25,18 +27,23 @@ import java.io.InputStream;
 public class Rank implements Command {
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
-        /**
-         * get user
-         */
         Utilities utilities = Manager.getUtilities();
-
-        Member member;
-        //get self rank
-        if (arguments.length == 0) {
-            member = event.getMember();
+        // Usage
+        if (arguments.length > 1) {
+            EmbedBuilder usage = new EmbedBuilder()
+                    .setAuthor("rank", null, event.getAuthor().getEffectiveAvatarUrl())
+                    .setColor(utilities.gray)
+                    .addField("`" + Prefix.getPrefix(event.getGuild()) + "rank <user>`", "\uD83C\uDFC5 │ Shows the rank of a user", false);
+            event.getChannel().sendMessage(usage.build()).queue();
+            return;
         }
-        //get given member
-        else {
+        /**
+         * show rank
+         */
+        // Get self user
+        Member member = event.getMember();
+        // If user is given
+        if (arguments.length == 1) {
             User user = utilities.getUser(event, arguments[0], "rank", "\uD83C\uDFC5");
             if (user == null) return;
             //check if user isn't in this guild
