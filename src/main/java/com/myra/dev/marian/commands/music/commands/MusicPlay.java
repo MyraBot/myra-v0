@@ -91,8 +91,8 @@ public class MusicPlay extends Events implements Command {
                     .setColor(Manager.getUtilities().blue)
                     .addField("\uD83D\uDD0D │ track 1\uFE0F\u20E3", searchResults.get(0).getSnippet().getTitle(), false)
                     .addField("\uD83D\uDD0D │ track 2\uFE0F\u20E3", searchResults.get(1).getSnippet().getTitle(), false)
-                    .addField("\uD83D\uDD0D │track 3\uFE0F\u20E3", searchResults.get(2).getSnippet().getTitle(), false)
-                    .addField("\uD83D\uDD0D │track 4\uFE0F\u20E3", searchResults.get(3).getSnippet().getTitle(), false)
+                    .addField("\uD83D\uDD0D │ track 3\uFE0F\u20E3", searchResults.get(2).getSnippet().getTitle(), false)
+                    .addField("\uD83D\uDD0D │ track 4\uFE0F\u20E3", searchResults.get(3).getSnippet().getTitle(), false)
                     .addField("\uD83D\uDD0D │ track 5\uFE0F\u20E3", searchResults.get(4).getSnippet().getTitle(), false);
             Message message = event.getChannel().sendMessage(songs.build()).complete();
             // Save results in HashMap
@@ -117,12 +117,13 @@ public class MusicPlay extends Events implements Command {
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) throws Exception {
         // Return if author is bot
         if (event.getUser().isBot()) return;
+        //If reaction is on wrong message
+        if (!results.containsKey(event.getMessageId())) return;
         // Get chosen song
         SearchResult song = results.get(event.getMessageId()).get(Integer.parseInt(event.getReactionEmote().getEmoji().replace("1️⃣", "0").replace("2️⃣", "1").replace("3️⃣", "2").replace("4️⃣", "3").replace("5️⃣", "4")));
         if (song == null) return;
         // Check for right reaction
         if (!MessageReaction.check(event, "play")) return;
-
         //get video url
         String videoUrl = "https://www.youtube.com/watch?v=" + song.getId().getVideoId();
         //play song

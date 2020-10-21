@@ -181,6 +181,7 @@ public class Utilities {
                     .setAuthor(command, null, authorAvatar)
                     .setColor(Manager.getUtilities().green)
                     .addField("\uD83C\uDFC1 │ " + successHeader, success, false)
+                    .setImage(imageUrl)
                     .build()
             ).queue((message -> message.delete().queueAfter(5, TimeUnit.SECONDS)));
         } else {
@@ -188,6 +189,7 @@ public class Utilities {
                     .setAuthor(command, null, authorAvatar)
                     .setColor(Manager.getUtilities().green)
                     .addField("\uD83C\uDFC1 │ " + successHeader, success, false)
+                    .setImage(imageUrl)
                     .build()
             ).queue();
         }

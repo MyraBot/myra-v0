@@ -41,7 +41,7 @@ public class MongoDbUpdate extends Events implements Command {
                 String guildName = doc.getString("guildName");
                 String prefix = doc.getString("prefix");
                 Document economy = (Document) doc.get("economy");
-                List<Document> members = doc.getList("members", Document.class);
+                Document members = (Document) doc.get("members");
                 String notificationChannel = doc.getString("notificationChannel");
                 List<String> streamers = doc.getList("streamers", String.class);
                 String suggestionsChannel = doc.getString("suggestionsChannel");
@@ -84,6 +84,9 @@ public class MongoDbUpdate extends Events implements Command {
                         .append("avatar", true)
                         .append("calculate", true)
                         .append("reminder", true)
+
+                        .append("rank", true)
+                        .append("leaderboard", true)
 
                         .append("meme", true)
                         .append("textFormatter", true);
@@ -175,21 +178,13 @@ public class MongoDbUpdate extends Events implements Command {
         //check if member is a bot
         if (event.getUser().isBot()) return;
         //get current document
-        List<Document> members = mongoDb.getCollection("guilds").find(eq("guildId", event.getGuild().getId())).first().getList("members", Document.class);
-        //if member is already in guild document
-        if (members.toString().contains(event.getMember().getId())) return;
+        Document members = (Document) mongoDb.getCollection("guilds").find(eq("guildId", event.getGuild().getId())).first().get("members");
+        // If member is already in guild document
+        if (members.values().contains(event.getMember().getId())) return;
         //create new Member document
-        Document member = new Document(
-                event.getMember().getId(),
-                new Document()
-                        .append("id", event.getMember().getId())
-                        .append("name", event.getUser().getName() + "#" + event.getUser().getDiscriminator())
-                        .append("level", 0)
-                        .append("xp", 0)
-                        .append("invites", 0)
-        );
-        //add new document
-        members.add(member);
+        Document member = MongoDbDocuments.member(event.getMember());
+        // Add new document
+        members.put(event.getMember().getId(), member);
         //update 'members' Object
         Document updatedDocument = mongoDb.getCollection("guilds").find(eq("guildId", event.getGuild().getId())).first();
         updatedDocument.replace("members", members);

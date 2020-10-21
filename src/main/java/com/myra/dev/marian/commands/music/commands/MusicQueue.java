@@ -50,6 +50,10 @@ public class MusicQueue implements Command {
         for (int i = 0; i < trackCount; i++) {
             songs += ("\n• " + tracks.get(i).getInfo().title);
         }
+        // If there are no songs queued
+        if (songs.equals("")) {
+            songs = "none \uD83D\uDE14";
+        }
 
         EmbedBuilder queuedSongs = new EmbedBuilder()
                 .setAuthor("queue", null, event.getAuthor().getEffectiveAvatarUrl())

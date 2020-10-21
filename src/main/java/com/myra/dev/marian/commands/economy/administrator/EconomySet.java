@@ -2,6 +2,7 @@ package com.myra.dev.marian.commands.economy.administrator;
 
 import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.database.allMethods.Database;
+import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
@@ -18,6 +19,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 public class EconomySet implements Command {
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+        // Missing permissions
+        if (!Permissions.isAdministrator(event.getMember())) return;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
         // Usage

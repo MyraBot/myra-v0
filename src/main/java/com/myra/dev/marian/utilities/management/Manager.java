@@ -61,6 +61,8 @@ public class Manager {
         Database.setDb(MONGO_DB);
         MongoDbUpdate.setDb(MONGO_DB);
 
+        DefaultCommandService.setDatabase(MONGO_DB);
+
         Reminder.setDb(MONGO_DB);
         Tempmute.setDb(MONGO_DB);
 

@@ -1,9 +1,13 @@
 package com.myra.dev.marian.utilities.management.commands;
 
+import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.Prefix;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.bson.Document;
 
 import java.util.*;
+
+import static com.mongodb.client.model.Filters.eq;
 
 
 /**
@@ -61,6 +65,13 @@ public class DefaultCommandService implements CommandService {
         return this.commands;
     }
 
+    //Database
+    private static MongoDb database;
+
+    public static void setDatabase(MongoDb db) {
+        database = db;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -112,6 +123,13 @@ public class DefaultCommandService implements CommandService {
                 /**
                  * run command
                  */
+                // Check if command is disabled
+                // Get listener document
+                Document commands = (Document) database.getCollection("guilds").find(eq("guildId", event.getGuild().getId())).first().get("commands");
+                // Return value of command
+                if (commands.getBoolean(entry.getValue().name()) != null) {
+                    if (!commands.getBoolean(entry.getValue().name())) return;
+                }
                 //filter arguments
                 String[] commandArguments = Arrays.copyOfRange(splitMessage, executor.length, splitMessage.length);
                 //run command

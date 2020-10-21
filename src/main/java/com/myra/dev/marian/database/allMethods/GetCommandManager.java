@@ -22,13 +22,13 @@ public class GetCommandManager {
     /**
      * methods
      */
-    //check if listener is enabled
+/*    //check if listener is enabled
     public Boolean check(String command) throws Exception {
         //get listener object
         Document commands = (Document) mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first().get("commands");
         //return value of listener
         return commands.getBoolean(command);
-    }
+    }*/
 
     //toggle command
     public void toggle(String command, GuildMessageReceivedEvent event) {

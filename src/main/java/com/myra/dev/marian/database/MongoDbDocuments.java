@@ -1,18 +1,12 @@
 package com.myra.dev.marian.database;
 
-import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.myra.dev.marian.Main;
 import com.myra.dev.marian.utilities.management.Manager;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import org.bson.Document;
 import org.json.JSONArray;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -21,23 +15,29 @@ public class MongoDbDocuments {
     public static void guild(Guild guild) {
         try {
             MongoDb db = new MongoDb();
-
             //get collections
-            MongoCollection members = db.getCollection("members");
             MongoCollection<Document> guilds = db.getCollection("guilds");
+
+            // Create members Document
+            Document members = new Document();
             //for each member
-            List<BasicDBObject> memberInformation = new ArrayList<>();
             for (Member member : guild.getMembers()) {
+                // If member isn't a bot
                 if (!member.getUser().isBot()) {
-                    BasicDBObject thing = new BasicDBObject(member.getUser().getId(), new BasicDBObject("id", member.getId()).append("name", member.getUser().getName() + "#" + member.getUser().getDiscriminator()).append("level", 0).append("xp", 0).append("invites", 0));
-                    //if user isn't already in the database
-                    if (members.find(eq("id", member.getUser().getId())).first() == null) {
-                        Document memberDoc = new Document("id", member.getUser().getId()).append("name", member.getUser().getName() + "#" + member.getUser().getDiscriminator()).append("facebook", "not set").append("instagram", "not set").append("youtube", "not set").append("twitch", "not set").append("mixer", "not set").append("imgur", "not set").append("tiktok", "not set").append("steam", "not set").append("epic", "not set").append("twitter", "not set").append("origin", "not set").append("reddit", "not set").append("spotify", "not set").append("skype", "not set").append("xboxlive", "not set").append("teamspeak", "not set").append("mumble", "not set").append("stackoverflow", "not set").append("tumblr", "not set").append("giphy", "not set").append("github", "not set");
-                        members.insertOne(memberDoc);
-                    }
-                    memberInformation.add(thing);
+                    // Create
+                    Document membersDocument = new Document()
+                            .append("id", member.getId())
+                            .append("name", member.getUser().getName() + "#" + member.getUser().getDiscriminator())
+                            .append("balance", 0)
+                            .append("dailyStreak", 0)
+                            .append("lastClaim", System.currentTimeMillis())
+                            .append("invites", 0);
+                    members.append(member.getId(), membersDocument);
                 }
             }
+            // Economy
+            Document economy = new Document()
+                    .append("currency", Manager.getUtilities().coin);
             //commands
             Document commands = new Document
                     //general
@@ -50,6 +50,9 @@ public class MongoDbDocuments {
                     .append("avatar", true)
                     .append("information", true)
                     .append("reminder", true)
+                    // Leveling
+                    .append("rank", true)
+                    .append("leaderboard", true)
                     //fun
                     .append("meme", true)
                     //music
@@ -98,7 +101,8 @@ public class MongoDbDocuments {
                 Document guildDoc = new Document("guildId", guild.getId())
                         .append("guildName", guild.getName())
                         .append("prefix", Main.prefix)
-                        .append("members", memberInformation)
+                        .append("economy", economy)
+                        .append("members", members)
                         .append("notificationChannel", "not set")
                         .append("streamers", streamers)
                         .append("suggestionsChannel", "not set")
@@ -116,5 +120,16 @@ public class MongoDbDocuments {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static Document member(Member member) {
+        Document membersDocument = new Document()
+                .append("id", member.getId())
+                .append("name", member.getUser().getName() + "#" + member.getUser().getDiscriminator())
+                .append("balance", 0)
+                .append("dailyStreak", 0)
+                .append("lastClaim", System.currentTimeMillis())
+                .append("invites", 0);
+        return membersDocument;
     }
 }

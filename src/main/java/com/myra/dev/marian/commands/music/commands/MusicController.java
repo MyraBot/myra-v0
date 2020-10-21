@@ -22,7 +22,7 @@ import java.util.TimerTask;
         name = "music controller"
 )
 public class MusicController extends Events implements Command {
-    private static HashMap<Message, Boolean> cancelTIMERS;
+    private static HashMap<Message, Boolean> cancelTimer = new HashMap<>();
 
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
@@ -39,7 +39,7 @@ public class MusicController extends Events implements Command {
         Timer cancel = new Timer();
         Timer removeHashMap = new Timer();
         // Add to HashMap
-        cancelTIMERS.put(message, false);
+        cancelTimer.put(message, false);
 
         update.scheduleAtFixedRate(new TimerTask() {
             public void run() {
@@ -75,7 +75,7 @@ public class MusicController extends Events implements Command {
             public void run() {
                 if (PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player.getPlayingTrack() == null) {
                     // Save boolean value
-                    cancelTIMERS.put(message, true);
+                    cancelTimer.put(message, true);
 
                     removeHashMap.schedule(new TimerTask() {
                         @Override
@@ -85,18 +85,18 @@ public class MusicController extends Events implements Command {
                                 update.cancel();
                                 cancel.cancel();
                                 removeHashMap.cancel();
-                                cancelTIMERS.remove(message);
+                                cancelTimer.remove(message);
                                 System.out.println("removing command from hashmap");
                             }
                         }
                     }, 5 * 1000);
                 }
                 //cancel timers
-                if (cancelTIMERS.get(message)) {
+                if (cancelTimer.get(message)) {
                     update.cancel();
                     cancel.cancel();
                     // Remove from HashMap
-                    cancelTIMERS.remove(message);
+                    cancelTimer.remove(message);
                 }
             }
         }, 5 * 1000, 5 * 1000);
