@@ -82,7 +82,7 @@ public class Rank implements Command {
         Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
         //draw box over background
         RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(5, 5, 340, 90, 15, 15);
-        graphics2D.setColor(new Color(200, 255, 255, 50));
+        graphics2D.setColor(new Color(200, 255, 255, 100));
         graphics2D.fill(roundedRectangle);
         //draw avatar
         graphics2D.drawImage(

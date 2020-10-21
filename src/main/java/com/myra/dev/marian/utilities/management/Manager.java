@@ -32,6 +32,10 @@ import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.listeners.autorole.AutoRoleSet;
 import com.myra.dev.marian.listeners.autorole.AutoroleToggle;
 import com.myra.dev.marian.listeners.leveling.*;
+import com.myra.dev.marian.listeners.notification.AddStreamer;
+import com.myra.dev.marian.listeners.notification.NotificationChannel;
+import com.myra.dev.marian.listeners.notification.NotificationHelp;
+import com.myra.dev.marian.listeners.notification.NotificationList;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.commands.CommandService;
 import com.myra.dev.marian.utilities.management.commands.DefaultCommandService;
@@ -130,9 +134,15 @@ public class Manager {
                 new MusicSkip(),
                 new MusicClearQueue(),
                 new MusicController(),
-                //autorole
+                // Autorole
                 new AutoRoleSet(),
-                new AutoroleToggle()
+                new AutoroleToggle(),
+                // Notification
+                new NotificationHelp(),
+
+                new NotificationChannel(),
+                new AddStreamer(),
+                new NotificationList()
         );
         LISTENER_SERVICE.register(
                 new LevelingListener(),

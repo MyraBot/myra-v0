@@ -26,7 +26,6 @@ public class LevelingListener implements Listener {
         //check for level
         leveling.levelUp(event);
         //save new xp
-        System.out.println(leveling.xp(event.getMessage()));
         new Database(
                 event.getGuild()).getMembers().getMember(event.getMember()).addXp(
                 leveling.xp(event.getMessage())
