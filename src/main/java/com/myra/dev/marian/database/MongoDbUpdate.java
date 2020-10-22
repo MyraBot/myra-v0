@@ -89,13 +89,15 @@ public class MongoDbUpdate extends Events implements Command {
                         .append("leaderboard", true)
 
                         .append("meme", true)
-                        .append("textFormatter", true);
+                        .append("textFormatter", true);*/
                 Document listenersNested = new Document()
-                        .append("welcomeImage", true)
-                        .append("welcomeEmbed", true)
-                        .append("welcomeDirectMessage", true)
+                        .append("welcomeImage", false)
+                        .append("welcomeEmbed", false)
+                        .append("welcomeDirectMessage", false)
 
-                        .append("autorole", true);*/
+                        .append("suggestions", false)
+
+                        .append("autorole", false);
 
                 //create Document
                 Document guildDoc = new Document("guildId", guildId)
@@ -111,7 +113,7 @@ public class MongoDbUpdate extends Events implements Command {
                         .append("muteRole", muteRole)
                         .append("welcome", welcome)
                         .append("commands", commands)
-                        .append("listeners", listeners);
+                        .append("listeners", listenersNested);
                 //replace old one
                 mongoDb.getCollection("guilds").findOneAndReplace(
                         mongoDb.getCollection("guilds").find(eq("guildId", guildDoc.getString("guildId"))).first(),

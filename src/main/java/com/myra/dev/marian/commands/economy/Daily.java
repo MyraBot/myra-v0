@@ -49,7 +49,7 @@ public class Daily implements Command {
             event.getChannel().sendMessage(daily.build()).queue();
         }
         // If 24 hours are passed
-        else if (TimeUnit.MILLISECONDS.toHours(passedTime) > 24) {
+        else if (TimeUnit.MILLISECONDS.toHours(passedTime) > 12) {
             // Create embed builder
             EmbedBuilder daily = new EmbedBuilder()
                     .setAuthor("daily", null, event.getAuthor().getEffectiveAvatarUrl())
@@ -91,7 +91,6 @@ public class Daily implements Command {
             // Send daily reward
             event.getChannel().sendMessage(daily.build()).queue();
         } else {
-
             long nextBonusAt = lastClaim + TimeUnit.DAYS.toMillis(1);
             String nextBonusIn = Manager.getUtilities().formatTime(nextBonusAt - System.currentTimeMillis());
 

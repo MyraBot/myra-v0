@@ -39,6 +39,10 @@ import com.myra.dev.marian.listeners.notification.AddStreamer;
 import com.myra.dev.marian.listeners.notification.NotificationChannel;
 import com.myra.dev.marian.listeners.notification.NotificationHelp;
 import com.myra.dev.marian.listeners.notification.NotificationList;
+import com.myra.dev.marian.listeners.suggestions.SubmitSuggestion;
+import com.myra.dev.marian.listeners.suggestions.SuggestionsChannel;
+import com.myra.dev.marian.listeners.suggestions.SuggestionsHelp;
+import com.myra.dev.marian.listeners.suggestions.SuggestionsToggle;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.commands.CommandService;
 import com.myra.dev.marian.utilities.management.commands.DefaultCommandService;
@@ -62,21 +66,23 @@ public class Manager {
         Database.setDb(MONGO_DB);
         MongoDbUpdate.setDb(MONGO_DB);
 
-        DefaultCommandService.setDatabase(MONGO_DB);
-
         Reminder.setDb(MONGO_DB);
-        Tempmute.setDb(MONGO_DB);
 
         //load commands
         commandRegistry();
     }
 
-    //return utilities
+    // Return database
+    public static MongoDb getDatabase() {
+        return MONGO_DB;
+    }
+
+    // Return utilities
     public static Utilities getUtilities() {
         return UTILITIES;
     }
 
-    //return utilities
+    // Return leveling
     public static Leveling getLeveling() {
         return LEVELING;
     }
@@ -119,6 +125,12 @@ public class Manager {
                 new Meme(),
                 new TextFormatter(),
                 new WouldYouRather(),
+                // Suggestions
+                new SuggestionsHelp(),
+                new SuggestionsChannel(),
+                new SuggestionsToggle(),
+
+                new SubmitSuggestion(),
                 // Moderation
                 new ModerationHelp(),
 

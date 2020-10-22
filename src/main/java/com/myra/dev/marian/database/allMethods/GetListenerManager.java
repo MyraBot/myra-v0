@@ -32,10 +32,8 @@ public class GetListenerManager {
 
     //toggle listener
     public void toggle(String listener, String commandEmoji, GuildMessageReceivedEvent event) {
-
         //get guildDocument
-        Document guildDocument = mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first();
-        Document updatedDocument = guildDocument;
+        Document updatedDocument = mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first();
         //get listener object
         Document listeners = (Document) updatedDocument.get("listeners");
         //get new value of listener
@@ -43,7 +41,7 @@ public class GetListenerManager {
         //replace String
         listeners.replace(listener, newValue);
         //replace guild Document
-        mongoDb.getCollection("guilds").findOneAndReplace(guildDocument, updatedDocument);
+        mongoDb.getCollection("guilds").findOneAndReplace(mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first(), updatedDocument);
         //success information
         if (newValue) {
             Manager.getUtilities().success(event.getChannel(), listener, commandEmoji, "`" + listener + "` got toggled on", "`" + listener + "` is now enabled", event.getAuthor().getEffectiveAvatarUrl(), false, null);

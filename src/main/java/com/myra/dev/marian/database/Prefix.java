@@ -3,6 +3,7 @@ package com.myra.dev.marian.database;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
+import com.myra.dev.marian.utilities.management.Manager;
 import net.dv8tion.jda.api.entities.Guild;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -23,7 +24,7 @@ public class Prefix {
 
     //load HashMaps
     public static void load() {
-        MongoDb mongoDb = new MongoDb();
+        MongoDb mongoDb = Manager.getDatabase();
 
         JSONParser parser = new JSONParser();
 
@@ -67,7 +68,7 @@ public class Prefix {
 
     //change Prefix
     public static void setPrefix(Guild guild, String newPrefix) {
-        MongoDb db = new MongoDb();
+        MongoDb db = Manager.getDatabase();
 //        db.getCollection("guilds").find(eq("guildId", guild.getId())).first().replace("prefix", newPrefix);
         //MongoDb
         Document guildDoc = db.getCollection("guilds").find(eq("guildId", guild.getId())).first();

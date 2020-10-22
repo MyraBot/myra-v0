@@ -14,7 +14,7 @@ public class MongoDbDocuments {
 
     public static void guild(Guild guild) {
         try {
-            MongoDb db = new MongoDb();
+            MongoDb db = Manager.getDatabase();
             //get collections
             MongoCollection<Document> guilds = db.getCollection("guilds");
 

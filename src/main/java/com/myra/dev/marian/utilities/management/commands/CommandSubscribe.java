@@ -11,11 +11,17 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Documented
 public @interface CommandSubscribe {
-
     /**
      * Retrieves the name of the command.
      *
      * @return The command name.
+     */
+    String command() default "";
+
+    /**
+     * Retrieves the main executor of the command
+     *
+     * @return The command executor.
      */
     String name();
 

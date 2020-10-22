@@ -2,6 +2,8 @@ package com.myra.dev.marian.utilities.management.commands;
 
 import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.Prefix;
+import com.myra.dev.marian.utilities.management.Manager;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.bson.Document;
 
@@ -66,11 +68,7 @@ public class DefaultCommandService implements CommandService {
     }
 
     //Database
-    private static MongoDb database;
-
-    public static void setDatabase(MongoDb db) {
-        database = db;
-    }
+    private final static MongoDb MONGO_DB = Manager.getDatabase();
 
     /**
      * {@inheritDoc}
@@ -124,18 +122,22 @@ public class DefaultCommandService implements CommandService {
                  * run command
                  */
                 // Check if command is disabled
-                // Get listener document
-                Document commands = (Document) database.getCollection("guilds").find(eq("guildId", event.getGuild().getId())).first().get("commands");
-                // Return value of command
-                if (commands.getBoolean(entry.getValue().name()) != null) {
-                    if (!commands.getBoolean(entry.getValue().name())) return;
-                }
+                if (isDisabled(entry.getValue().command(), event.getGuild())) return;
                 //filter arguments
                 String[] commandArguments = Arrays.copyOfRange(splitMessage, executor.length, splitMessage.length);
                 //run command
                 entry.getKey().execute(event, commandArguments);
             }
         }
+    }
+
+    private boolean isDisabled(String command, Guild guild) {
+        // Get listener document
+        Document commands = (Document) MONGO_DB.getCollection("guilds").find(eq("guildId", guild.getId())).first().get("commands");
+        // If command isn't in the database
+        if (!commands.containsKey(command)) return false;
+        // Return value of command
+        return commands.getBoolean(command);
     }
 
     private boolean isSubscribed(Class<?> cls) {

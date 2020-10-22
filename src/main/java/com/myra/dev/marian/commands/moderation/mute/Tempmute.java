@@ -28,13 +28,6 @@ import java.util.concurrent.TimeUnit;
         name = "tempmute"
 )
 public class Tempmute extends Events implements Command {
-    //database
-    private static MongoDb mongoDb;
-
-    //set variable
-    public static void setDb(MongoDb db) {
-        mongoDb = db;
-    }
 
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
@@ -120,6 +113,8 @@ public class Tempmute extends Events implements Command {
         /**
          * unmute
          */
+        // Get database
+        MongoDb db = Manager.getDatabase();
         //delay
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -128,14 +123,14 @@ public class Tempmute extends Events implements Command {
                 //if member left the server
                 if (event.getGuild().getMemberById(document.getString("userId")) == null) {
                     //delete document
-                    mongoDb.getCollection("unmutes").deleteOne(document);
+                    db.getCollection("unmutes").deleteOne(document);
                 }
                 //remove role
                 event.getGuild().removeRoleFromMember(document.getString("userId"), event.getGuild().getRoleById(muteRoleId)).queue();
                 //send unmute message
                 unmuteMessage(user, event.getGuild(), event.getAuthor());
                 //delete document
-                mongoDb.getCollection("unmutes").deleteOne(document);
+                db.getCollection("unmutes").deleteOne(document);
 
             }
         }, durationInMilliseconds);
@@ -145,7 +140,7 @@ public class Tempmute extends Events implements Command {
     //create unmute document
     public Document createUnmute(String userId, String guildId, Long durationInMilliseconds, String moderatorId) {
 
-        MongoCollection<Document> guilds = mongoDb.getCollection("unmutes");
+        MongoCollection<Document> guilds = Manager.getDatabase().getCollection("unmutes");
         //create Document
         Document docToInsert = new Document()
                 .append("userId", userId)
@@ -189,13 +184,14 @@ public class Tempmute extends Events implements Command {
     }
 
     public void onReady(ReadyEvent event) throws Exception {
+        // Get database
+        MongoDb db = Manager.getDatabase();
         //for each document
-        for (Document doc : mongoDb.getCollection("unmutes").find()) {
+        for (Document doc : db.getCollection("unmutes").find()) {
             //get unmute time
             Long unmuteTime = doc.getLong("unmuteTime");
             //get guild
             Guild guild = event.getJDA().getGuildById(doc.getString("guildId"));
-            Database db = new Database(guild);
             /**
              * if unmute time is already reached
              */
@@ -203,14 +199,14 @@ public class Tempmute extends Events implements Command {
                 //if member left the server
                 if (event.getJDA().getGuildById(doc.getString("guildId")).getMemberById(doc.getString("userId")) == null) {
                     //delete document
-                    mongoDb.getCollection("unmutes").deleteOne(doc);
+                    db.getCollection("unmutes").deleteOne(doc);
                 }
                 //remove role
-                guild.removeRoleFromMember(doc.getString("userId"), guild.getRoleById(db.get("muteRole"))).queue();
+                guild.removeRoleFromMember(doc.getString("userId"), guild.getRoleById(new Database(guild).get("muteRole"))).queue();
                 //send unmute message
                 unmuteMessage(event.getJDA().getUserById(doc.getString("userId")), guild, event.getJDA().getUserById(doc.getString("moderatorId")));
                 //delete document
-                mongoDb.getCollection("unmutes").deleteOne(doc);
+                db.getCollection("unmutes").deleteOne(doc);
                 continue;
             }
             /**
@@ -224,14 +220,14 @@ public class Tempmute extends Events implements Command {
                     //if member left the server
                     if (event.getJDA().getGuildById(doc.getString("guildId")).getMemberById(doc.getString("userId")) == null) {
                         //delete document
-                        mongoDb.getCollection("unmutes").deleteOne(doc);
+                        db.getCollection("unmutes").deleteOne(doc);
                     }
                     //unmute
-                    guild.removeRoleFromMember(doc.getString("userId"), guild.getRoleById(db.get("muteRole"))).queue();
+                    guild.removeRoleFromMember(doc.getString("userId"), guild.getRoleById(new Database(guild).get("muteRole"))).queue();
                     //send unmute message
                     unmuteMessage(event.getJDA().getUserById(doc.getString("userId")), guild, event.getJDA().getUserById(doc.getString("moderatorId")));
                     //delete document
-                    mongoDb.getCollection("unmutes").deleteOne(doc);
+                    db.getCollection("unmutes").deleteOne(doc);
                 }
             }, doc.getLong("unmuteTime") - System.currentTimeMillis());
         }
