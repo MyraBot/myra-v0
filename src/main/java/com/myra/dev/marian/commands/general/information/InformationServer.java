@@ -14,6 +14,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 @CommandSubscribe(
+        command = "information",
         name = "information server",
         aliases = {"info server", "information guild", "info guild", "information GUILD_NAME", "info GUILD_NAME"}
 )

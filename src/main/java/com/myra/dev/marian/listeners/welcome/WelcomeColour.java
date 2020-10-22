@@ -1,15 +1,17 @@
 package com.myra.dev.marian.listeners.welcome;
 
 import com.myra.dev.marian.database.Prefix;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
-import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.Permissions;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.utilities.management.Manager;
+import com.myra.dev.marian.utilities.management.commands.Command;
+import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
-import java.util.Arrays;
+
 @CommandSubscribe(
         name = "welcome colour",
         aliases = {"welcome color"}
@@ -18,39 +20,40 @@ public class WelcomeColour implements Command {
 
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
-        Database db = new Database(event.getGuild());
-
-        //missing permissions
+        // Missing permissions
         if (!Permissions.isAdministrator(event.getMember())) return;
-        //split
-        String[] sentMessage = event.getMessage().getContentRaw().split("\\s+");
-        //alias
-        String[] args1 = {Prefix.getPrefix(event.getGuild()) + "welcome"};
-        String[] args2 = {"colour"};
-
-        if (Arrays.stream(args1).anyMatch(sentMessage[0]::equalsIgnoreCase) && Arrays.stream(args2).anyMatch(sentMessage[1]::equalsIgnoreCase) && sentMessage.length == 3) {
-            String hex = null;
-            //remove #
-            if (sentMessage[2].startsWith("#")) {
-                StringBuilder raw = new StringBuilder(sentMessage[2]);
-                raw.deleteCharAt(0);
-                hex = "0x" + raw.toString();
-            }
-            //add 0x
-            else {
-                hex = "0x" + sentMessage[2];
-            }
-            //if colour doesn't exist
-            try {
-                Color.decode(hex);
-            } catch (Exception e) {
-                Manager.getUtilities().error(event.getChannel(), "welcome embed colour", "\uD83C\uDFA8", "Invalid colour", "The given colour doesn't exist", event.getAuthor().getEffectiveAvatarUrl());
-                return;
-            }
-            //save in database
-            db.getNested("welcome").set("welcomeColour", hex);
-            //success
-            Manager.getUtilities().success(event.getChannel(), "welcome embed colour", "\uD83C\uDFA8", "Updated Colour", "Colour changed to `" + db.getNested("welcome").get("welcomeColour").replace("0x", "#") + "`", event.getAuthor().getEffectiveAvatarUrl(), false, null);
+        // Get utilities
+        Utilities utilities = Manager.getUtilities();
+        // Usage
+        if (arguments.length != 1) {
+            EmbedBuilder welcomeChannelUsage = new EmbedBuilder()
+                    .setAuthor("welcome colour", null, event.getAuthor().getEffectiveAvatarUrl())
+                    .setColor(utilities.gray)
+                    .addField("`" + Prefix.getPrefix(event.getGuild()) + "welcome colour <hex colour>`", "\uD83C\uDFA8 │ Set the colour of the embeds", false);
+            event.getChannel().sendMessage(welcomeChannelUsage.build()).queue();
+            return;
         }
+        String hex = null;
+        //remove #
+        if (arguments[0].startsWith("#")) {
+            StringBuilder raw = new StringBuilder(arguments[0]);
+            raw.deleteCharAt(0);
+            hex = "0x" + raw.toString();
+        }
+        //add 0x
+        else {
+            hex = "0x" + arguments[0];
+        }
+        //if colour doesn't exist
+        try {
+            Color.decode(hex);
+        } catch (Exception e) {
+            utilities.error(event.getChannel(), "welcome embed colour", "\uD83C\uDFA8", "Invalid colour", "The given colour doesn't exist", event.getAuthor().getEffectiveAvatarUrl());
+            return;
+        }
+        //save in database
+        new Database(event.getGuild()).getNested("welcome").set("welcomeColour", hex);
+        //success
+        utilities.success(event.getChannel(), "welcome embed colour", "\uD83C\uDFA8", "Updated Colour", "Colour changed to `" + hex.replace("0x", "#") + "`", event.getAuthor().getEffectiveAvatarUrl(), false, null);
     }
 }

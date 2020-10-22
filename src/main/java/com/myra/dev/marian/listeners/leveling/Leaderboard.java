@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import java.util.List;
 
 @CommandSubscribe(
+        command = "leaderboard",
         name = "leaderboard",
         aliases = {"top"}
 )

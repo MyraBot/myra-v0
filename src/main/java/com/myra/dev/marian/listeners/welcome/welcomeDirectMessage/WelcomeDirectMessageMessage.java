@@ -1,6 +1,7 @@
 package com.myra.dev.marian.listeners.welcome.welcomeDirectMessage;
 
 import com.myra.dev.marian.database.Prefix;
+import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.management.Manager;
@@ -15,9 +16,12 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 public class WelcomeDirectMessageMessage implements Command {
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+        // Missing permissions
+        if (!Permissions.isAdministrator(event.getMember())) return;
+        // Usage
         if (arguments.length == 0) {
             EmbedBuilder welcomeDirectMessageMessage = new EmbedBuilder()
-                    .setAuthor("│ welcome direct message", null, event.getAuthor().getEffectiveAvatarUrl())
+                    .setAuthor("welcome direct message", null, event.getAuthor().getEffectiveAvatarUrl())
                     .addField("`" + Prefix.getPrefix(event.getGuild()) + "welcome direct message message <message>`", "\uD83D\uDCAC │ change the text of the direct messages", false)
                     .setFooter("{user} = mention the user │ {server} = server name │ {count} = user count");
             event.getChannel().sendMessage(welcomeDirectMessageMessage.build()).queue();

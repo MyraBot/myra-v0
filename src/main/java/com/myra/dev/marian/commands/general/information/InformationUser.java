@@ -17,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @CommandSubscribe(
+        command = "information",
         name = "information user",
         aliases = {"info user", "information member", "info member"}
 )

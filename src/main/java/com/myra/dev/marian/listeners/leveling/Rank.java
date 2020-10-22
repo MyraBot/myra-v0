@@ -22,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
 @CommandSubscribe(
+        command = "rank",
         name = "rank"
 )
 public class Rank implements Command {

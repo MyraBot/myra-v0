@@ -10,6 +10,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 @CommandSubscribe(
+        command = "information",
         name = "information bot",
         aliases = {"info bot", "information BOT_NAME", "info BOT_NAME"}
 )

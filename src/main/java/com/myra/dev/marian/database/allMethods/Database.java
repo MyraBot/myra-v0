@@ -1,20 +1,15 @@
 package com.myra.dev.marian.database.allMethods;
 
-import com.mongodb.client.MongoCollection;
 import com.myra.dev.marian.database.MongoDb;
+import com.myra.dev.marian.utilities.management.Manager;
 import net.dv8tion.jda.api.entities.Guild;
 import org.bson.Document;
 
 import static com.mongodb.client.model.Filters.eq;
 
 public class Database {
-    //database
-    private static MongoDb mongoDb;
-
-    //set variable
-    public static void setDb(MongoDb db) {
-        mongoDb = db;
-    }
+    // Database
+    private final MongoDb mongoDb = Manager.getDatabase();
 
     //variable
     private Guild guild;
@@ -34,6 +29,11 @@ public class Database {
 
     //replace String
     public void set(String key, String value) {
+        // Replace value
+        Document updatedDocument = mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first();
+        updatedDocument.replace(key, value);
+        // Update database
+        mongoDb.getCollection("guilds").findOneAndReplace(mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first(), updatedDocument);
     }
 
     //get nested object

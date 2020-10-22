@@ -1,6 +1,5 @@
 package com.myra.dev.marian.listeners.welcome.welcomeDirectMessage;
 
-import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.management.Events;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -19,7 +18,7 @@ public class WelcomeDirectMessage extends Events {
         String welcomeDirectMessage = db.getNested("welcome").get("welcomeDirectMessage");
         //send message
         EmbedBuilder join = new EmbedBuilder()
-                .setAuthor("│ welcome", null, event.getGuild().getIconUrl())
+                .setAuthor("welcome", null, event.getGuild().getIconUrl())
                 .setColor(Color.decode(welcomeColour))
                 .setThumbnail(event.getUser().getEffectiveAvatarUrl())
                 .setDescription(welcomeDirectMessage

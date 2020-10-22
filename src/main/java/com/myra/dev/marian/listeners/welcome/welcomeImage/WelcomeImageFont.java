@@ -1,6 +1,7 @@
 package com.myra.dev.marian.listeners.welcome.welcomeImage;
 
 import com.myra.dev.marian.database.allMethods.Database;
+import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.management.Events;
@@ -22,12 +23,12 @@ public class WelcomeImageFont extends Events implements Command {
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
         //missing permissions
         if (!event.getMember().hasPermission(Permission.ADMINISTRATOR)) return;
-        //split message
-        String[] sentMessage = event.getMessage().getContentRaw().split("\\s+");
+        // Get utilities
+        Utilities utilities = Manager.getUtilities();
         //change font
         EmbedBuilder fontSelection = new EmbedBuilder()
-                .setAuthor("│ welcome image font", null, event.getAuthor().getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().blue)
+                .setAuthor("welcome image font", null, event.getAuthor().getEffectiveAvatarUrl())
+                .setColor(utilities.blue)
                 .addField("fonts",
                         "1\uFE0F\u20E3 default \n" +
                                 "2\uFE0F\u20E3 modern \n" +
@@ -49,13 +50,12 @@ public class WelcomeImageFont extends Events implements Command {
         if (!Permissions.isAdministrator(event.getMember())) return;
         //if reaction was added on the wrong message return
         if (MessageReaction.hashMap.get("welcomeImageFont") == null) return;
-        if (!Arrays.stream(MessageReaction.hashMap.get("welcomeImageFont").toArray()).anyMatch(event.getMessageId()::equals) || event.getUser().isBot())
+        if (Arrays.stream(MessageReaction.hashMap.get("welcomeImageFont").toArray()).noneMatch(event.getMessageId()::equals) || event.getUser().isBot())
             return;
         //remove id from hashmap
         MessageReaction.hashMap.get("welcomeImageFont").remove(event.getMessageId());
-
+        // Get database
         Database db = new Database(event.getGuild());
-
         //fonts
         switch (event.getReaction().getReactionEmote().getEmoji()) {
             case "1\uFE0F\u20E3":

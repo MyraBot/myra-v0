@@ -32,11 +32,13 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.user.update.UserUpdateNameEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class EventsManager extends ListenerAdapter {
     private final CommandService commandService = Manager.COMMAND_SERVICE;
     private final ListenerService listenerService = Manager.LISTENER_SERVICE;
+
     /**
      * run commands
      */
@@ -128,7 +130,6 @@ public class EventsManager extends ListenerAdapter {
             new Tempmute().onReady(event);
 
 
-
             //get access token for Twitch
             new Twitch().jdaReady(event);
             //load streamers
@@ -175,6 +176,15 @@ public class EventsManager extends ListenerAdapter {
         try {
             //delete guild document
             new MongoDbUpdate().guildLeaveEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onUserUpdateName(UserUpdateNameEvent event) {
+        try {
+        // Update database
+        new MongoDbUpdate().userUpdateNameEvent(event);
         } catch (Exception e) {
             e.printStackTrace();
         }

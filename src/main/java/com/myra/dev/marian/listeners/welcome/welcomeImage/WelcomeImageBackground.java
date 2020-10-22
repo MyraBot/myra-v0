@@ -2,6 +2,7 @@ package com.myra.dev.marian.listeners.welcome.welcomeImage;
 
 import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.database.allMethods.Database;
+import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
@@ -20,13 +21,12 @@ import java.net.URL;
 public class WelcomeImageBackground implements Command {
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
-        Database db = new Database(event.getGuild());
-        //split message
-        String[] sentMessage = event.getMessage().getContentRaw().split("\\s+");
-        //missing permissions
+        // Missing permissions
         if (!event.getMember().hasPermission(Permission.ADMINISTRATOR)) return;
-        //usage
-        if (sentMessage.length == 3 || sentMessage.length < 3) {
+        // Get utilities
+        Utilities utilities = Manager.getUtilities();
+        // Usage
+        if (arguments.length != 1) {
             EmbedBuilder usage = new EmbedBuilder()
                     .setAuthor("welcome image background", null, event.getAuthor().getEffectiveAvatarUrl())
                     .setColor(Manager.getUtilities().gray)
@@ -39,9 +39,9 @@ public class WelcomeImageBackground implements Command {
          */
         //invalid url
         try {
-            ImageIO.read(new URL(sentMessage[3]));
+            ImageIO.read(new URL(arguments[0]));
         } catch (IOException e) {
-            Manager.getUtilities().error(event.getChannel(),
+           utilities.error(event.getChannel(),
                     "welcome image background",
                     "\uD83D\uDDBC",
                     "Invalid background URL",
@@ -50,14 +50,14 @@ public class WelcomeImageBackground implements Command {
             return;
         }
         //save in database
-        db.getNested("welcome").set("welcomeImageBackground", sentMessage[3]);
+        new Database(event.getGuild()).getNested("welcome").set("welcomeImageBackground", arguments[0]);
         //success
-        Manager.getUtilities().success(event.getChannel(),
+      utilities.success(event.getChannel(),
                 "welcome image background",
                 "\uD83D\uDDBC",
                 "Changed welcome image background",
                 "The background has been changed to:",
                 event.getAuthor().getEffectiveAvatarUrl(),
-                false, db.getNested("welcome").get("welcomeImageBackground"));
+                false, arguments[0]);
     }
 }

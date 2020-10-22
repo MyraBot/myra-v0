@@ -12,9 +12,10 @@ public class WelcomeImageToggle implements Command {
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
         Database db = new Database(event.getGuild());
-
         //missing permissions
         if (!event.getMember().hasPermission(Permission.ADMINISTRATOR)) return;
+        // Check for no arguments
+        if (arguments.length != 0) return;
         //toggle
         db.getListenerManager().toggle("welcomeImage", "\uD83D\uDDBC", event);
     }

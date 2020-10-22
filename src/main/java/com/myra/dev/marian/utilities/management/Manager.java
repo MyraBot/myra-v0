@@ -43,6 +43,13 @@ import com.myra.dev.marian.listeners.suggestions.SubmitSuggestion;
 import com.myra.dev.marian.listeners.suggestions.SuggestionsChannel;
 import com.myra.dev.marian.listeners.suggestions.SuggestionsHelp;
 import com.myra.dev.marian.listeners.suggestions.SuggestionsToggle;
+import com.myra.dev.marian.listeners.welcome.WelcomeChannel;
+import com.myra.dev.marian.listeners.welcome.WelcomeColour;
+import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessageHelp;
+import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessageMessage;
+import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessagePreview;
+import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessageToggle;
+import com.myra.dev.marian.listeners.welcome.welcomeImage.*;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.commands.CommandService;
 import com.myra.dev.marian.utilities.management.commands.DefaultCommandService;
@@ -63,7 +70,6 @@ public class Manager {
 
     public void start() {
         //load database
-        Database.setDb(MONGO_DB);
         MongoDbUpdate.setDb(MONGO_DB);
 
         Reminder.setDb(MONGO_DB);
@@ -164,8 +170,22 @@ public class Manager {
 
                 new NotificationChannel(),
                 new AddStreamer(),
-                new NotificationList()
-        );
+                new NotificationList(),
+                // Welcome
+                new WelcomeChannel(),
+                new WelcomeColour(),
+                // Welcome Image
+                new WelcomeImageHelp(),
+                new WelcomeImagePreview(),
+                new WelcomeImageToggle(),
+                new WelcomeImageBackground(),
+                new WelcomeImageFont(),
+                // Welcome direct message
+                new WelcomeDirectMessageHelp(),
+                new WelcomeDirectMessageToggle(),
+                new WelcomeDirectMessageMessage(),
+                new WelcomeDirectMessagePreview()
+                );
         LISTENER_SERVICE.register(
                 new LevelingListener(),
 

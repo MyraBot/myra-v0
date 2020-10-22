@@ -7,6 +7,7 @@ import com.myra.dev.marian.database.Prefix;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 @CommandSubscribe(
+        command = "information",
         name = "information",
         aliases = {"info"}
 )

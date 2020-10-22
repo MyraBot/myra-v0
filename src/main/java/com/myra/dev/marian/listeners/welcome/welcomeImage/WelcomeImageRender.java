@@ -19,8 +19,8 @@ import java.net.URL;
 public class WelcomeImageRender {
 
     /**
-     * @param user The user who is greeted.
-     * @param guild The guild the new user joined.
+     * @param user    The user who is greeted.
+     * @param guild   The guild the new user joined.
      * @param channel The channel the greeting will be send.
      */
     public void welcomeImage(Guild guild, User user, TextChannel channel) throws Exception {
@@ -38,15 +38,7 @@ public class WelcomeImageRender {
         }
         //get font
         String font = db.getNested("welcome").get("welcomeImageFont");
-        InputStream inputStream;
-        switch (font) {
-            case "modern":
-                inputStream = this.getClass().getClassLoader().getResourceAsStream("modern.ttf");
-            case    "handwritten":
-                inputStream = this.getClass().getClassLoader().getResourceAsStream("handwritten.ttf");
-            default:
-                inputStream = this.getClass().getClassLoader().getResourceAsStream("default.ttf");
-        }
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(font + ".ttf");
         //graphics
         Graphic graphic = new Graphic();
         Graphics graphics = background.getGraphics();
@@ -86,7 +78,7 @@ public class WelcomeImageRender {
         //draw circle around avatar
         graphics2D.setColor(Color.white);
         graphics2D.setStroke(new BasicStroke(
-                background.getHeight() / 250f,
+                background.getHeight() / 200f,
                 BasicStroke.CAP_ROUND,
                 BasicStroke.JOIN_ROUND
         ));
@@ -125,7 +117,7 @@ public class WelcomeImageRender {
     private void portrait(BufferedImage background, User user, Graphic graphic, Graphics graphics, Graphics2D graphics2D, InputStream inputStream) throws Exception {
         //resize avatar
         BufferedImage avatar = graphic.getAvatar(user.getEffectiveAvatarUrl());
-        avatar = graphic.resizeSquaredImage(avatar, background.getWidth() / 250f);
+        avatar = graphic.resizeSquaredImage(avatar, background.getWidth() / 200f);
         //load font
         Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
         //draw avatar

@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.user.update.UserUpdateNameEvent;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -137,6 +138,12 @@ public class MongoDbUpdate extends Events implements Command {
     @Override
     public void jdaReady(ReadyEvent event) throws Exception {
         for (Guild guild : event.getJDA().getGuilds()) {
+            // If guild isn't in the database yet
+            if (mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first() == null) {
+                // Add guild to database
+                MongoDbDocuments.guild(guild);
+            }
+
             for (Member member : guild.getMembers()) {
                 //check if member is a bot
                 if (member.getUser().isBot()) continue;
@@ -196,5 +203,26 @@ public class MongoDbUpdate extends Events implements Command {
     @Override
     public void guildLeaveEvent(GuildLeaveEvent event) {
         mongoDb.getCollection("guilds").deleteOne(eq("guildId", event.getGuild().getId()));
+    }
+
+    // User changes name
+    public void userUpdateNameEvent(UserUpdateNameEvent event) {
+        // For each guilds document
+        for (Document guildDocument : mongoDb.getCollection("guilds").find()) {
+            // Check if user is in guild
+            if (!guildDocument.toString().contains(event.getUser().getId())) continue;
+            // Get guild document
+            Document updatedDocument = guildDocument;
+            // Get members document
+            Document members = (Document) updatedDocument.get("members");
+            // Get member document
+            Document member = (Document) members.get(event.getUser().getId());
+            // Replace old name
+            member.replace("name", event.getNewValue() + "#" + event.getUser().getDiscriminator());
+            // Replace members
+            updatedDocument.replace("members", members);
+            // Update guild document
+            mongoDb.getCollection("guilds").findOneAndReplace(guildDocument, updatedDocument);
+        }
     }
 }

@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.user.update.UserUpdateNameEvent;
 
 public abstract class Events {
     public void jdaReady(ReadyEvent event) throws Exception {
@@ -40,5 +41,9 @@ public abstract class Events {
     }
 
     public void voiceChannelMove(GuildVoiceMoveEvent event) throws Exception {
+    }
+
+    public void UserUpdateNameEvent(UserUpdateNameEvent event) throws Exception {
+
     }
 }

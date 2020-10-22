@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import java.time.Instant;
 
 @CommandSubscribe(
+        command = "suggestions",
         name = "suggest"
 )
 public class SubmitSuggestion implements Command {

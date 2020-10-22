@@ -13,7 +13,11 @@ public class WelcomeImagePreview implements Command {
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
         //missing permissions
         if (!event.getMember().hasPermission(Permission.ADMINISTRATOR)) return;
-        //send image
+        // Check for no arguments
+        if (arguments.length != 0) return;
+        // Send 'is typing'
+        event.getChannel().sendTyping().queue();
+        // Send image
         new WelcomeImageRender().welcomeImage(event.getGuild(), event.getAuthor(), event.getChannel());
     }
 }

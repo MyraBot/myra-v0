@@ -135,9 +135,9 @@ public class DefaultCommandService implements CommandService {
         // Get listener document
         Document commands = (Document) MONGO_DB.getCollection("guilds").find(eq("guildId", guild.getId())).first().get("commands");
         // If command isn't in the database
-        if (!commands.containsKey(command)) return false;
+        if (command.equals("")) return false;
         // Return value of command
-        return commands.getBoolean(command);
+        return !commands.getBoolean(command);
     }
 
     private boolean isSubscribed(Class<?> cls) {
