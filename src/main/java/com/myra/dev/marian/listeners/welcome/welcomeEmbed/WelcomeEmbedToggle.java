@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 @CommandSubscribe(
-        name = "welcome embed preview"
+        name = "welcome embed toggle"
 )
 public class WelcomeEmbedToggle implements Command {
     @Override

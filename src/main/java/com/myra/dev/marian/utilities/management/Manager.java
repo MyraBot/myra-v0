@@ -44,6 +44,7 @@ import com.myra.dev.marian.listeners.suggestions.SuggestionsHelp;
 import com.myra.dev.marian.listeners.suggestions.SuggestionsToggle;
 import com.myra.dev.marian.listeners.welcome.WelcomeChannel;
 import com.myra.dev.marian.listeners.welcome.WelcomeColour;
+import com.myra.dev.marian.listeners.welcome.WelcomeHelp;
 import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessageHelp;
 import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessageMessage;
 import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessagePreview;
@@ -175,6 +176,7 @@ public class Manager {
                 new AddStreamer(),
                 new NotificationList(),
                 // Welcome
+                new WelcomeHelp(),
                 new WelcomeChannel(),
                 new WelcomeColour(),
                 // Welcome Image
