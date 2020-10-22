@@ -8,8 +8,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import java.util.Arrays;
-
 @CommandSubscribe(
         name = "welcome"
 )
@@ -44,30 +42,6 @@ public class WelcomeHelp implements Command {
                     .addField("`" + Prefix.getPrefix(event.getGuild()) + "welcome colour <hex colour>`", "\uD83C\uDFA8 │ Set the colour of the embeds", false);
             event.getChannel().sendMessage(welcomeUsage.build()).queue();
             return;
-        }
-        /**
-         * welcome embed usage
-         */
-        if (Arrays.stream(embed).anyMatch(sentMessage[1]::equals)) {
-            if (sentMessage.length == 2) {
-                EmbedBuilder welcomeEmbed = new EmbedBuilder()
-                        .setAuthor("│ welcome embed", null, event.getAuthor().getEffectiveAvatarUrl())
-                        .setColor(Manager.getUtilities().gray)
-                        .addField("`" + Prefix.getPrefix(event.getGuild()) + "welcome embed toggle`", "\uD83D\uDD11 │ Toggle welcome embeds on and off", false)
-                        .addField("`" + Prefix.getPrefix(event.getGuild()) + "welcome embed message <message>`", "\uD83D\uDCAC │ Set the text of the embed message", false)
-                        .addField("`" + Prefix.getPrefix(event.getGuild()) + "welcome embed preview`", "\uD83D\uDCF8 │ Displays the current embed", false);
-                event.getChannel().sendMessage(welcomeEmbed.build()).queue();
-                return;
-            }
-            //welcome embed message usage
-            if (sentMessage.length == 3 && Arrays.stream(message).anyMatch(sentMessage[2]::equalsIgnoreCase)) {
-                EmbedBuilder welcomeEmbedMessage = new EmbedBuilder()
-                        .setAuthor("│ welcome embed message", null, event.getAuthor().getEffectiveAvatarUrl())
-                        .addField("`" + Prefix.getPrefix(event.getGuild()) + "welcome embed message <message>`", "\uD83D\uDCAC │ Set the text of the embed message", false)
-                        .setFooter("{user} = mention the user │ {server} = server name │ {count} = user count");
-                event.getChannel().sendMessage(welcomeEmbedMessage.build()).queue();
-                return;
-            }
         }
     }
 }

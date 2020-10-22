@@ -12,10 +12,11 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 public class WelcomeEmbedToggle implements Command {
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
-        Database db = new Database(event.getGuild());
         //missing permissions
         if (!event.getMember().hasPermission(Permission.ADMINISTRATOR)) return;
+        // Check for no arguments
+        if (arguments.length != 0) return;
         //toggle feature
-        db.getListenerManager().toggle("welcomeEmbed", "\uD83D\uDCC7", event);
+        new Database(event.getGuild()).getListenerManager().toggle("welcomeEmbed", "\uD83D\uDCC7", event);
     }
 }

@@ -21,7 +21,7 @@ public class WelcomeEmbedPreview implements Command {
         String welcomeEmbedMessage = db.getNested("welcome").get("welcomeEmbedMessage");
         //build embed
         EmbedBuilder join = new EmbedBuilder()
-                .setAuthor("│ welcome", null, event.getGuild().getIconUrl())
+                .setAuthor("welcome", null, event.getGuild().getIconUrl())
                 .setColor(Color.decode(welcomeColour))
                 .setThumbnail(event.getAuthor().getEffectiveAvatarUrl())
                 .setDescription(welcomeEmbedMessage.replace("{user}", event.getMember().getAsMention()).replace("{server}", event.getGuild().getName()).replace("{count}", Integer.toString(event.getGuild().getMemberCount())))

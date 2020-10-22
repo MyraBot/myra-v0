@@ -1,9 +1,9 @@
 package com.myra.dev.marian.listeners.welcome.welcomeEmbed;
 
 import com.myra.dev.marian.database.Prefix;
-import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.management.Events;
+import com.myra.dev.marian.utilities.management.Manager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
@@ -12,8 +12,8 @@ import java.awt.*;
 import java.time.Instant;
 
 public class WelcomeEmbed extends Events {
-
-    public void onGuildMemberJoin(GuildMemberJoinEvent event) throws Exception{
+    @Override
+    public void memberJoined(GuildMemberJoinEvent event) throws Exception {
         Database db = new Database(event.getGuild());
 
         //check if feature is disabled
@@ -30,7 +30,7 @@ public class WelcomeEmbed extends Events {
         String welcomeEmbedMessage = db.getNested("welcome").get("welcomeEmbedMessage");
         //send message
         EmbedBuilder join = new EmbedBuilder()
-                .setAuthor("│ welcome", null, event.getGuild().getIconUrl())
+                .setAuthor("welcome", null, event.getGuild().getIconUrl())
                 .setColor(Color.decode(welcomeColour))
                 .setThumbnail(event.getUser().getEffectiveAvatarUrl())
                 .setDescription(welcomeEmbedMessage.replace("{user}", event.getMember().getAsMention()).replace("{server}", event.getGuild().getName()).replace("{count}", Integer.toString(event.getGuild().getMemberCount())))

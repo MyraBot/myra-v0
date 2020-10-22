@@ -16,8 +16,6 @@ public class WelcomeDirectMessageToggle implements Command {
         // Missing permissions
         if (!Permissions.isAdministrator(event.getMember())) return;
         //toggle feature
-        Database db = new Database(event.getGuild());
-
-        db.getListenerManager().toggle("welcomeDirectMessage", "\u2709\uFE0F", event);
+        new Database(event.getGuild()).getListenerManager().toggle("welcomeDirectMessage", "\u2709\uFE0F", event);
     }
 }

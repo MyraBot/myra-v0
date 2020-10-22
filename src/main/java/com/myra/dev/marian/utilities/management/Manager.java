@@ -31,7 +31,6 @@ import com.myra.dev.marian.commands.moderation.mute.Unmute;
 import com.myra.dev.marian.commands.music.commands.*;
 import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.MongoDbUpdate;
-import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.listeners.autorole.AutoRoleSet;
 import com.myra.dev.marian.listeners.autorole.AutoroleToggle;
 import com.myra.dev.marian.listeners.leveling.*;
@@ -49,7 +48,11 @@ import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectM
 import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessageMessage;
 import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessagePreview;
 import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessageToggle;
-import com.myra.dev.marian.listeners.welcome.welcomeImage.*;
+import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedHelp;
+import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedMessage;
+import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedPreview;
+import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedToggle;
+import com.myra.dev.marian.listeners.welcome.WelcomeImage.*;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.commands.CommandService;
 import com.myra.dev.marian.utilities.management.commands.DefaultCommandService;
@@ -184,7 +187,12 @@ public class Manager {
                 new WelcomeDirectMessageHelp(),
                 new WelcomeDirectMessageToggle(),
                 new WelcomeDirectMessageMessage(),
-                new WelcomeDirectMessagePreview()
+                new WelcomeDirectMessagePreview(),
+                // Welcome embed
+                new WelcomeEmbedHelp(),
+                new WelcomeEmbedToggle(),
+                new WelcomeEmbedMessage(),
+                new WelcomeEmbedPreview()
                 );
         LISTENER_SERVICE.register(
                 new LevelingListener(),

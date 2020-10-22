@@ -29,7 +29,7 @@ public class Daily implements Command {
         // Get currency
         String currency = new Database(event.getGuild()).getNested("economy").get("currency");
         // Missed reward
-        if (TimeUnit.MILLISECONDS.toHours(passedTime) > 48) {
+        if (TimeUnit.MILLISECONDS.toHours(passedTime) > 24) {
             // Create embed builder
             EmbedBuilder daily = new EmbedBuilder()
                     .setAuthor("daily", null, event.getAuthor().getEffectiveAvatarUrl())
@@ -91,7 +91,7 @@ public class Daily implements Command {
             // Send daily reward
             event.getChannel().sendMessage(daily.build()).queue();
         } else {
-            long nextBonusAt = lastClaim + TimeUnit.DAYS.toMillis(1);
+            long nextBonusAt = lastClaim + TimeUnit.HOURS.toMillis(12);
             String nextBonusIn = Manager.getUtilities().formatTime(nextBonusAt - System.currentTimeMillis());
 
             EmbedBuilder daily = new EmbedBuilder()

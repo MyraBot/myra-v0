@@ -25,12 +25,18 @@ public class WelcomeDirectMessageMessage implements Command {
                     .addField("`" + Prefix.getPrefix(event.getGuild()) + "welcome direct message message <message>`", "\uD83D\uDCAC │ change the text of the direct messages", false)
                     .setFooter("{user} = mention the user │ {server} = server name │ {count} = user count");
             event.getChannel().sendMessage(welcomeDirectMessageMessage.build()).queue();
+            return;
         }
         Database db = new Database(event.getGuild());
-        //split message
-        String[] sentMessage = event.getMessage().getContentRaw().split("\\s+", 5);
+        // Get message
+        String message = "";
+        for (int i = 0; i < arguments.length; i++) {
+            message += arguments[i] + " ";
+        }
+        //remove last space
+        message = message.substring(0, message.length() - 1);
         //change value in database
-        db.getNested("welcome").set("welcomeDirectMessage", sentMessage[4]);
+        db.getNested("welcome").set("welcomeDirectMessage", message);
         //success
         String welcomeMessage = db.getNested("welcome").get("welcomeDirectMessage");
         Manager.getUtilities().success(event.getChannel(), "welcome direct message", "\u2709\uFE0F", "Welcome message changed",

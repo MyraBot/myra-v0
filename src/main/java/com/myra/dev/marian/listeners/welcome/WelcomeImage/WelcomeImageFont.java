@@ -1,4 +1,4 @@
-package com.myra.dev.marian.listeners.welcome.welcomeImage;
+package com.myra.dev.marian.listeners.welcome.WelcomeImage;
 
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.Utilities;

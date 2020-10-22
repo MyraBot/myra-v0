@@ -11,7 +11,7 @@ import java.awt.*;
 
 @CommandSubscribe(
         name = "welcome direct message preview",
-        aliases = {"welcoe dm preview"}
+        aliases = {"welcome dm preview"}
 )
 public class WelcomeDirectMessagePreview implements Command {
     @Override
@@ -20,21 +20,7 @@ public class WelcomeDirectMessagePreview implements Command {
         if (!Permissions.isAdministrator(event.getMember())) return;
         // Check for no arguments
         if (arguments.length != 0) return;
-
-        // Get database
-        Database db = new Database(event.getGuild());
-        //get variables
-        String welcomeColour = db.getNested("welcome").get("welcomeColour");
-        String welcomeDirectMessage = db.getNested("welcome").get("welcomeDirectMessage");
-        //send message
-        EmbedBuilder join = new EmbedBuilder()
-                .setAuthor("│ welcome", null, event.getGuild().getIconUrl())
-                .setColor(Color.decode(welcomeColour))
-                .setThumbnail(event.getAuthor().getEffectiveAvatarUrl())
-                .setDescription(welcomeDirectMessage
-                        .replace("{user}", event.getAuthor().getAsMention())
-                        .replace("{server}", event.getGuild().getName())
-                        .replace("{count}", Integer.toString(event.getGuild().getMemberCount())));
-        event.getChannel().sendMessage(join.build()).queue();
+        // Send message
+        new WelcomeDirectMessageRender().embed(event.getGuild(), null, event.getChannel(), event.getAuthor());
     }
 }
