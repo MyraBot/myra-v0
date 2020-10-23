@@ -7,13 +7,14 @@ import com.myra.dev.marian.utilities.management.Manager;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Icon;
-import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
-import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.*;
 
 public class Main {
@@ -66,6 +67,9 @@ public class Main {
         profilePictures.add(this.getClass().getClassLoader().getResourceAsStream("profilePicture3.png"));
         profilePictures.add(this.getClass().getClassLoader().getResourceAsStream("profilePicture4.png"));
         profilePictures.add(this.getClass().getClassLoader().getResourceAsStream("profilePicture5.png"));
+        profilePictures.add(this.getClass().getClassLoader().getResourceAsStream("profilePicture6.png"));
+        profilePictures.add(this.getClass().getClassLoader().getResourceAsStream("profilePicture7.png"));
+        profilePictures.add(this.getClass().getClassLoader().getResourceAsStream("profilePicture8.png"));
         //get a random one
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -75,7 +79,7 @@ public class Main {
                 shardManager.getShards().forEach(bot -> {
                     try {
                         //change status
-                        bot.getPresence().setActivity(Activity.listening("~help │ v0.6.0 │ " + bot.getGuilds().size() + " servers"));
+                        bot.getPresence().setActivity(Activity.listening("~help │ v0.6.1 │ " + bot.getGuilds().size() + " servers"));
                         //change profile picture
                         int random = new Random().nextInt(profilePictures.size());
                         bot.getSelfUser().getManager().setAvatar(
@@ -85,6 +89,6 @@ public class Main {
                     }
                 });
             }
-        }, 10 * 1000, 5 * 60 * 1000);
+        }, 5 * 1000, 45 * 100 * 1000);
     }
 }

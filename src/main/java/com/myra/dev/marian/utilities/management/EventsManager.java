@@ -14,10 +14,11 @@ import com.myra.dev.marian.commands.music.commands.MusicPlay;
 import com.myra.dev.marian.database.MongoDbUpdate;
 import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.listeners.autorole.AutoroleAssign;
+import com.myra.dev.marian.listeners.leveling.Leveling;
 import com.myra.dev.marian.listeners.notification.Notification;
-import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessage;
 import com.myra.dev.marian.listeners.welcome.WelcomeImage.WelcomeImage;
 import com.myra.dev.marian.listeners.welcome.WelcomeImage.WelcomeImageFont;
+import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessage;
 import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.utilities.management.commands.CommandService;
 import com.myra.dev.marian.utilities.management.listeners.ListenerService;
@@ -28,6 +29,7 @@ import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -181,10 +183,18 @@ public class EventsManager extends ListenerAdapter {
         }
     }
 
+    public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
+        try {
+            new Leveling().xpVoice(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void onUserUpdateName(UserUpdateNameEvent event) {
         try {
-        // Update database
-        new MongoDbUpdate().userUpdateNameEvent(event);
+            // Update database
+            new MongoDbUpdate().userUpdateNameEvent(event);
         } catch (Exception e) {
             e.printStackTrace();
         }

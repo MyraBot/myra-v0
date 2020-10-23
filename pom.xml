@@ -6,7 +6,7 @@
 
     <groupId>Marian</groupId>
     <artifactId>Myra</artifactId>
-    <version>v0.6.0</version>
+    <version>v0.6.1</version>
 
     <dependencies>
         <!-- JDA -->

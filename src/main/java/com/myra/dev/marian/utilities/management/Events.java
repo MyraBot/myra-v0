@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -35,6 +36,9 @@ public abstract class Events {
     }
 
     public void memberJoined(GuildMemberJoinEvent event) throws Exception {
+    }
+
+    public void guildVoiceJoinEvent(GuildVoiceJoinEvent event) throws Exception {
     }
 
     public void voiceChannelLeave(GuildVoiceLeaveEvent event) throws Exception {

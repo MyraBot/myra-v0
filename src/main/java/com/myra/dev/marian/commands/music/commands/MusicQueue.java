@@ -44,7 +44,7 @@ public class MusicQueue implements Command {
         }
         // Get queue
         BlockingQueue<AudioTrack> queue = PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).scheduler.getQueue();
-        int trackCount = Math.min(queue.size(), 20);
+        int trackCount = Math.min(queue.size(), 15);
         List<AudioTrack> tracks = new ArrayList<>(queue);
         String songs = "";
         for (int i = 0; i < trackCount; i++) {

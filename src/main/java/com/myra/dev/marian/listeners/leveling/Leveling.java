@@ -6,6 +6,7 @@ import com.myra.dev.marian.utilities.Graphic;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import javax.imageio.ImageIO;
@@ -17,6 +18,8 @@ import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Leveling {
 
@@ -147,5 +150,22 @@ public class Leveling {
         numberFormat.setMaximumFractionDigits(0);
         //convert to int and remove the '.0'
         return Integer.parseInt(String.valueOf(xp).replace(".0", ""));
+    }
+
+    public void xpVoice(GuildVoiceJoinEvent event) {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+/*                System.out.println("suppressed " + event.getMember().getVoiceState().isSuppressed());
+                System.out.println("deafened " +event.getMember().getVoiceState().isDeafened());
+                System.out.println("guild deafened " +event.getMember().getVoiceState().isGuildDeafened());
+                System.out.println("guild muted " +event.getMember().getVoiceState().isGuildMuted());
+                System.out.println("muted " +event.getMember().getVoiceState().isMuted());
+                System.out.println("self deafend " +event.getMember().getVoiceState().isSelfDeafened());
+                System.out.println("is self muted " +event.getMember().getVoiceState().isSelfMuted());
+                System.out.println("stream " +event.getMember().getVoiceState().isStream());*/
+            }
+        }, 1000, 5 * 1000);
     }
 }
