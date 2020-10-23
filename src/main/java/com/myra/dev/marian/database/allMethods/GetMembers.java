@@ -1,6 +1,7 @@
 package com.myra.dev.marian.database.allMethods;
 
 import com.myra.dev.marian.database.MongoDb;
+import com.myra.dev.marian.database.documents.MemberDocument;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import org.bson.Document;
@@ -22,7 +23,7 @@ public class GetMembers {
     public GetMembers(MongoDb mongoDb, Guild guild) {
         this.mongoDb = mongoDb;
         this.guild = guild;
-        guildDocument = mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first();
+        this.guildDocument = mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first();
     }
 
     /**

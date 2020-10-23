@@ -1,7 +1,7 @@
-package com.myra.dev.marian.listeners.leveling;
+package com.myra.dev.marian.commands.leveling;
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.database.allMethods.MemberDocument;
+import com.myra.dev.marian.database.documents.MemberDocument;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.management.Manager;

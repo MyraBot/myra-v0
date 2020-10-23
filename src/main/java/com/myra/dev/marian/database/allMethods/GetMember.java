@@ -1,6 +1,7 @@
 package com.myra.dev.marian.database.allMethods;
 
 import com.myra.dev.marian.database.MongoDb;
+import com.myra.dev.marian.database.documents.MemberDocument;
 import net.dv8tion.jda.api.entities.Guild;
 import org.bson.Document;
 

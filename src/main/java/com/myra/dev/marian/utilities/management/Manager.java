@@ -18,6 +18,12 @@ import com.myra.dev.marian.commands.general.information.InformationHelp;
 import com.myra.dev.marian.commands.general.information.InformationServer;
 import com.myra.dev.marian.commands.general.information.InformationUser;
 import com.myra.dev.marian.commands.help.*;
+import com.myra.dev.marian.commands.leveling.Leaderboard;
+import com.myra.dev.marian.commands.leveling.administrator.LevelingHelp;
+import com.myra.dev.marian.commands.leveling.administrator.LevelingSet;
+import com.myra.dev.marian.commands.leveling.Rank;
+import com.myra.dev.marian.commands.leveling.administrator.levelingRoles.LevelingRolesAdd;
+import com.myra.dev.marian.commands.leveling.administrator.levelingRoles.LevelingRolesRemove;
 import com.myra.dev.marian.commands.moderation.Clear;
 import com.myra.dev.marian.commands.moderation.Kick;
 import com.myra.dev.marian.commands.moderation.ModerationHelp;
@@ -97,7 +103,9 @@ public class Manager {
         return LEVELING;
     }
 
+    // Register events
     public void commandRegistry() {
+        // Register commands
         COMMAND_SERVICE.register(
                 // Marian
                 new MongoDbUpdate(),
@@ -123,6 +131,8 @@ public class Manager {
                 // Leveling
                 new LevelingHelp(),
                 new LevelingSet(),
+                new LevelingRolesAdd(),
+                new LevelingRolesRemove(),
 
                 new Rank(),
                 new Leaderboard(),
@@ -196,6 +206,7 @@ public class Manager {
                 new WelcomeEmbedMessage(),
                 new WelcomeEmbedPreview()
                 );
+        // Register listeners
         LISTENER_SERVICE.register(
                 new LevelingListener(),
 

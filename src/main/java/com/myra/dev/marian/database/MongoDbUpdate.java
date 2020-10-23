@@ -1,6 +1,7 @@
 package com.myra.dev.marian.database;
 
 import com.myra.dev.marian.utilities.management.Events;
+import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.entities.Guild;
@@ -53,8 +54,8 @@ public class MongoDbUpdate extends Events implements Command {
                 Document commands = (Document) doc.get("commands");
                 Document listeners = (Document) doc.get("listeners");
 
-/*
-                for (Document member : members) {
+
+                /*for (Document member : members) {
                     //get id of user
                     String id = member.toString().split("=")[2].split(",")[0];
                     //get member document
@@ -64,9 +65,14 @@ public class MongoDbUpdate extends Events implements Command {
                     memberDocument.append("lastClaim", System.currentTimeMillis())
                             .append("invites", 0);
                 }
-
+                */
+                /*
                 Document economy = new Document()
                         .append("currency", Manager.getUtilities().coin);
+                */
+                Document leveling = new Document()
+                        .append("boost", 1)
+                        .append("roles", new Document());
                 Document welcomeNested = new Document()
                         .append("welcomeChannel", "not set")
                         .append("welcomeColour", Manager.getUtilities().blue)
@@ -90,7 +96,7 @@ public class MongoDbUpdate extends Events implements Command {
                         .append("leaderboard", true)
 
                         .append("meme", true)
-                        .append("textFormatter", true);*/
+                        .append("textFormatter", true);
                 Document listenersNested = new Document()
                         .append("welcomeImage", false)
                         .append("welcomeEmbed", false)
@@ -99,12 +105,12 @@ public class MongoDbUpdate extends Events implements Command {
                         .append("suggestions", false)
 
                         .append("autorole", false);
-
                 //create Document
                 Document guildDoc = new Document("guildId", guildId)
                         .append("guildName", guildName)
                         .append("prefix", prefix)
                         .append("economy", economy)
+                        .append("leveling", leveling)
                         .append("members", members)
                         .append("notificationChannel", notificationChannel)
                         .append("streamers", streamers)
@@ -114,7 +120,7 @@ public class MongoDbUpdate extends Events implements Command {
                         .append("muteRole", muteRole)
                         .append("welcome", welcome)
                         .append("commands", commands)
-                        .append("listeners", listenersNested);
+                        .append("listeners", listeners);
                 //replace old one
                 mongoDb.getCollection("guilds").findOneAndReplace(
                         mongoDb.getCollection("guilds").find(eq("guildId", guildDoc.getString("guildId"))).first(),

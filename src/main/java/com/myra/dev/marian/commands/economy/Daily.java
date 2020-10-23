@@ -19,54 +19,48 @@ public class Daily implements Command {
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
         // Check for no arguments
         if (arguments.length != 0) return;
-
-        // Get database
+        // Get member from database
         GetMember member = new Database(event.getGuild()).getMembers().getMember(event.getMember());
         // Get last claimed reward
         long lastClaim = member.getLastClaim();
-        // Get duration, which passed
+        // Get duration, which passed (in milliseconds)
         long passedTime = System.currentTimeMillis() - lastClaim;
+        // New streak
+        int streak = 0;
+        // Get reward
+        int dailyReward = 0;
+        // New balance
+        int balance = member.getBalance();
         // Get currency
         String currency = new Database(event.getGuild()).getNested("economy").get("currency");
-        // Missed reward
-        if (TimeUnit.MILLISECONDS.toHours(passedTime) > 24) {
-            // Create embed builder
-            EmbedBuilder daily = new EmbedBuilder()
-                    .setAuthor("daily", null, event.getAuthor().getEffectiveAvatarUrl())
-                    .setColor(Manager.getUtilities().getMemberRoleColour(event.getMember()));
-            // Get balance without bonus (With the streak of 1, you can't get a bonus)
-            int balance = 100 + member.getBalance();
-            daily.setDescription("**+" + 100 + "** " + currency + "! Now you have `" + balance + "` " + currency);
-            // Show streak
-            daily.setFooter("streak: 1/14");
-            // Update balance
-            member.setBalance(member.getBalance() + 100);
-            // Update
-            member.updateClaimedReward();
-            // Update streak
-            member.setDailyStreak(1);
-            // Send daily reward
+        // Create embed
+        EmbedBuilder daily = new EmbedBuilder()
+                .setAuthor("daily", null, event.getAuthor().getEffectiveAvatarUrl())
+                .setColor(Manager.getUtilities().getMemberRoleColour(event.getMember()));
+
+        // Too early
+        if (TimeUnit.MILLISECONDS.toHours(passedTime) < 12) {
+            long nextBonusAt = lastClaim + TimeUnit.HOURS.toMillis(12);
+            String nextBonusIn = Manager.getUtilities().formatTime(nextBonusAt - System.currentTimeMillis());
+
+
+            daily.setDescription("You need to wait more " + nextBonusIn);
             event.getChannel().sendMessage(daily.build()).queue();
+            return;
         }
-        // If 24 hours are passed
-        else if (TimeUnit.MILLISECONDS.toHours(passedTime) > 12) {
-            // Create embed builder
-            EmbedBuilder daily = new EmbedBuilder()
-                    .setAuthor("daily", null, event.getAuthor().getEffectiveAvatarUrl())
-                    .setColor(Manager.getUtilities().getMemberRoleColour(event.getMember()));
-            // Get streak
-            int streak = member.getDailyStreak();
-            // Update streak if it's not 14 (maximum)
-            if (streak != 14) {
-                streak = streak + 1;
-                member.setDailyStreak(streak);
+
+        // Claim reward
+        if (TimeUnit.MILLISECONDS.toHours(passedTime) > 12) {
+            // Update streak
+            streak = member.getDailyStreak() + 1;
+            // Missed reward
+            if (TimeUnit.MILLISECONDS.toHours(passedTime) > 24) {
+                // Reset streak
+                streak = 1;
             }
-            // Get balance without bonus
-            int dailyReward = streak * 100;
-            int balance = dailyReward + member.getBalance();
-            daily.setDescription("**+" + dailyReward + "** " + currency + "! Now you have `" + balance + "` " + currency);
-            // If streak isn't one (With a streak of 1, you can't get a bonus)
-            if (streak != 1) {
+
+            // Get bonus
+            if (streak != 1) { // With a steak of 1, you're not be able to receive a bonus
                 // Set probability
                 int percent = streak / 100 * 2;
                 Random random = new Random();
@@ -80,25 +74,21 @@ public class Daily implements Command {
                     daily.addField("\uD83D\uDCB0 │ bonus", "You could have got a bonus here \uD83D\uDE14, BUT YOU DIDN'T <:lmao:768519476400095262>", false);
                 }
             }
-            // Show streak
-            daily.setFooter("streak: " + streak + "/14");
-            // Update balance
-            member.setBalance(member.getBalance() + dailyReward);
-            // Update streak
-            member.setDailyStreak(streak);
-            // Update last claim
-            member.updateClaimedReward();
-            // Send daily reward
-            event.getChannel().sendMessage(daily.build()).queue();
-        } else {
-            long nextBonusAt = lastClaim + TimeUnit.HOURS.toMillis(12);
-            String nextBonusIn = Manager.getUtilities().formatTime(nextBonusAt - System.currentTimeMillis());
-
-            EmbedBuilder daily = new EmbedBuilder()
-                    .setAuthor("daily", null, event.getAuthor().getEffectiveAvatarUrl())
-                    .setColor(Manager.getUtilities().getMemberRoleColour(event.getMember()))
-                    .setDescription("You need to wait more " + nextBonusIn);
-            event.getChannel().sendMessage(daily.build()).queue();
         }
+        // Get daily reward
+        dailyReward += streak * 100;
+        // Update balance
+        member.setBalance(member.getBalance() + dailyReward);
+        // Update last claim
+        member.updateClaimedReward();
+        // Update streak
+        member.setDailyStreak(streak);
+
+        // Show reward
+        daily.setDescription("**+" + dailyReward + "** " + currency + "! Now you have `" + balance + "` " + currency);
+        // Show streak
+        daily.setFooter("streak: " + streak + "/14");
+        // Send daily reward
+        event.getChannel().sendMessage(daily.build()).queue();
     }
 }

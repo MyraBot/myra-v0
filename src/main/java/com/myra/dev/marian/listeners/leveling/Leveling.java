@@ -82,6 +82,10 @@ public class Leveling {
                 new ByteArrayInputStream(outStream.toByteArray()),
                 event.getMember().getUser().getName().toLowerCase() + "_level_up.png"
         ).queue();
+        /**
+         * Leveling role
+         */
+        new Database(event.getGuild()).getLeveling().getLevelingRoles().checkForNewOnesOwO(newLevel, event.getMember(), event.getGuild());
     }
 
     //return xp

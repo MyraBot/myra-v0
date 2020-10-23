@@ -1,4 +1,4 @@
-package com.myra.dev.marian.database.allMethods;
+package com.myra.dev.marian.database.documents;
 
 import org.bson.Document;
 

@@ -60,4 +60,9 @@ public class Database {
     public GetNotificationManager getNotificationManager() {
         return new GetNotificationManager(mongoDb, guild);
     }
+
+    // Get Leveling
+    public GetLeveling getLeveling() {
+        return new GetLeveling(mongoDb, guild);
+    }
 }

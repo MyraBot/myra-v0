@@ -55,7 +55,6 @@ public class Twitch extends Events {
             //return access token
             String output = response.body().string();
             JSONObject obj = new JSONObject(output);
-            System.out.println(response);
             String gameName = obj.getJSONArray("data").getJSONObject(0).getString("name");
             return gameName;
         }
