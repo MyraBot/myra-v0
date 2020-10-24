@@ -53,7 +53,7 @@ public class Clear implements Command {
             }
             //message too late
             else {
-                utilities.error(event.getChannel(), "clear", "\uD83D\uDDD1", "You selected too old messages", "I can´t delete messages older than 2 weeks", event.getAuthor().getEffectiveAvatarUrl());
+                utilities.error(event.getChannel(), "clear", "\uD83D\uDDD1", "You selected too old messages", "I can't delete messages older than 2 weeks", event.getAuthor().getEffectiveAvatarUrl());
             }
         }
     }

@@ -47,7 +47,7 @@ public class Unmute implements Command {
         }
         // User is already muted
         if (!event.getGuild().getMember(user).getRoles().contains(event.getGuild().getRoleById(muteRoleId))) {
-            Manager.getUtilities().error(event.getChannel(), "unmute", "\uD83D\uDD08", "This user isn´t muted", "Use `" + Prefix.getPrefix(event.getGuild()) + "mute <user>` to mute a user", event.getAuthor().getEffectiveAvatarUrl());
+            Manager.getUtilities().error(event.getChannel(), "unmute", "\uD83D\uDD08", "This user isn't muted", "Use `" + Prefix.getPrefix(event.getGuild()) + "mute <user>` to mute a user", event.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         //guild message

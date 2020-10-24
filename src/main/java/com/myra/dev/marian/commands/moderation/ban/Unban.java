@@ -41,11 +41,11 @@ public class Unban implements Command {
         //get user
         User user = utilities.getUser(event, arguments[0], "unban", "\uD83D\uDD13");
         if (user == null) return;
-        //user isn´t banned
+        //user isn't banned
         if (event.getGuild().getMember(user) != null) {
             Manager.getUtilities().error(event.getChannel(),
                     "unban", "\uD83D\uDD13",
-                    "User isn´t banned",
+                    "User isn't banned",
                     "The mentioned user is already unbanned",
                     event.getAuthor().getEffectiveAvatarUrl());
             return;

@@ -18,12 +18,12 @@ public class MusicLeave implements Command {
         if (!event.getGuild().getAudioManager().isConnected()) {
             Manager.getUtilities().error(event.getChannel(),
                     "disconnect", "\uD83D\uDCE4",
-                    "I´m not connected to a voice channel",
+                    "I'm not connected to a voice channel",
                     "Use `" + Prefix.getPrefix(event.getGuild()) + "join` to connect me to your voice channel",
                     event.getAuthor().getEffectiveAvatarUrl());
             return;
         }
-        //author isn´t in the same voice channel as the bot
+        //author isn't in the same voice channel as the bot
         if (!event.getGuild().getAudioManager().getConnectedChannel().getMembers().contains(event.getMember())) {
             Manager.getUtilities().error(event.getChannel(),
                     "disconnect", "\uD83D\uDCE4",

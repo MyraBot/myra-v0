@@ -29,7 +29,7 @@ public class MusicShuffle implements Command {
             utilities.error(
                     event.getChannel(),
                     "shuffle queue", "\uD83D\uDCE4",
-                    "I´m not connected to a voice channel",
+                    "I'm not connected to a voice channel",
                     "Use `" + Prefix.getPrefix(event.getGuild()) + "join` to connect me to your voice channel",
                     event.getAuthor().getEffectiveAvatarUrl());
             return;

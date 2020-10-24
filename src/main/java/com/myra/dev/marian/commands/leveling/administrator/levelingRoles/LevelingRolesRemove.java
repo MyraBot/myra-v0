@@ -2,6 +2,7 @@ package com.myra.dev.marian.commands.leveling.administrator.levelingRoles;
 
 import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.database.allMethods.Database;
+import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
@@ -13,11 +14,14 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.bson.Document;
 
 @CommandSubscribe(
-        name = "leveling roles remove"
+        name = "leveling roles remove",
+        aliases = {"leveling role remove"}
 )
 public class LevelingRolesRemove implements Command {
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+        // Missing permissions
+        if (!Permissions.isAdministrator(event.getMember())) return;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
         // Usage
@@ -25,7 +29,7 @@ public class LevelingRolesRemove implements Command {
             EmbedBuilder usage = new EmbedBuilder()
                     .setAuthor("leveling roles remove", null, event.getAuthor().getEffectiveAvatarUrl())
                     .setColor(utilities.gray)
-                    .addField("`" + Prefix.getPrefix(event.getGuild()) + "leveling roles remove <role>`", "\uD83C\uDFC5 │ Delete the linking between a level and a role", false);
+                    .addField("`" + Prefix.getPrefix(event.getGuild()) + "leveling roles remove <role>`", "\uD83D\uDDD1 │ Delete the linking between a level and a role", false);
             event.getChannel().sendMessage(usage.build()).queue();
             return;
         }

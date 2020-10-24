@@ -29,7 +29,7 @@ public class Mute implements Command {
                     .setAuthor("│ mute", null, event.getAuthor().getEffectiveAvatarUrl())
                     .setColor(Manager.getUtilities().gray)
                     .addField("`" + Prefix.getPrefix(event.getGuild()) + "mute <user> <reason>`", "\uD83D\uDD07 │ mute a specific user", false)
-                    .setFooter("you don´t have to give a reason.");
+                    .setFooter("you don't have to give a reason.");
             event.getChannel().sendMessage(usage.build()).queue();
             return;
         }

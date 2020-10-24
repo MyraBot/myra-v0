@@ -23,7 +23,7 @@ public class MusicSkip implements Command {
             utilities.error(
                     event.getChannel(),
                     "skip", "\u23ED\uFE0F",
-                    "I´m not connected to a voice channel",
+                    "I'm not connected to a voice channel",
                     "Use `" + Prefix.getPrefix(event.getGuild()) + "join` to connect me to your voice channel",
                     event.getAuthor().getEffectiveAvatarUrl());
             return;

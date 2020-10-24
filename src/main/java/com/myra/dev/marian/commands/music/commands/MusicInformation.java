@@ -23,12 +23,12 @@ public class MusicInformation implements Command {
         AudioPlayer player = PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
-        //the bot isn´t connected to any voice channel
+        //the bot isn't connected to any voice channel
         if (!event.getGuild().getAudioManager().isConnected()) {
             utilities.error(
                     event.getChannel(),
                     "track information", "\uD83D\uDDD2",
-                    "I´m not connected to a voice channel",
+                    "I'm not connected to a voice channel",
                     "Use `" + Prefix.getPrefix(event.getGuild()) + "join` to connect me to your voice channel",
                     event.getAuthor().getEffectiveAvatarUrl());
             return;

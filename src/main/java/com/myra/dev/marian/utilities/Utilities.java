@@ -235,19 +235,19 @@ public class Utilities {
             error(event.getChannel(), command, commandEmoji, "No user given", "Please enter the id, tag or mention the user", event.getAuthor().getEffectiveAvatarUrl());
             //return null;
         }
-        //if member isn´t in the guild
+        //if member isn't in the guild
         if (event.getGuild().getMember(user) == null) {
             error(event.getChannel(), command, commandEmoji, "No user found", "The user you mentioned isn't on this server", event.getAuthor().getEffectiveAvatarUrl());
             return null;
         }
-        //can´t modify yourself
+        //can't modify yourself
         if (user.equals(event.getAuthor())) {
-            error(event.getChannel(), command, commandEmoji, "Can´t " + command + " the mentioned user", "You can´t " + command + " yourself", event.getAuthor().getEffectiveAvatarUrl());
+            error(event.getChannel(), command, commandEmoji, "Can't " + command + " the mentioned user", "You can't " + command + " yourself", event.getAuthor().getEffectiveAvatarUrl());
             return null;
         }
         //can't modify the owner
         else if (event.getGuild().getMember(user).isOwner()) {
-            error(event.getChannel(), command, commandEmoji, "Can´t " + command + " the mentioned user", "You can´t " + command + " the owner of the server", event.getAuthor().getEffectiveAvatarUrl());
+            error(event.getChannel(), command, commandEmoji, "Can't " + command + " the mentioned user", "You can't " + command + " the owner of the server", event.getAuthor().getEffectiveAvatarUrl());
             return null;
         }
         //if user has a higher or equal role than you

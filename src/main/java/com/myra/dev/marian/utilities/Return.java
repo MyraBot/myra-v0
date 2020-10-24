@@ -45,22 +45,22 @@ public class Return {
         User user = event.getJDA().getUserById(sentMessage[providedUser].replaceAll("[<@!>]", ""));
         //if no user if found
         if (user == null) {
-            Manager.getUtilities().error(event.getChannel(), command, commandEmoji, "No user found", "I couldn´t find the specified user", event.getAuthor().getEffectiveAvatarUrl());
+            Manager.getUtilities().error(event.getChannel(), command, commandEmoji, "No user found", "I couldn't find the specified user", event.getAuthor().getEffectiveAvatarUrl());
             return null;
         }
-        //if member isn´t in the guild
+        //if member isn't in the guild
         if (event.getGuild().getMember(user) == null) {
-            Manager.getUtilities().error(event.getChannel(), command, commandEmoji, "No user found", "The user you mentioned isn´t on this server", event.getAuthor().getEffectiveAvatarUrl());
+            Manager.getUtilities().error(event.getChannel(), command, commandEmoji, "No user found", "The user you mentioned isn't on this server", event.getAuthor().getEffectiveAvatarUrl());
             return null;
         }
-        //can´t modify yourself
+        //can't modify yourself
         if (user.getId().equals(event.getAuthor().getId())) {
-            Manager.getUtilities().error(event.getChannel(), command, commandEmoji, "Can´t " + command + " the mentioned user", "You can´t " + command + " yourself", event.getAuthor().getEffectiveAvatarUrl());
+            Manager.getUtilities().error(event.getChannel(), command, commandEmoji, "Can't " + command + " the mentioned user", "You can't " + command + " yourself", event.getAuthor().getEffectiveAvatarUrl());
             return null;
         }
-        //can´t modify the owner
+        //can't modify the owner
         else if (event.getGuild().getMember(user).isOwner()) {
-            Manager.getUtilities().error(event.getChannel(), command, commandEmoji, "Can´t " + command + " the mentioned user", "You can´t " + command + " the owner of the server", event.getAuthor().getEffectiveAvatarUrl());
+            Manager.getUtilities().error(event.getChannel(), command, commandEmoji, "Can't " + command + " the mentioned user", "You can't " + command + " the owner of the server", event.getAuthor().getEffectiveAvatarUrl());
             return null;
         }
         //if user has a higher or equal role than you

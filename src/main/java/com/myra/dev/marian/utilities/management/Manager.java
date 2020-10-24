@@ -23,6 +23,8 @@ import com.myra.dev.marian.commands.leveling.administrator.LevelingHelp;
 import com.myra.dev.marian.commands.leveling.administrator.LevelingSet;
 import com.myra.dev.marian.commands.leveling.Rank;
 import com.myra.dev.marian.commands.leveling.administrator.levelingRoles.LevelingRolesAdd;
+import com.myra.dev.marian.commands.leveling.administrator.levelingRoles.LevelingRolesHelp;
+import com.myra.dev.marian.commands.leveling.administrator.levelingRoles.LevelingRolesList;
 import com.myra.dev.marian.commands.leveling.administrator.levelingRoles.LevelingRolesRemove;
 import com.myra.dev.marian.commands.moderation.Clear;
 import com.myra.dev.marian.commands.moderation.Kick;
@@ -131,6 +133,9 @@ public class Manager {
                 // Leveling
                 new LevelingHelp(),
                 new LevelingSet(),
+
+                new LevelingRolesHelp(),
+                new LevelingRolesList(),
                 new LevelingRolesAdd(),
                 new LevelingRolesRemove(),
 

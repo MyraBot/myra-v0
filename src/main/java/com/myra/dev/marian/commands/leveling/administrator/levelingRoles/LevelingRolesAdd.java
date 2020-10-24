@@ -2,6 +2,7 @@ package com.myra.dev.marian.commands.leveling.administrator.levelingRoles;
 
 import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.database.allMethods.Database;
+import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
@@ -12,11 +13,14 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 @CommandSubscribe(
-        name = "leveling roles add"
+        name = "leveling roles add",
+        aliases = {"leveling role add"}
 )
 public class LevelingRolesAdd implements Command {
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+        // Missing permissions
+        if (!Permissions.isAdministrator(event.getMember())) return;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
         // Usage
@@ -24,7 +28,7 @@ public class LevelingRolesAdd implements Command {
             EmbedBuilder usage = new EmbedBuilder()
                     .setAuthor("leveling roles add", null, event.getAuthor().getEffectiveAvatarUrl())
                     .setColor(utilities.gray)
-                    .addField("`" + Prefix.getPrefix(event.getGuild()) + "leveling roles add <level> <role> [remove]`", "\uD83C\uDFC5 │ Link a role to a level", false);
+                    .addField("`" + Prefix.getPrefix(event.getGuild()) + "leveling roles add <level> <role> [remove]`", "\uD83D\uDD17 │ Link a role to a level", false);
             event.getChannel().sendMessage(usage.build()).queue();
             return;
         }
@@ -75,7 +79,7 @@ public class LevelingRolesAdd implements Command {
         // If role to remove is given
         if (arguments.length == 3) {
             utilities.success(event.getChannel(), "leveling roles add", "\uD83C\uDFC5", "Added leveling role", roleToAdd.getAsMention() + " is now linked up tp level `" + arguments[0] + "` and I will remove " + roleToRemove.getAsMention(), event.getAuthor().getEffectiveAvatarUrl(), false, null);
-        return;
+            return;
         }
         // If role to remove isn't givem
         utilities.success(event.getChannel(), "leveling roles add", "\uD83C\uDFC5", "Added leveling role", roleToAdd.getAsMention() + " is now linked up to level `" + arguments[0] + "`", event.getAuthor().getEffectiveAvatarUrl(), false, null);

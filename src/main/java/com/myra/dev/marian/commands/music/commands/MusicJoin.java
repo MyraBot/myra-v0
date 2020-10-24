@@ -23,7 +23,7 @@ public class MusicJoin implements Command {
                     event.getChannel(),
                     "join", "\uD83D\uDCE5",
                     "I can only be in one channel at a time",
-                    "I´m already connected to **" + event.getGuild().getAudioManager().getConnectedChannel().getName() + "**",
+                    "I'm already connected to **" + event.getGuild().getAudioManager().getConnectedChannel().getName() + "**",
                     event.getAuthor().getEffectiveAvatarUrl());
             return;
         }
@@ -42,7 +42,7 @@ public class MusicJoin implements Command {
             utilities.error(
                     event.getChannel(),
                     "join", "\uD83D\uDCE5",
-                    "I´m missing permissions to join your voice channel",
+                    "I'm missing permissions to join your voice channel",
                     "please give me the permission `Connect` under the `VOICE PERMISSIONS` category",
                     event.getAuthor().getEffectiveAvatarUrl());
             return;

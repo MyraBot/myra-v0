@@ -48,9 +48,9 @@ public class Ban implements Command {
         //get user
         User user = utilities.getUser(event, arguments[0], "ban", "\uD83D\uDD12");
         if (user == null) return;
-        //if member isn´t in the guild
+        //if member isn't in the guild
         if (event.getGuild().getMember(user) == null) {
-            utilities.error(event.getChannel(), "ban", "\uD83D\uDD12", "No user found", "The user you mentioned isn´t on this server", event.getAuthor().getEffectiveAvatarUrl());
+            utilities.error(event.getChannel(), "ban", "\uD83D\uDD12", "No user found", "The user you mentioned isn't on this server", event.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         //guild message

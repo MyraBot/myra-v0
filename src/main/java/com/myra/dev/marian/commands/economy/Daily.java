@@ -29,8 +29,6 @@ public class Daily implements Command {
         int streak = 0;
         // Get reward
         int dailyReward = 0;
-        // New balance
-        int balance = member.getBalance();
         // Get currency
         String currency = new Database(event.getGuild()).getNested("economy").get("currency");
         // Create embed
@@ -77,15 +75,17 @@ public class Daily implements Command {
         }
         // Get daily reward
         dailyReward += streak * 100;
+        // Get new balance
+        int newBalance = member.getBalance() + dailyReward;
         // Update balance
-        member.setBalance(member.getBalance() + dailyReward);
+        member.setBalance(newBalance);
         // Update last claim
         member.updateClaimedReward();
         // Update streak
         member.setDailyStreak(streak);
 
         // Show reward
-        daily.setDescription("**+" + dailyReward + "** " + currency + "! Now you have `" + balance + "` " + currency);
+        daily.setDescription("**+" + dailyReward + "** " + currency + "! Now you have `" + newBalance + "` " + currency);
         // Show streak
         daily.setFooter("streak: " + streak + "/14");
         // Send daily reward

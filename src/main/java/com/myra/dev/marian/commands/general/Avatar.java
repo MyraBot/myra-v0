@@ -1,17 +1,16 @@
 package com.myra.dev.marian.commands.general;
 
-import com.myra.dev.marian.utilities.Return;
 import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
-import com.myra.dev.marian.utilities.management.Manager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 @CommandSubscribe(
         name = "avatar",
-        aliases = {"profile picture", "pp", "profile image"}
+        aliases = {"av", "profile picture", "pp", "profile image"}
 )
 public class Avatar implements Command {
     @Override
@@ -26,7 +25,7 @@ public class Avatar implements Command {
         }
         //avatar
         EmbedBuilder avatar = new EmbedBuilder()
-                .setAuthor(user.getName() + "´s avatar:", user.getEffectiveAvatarUrl(), user.getEffectiveAvatarUrl());
+                .setAuthor(user.getName() + "'s avatar:", user.getEffectiveAvatarUrl(), user.getEffectiveAvatarUrl());
         if (event.getGuild().getMember(user) != null) {
             avatar.setColor(utilities.getMemberRoleColour(event.getGuild().getMember(user)));
         }

@@ -88,7 +88,7 @@ public class Leveling {
         /**
          * Leveling role
          */
-        new Database(event.getGuild()).getLeveling().getLevelingRoles().checkForNewOnesOwO(newLevel, event.getMember(), event.getGuild());
+        new Database(event.getGuild()).getLeveling().checkForNewOnesOwO(newLevel, event.getMember(), event.getGuild());
     }
 
     //return xp

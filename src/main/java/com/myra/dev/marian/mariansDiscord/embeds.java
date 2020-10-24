@@ -83,8 +83,8 @@ public class embeds {
         EmbedBuilder socialMedia = new EmbedBuilder();
         socialMedia.setTitle("my social Media");
         socialMedia.setColor(0x0094FF);
-        socialMedia.addField("\uD83D\uDD17 │ YouTube", "[texture packs releases + amv´s](https://www.youtube.com/channel/UCw4EmB5OUHFN5RplLLon_Xw? \"ᴍᴀʀɪᴀɴ ⚡ on YouTube\")", false);
-        socialMedia.addField("\uD83D\uDD17 │ Instagram", "[amv´s](https://www.instagram.com/mar._.ian/ \"ᴍᴀʀɪᴀɴ ⚡ on Instagram\")", false);
+        socialMedia.addField("\uD83D\uDD17 │ YouTube", "[texture packs releases](https://www.youtube.com/channel/UCw4EmB5OUHFN5RplLLon_Xw? \"ᴍᴀʀɪᴀɴ ⚡ on YouTube\")", false);
+        socialMedia.addField("\uD83D\uDD17 │ Instagram", "[edits](https://www.instagram.com/mar._.ian/ \"ᴍᴀʀɪᴀɴ ⚡ on Instagram\")", false);
         socialMedia.addField("\uD83D\uDD17 │ Twitter", "[idk lol](https://twitter.com/MarianGFX \"ᴍᴀʀɪᴀɴ ⚡ on Twitter\")", true);
         socialMedia.addField("\uD83D\uDD17 │ Discord", "[join my discord server](https://discord.gg/nG4uKuB \"Marians discord server\")", false);
 
