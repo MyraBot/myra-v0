@@ -4,12 +4,13 @@ import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
-import com.myra.dev.marian.utilities.management.Manager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+
 @CommandSubscribe(
         name = "leveling set"
 )
@@ -35,7 +36,10 @@ public class LevelingSet implements Command {
         User user = utilities.getUser(event, arguments[0], "leveling set", "\uD83C\uDFC6");
         if (user == null) return;
         // When user is a bot
-        if (user.isBot()) return;
+        if (user.isBot()) {
+            Manager.getUtilities().error(event.getChannel(), "leveling set", "\uD83C\uDFC6", user.getName() + " is a bot", "Bots aren't allowed to participate in the ranking competition", event.getAuthor().getEffectiveAvatarUrl());
+            return;
+        }
         //replace level in database
         db.getMembers().getMember(event.getGuild().getMember(user)).setLevel(Integer.parseInt(arguments[1]));
         //send success message

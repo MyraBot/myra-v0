@@ -12,7 +12,7 @@ public class MutePermissions extends Events {
     public void textChannelCreateEvent(TextChannelCreateEvent event) {
         Database db = new Database(event.getGuild());
         Role muteRole = event.getGuild().getRoleById(db.get("muteRole"));
-        if (muteRole.equals("not set")) return;
+        if (muteRole == null) return;
         event.getChannel().getManager().putPermissionOverride(muteRole, null, EnumSet.of(Permission.MESSAGE_WRITE)).queue();
     }
 }

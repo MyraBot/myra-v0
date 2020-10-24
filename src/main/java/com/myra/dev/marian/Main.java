@@ -75,13 +75,14 @@ public class Main {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                //change activity
+                // Get random number
+                int random = new Random().nextInt(profilePictures.size());
+                //change profile
                 shardManager.getShards().forEach(bot -> {
                     try {
                         //change status
                         bot.getPresence().setActivity(Activity.listening("~help │ v0.6.2 │ " + bot.getGuilds().size() + " servers"));
                         //change profile picture
-                        int random = new Random().nextInt(profilePictures.size());
                         bot.getSelfUser().getManager().setAvatar(
                                 Icon.from(profilePictures.get(random))).queue();
                     } catch (Exception e) {

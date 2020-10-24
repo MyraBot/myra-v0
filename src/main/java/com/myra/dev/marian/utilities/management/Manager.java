@@ -6,6 +6,8 @@ import com.myra.dev.marian.commands.administrator.Someone;
 import com.myra.dev.marian.commands.administrator.Toggle;
 import com.myra.dev.marian.commands.economy.Balance;
 import com.myra.dev.marian.commands.economy.Daily;
+import com.myra.dev.marian.commands.economy.administrator.Currency;
+import com.myra.dev.marian.commands.economy.administrator.EconomyHelp;
 import com.myra.dev.marian.commands.economy.administrator.EconomySet;
 import com.myra.dev.marian.commands.fun.Meme;
 import com.myra.dev.marian.commands.fun.TextFormatter;
@@ -35,6 +37,7 @@ import com.myra.dev.marian.commands.moderation.ban.Ban;
 import com.myra.dev.marian.commands.moderation.ban.Tempban;
 import com.myra.dev.marian.commands.moderation.ban.Unban;
 import com.myra.dev.marian.commands.moderation.mute.Mute;
+import com.myra.dev.marian.commands.moderation.mute.MuteRole;
 import com.myra.dev.marian.commands.moderation.mute.Tempmute;
 import com.myra.dev.marian.commands.moderation.mute.Unmute;
 import com.myra.dev.marian.commands.music.commands.*;
@@ -43,6 +46,7 @@ import com.myra.dev.marian.database.MongoDbUpdate;
 import com.myra.dev.marian.listeners.autorole.AutoRoleSet;
 import com.myra.dev.marian.listeners.autorole.AutoroleToggle;
 import com.myra.dev.marian.listeners.leveling.*;
+import com.myra.dev.marian.listeners.logging.LogChannel;
 import com.myra.dev.marian.listeners.notification.AddStreamer;
 import com.myra.dev.marian.listeners.notification.NotificationChannel;
 import com.myra.dev.marian.listeners.notification.NotificationHelp;
@@ -116,6 +120,8 @@ public class Manager {
                 new Prefix(),
                 new Say(),
                 new Toggle(),
+                //
+                new LogChannel(),
                 // Help
                 new Commands(),
                 new Help(),
@@ -144,7 +150,9 @@ public class Manager {
                 new Background(),
                 new Leaderboard(),
                 // Economy
+                new EconomyHelp(),
                 new EconomySet(),
+                new Currency(),
 
                 new Balance(),
                 new Daily(),
@@ -165,6 +173,7 @@ public class Manager {
                 new Tempban(),
                 new Unban(),
 
+                new MuteRole(),
                 new Mute(),
                 new Tempmute(),
                 new Unmute(),

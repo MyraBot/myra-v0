@@ -18,23 +18,25 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 public class MuteRole implements Command {
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
-        //missing permissions
+        // Missing permissions
         if (!Permissions.isModerator(event.getMember())) return;
         //command usage
         if (arguments.length != 1) {
             EmbedBuilder embed = new EmbedBuilder()
-                    .setAuthor("│ mute role", null, event.getAuthor().getEffectiveAvatarUrl())
+                    .setAuthor("mute role", null, event.getAuthor().getEffectiveAvatarUrl())
                     .setColor(Manager.getUtilities().gray)
                     .addField("`" + Main.prefix + "mute role <role>`", "\uD83D\uDD07 │ Change the mute role", true);
             event.getChannel().sendMessage(embed.build()).queue();
             return;
         }
         /**
-         * change mute role
+         * Change mute role
          */
+        // Get database
         Database db = new Database(event.getGuild());
+        // Get utilities
         Utilities utilities = Manager.getUtilities();
-
+        // Get role
         Role role = utilities.getRole(event, arguments[0], "mute role", "\uD83D\uDD07");
         if (role == null) return;
         //get mute role id
@@ -50,6 +52,6 @@ public class MuteRole implements Command {
         //change mute role
         db.set("muteRole", role.getId());
         //role changed
-        utilities.success(event.getChannel(), "mute role", "\uD83D\uDCC4", "muted role successfuly changed", "mute role set to " + role.getAsMention(), event.getAuthor().getEffectiveAvatarUrl(), false, null);
+        utilities.success(event.getChannel(), "mute role", "\uD83D\uDCC4", "Muted role changed", "mute role set to " + role.getAsMention(), event.getAuthor().getEffectiveAvatarUrl(), false, null);
     }
 }
