@@ -18,6 +18,8 @@ public class LevelingRolesHelp implements Command {
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
         // Missing permissions
         if (!Permissions.isAdministrator(event.getMember())) return;
+        // Check for no arguments
+        if (arguments.length != 0) return;
         // Usage
         EmbedBuilder usage = new EmbedBuilder()
                 .setAuthor("leveling roles", null, event.getAuthor().getEffectiveAvatarUrl())

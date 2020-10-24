@@ -43,6 +43,7 @@ public class MongoDbUpdate extends Events implements Command {
                 String guildName = doc.getString("guildName");
                 String prefix = doc.getString("prefix");
                 Document economy = (Document) doc.get("economy");
+                Document leveling = (Document) doc.get("leveling");
                 Document members = (Document) doc.get("members");
                 String notificationChannel = doc.getString("notificationChannel");
                 List<String> streamers = doc.getList("streamers", String.class);
@@ -55,22 +56,18 @@ public class MongoDbUpdate extends Events implements Command {
                 Document listeners = (Document) doc.get("listeners");
 
 
-                /*for (Document member : members) {
-                    //get id of user
-                    String id = member.toString().split("=")[2].split(",")[0];
+                for (String memberId : members.keySet()) {
                     //get member document
-                    Document memberDocument = (Document) member.get(id);
-                    memberDocument.remove("invites");
-                    memberDocument.append("dailyStreak", 0);
-                    memberDocument.append("lastClaim", System.currentTimeMillis())
-                            .append("invites", 0);
+                    Document memberDocument = (Document) members.get(memberId);
+
+                    memberDocument.append("rankBackground", "default");
                 }
-                */
-                /*
-                Document economy = new Document()
+
+
+                Document economyDocument = new Document()
                         .append("currency", Manager.getUtilities().coin);
-                */
-                Document leveling = new Document()
+
+                Document levelingDocument = new Document()
                         .append("boost", 1)
                         .append("roles", new Document());
                 Document welcomeNested = new Document()
@@ -115,7 +112,7 @@ public class MongoDbUpdate extends Events implements Command {
                         .append("notificationChannel", notificationChannel)
                         .append("streamers", streamers)
                         .append("suggestionsChannel", suggestionsChannel)
-                        .append("logsChannel", logChannel)
+                        .append("logChannel", logChannel)
                         .append("autoRole", autoRole)
                         .append("muteRole", muteRole)
                         .append("welcome", welcome)
@@ -133,6 +130,7 @@ public class MongoDbUpdate extends Events implements Command {
                 MongoDbDocuments.guild(event.getGuild());
             }
         }
+
     }
 
     //add guild document

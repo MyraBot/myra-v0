@@ -79,7 +79,7 @@ public class Main {
                 shardManager.getShards().forEach(bot -> {
                     try {
                         //change status
-                        bot.getPresence().setActivity(Activity.listening("~help │ v0.6.1 │ " + bot.getGuilds().size() + " servers"));
+                        bot.getPresence().setActivity(Activity.listening("~help │ v0.6.2 │ " + bot.getGuilds().size() + " servers"));
                         //change profile picture
                         int random = new Random().nextInt(profilePictures.size());
                         bot.getSelfUser().getManager().setAvatar(

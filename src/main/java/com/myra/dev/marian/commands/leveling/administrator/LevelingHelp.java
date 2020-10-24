@@ -18,8 +18,8 @@ public class LevelingHelp implements Command {
         EmbedBuilder help = new EmbedBuilder()
                 .setAuthor("leveling", null, event.getAuthor().getEffectiveAvatarUrl())
                 .setColor(Manager.getUtilities().gray)
-                .addField("`" + Prefix.getPrefix(event.getGuild()) + "leveling set <user> <level>`", "\uD83C\uDF96 │ Change the level of a user", false)
-                .addField("`" + Prefix.getPrefix(event.getGuild()) + "leveling roles add <level> <role> [remove]`", "\uD83C\uDFC5 │ Link a role to a level", false);
+                .addField("`" + Prefix.getPrefix(event.getGuild()) + "leveling set <user> <level>`", "\uD83C\uDFC6 │ Change the level of a user", false)
+                .addField("`" + Prefix.getPrefix(event.getGuild()) + "leveling roles`", "\uD83D\uDD17 │ Link a role to a level", false);
         event.getChannel().sendMessage(help.build()).queue();
     }
 }

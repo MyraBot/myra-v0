@@ -25,18 +25,20 @@ public class LevelingSet implements Command {
             EmbedBuilder usage = new EmbedBuilder()
                     .setAuthor("leveling set", null, event.getAuthor().getEffectiveAvatarUrl())
                     .setColor(utilities.gray)
-                    .addField("`" + Prefix.getPrefix(event.getGuild()) + "leveling set <user> <level>`", "\uD83C\uDF96 │ Change the level of a user", false);
+                    .addField("`" + Prefix.getPrefix(event.getGuild()) + "leveling set <user> <level>`", "\uD83C\uDFC6 │ Change the level of a user", false);
             event.getChannel().sendMessage(usage.build()).queue();
             return;
         }
         // Get database
         Database db = new Database(event.getGuild());
         //get provided member
-        User user = utilities.getUser(event, arguments[0], "leveling set", "\uD83C\uDFC5");
+        User user = utilities.getUser(event, arguments[0], "leveling set", "\uD83C\uDFC6");
         if (user == null) return;
+        // When user is a bot
+        if (user.isBot()) return;
         //replace level in database
         db.getMembers().getMember(event.getGuild().getMember(user)).setLevel(Integer.parseInt(arguments[1]));
         //send success message
-        Manager.getUtilities().success(event.getChannel(), "leveling set", "\uD83C\uDFC5", user.getName() + "'s level changed", user.getAsMention() + " is now level `" + arguments[1] + "`", event.getAuthor().getEffectiveAvatarUrl(), false, null);
+        Manager.getUtilities().success(event.getChannel(), "leveling set", "\uD83C\uDFC6", user.getName() + "'s level changed", user.getAsMention() + " is now level `" + arguments[1] + "`", event.getAuthor().getEffectiveAvatarUrl(), false, null);
     }
 }

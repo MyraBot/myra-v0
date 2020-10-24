@@ -20,6 +20,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.net.URL;
 
 @CommandSubscribe(
         command = "rank",
@@ -66,10 +67,20 @@ public class Rank implements Command {
         int xp = getMember.getXp();
         int requiredXpForNextLevel = Manager.getLeveling().requiredXpForNextLevel(event.getGuild(), member);
         int rank = getMember.getRank();
+        // Get rank background
+        BufferedImage background;
+        String backgroundUrl = getMember.getRankBackground();
+        // No background set
+        if (backgroundUrl.equals("default")) {
+            background = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("defaultRank.png"));
+        }
+        // Custom background
+        else {
+            background = ImageIO.read(new URL(backgroundUrl));
+        }
 
         Graphic graphic = new Graphic();
 
-        BufferedImage background = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("defaultRank.png"));
         BufferedImage avatar = graphic.getAvatar(member.getUser().getEffectiveAvatarUrl());
         //resize avatar
         avatar = graphic.resizeSquaredImage(avatar, 0.5f);
@@ -83,7 +94,7 @@ public class Rank implements Command {
         Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
         //draw box over background
         RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(5, 5, 340, 90, 15, 15);
-        graphics2D.setColor(new Color(200, 255, 255, 100));
+        graphics2D.setColor(new Color(200, 255, 255, 50));
         graphics2D.fill(roundedRectangle);
         //draw avatar
         graphics2D.drawImage(
@@ -159,7 +170,7 @@ public class Rank implements Command {
          */
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
         ImageIO.write(background, "png", outStream);
-        event.getChannel().sendMessage(member.getAsMention() + ", you are level " + level + " and ur rank thing is " + getMember.getRank()).queue();
+        event.getChannel().sendMessage("> " + member.getAsMention() + "**, you're level " + level + "**").queue();
         event.getChannel().sendFile(
                 new ByteArrayInputStream(outStream.toByteArray()),
                 member.getUser().getName().toLowerCase() + "_rank.png"

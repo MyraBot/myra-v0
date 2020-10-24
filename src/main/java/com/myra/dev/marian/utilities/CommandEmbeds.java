@@ -56,7 +56,8 @@ public class CommandEmbeds {
                 .setAuthor("leveling", null, authorAvatar)
                 .setColor(Manager.getUtilities().gray)
                 .addField("`" + Prefix.getPrefix(guild) + "rank <user>`", "\uD83C\uDFC5 │ Shows the rank of a user", false)
-                .addField("`" + Prefix.getPrefix(guild) + "leaderboard`", "\uD83E\uDD47 │ Shows the leaderboard", false);
+                .addField("`" + Prefix.getPrefix(guild) + "leaderboard`", "\uD83E\uDD47 │ Shows the leaderboard", false)
+                .addField("`" + Prefix.getPrefix(guild) + "leveling background <url>`", "\uD83D\uDDBC │ Set a custom rank background", false);
         return fun;
     }
 

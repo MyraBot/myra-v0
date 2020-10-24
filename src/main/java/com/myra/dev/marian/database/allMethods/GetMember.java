@@ -32,7 +32,13 @@ public class GetMember {
     /**
      * methods
      */
-    //addXp
+
+    //get xp
+    public int getXp() {
+        return memberDocument.getInteger("xp");
+    }
+
+    // Add experience
     public void addXp(int xpToAdd) {
         //update xp
         memberDocument.replace("xp", memberDocument.getInteger("xp") + xpToAdd);
@@ -43,17 +49,12 @@ public class GetMember {
         );
     }
 
-    //get xp
-    public int getXp() {
-        return memberDocument.getInteger("xp");
-    }
-
     //get level
     public int getLevel() {
         return memberDocument.getInteger("level");
     }
 
-    //change level
+    // Set level
     public void setLevel(int level) {
         //update level
         memberDocument.replace("level", level);
@@ -149,6 +150,22 @@ public class GetMember {
         // Replace 'dailyStreak' with new value
         memberDocument.replace("dailyStreak", newStreak);
         // Update guild document
+        mongoDb.getCollection("guilds").findOneAndReplace(
+                mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first(),
+                guildDocument
+        );
+    }
+
+    // Get rank background
+    public String getRankBackground() {
+    return memberDocument.getString("rankBackground");
+    }
+
+    // Get rank background
+    public void setRankBackground(String backgroundUrl) {
+        //replace balance
+        memberDocument.replace("rankBackground", backgroundUrl);
+        //update Document
         mongoDb.getCollection("guilds").findOneAndReplace(
                 mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first(),
                 guildDocument
