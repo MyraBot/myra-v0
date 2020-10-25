@@ -3,10 +3,10 @@ package com.myra.dev.marian.commands.music.commands;
 import com.myra.dev.marian.commands.music.Music.PlayerManager;
 import com.myra.dev.marian.commands.music.Music.TrackScheduler;
 import com.myra.dev.marian.utilities.MessageReaction;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.management.Events;
 import com.myra.dev.marian.utilities.management.Manager;
+import com.myra.dev.marian.utilities.management.commands.Command;
+import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -67,7 +67,7 @@ public class MusicController extends Events implements Command {
         message.addReaction("\u23ED\uFE0F").queue();
         message.addReaction("\u23F9\uFE0F").queue();
         //add message id to HashMap
-        MessageReaction.add("musicController", message.getId(), event.getChannel(), false);
+        MessageReaction.add("musicController", message.getId(), event.getChannel(), event.getAuthor(), false);
 
         //cancel timer
         cancel.scheduleAtFixedRate(new TimerTask() {
@@ -106,9 +106,7 @@ public class MusicController extends Events implements Command {
     @Override
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) {
         //if reaction was added on the wrong message return
-        if (MessageReaction.hashMap.get("musicController") == null) return;
-        if (!Arrays.stream(MessageReaction.hashMap.get("musicController").toArray()).anyMatch(event.getMessageId()::equals) || event.getUser().isBot())
-            return;
+        if (!MessageReaction.check(event, "musicController")) return;
 
         AudioPlayer player = PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player;
         TrackScheduler scheduler = PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).scheduler;

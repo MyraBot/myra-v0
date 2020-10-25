@@ -170,7 +170,7 @@ public class TextFormatter extends Events implements Command {
         message.addReaction("\uD83D\uDD8B").queue();
         message.addReaction("\uD83C\uDF39").queue();
         //save message id
-        MessageReaction.add("format", message.getId(), event.getChannel(), true);
+        MessageReaction.add("format", message.getId(), event.getChannel(), event.getAuthor(), true);
     }
 
     /**

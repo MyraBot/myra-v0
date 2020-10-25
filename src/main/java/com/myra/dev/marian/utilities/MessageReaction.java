@@ -3,37 +3,42 @@ package com.myra.dev.marian.utilities;
 import com.myra.dev.marian.utilities.management.Events;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MessageReaction extends Events {
 
-    public static HashMap<String, List<String>> hashMap = new HashMap();
+    private static HashMap<String, HashMap<String, User>> hashMap = new HashMap();
 
-    public static void add(String command, String messageId, TextChannel channel, Boolean timeOut) {
+    public static void add(String command, String messageId, TextChannel channel, User user, Boolean timeOut) {
         //create new key
         if (hashMap.get(command) == null) {
-            List<String> list = new ArrayList<>();
-            list.add(messageId);
-            hashMap.put(command, list);
+            // Create HashMap
+            HashMap<String, User> map = new HashMap<>();
+            // Put the message id and the author in the HashMap
+            map.put(messageId, user);
+            // Add the command to the HashMap
+            hashMap.put(command, map);
         }
-        //add message id
+        // Add to existing command
         else {
-            hashMap.get(command).add(messageId);
+            // Add the message id and the author to the hashmap
+            hashMap.get(command).put(messageId, user);
         }
-        //if timeOut is true
+        // When the command has a time out
         if (timeOut) {
             //remove id
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    //if a reaction was already added
-                    if (!hashMap.get(command).contains(messageId)) return;
-
-                    //remove from hashmap
+                    // Can't find the command
+                    if (!hashMap.get(command).containsKey(messageId)) return;
+                    // Remove message id from hashmap
                     hashMap.get(command).remove(messageId);
                     //remove all reactions
                     channel.retrieveMessageById(messageId).complete().clearReactions().queue();
@@ -44,21 +49,19 @@ public class MessageReaction extends Events {
     }
 
     public static void remove(String command, Message message) {
+        // Remove message id from HashMap
         hashMap.get(command).remove(message.getId());
+        // Clear all reactions from the message
         message.clearReactions().queue();
     }
-    public static boolean check(GuildMessageReactionAddEvent event, String command) {
-        // If reaction was added on the wrong message return
-        if (MessageReaction.hashMap.get(command) == null) return false;
-        if (!Arrays.stream(MessageReaction.hashMap.get(command).toArray()).anyMatch(event.getMessageId()::equals) || event.getUser().isBot())
-            return false;
-        // Remove id from hashmap
-        MessageReaction.hashMap.get(command).remove(event.getMessageId());
-        return true;
-    }
 
-    @Override
-    public void jdaReady(ReadyEvent event) {
-        hashMap.clear();
+    public static boolean check(GuildMessageReactionAddEvent event, String command) {
+        // When command isn't in the hashMap yet
+        if (hashMap.get(command) == null) return false;
+        // When author is a bot
+        if (event.getUser().isBot()) return false;
+        // Check for the right author
+        if (hashMap.get(command).get(event.getMessageId()).equals(event.getUser())) return true;
+        else return false;
     }
 }

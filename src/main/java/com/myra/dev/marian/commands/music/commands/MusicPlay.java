@@ -106,7 +106,7 @@ public class MusicPlay extends Events implements Command {
 
             message.addReaction("\uD83D\uDEAB").queue();
             // Add reaction to HashMap
-            MessageReaction.add("play", message.getId(), event.getChannel(), false);
+            MessageReaction.add("play", message.getId(), event.getChannel(),  event.getAuthor(), false);
         }
         // Set volume
         PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player.setVolume(25);

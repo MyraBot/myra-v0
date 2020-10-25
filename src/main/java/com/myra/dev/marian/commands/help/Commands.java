@@ -2,9 +2,9 @@ package com.myra.dev.marian.commands.help;
 
 import com.myra.dev.marian.utilities.CommandEmbeds;
 import com.myra.dev.marian.utilities.MessageReaction;
+import com.myra.dev.marian.utilities.management.Events;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
-import com.myra.dev.marian.utilities.management.Events;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
@@ -28,18 +28,13 @@ public class Commands extends Events implements Command {
         message.addReaction("\uD83D\uDD28").queue();
         message.addReaction("\uD83D\uDD29").queue();
 
-        MessageReaction.add("commands", message.getId(), event.getChannel(), true);
+        MessageReaction.add("commands", message.getId(), event.getChannel(), event.getAuthor(), true);
     }
 
     @Override
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) throws Exception {
         //if reaction was added on the wrong message return
-        if (MessageReaction.hashMap.get("commands") == null) return;
-        if (!Arrays.stream(MessageReaction.hashMap.get("commands").toArray()).anyMatch(event.getMessageId()::equals) || event.getUser().isBot())
-            return;
-
-        //remove id from hashmap
-        MessageReaction.hashMap.get("commands").remove(event.getMessageId());
+        if (!MessageReaction.check(event, "commands")) return;
         //general commands
         if (event.getReactionEmote().getEmoji().equals("\uD83C\uDF88") && !event.getMember().getUser().isBot()) {
             CommandEmbeds embed = new CommandEmbeds();

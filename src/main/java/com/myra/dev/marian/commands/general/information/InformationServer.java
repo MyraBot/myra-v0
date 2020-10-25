@@ -1,10 +1,10 @@
 package com.myra.dev.marian.commands.general.information;
 
+import com.myra.dev.marian.utilities.MessageReaction;
+import com.myra.dev.marian.utilities.management.Events;
+import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.Events;
-import com.myra.dev.marian.utilities.MessageReaction;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEve
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
+
 @CommandSubscribe(
         command = "information",
         name = "information server",
@@ -37,19 +37,14 @@ public class InformationServer extends Events implements Command {
         //reactions
         message.addReaction("\uD83D\uDCDC").queue();
 
-        MessageReaction.add("informationServer", message.getId(), event.getChannel(), true);
+        MessageReaction.add("informationServer", message.getId(), event.getChannel(), event.getAuthor(), true);
     }
 
 
     @Override
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) {
         //if reaction was added on the wrong message return
-        if (MessageReaction.hashMap.get("informationServer") == null) return;
-        if (!Arrays.stream(MessageReaction.hashMap.get("informationServer").toArray()).anyMatch(event.getMessageId()::equals) || event.getUser().isBot())
-            return;
-
-        //remove id from hashmap
-        MessageReaction.hashMap.get("informationServer").remove(event.getMessageId());
+        if (!MessageReaction.check(event, "informationServer")) return;
 
         if (event.getReactionEmote().getEmoji().equals("\uD83D\uDCDC")) {
             //remove reaction

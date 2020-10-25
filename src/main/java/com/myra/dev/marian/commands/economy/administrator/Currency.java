@@ -21,7 +21,7 @@ public class Currency implements Command {
         // Get database
         Database db = new Database(event.getGuild());
         // Usage
-        if (arguments.length != 1) {
+        if (arguments.length == 0) {
             EmbedBuilder usage = new EmbedBuilder()
                     .setAuthor("leveling currency", null, event.getAuthor().getEffectiveAvatarUrl())
                     .setColor(utilities.gray)
@@ -33,7 +33,12 @@ public class Currency implements Command {
          * Change currency
          */
         // Get new currency
-        String currency = arguments[0];
+        String currency = "";
+        for (String argument : arguments) {
+            currency += argument + " ";
+        }
+        //remove last space
+        currency = currency.substring(0, currency.length() - 1);
         // Update database
         db.getNested("economy").set("currency", currency);
         // Send success message
