@@ -60,6 +60,19 @@ public class PlayerManager {
                         .setImage(thumbnailUrl);
                 channel.sendMessage(success.build()).queue();
             }
+            // Load a playlist into the queue
+            @Override
+            public void playlistLoaded(AudioPlaylist playlist) {
+                // Add every audio of the playlist track to queue
+                playlist.getTracks().forEach(musicManager.scheduler::queue);
+                // Success message
+                EmbedBuilder success = new EmbedBuilder()
+                        .setAuthor("play", trackUrl, authorAvatar)
+                        .setColor(utilities.blue)
+                        .setDescription("Adding playlist to queue: " + utilities.hyperlink(playlist.getName(), trackUrl))
+                        .setImage(thumbnailUrl);
+                channel.sendMessage(success.build()).queue();
+            }
 
 
 
@@ -78,22 +91,14 @@ public class PlayerManager {
             //TODO die methoden hier drunter
 
 
-            @Override
-            public void playlistLoaded(AudioPlaylist playlist) {
-                AudioTrack firstTrack = playlist.getSelectedTrack();
 
-                if (firstTrack == null) {
-                    firstTrack = playlist.getTracks().remove(0);
-                }
-                Manager.getUtilities().success(channel,
-                        "play", "\uD83D\uDCBF",
-                        "Added playlist to queue",
-                        "The playlist **" + Manager.getUtilities().hyperlink(playlist.getName(), trackUrl) + "** has been added to the queue",
-                        authorAvatar,
-                        false, null);
-               // play(musicManager, firstTrack);
-               // playlist.getTracks().forEach(musicManager.scheduler::queue);
-            }
+
+
+
+
+
+
+
 
             @Override
             public void noMatches() {
