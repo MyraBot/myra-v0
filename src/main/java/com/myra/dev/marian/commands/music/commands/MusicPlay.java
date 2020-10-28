@@ -7,7 +7,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.YouTubeRequestInitializer;
 import com.google.api.services.youtube.model.SearchResult;
-import com.myra.dev.marian.commands.music.Music.PlayerManager;
+import com.myra.dev.marian.APIs.LavaPlayer.PlayerManager;
 import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.utilities.Utilities;
@@ -22,10 +22,10 @@ import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEve
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+@SuppressWarnings("ConstantConditions") // Requires '.enableCache(CacheFlag.VOICE_STATE)' to be not null
 @CommandSubscribe(
         name = "play"
 )
@@ -46,6 +46,20 @@ public class MusicPlay extends Events implements Command {
             event.getChannel().sendMessage(usage.build()).queue();
             return;
         }
+        /**
+         * Add a audio track to the queue
+         */
+        // If bot isn't in a voice channel
+        if (!event.getGuild().getSelfMember().getVoiceState().inVoiceChannel()) {
+            utilities.error(event.getChannel(), "play", "\uD83D\uDCBF", "I need to be in a voice channel", "Use `" + Prefix.getPrefix(event.getGuild()) + "join` to let me join a voice channel", event.getAuthor().getEffectiveAvatarUrl());
+            return;
+        }
+        // If author isn't in the same voice channel as bot
+        if (!event.getMember().getVoiceState().getChannel().equals(event.getGuild().getSelfMember().getVoiceState().getChannel())) {
+            utilities.error(event.getChannel(), "play", "\uD83D\uDCBF", "You need to be in the same voice channel as me to use this command", "Join `" + event.getGuild().getSelfMember().getVoiceState().getChannel().getName() + "` to use this command", event.getAuthor().getEffectiveAvatarUrl());
+            return;
+        }
+
         // Get song
         String song = utilities.getString(arguments);
         // If song is url
@@ -106,10 +120,8 @@ public class MusicPlay extends Events implements Command {
 
             message.addReaction("\uD83D\uDEAB").queue();
             // Add reaction to HashMap
-            MessageReaction.add("play", message.getId(), event.getChannel(),  event.getAuthor(), false);
+            MessageReaction.add("play", message.getId(), event.getChannel(), event.getAuthor(), false);
         }
-        // Set volume
-        PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player.setVolume(25);
     }
 
     //chose song
@@ -128,8 +140,6 @@ public class MusicPlay extends Events implements Command {
         String videoUrl = "https://www.youtube.com/watch?v=" + song.getId().getVideoId();
         //play song
         PlayerManager.getInstance().loadAndPlay(event.getChannel(), videoUrl, event.getUser().getEffectiveAvatarUrl(), "https://img.youtube.com/vi/" + song.getId().getVideoId() + "/maxresdefault.jpg");
-        // Set volume
-        PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player.setVolume(25);
         //delete track selector
         event.getChannel().deleteMessageById(event.getMessageId()).queue();
     }

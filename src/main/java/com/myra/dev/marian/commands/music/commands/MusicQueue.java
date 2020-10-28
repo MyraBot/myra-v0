@@ -3,7 +3,7 @@ package com.myra.dev.marian.commands.music.commands;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.commands.music.Music.PlayerManager;
+import com.myra.dev.marian.APIs.LavaPlayer.PlayerManager;
 import com.myra.dev.marian.database.Prefix;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -33,7 +33,7 @@ public class MusicQueue implements Command {
             return;
         }
         //if no track is playing
-        if (PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player.getPlayingTrack() == null) {
+        if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
             Manager.getUtilities().error(
                     event.getChannel(),
                     "shuffle queue", "\uD83C\uDFB2",
@@ -43,7 +43,7 @@ public class MusicQueue implements Command {
             return;
         }
         // Get queue
-        BlockingQueue<AudioTrack> queue = PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).scheduler.getQueue();
+        BlockingQueue<AudioTrack> queue = PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.getQueue();
         int trackCount = Math.min(queue.size(), 15);
         List<AudioTrack> tracks = new ArrayList<>(queue);
         String songs = "";

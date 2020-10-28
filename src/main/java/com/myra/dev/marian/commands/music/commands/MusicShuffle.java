@@ -1,6 +1,6 @@
 package com.myra.dev.marian.commands.music.commands;
 
-import com.myra.dev.marian.commands.music.Music.PlayerManager;
+import com.myra.dev.marian.APIs.LavaPlayer.PlayerManager;
 import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.commands.Command;
@@ -35,7 +35,7 @@ public class MusicShuffle implements Command {
             return;
         }
         //if no track is playing
-        if (PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player.getPlayingTrack() == null) {
+        if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
             utilities.error(
                     event.getChannel(),
                     "shuffle queue", "\uD83C\uDFB2",
@@ -44,10 +44,10 @@ public class MusicShuffle implements Command {
                     event.getAuthor().getEffectiveAvatarUrl());
             return;
         }
-        BlockingQueue<AudioTrack> queue = PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).scheduler.getQueue();
+        BlockingQueue<AudioTrack> queue = PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.getQueue();
         List<AudioTrack> tracks = new ArrayList<>(queue);
         Collections.shuffle(tracks);
-        PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).scheduler.getQueue().clear();
+        PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.getQueue().clear();
         queue.addAll(tracks);
         utilities.success(event.getChannel(),
                 "shuffle queue",

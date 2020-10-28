@@ -1,5 +1,6 @@
-package com.myra.dev.marian.commands.music.Music;
+package com.myra.dev.marian.APIs.LavaPlayer;
 
+import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -8,6 +9,7 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -16,43 +18,65 @@ import java.util.Map;
 
 public class PlayerManager {
     private static PlayerManager INSTANCE;
-    private final AudioPlayerManager TrackManager;
-    private final Map<Long, GuildMusicManager> musicManagers;
 
-    private PlayerManager() {
+    private final Map<Long, GuildMusicManager> musicManagers;
+    private final AudioPlayerManager audioPlayerManager;
+
+    public PlayerManager() {
         this.musicManagers = new HashMap<>();
-        this.TrackManager = new DefaultAudioPlayerManager();
-        AudioSourceManagers.registerRemoteSources(TrackManager);
-        AudioSourceManagers.registerRemoteSources(TrackManager);
+        this.audioPlayerManager = new DefaultAudioPlayerManager();
+        // Register sources
+        AudioSourceManagers.registerRemoteSources(this.audioPlayerManager);
+        AudioSourceManagers.registerRemoteSources(this.audioPlayerManager);
     }
 
-    public synchronized GuildMusicManager getGuildMusicManger(Guild guild) {
-        Long guildId = guild.getIdLong();
-        GuildMusicManager musicManager = musicManagers.get(guildId);
+    public GuildMusicManager getMusicManager(Guild guild) {
+        return this.musicManagers.computeIfAbsent(guild.getIdLong(), (guildId) -> {
+            final GuildMusicManager guildMusicManager = new GuildMusicManager(this.audioPlayerManager);
+            // Tell JDA what to use to send the audio
+            guild.getAudioManager().setSendingHandler(guildMusicManager.getSendHandler());
 
-        if (musicManager == null) {
-            musicManager = new GuildMusicManager(TrackManager);
-            musicManagers.put(guildId, musicManager);
-        }
-        guild.getAudioManager().setSendingHandler(musicManager.getSendHandler());
-
-        return musicManager;
+            return guildMusicManager;
+        });
     }
 
     public void loadAndPlay(TextChannel channel, String trackUrl, String authorAvatar, String thumbnailUrl) throws Exception {
-
-        GuildMusicManager musicManager = getGuildMusicManger(channel.getGuild());
-
-        TrackManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
+        // Get Utilities
+        Utilities utilities = Manager.getUtilities();
+        // Get music manager for guild
+        final GuildMusicManager musicManager = this.getMusicManager(channel.getGuild());
+        // All methods
+        this.audioPlayerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
+            // Load a track into the queue
             @Override
             public void trackLoaded(AudioTrack track) {
-                Manager.getUtilities().success(channel,
-                        "play", "\uD83D\uDCBF",
-                        "Added track to queue", "**" + Manager.getUtilities().hyperlink(track.getInfo().title, trackUrl) + "** has been added to the queue",
-                        authorAvatar,
-                        false, thumbnailUrl);
-                play(musicManager, track);
+                // Add audio track to queue
+                musicManager.scheduler.queue(track);
+                // Success message
+                EmbedBuilder success = new EmbedBuilder()
+                        .setAuthor("play", trackUrl, authorAvatar)
+                        .setColor(utilities.blue)
+                        .setDescription("Adding to queue: " + utilities.hyperlink(track.getInfo().title, trackUrl))
+                        .setImage(thumbnailUrl);
+                channel.sendMessage(success.build()).queue();
             }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //TODO die methoden hier drunter
+
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
@@ -67,8 +91,8 @@ public class PlayerManager {
                         "The playlist **" + Manager.getUtilities().hyperlink(playlist.getName(), trackUrl) + "** has been added to the queue",
                         authorAvatar,
                         false, null);
-                play(musicManager, firstTrack);
-                playlist.getTracks().forEach(musicManager.scheduler::queue);
+               // play(musicManager, firstTrack);
+               // playlist.getTracks().forEach(musicManager.scheduler::queue);
             }
 
             @Override
@@ -93,17 +117,15 @@ public class PlayerManager {
                 );
             }
         });
+        // Set volume
+        musicManager.audioPlayer.setVolume(25);
     }
 
-    private void play(GuildMusicManager musicManager, AudioTrack track) {
-        musicManager.scheduler.queue(track);
-    }
-
-    public static synchronized PlayerManager getInstance() {
+    // Return PlayerManager class
+    public static PlayerManager getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new PlayerManager();
         }
-
         return INSTANCE;
     }
 }

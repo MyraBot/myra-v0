@@ -1,6 +1,6 @@
 package com.myra.dev.marian.commands.music.commands;
 
-import com.myra.dev.marian.commands.music.Music.PlayerManager;
+import com.myra.dev.marian.APIs.LavaPlayer.PlayerManager;
 import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.commands.Command;
@@ -29,7 +29,7 @@ public class MusicSkip implements Command {
             return;
         }
         //if no track is playing
-        if (PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player.getPlayingTrack() == null) {
+        if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
             utilities.error(
                     event.getChannel(),
                     "skip", "\u23ED\uFE0F",
@@ -43,9 +43,9 @@ public class MusicSkip implements Command {
                 "skip",
                 "\u23ED\uFE0F",
                 "skipped song",
-                "skipped **" + PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player.getPlayingTrack().getInfo().title + "**",
+                "skipped **" + PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().title + "**",
                 event.getAuthor().getEffectiveAvatarUrl(),
                 false, null);
-        PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).scheduler.nextTrack();
+        PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.nextTrack();
     }
 }

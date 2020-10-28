@@ -1,7 +1,7 @@
 package com.myra.dev.marian.commands.music.commands;
 
-import com.myra.dev.marian.commands.music.Music.PlayerManager;
-import com.myra.dev.marian.commands.music.Music.TrackScheduler;
+import com.myra.dev.marian.APIs.LavaPlayer.PlayerManager;
+import com.myra.dev.marian.APIs.LavaPlayer.TrackScheduler;
 import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.utilities.management.Events;
 import com.myra.dev.marian.utilities.management.Manager;
@@ -13,7 +13,6 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -26,12 +25,12 @@ public class MusicController extends Events implements Command {
 
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
-        AudioPlayer player = PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player;
+        AudioPlayer player = PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer;
         //music controller
         EmbedBuilder musicController = new EmbedBuilder()
                 .setAuthor("music", null, event.getJDA().getSelfUser().getEffectiveAvatarUrl())
                 .setColor(Manager.getUtilities().blue)
-                .addField("current playing track", PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player.getPlayingTrack().getInfo().title, false)
+                .addField("current playing track", PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().title, false)
                 .setFooter(displayPosition(player));
         Message message = event.getChannel().sendMessage(musicController.build()).complete();
         //updating embed
@@ -55,7 +54,7 @@ public class MusicController extends Events implements Command {
                 } else {
                     update
                             .setColor(Manager.getUtilities().blue)
-                            .addField("\u25B6 │ current playing track", PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player.getPlayingTrack().getInfo().title, false)
+                            .addField("\u25B6 │ current playing track", PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().title, false)
                             .setFooter(displayPosition(player));
                 }
 
@@ -73,14 +72,14 @@ public class MusicController extends Events implements Command {
         cancel.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player.getPlayingTrack() == null) {
+                if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
                     // Save boolean value
                     cancelTimer.put(message, true);
 
                     removeHashMap.schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            if (PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player.getPlayingTrack() == null) {
+                            if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
                                 MessageReaction.remove("musicController", message);
                                 update.cancel();
                                 cancel.cancel();
@@ -108,8 +107,8 @@ public class MusicController extends Events implements Command {
         //if reaction was added on the wrong message return
         if (!MessageReaction.check(event, "musicController")) return;
 
-        AudioPlayer player = PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player;
-        TrackScheduler scheduler = PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).scheduler;
+        AudioPlayer player = PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer;
+        TrackScheduler scheduler = PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler;
 
         //play and pause
         if (event.getReactionEmote().getEmoji().equals("\u23EF\uFE0F") && !event.getMember().getUser().isBot()) {

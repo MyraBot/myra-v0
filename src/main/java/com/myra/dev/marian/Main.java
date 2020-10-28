@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,6 +40,7 @@ public class Main {
             DefaultShardManagerBuilder jda = new DefaultShardManagerBuilder("NzE4NDQ0NzA5NDQ1NjMyMTIy.Xto9xg.dQxtSFxxYHpKXOwLCtJuWM5w1MM")
                     //.enableIntents(GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MEMBERS)
                     //.enableCache(CacheFlag.ACTIVITY)
+                    .enableCache(CacheFlag.VOICE_STATE)
                     .setMemberCachePolicy(MemberCachePolicy.ALL)
                     .setStatus(OnlineStatus.IDLE);
             //event listeners

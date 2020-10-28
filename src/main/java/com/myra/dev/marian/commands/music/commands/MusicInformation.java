@@ -1,6 +1,6 @@
 package com.myra.dev.marian.commands.music.commands;
 
-import com.myra.dev.marian.commands.music.Music.PlayerManager;
+import com.myra.dev.marian.APIs.LavaPlayer.PlayerManager;
 import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
@@ -20,7 +20,7 @@ public class MusicInformation implements Command {
         // Check for no arguments
         if (arguments.length != 0) return;
         // Get audio player
-        AudioPlayer player = PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player;
+        AudioPlayer player = PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
         //the bot isn't connected to any voice channel
@@ -34,7 +34,7 @@ public class MusicInformation implements Command {
             return;
         }
         //bot isn't playing any song
-        if (PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player.getPlayingTrack() == null) {
+        if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
             utilities.error(event.getChannel(),
                     "track information", "\uD83D\uDDD2",
                     "The player isn`t playing any song",

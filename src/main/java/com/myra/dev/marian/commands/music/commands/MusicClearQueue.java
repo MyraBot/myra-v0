@@ -1,7 +1,7 @@
 package com.myra.dev.marian.commands.music.commands;
 
-import com.myra.dev.marian.commands.music.Music.GuildMusicManager;
-import com.myra.dev.marian.commands.music.Music.PlayerManager;
+import com.myra.dev.marian.APIs.LavaPlayer.GuildMusicManager;
+import com.myra.dev.marian.APIs.LavaPlayer.PlayerManager;
 import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
@@ -27,7 +27,7 @@ public class MusicClearQueue implements Command {
             return;
         }
         //if no track is playing
-        if (PlayerManager.getInstance().getGuildMusicManger(event.getGuild()).player.getPlayingTrack() == null) {
+        if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
             Manager.getUtilities().error(
                     event.getChannel(),
                     "shuffle queue", "\uD83C\uDFB2",
@@ -37,11 +37,11 @@ public class MusicClearQueue implements Command {
             return;
         }
         PlayerManager playerManager = PlayerManager.getInstance();
-        GuildMusicManager musicManager = playerManager.getGuildMusicManger(event.getGuild());
+        GuildMusicManager musicManager = playerManager.getMusicManager(event.getGuild());
 
         musicManager.scheduler.getQueue().clear();
-        musicManager.player.stopTrack();
-        musicManager.player.setPaused(false);
+        musicManager.audioPlayer.stopTrack();
+        musicManager.audioPlayer.setPaused(false);
 
         Manager.getUtilities().success(event.getChannel(),
                 "clear queue", "\uD83D\uDDD1",
