@@ -4,6 +4,7 @@ import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.utilities.management.Manager;
 import net.dv8tion.jda.api.entities.Guild;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.bson.Document;
 
@@ -126,7 +127,7 @@ public class DefaultCommandService implements CommandService {
                 //filter arguments
                 String[] commandArguments = Arrays.copyOfRange(splitMessage, executor.length, splitMessage.length);
                 //run command
-                entry.getKey().execute(event, commandArguments);
+                entry.getKey().execute(new CommandContext(PREFIX, event, commandArguments));
             }
         }
     }

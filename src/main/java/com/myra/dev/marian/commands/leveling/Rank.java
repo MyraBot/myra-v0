@@ -11,7 +11,7 @@ import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -28,44 +28,44 @@ import java.net.URL;
 )
 public class Rank implements Command {
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         Utilities utilities = Manager.getUtilities();
         // Usage
-        if (arguments.length > 1) {
+        if (ctx.getArguments().length > 1) {
             EmbedBuilder usage = new EmbedBuilder()
-                    .setAuthor("rank", null, event.getAuthor().getEffectiveAvatarUrl())
+                    .setAuthor("rank", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(utilities.gray)
-                    .addField("`" + Prefix.getPrefix(event.getGuild()) + "rank <user>`", "\uD83C\uDFC5 │ Shows the rank of a user", false);
-            event.getChannel().sendMessage(usage.build()).queue();
+                    .addField("`" + ctx.getPrefix() + "rank <user>`", "\uD83C\uDFC5 │ Shows the rank of a user", false);
+            ctx.getChannel().sendMessage(usage.build()).queue();
             return;
         }
         /**
          * show rank
          */
         // Get self user
-        Member member = event.getMember();
+        Member member = ctx.getEvent().getMember();
         // If user is given
-        if (arguments.length == 1) {
-            User user = utilities.getUser(event, arguments[0], "rank", "\uD83C\uDFC5");
+        if (ctx.getArguments().length == 1) {
+            User user = utilities.getUser(ctx.getEvent(), ctx.getArguments()[0], "rank", "\uD83C\uDFC5");
             if (user == null) return;
             //check if user isn't in this guild
-            if (event.getGuild().getMember(user) == null) {
-                utilities.error(event.getChannel(), "rank", "\uD83C\uDFC5", "No member found", "the given user isn't on this server", event.getAuthor().getEffectiveAvatarUrl());
+            if (ctx.getGuild().getMember(user) == null) {
+                utilities.error(ctx.getChannel(), "rank", "\uD83C\uDFC5", "No member found", "the given user isn't on this server", ctx.getAuthor().getEffectiveAvatarUrl());
                 return;
             }
-            member = event.getGuild().getMember(user);
+            member = ctx.getGuild().getMember(user);
         }
         //if member is bot
         if (member.getUser().isBot()) {
-            Manager.getUtilities().error(event.getChannel(), "rank", "\uD83C\uDFC5", member.getEffectiveName() + " is a bot", "Bots aren't allowed to participate in the ranking competition", event.getAuthor().getEffectiveAvatarUrl());
+            Manager.getUtilities().error(ctx.getChannel(), "rank", "\uD83C\uDFC5", member.getEffectiveName() + " is a bot", "Bots aren't allowed to participate in the ranking competition", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         //get variables
-        GetMember getMember = new Database(event.getGuild()).getMembers().getMember(member);
+        GetMember getMember = new Database(ctx.getGuild()).getMembers().getMember(member);
 
         String level = String.valueOf(getMember.getLevel());
         int xp = getMember.getXp();
-        int requiredXpForNextLevel = Manager.getLeveling().requiredXpForNextLevel(event.getGuild(), member);
+        int requiredXpForNextLevel = Manager.getLeveling().requiredXpForNextLevel(ctx.getGuild(), member);
         int rank = getMember.getRank();
         // Get rank background
         BufferedImage background;
@@ -170,8 +170,8 @@ public class Rank implements Command {
          */
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
         ImageIO.write(background, "png", outStream);
-        event.getChannel().sendMessage("> " + member.getAsMention() + "**, you're level " + level + "**").queue();
-        event.getChannel().sendFile(
+        ctx.getChannel().sendMessage("> " + member.getAsMention() + "**, you're level " + level + "**").queue();
+        ctx.getChannel().sendFile(
                 new ByteArrayInputStream(outStream.toByteArray()),
                 member.getUser().getName().toLowerCase() + "_rank.png"
         ).queue();

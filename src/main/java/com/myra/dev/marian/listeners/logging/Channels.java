@@ -130,8 +130,8 @@ public class Channels extends ListenerAdapter {
         log.setAuthor("│ category changed", null, event.getGuild().getIconUrl());
         log.setDescription("\uD83C\uDF9F │ channel id\n" + event.getChannel().getId());
         log.setColor(Manager.getUtilities().blue);
-        log.addField("\uD83D\uDDD1 │ old category", Integer.toString(event.getOldSlowmode()) + "seconds", false);
-        log.addField("\uD83D\uDCC1 │ new category", Integer.toString(event.getNewSlowmode()) + "seconds", false);
+        log.addField("\uD83D\uDDD1 │ old category", event.getOldSlowmode() + "seconds", false);
+        log.addField("\uD83D\uDCC1 │ new category", event.getNewSlowmode() + "seconds", false);
         log.setFooter(event.getChannel().getTimeCreated().getDayOfMonth() + "." + event.getChannel().getTimeCreated().getMonthValue() + "." + event.getChannel().getTimeCreated().getYear() + ", " + event.getChannel().getTimeCreated().getHour() + ":" + event.getChannel().getTimeCreated().getMinute() + ":" + event.getChannel().getTimeCreated().getSecond());
 
         event.getGuild().getDefaultChannel().sendMessage(log.build()).queue();

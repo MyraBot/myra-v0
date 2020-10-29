@@ -10,7 +10,7 @@ import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
 import java.util.HashMap;
@@ -25,15 +25,15 @@ public class MusicController extends Events implements Command {
     private static HashMap<Message, Boolean> cancelTimer = new HashMap<>();
 
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
-        AudioPlayer player = PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer;
+    public void execute(CommandContext ctx) throws Exception {
+        AudioPlayer player = PlayerManager.getInstance().getMusicManager(ctx.getGuild()).audioPlayer;
         //music controller
         EmbedBuilder musicController = new EmbedBuilder()
-                .setAuthor("music", null, event.getJDA().getSelfUser().getEffectiveAvatarUrl())
+                .setAuthor("music", null, ctx.getEvent().getJDA().getSelfUser().getEffectiveAvatarUrl())
                 .setColor(Manager.getUtilities().blue)
-                .addField("current playing track", PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().title, false)
+                .addField("current playing track", PlayerManager.getInstance().getMusicManager(ctx.getGuild()).audioPlayer.getPlayingTrack().getInfo().title, false)
                 .setFooter(displayPosition(player));
-        Message message = event.getChannel().sendMessage(musicController.build()).complete();
+        Message message = ctx.getChannel().sendMessage(musicController.build()).complete();
         //updating embed
         Timer update = new Timer();
         Timer cancel = new Timer();
@@ -44,7 +44,7 @@ public class MusicController extends Events implements Command {
         update.scheduleAtFixedRate(new TimerTask() {
             public void run() {
                 EmbedBuilder update = new EmbedBuilder();
-                update.setAuthor("music", null, event.getJDA().getSelfUser().getEffectiveAvatarUrl());
+                update.setAuthor("music", null, ctx.getEvent().getJDA().getSelfUser().getEffectiveAvatarUrl());
                 //if no song is playing
                 if (player.getPlayingTrack() == null) {
                     update.addField("\u23F9 │ player stopped", "no song playing", false);
@@ -55,7 +55,7 @@ public class MusicController extends Events implements Command {
                 } else {
                     update
                             .setColor(Manager.getUtilities().blue)
-                            .addField("\u25B6 │ current playing track", PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().title, false)
+                            .addField("\u25B6 │ current playing track", PlayerManager.getInstance().getMusicManager(ctx.getGuild()).audioPlayer.getPlayingTrack().getInfo().title, false)
                             .setFooter(displayPosition(player));
                 }
 
@@ -67,20 +67,20 @@ public class MusicController extends Events implements Command {
         message.addReaction("\u23ED\uFE0F").queue();
         message.addReaction("\u23F9\uFE0F").queue();
         //add message id to HashMap
-        MessageReaction.add("musicController", message.getId(), event.getChannel(), event.getAuthor(), false);
+        MessageReaction.add("musicController", message.getId(), ctx.getChannel(), ctx.getAuthor(), false);
 
         //cancel timer
         cancel.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
+                if (PlayerManager.getInstance().getMusicManager(ctx.getGuild()).audioPlayer.getPlayingTrack() == null) {
                     // Save boolean value
                     cancelTimer.put(message, true);
 
                     removeHashMap.schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
+                            if (PlayerManager.getInstance().getMusicManager(ctx.getGuild()).audioPlayer.getPlayingTrack() == null) {
                                 MessageReaction.remove("musicController", message);
                                 update.cancel();
                                 cancel.cancel();

@@ -1,16 +1,15 @@
 package com.myra.dev.marian.commands.economy.administrator;
 
-import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 @CommandSubscribe(
         name = "economy set",
@@ -18,19 +17,19 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 )
 public class EconomySet implements Command {
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         // Missing permissions
-        if (!Permissions.isAdministrator(event.getMember())) return;
+        if (!Permissions.isAdministrator(ctx.getMember())) return;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
         // Usage
-        if (arguments.length != 2) {
+        if (ctx.getArguments().length != 2) {
             EmbedBuilder usage = new EmbedBuilder()
-                    .setAuthor("economy set", null, event.getAuthor().getEffectiveAvatarUrl())
+                    .setAuthor("economy set", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(utilities.gray)
-                    .addField("`" + Prefix.getPrefix(event.getGuild()) + "economy set <user> <balance>`", "\uD83D\uDC5B │ Change a users balance", false)
+                    .addField("`" + ctx.getPrefix() + "economy set <user> <balance>`", "\uD83D\uDC5B │ Change a users balance", false)
                     .setFooter("Use: + / -, to add and subtract money");
-            event.getChannel().sendMessage(usage.build()).queue();
+            ctx.getChannel().sendMessage(usage.build()).queue();
             return;
         }
         /**
@@ -38,45 +37,45 @@ public class EconomySet implements Command {
          */
         // Get User
         // Get self user
-        Member member = event.getMember();
+        Member member = ctx.getEvent().getMember();
         // Get given user
-        if (arguments.length == 2) {
-            User user = utilities.getUser(event, arguments[0], "economy set", "\uD83D\uDC5B");
+        if (ctx.getArguments().length == 2) {
+            User user = utilities.getUser(ctx.getEvent(), ctx.getArguments()[0], "economy set", "\uD83D\uDC5B");
             if (user == null) return;
             // User isn't in the guild
-            if (event.getGuild().getMember(user) == null) {
-                utilities.error(event.getChannel(), "economy set", "\uD83D\uDC5B", "No member found", "the given user isn't on this server", event.getAuthor().getEffectiveAvatarUrl());
+            if (ctx.getGuild().getMember(user) == null) {
+                utilities.error(ctx.getChannel(), "economy set", "\uD83D\uDC5B", "No member found", "the given user isn't on this server", ctx.getAuthor().getEffectiveAvatarUrl());
                 return;
             }
             // Save user as member
-            member = event.getGuild().getMember(user);
+            member = ctx.getGuild().getMember(user);
         }
         // Get database
-        Database db = new Database(event.getGuild());
+        Database db = new Database(ctx.getGuild());
         // Get old balance
         int oldBalance = db.getMembers().getMember(member).getBalance();
         // Get new balance
         int updatedBalance;
         // Add balance
-        if (arguments[1].matches("[+]\\d+")) {
-            updatedBalance = oldBalance + Integer.parseInt(arguments[1].substring(1));
+        if (ctx.getArguments()[1].matches("[+]\\d+")) {
+            updatedBalance = oldBalance + Integer.parseInt(ctx.getArguments()[1].substring(1));
         }
         // Subtract balance
-        else if (arguments[1].matches("[-]\\d+")) {
-            updatedBalance = oldBalance - Integer.parseInt(arguments[1].substring(1));
+        else if (ctx.getArguments()[1].matches("[-]\\d+")) {
+            updatedBalance = oldBalance - Integer.parseInt(ctx.getArguments()[1].substring(1));
         }
         // Set balance
-        else if (arguments[1].matches("\\d+")) {
-            updatedBalance = Integer.parseInt(arguments[1]);
+        else if (ctx.getArguments()[1].matches("\\d+")) {
+            updatedBalance = Integer.parseInt(ctx.getArguments()[1]);
         }
         // Error
         else {
-            utilities.error(event.getChannel(), "economy set", "\uD83D\uDC5B", "Invalid operator", "Please use `+` to add money, `-` to subtract money or leave the operators out to set an exact amount of money", event.getAuthor().getEffectiveAvatarUrl());
+            utilities.error(ctx.getChannel(), "economy set", "\uD83D\uDC5B", "Invalid operator", "Please use `+` to add money, `-` to subtract money or leave the operators out to set an exact amount of money", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         // Change balance in database
         db.getMembers().getMember(member).setBalance(updatedBalance);
         // Success
-        utilities.success(event.getChannel(), "economy set", "\uD83D\uDC5B", "Updated balance", member.getAsMention() + "has now `" + updatedBalance + "` " + db.getNested("economy").get("currency"), event.getAuthor().getEffectiveAvatarUrl(), false, null);
+        utilities.success(ctx.getChannel(), "economy set", "\uD83D\uDC5B", "Updated balance", member.getAsMention() + "has now `" + updatedBalance + "` " + db.getNested("economy").get("currency"), ctx.getAuthor().getEffectiveAvatarUrl(), false, null);
     }
 }

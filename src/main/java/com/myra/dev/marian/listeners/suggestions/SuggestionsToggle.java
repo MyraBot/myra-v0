@@ -4,17 +4,17 @@ import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 
 @CommandSubscribe(
         name = "suggestions toggle"
 )
 public class SuggestionsToggle implements Command {
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         //missing permissions
-        if (!Permissions.isAdministrator(event.getMember())) return;
+        if (!Permissions.isAdministrator(ctx.getMember())) return;
         //toggle feature
-        new Database(event.getGuild()).getListenerManager().toggle("suggestions", "\uD83D\uDDF3", event);
+        new Database(ctx.getGuild()).getListenerManager().toggle("suggestions", "\uD83D\uDDF3", ctx.getEvent());
     }
 }

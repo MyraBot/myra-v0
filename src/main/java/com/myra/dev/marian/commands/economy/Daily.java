@@ -6,7 +6,7 @@ import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -16,11 +16,11 @@ import java.util.concurrent.TimeUnit;
 )
 public class Daily implements Command {
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         // Check for no arguments
-        if (arguments.length != 0) return;
+        if (ctx.getArguments().length != 0) return;
         // Get member from database
-        GetMember member = new Database(event.getGuild()).getMembers().getMember(event.getMember());
+        GetMember member = new Database(ctx.getGuild()).getMembers().getMember(ctx.getEvent().getMember());
         // Get last claimed reward
         long lastClaim = member.getLastClaim();
         // Get duration, which passed (in milliseconds)
@@ -30,11 +30,11 @@ public class Daily implements Command {
         // Get reward
         int dailyReward = 0;
         // Get currency
-        String currency = new Database(event.getGuild()).getNested("economy").get("currency");
+        String currency = new Database(ctx.getGuild()).getNested("economy").get("currency");
         // Create embed
         EmbedBuilder daily = new EmbedBuilder()
-                .setAuthor("daily", null, event.getAuthor().getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().getMemberRoleColour(event.getMember()));
+                .setAuthor("daily", null, ctx.getAuthor().getEffectiveAvatarUrl())
+                .setColor(Manager.getUtilities().getMemberRoleColour(ctx.getEvent().getMember()));
 
         // Too early
         if (TimeUnit.MILLISECONDS.toHours(passedTime) < 12) {
@@ -43,7 +43,7 @@ public class Daily implements Command {
 
 
             daily.setDescription("You need to wait more " + nextBonusIn);
-            event.getChannel().sendMessage(daily.build()).queue();
+            ctx.getChannel().sendMessage(daily.build()).queue();
             return;
         }
 
@@ -89,6 +89,6 @@ public class Daily implements Command {
         // Show streak
         daily.setFooter("streak: " + streak + "/14");
         // Send daily reward
-        event.getChannel().sendMessage(daily.build()).queue();
+        ctx.getChannel().sendMessage(daily.build()).queue();
     }
 }

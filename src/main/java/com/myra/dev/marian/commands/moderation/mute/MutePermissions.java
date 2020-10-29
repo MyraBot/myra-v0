@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.events.channel.text.TextChannelCreateEvent;
 import java.util.EnumSet;
 
 public class MutePermissions extends Events {
+
     public void textChannelCreateEvent(TextChannelCreateEvent event) {
         Database db = new Database(event.getGuild());
         Role muteRole = event.getGuild().getRoleById(db.get("muteRole"));

@@ -9,7 +9,7 @@ import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 
 @CommandSubscribe(
         name = "balance",
@@ -17,44 +17,44 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 )
 public class Balance implements Command {
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         // Get utilities
         Utilities utilities = Manager.getUtilities();
         // Get database
-        Database db = new Database(event.getGuild());
+        Database db = new Database(ctx.getGuild());
         // Get currency
         String currency = db.getNested("economy").get("currency");
         // Usage
-        if (arguments.length > 1) {
+        if (ctx.getArguments().length > 1) {
             EmbedBuilder usage = new EmbedBuilder()
-                    .setAuthor("balance", null, event.getAuthor().getEffectiveAvatarUrl())
+                    .setAuthor("balance", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(utilities.gray)
-                    .addField("`" + Prefix.getPrefix(event.getGuild()) + "balance <user>`", currency + " │ Shows how many " + currency + " you have.", false);
-            event.getChannel().sendMessage(usage.build()).queue();
+                    .addField("`" + ctx.getPrefix() + "balance <user>`", currency + " │ Shows how many " + currency + " you have.", false);
+            ctx.getChannel().sendMessage(usage.build()).queue();
             return;
         }
         /**
          * Show balance
          */
         // Get self user
-        Member member = event.getMember();
+        Member member = ctx.getEvent().getMember();
         // Get given user
-        if (arguments.length == 1) {
-            User user = utilities.getUser(event, arguments[0], "balance", currency);
+        if (ctx.getArguments().length == 1) {
+            User user = utilities.getUser(ctx.getEvent(), ctx.getArguments()[0], "balance", currency);
             if (user == null) return;
             // User isn't in the guild
-            if (event.getGuild().getMember(user) == null) {
-                utilities.error(event.getChannel(), "balance", currency, "No member found", "the given user isn't on this server", event.getAuthor().getEffectiveAvatarUrl());
+            if (ctx.getGuild().getMember(user) == null) {
+                utilities.error(ctx.getChannel(), "balance", currency, "No member found", "the given user isn't on this server", ctx.getAuthor().getEffectiveAvatarUrl());
                 return;
             }
             // Save user as member
-            member = event.getGuild().getMember(user);
+            member = ctx.getGuild().getMember(user);
         }
         // Send balance
         EmbedBuilder balance = new EmbedBuilder()
-                .setAuthor("balance", null, event.getAuthor().getEffectiveAvatarUrl())
-                .setColor(utilities.getMemberRoleColour(event.getMember()))
+                .setAuthor("balance", null, ctx.getAuthor().getEffectiveAvatarUrl())
+                .setColor(utilities.getMemberRoleColour(ctx.getEvent().getMember()))
                 .setDescription(member.getAsMention() + "'s balance is `" + db.getMembers().getMember(member).getBalance() + "` " + currency);
-        event.getChannel().sendMessage(balance.build()).queue();
+        ctx.getChannel().sendMessage(balance.build()).queue();
     }
 }

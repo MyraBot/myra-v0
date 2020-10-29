@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
@@ -114,7 +115,7 @@ public class Utilities {
     }
 
     //return duration
-    public List getDuration(String providedInformation) {
+    public List<String> getDuration(String providedInformation) {
         //get time unit
         TimeUnit timeUnit = null;
         switch (providedInformation.replaceAll("\\d+", "")) {

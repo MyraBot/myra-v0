@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import org.bson.Document;
 
 import java.time.Instant;
@@ -30,19 +30,19 @@ import java.util.concurrent.TimeUnit;
 public class Tempmute extends Events implements Command {
 
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         //missing permissions
-        if (!Permissions.isModerator(event.getMember())) return;
+        if (!Permissions.isModerator(ctx.getMember())) return;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
         //command usage
-        if (arguments.length == 0) {
+        if (ctx.getArguments().length == 0) {
             EmbedBuilder usage = new EmbedBuilder()
-                    .setAuthor("tempmute", null, event.getAuthor().getEffectiveAvatarUrl())
+                    .setAuthor("tempmute", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(utilities.gray)
-                    .addField("\uD83D\uDD07 │ tempmute a specific member", "`" + Prefix.getPrefix(event.getGuild()) + "tempmute <user> <duration><time unit> <reason>`", true)
+                    .addField("\uD83D\uDD07 │ tempmute a specific member", "`" + ctx.getPrefix() + "tempmute <user> <duration><time unit> <reason>`", true)
                     .setFooter("Accepted time units: seconds, minutes, hours, days");
-            event.getChannel().sendMessage(usage.build()).queue();
+            ctx.getChannel().sendMessage(usage.build()).queue();
             return;
         }
         /**
@@ -50,30 +50,30 @@ public class Tempmute extends Events implements Command {
          */
         //get reason
         String reason = "";
-        if (arguments.length > 2) {
-            for (int i = 2; i < arguments.length; i++) {
-                reason += arguments[i] + " ";
+        if (ctx.getArguments().length > 2) {
+            for (int i = 2; i < ctx.getArguments().length; i++) {
+                reason += ctx.getArguments()[i] + " ";
             }
             //remove last space
             reason = reason.substring(0, reason.length() - 1);
         }
         //get user
-        User user = utilities.getModifiedUser(event, arguments[0], "tempmute", "\uD83D\uDD07");
+        User user = utilities.getModifiedUser(ctx.getEvent(), ctx.getArguments()[0], "tempmute", "\uD83D\uDD07");
         if (user == null) return;
         //get mute role id
-        String muteRoleId = new Database(event.getGuild()).get("muteRole");
+        String muteRoleId = new Database(ctx.getGuild()).get("muteRole");
         //no mute role set
         if (muteRoleId.equals("not set")) {
-            utilities.error(event.getChannel(), "tempmute", "\uD83D\uDD07", "You didn't specify a mute role", "To indicate a mute role, type in `" + Prefix.getPrefix(event.getGuild()) + "mute role <role>`", event.getAuthor().getEffectiveAvatarUrl());
+            utilities.error(ctx.getChannel(), "tempmute", "\uD83D\uDD07", "You didn't specify a mute role", "To indicate a mute role, type in `" + ctx.getPrefix() + "mute role <role>`", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         //if the string is not [NumberLetters]
-        if (!arguments[1].matches("[0-9]+[a-zA-z]+")) {
-            utilities.error(event.getChannel(), "tempmute", "\uD83D\uDD07", "Invalid time", "please note: `<time><time unit>`", event.getAuthor().getEffectiveAvatarUrl());
+        if (!ctx.getArguments()[1].matches("[0-9]+[a-zA-z]+")) {
+            utilities.error(ctx.getChannel(), "tempmute", "\uD83D\uDD07", "Invalid time", "please note: `<time><time unit>`", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         //return duration as a list
-        List durationList = utilities.getDuration(arguments[1]);
+        List durationList = utilities.getDuration(ctx.getArguments()[1]);
         String duration = durationList.get(0).toString();
         long durationInMilliseconds = Long.parseLong(durationList.get(1).toString());
         TimeUnit timeUnit = TimeUnit.valueOf(durationList.get(2).toString());
@@ -82,17 +82,17 @@ public class Tempmute extends Events implements Command {
                 .setAuthor(user.getName() + " got tempmuted", null, user.getEffectiveAvatarUrl())
                 .setColor(utilities.red)
                 .setDescription("\u23F1\uFE0F │ " + user.getAsMention() + " got muted for **" + duration + " " + timeUnit.toString().toLowerCase() + "**")
-                .setFooter("requested by " + event.getAuthor().getAsTag(), event.getAuthor().getEffectiveAvatarUrl())
+                .setFooter("requested by " + ctx.getAuthor().getAsTag(), ctx.getAuthor().getEffectiveAvatarUrl())
                 .setTimestamp(Instant.now());
         //direct message mute
         EmbedBuilder muteDirectMessage = new EmbedBuilder()
-                .setAuthor("You got tempmuted on " + event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                .setAuthor("You got tempmuted on " + ctx.getGuild().getName(), null, ctx.getGuild().getIconUrl())
                 .setColor(utilities.red)
-                .setDescription("\u23F1\uFE0F │ You got muted on " + event.getGuild().getName() + " for **" + duration + " " + timeUnit.toString().toLowerCase() + "**")
-                .setFooter("requested by " + event.getMember().getUser().getName(), event.getMember().getUser().getEffectiveAvatarUrl())
+                .setDescription("\u23F1\uFE0F │ You got muted on " + ctx.getGuild().getName() + " for **" + duration + " " + timeUnit.toString().toLowerCase() + "**")
+                .setFooter("requested by " + ctx.getEvent().getMember().getUser().getName(), ctx.getAuthor().getEffectiveAvatarUrl())
                 .setTimestamp(Instant.now());
         //with reason
-        if (arguments.length > 2) {
+        if (ctx.getArguments().length > 2) {
             muteGuild.addField("\uD83D\uDCC4 │ reason:", reason, false);
             muteDirectMessage.addField("\uD83D\uDCC4 │ reason:", reason, false);
         }
@@ -102,17 +102,15 @@ public class Tempmute extends Events implements Command {
             muteDirectMessage.addField("\uD83D\uDCC4 │ no reason", "there was no reason given", false);
         }
         //send message
-        event.getChannel().sendMessage(muteGuild.build()).queue();
+        ctx.getChannel().sendMessage(muteGuild.build()).queue();
         user.openPrivateChannel().queue((channel) -> {
             channel.sendMessage(muteDirectMessage.build()).queue();
         });
         //mute
-        event.getGuild().addRoleToMember(event.getGuild().getMember(user), event.getGuild().getRoleById(muteRoleId)).queue();
+        ctx.getGuild().addRoleToMember(ctx.getGuild().getMember(user), ctx.getGuild().getRoleById(muteRoleId)).queue();
         //create unmute Document
-        Document document = createUnmute(user.getId(), event.getGuild().getId(), durationInMilliseconds, event.getAuthor().getId());
-        /**
-         * unmute
-         */
+        Document document = createUnmute(user.getId(), ctx.getGuild().getId(), durationInMilliseconds, ctx.getAuthor().getId());
+// Unmute
         // Get database
         MongoDb db = Manager.getDatabase();
         //delay
@@ -121,14 +119,14 @@ public class Tempmute extends Events implements Command {
             @Override
             public void run() {
                 //if member left the server
-                if (event.getGuild().getMemberById(document.getString("userId")) == null) {
+                if (ctx.getGuild().getMemberById(document.getString("userId")) == null) {
                     //delete document
                     db.getCollection("unmutes").deleteOne(document);
                 }
                 //remove role
-                event.getGuild().removeRoleFromMember(document.getString("userId"), event.getGuild().getRoleById(muteRoleId)).queue();
+                ctx.getGuild().removeRoleFromMember(document.getString("userId"), ctx.getGuild().getRoleById(muteRoleId)).queue();
                 //send unmute message
-                unmuteMessage(user, event.getGuild(), event.getAuthor());
+                unmuteMessage(user, ctx.getGuild(), ctx.getAuthor());
                 //delete document
                 db.getCollection("unmutes").deleteOne(document);
 

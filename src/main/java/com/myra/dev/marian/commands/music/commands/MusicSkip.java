@@ -8,7 +8,7 @@ import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 
 @CommandSubscribe(
         name = "skip",
@@ -17,42 +17,42 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 public class MusicSkip implements Command {
 
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         // Check for no arguments
-        if (arguments.length != 0) return;
+        if (ctx.getArguments().length != 0) return;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
 // Errors
         // Bot isn't connected to a voice channel
-        if (!event.getGuild().getAudioManager().isConnected()) {
+        if (!ctx.getGuild().getAudioManager().isConnected()) {
             utilities.error(
-                    event.getChannel(),
+                    ctx.getChannel(),
                     "skip", "\u23ED\uFE0F",
                     "I'm not connected to a voice channel",
-                    "Use `" + Prefix.getPrefix(event.getGuild()) + "join` to connect me to your voice channel",
-                    event.getAuthor().getEffectiveAvatarUrl());
+                    "Use `" + ctx.getPrefix() + "join` to connect me to your voice channel",
+                    ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         // No audio track is playing
-        if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
+        if (PlayerManager.getInstance().getMusicManager(ctx.getGuild()).audioPlayer.getPlayingTrack() == null) {
             utilities.error(
-                    event.getChannel(),
+                    ctx.getChannel(),
                     "skip", "\u23ED\uFE0F",
                     "The player isn`t playing any song",
-                    "Use `" + Prefix.getPrefix(event.getGuild()) + "play <song>` to play a song",
-                    event.getAuthor().getEffectiveAvatarUrl());
+                    "Use `" + ctx.getPrefix() + "play <song>` to play a song",
+                    ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
 // Skip current playing track
         // Get audio player
-        AudioTrack track = PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack();
+        AudioTrack track = PlayerManager.getInstance().getMusicManager(ctx.getGuild()).audioPlayer.getPlayingTrack();
         // Send success message
         EmbedBuilder success = new EmbedBuilder()
-                .setAuthor("skip", track.getInfo().uri, event.getAuthor().getEffectiveAvatarUrl())
+                .setAuthor("skip", track.getInfo().uri, ctx.getAuthor().getEffectiveAvatarUrl())
                 .setColor(utilities.blue)
                 .setDescription("Skipped track: " + utilities.hyperlink(track.getInfo().title, track.getInfo().uri));
-        event.getChannel().sendMessage(success.build()).queue();
+        ctx.getChannel().sendMessage(success.build()).queue();
         // Skip track
-        PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.nextTrack();
+        PlayerManager.getInstance().getMusicManager(ctx.getGuild()).scheduler.nextTrack();
     }
 }

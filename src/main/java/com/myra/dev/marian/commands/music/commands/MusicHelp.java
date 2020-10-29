@@ -2,20 +2,20 @@ package com.myra.dev.marian.commands.music.commands;
 
 import com.myra.dev.marian.utilities.CommandEmbeds;
 import com.myra.dev.marian.utilities.management.commands.Command;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 @CommandSubscribe(
         name = "music",
         aliases = {"radio"}
 )
 public class MusicHelp implements Command {
-    //TODO
+
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         // Check for no arguments
-        if (arguments.length != 0) return;
+        if (ctx.getArguments().length != 0) return;
         // Run command
-        event.getChannel().sendMessage(new CommandEmbeds().music(event.getGuild(), event.getAuthor().getEffectiveAvatarUrl()).build()).queue();
+        ctx.getChannel().sendMessage(new CommandEmbeds().music(ctx.getGuild(), ctx.getAuthor().getEffectiveAvatarUrl()).build()).queue();
     }
 }

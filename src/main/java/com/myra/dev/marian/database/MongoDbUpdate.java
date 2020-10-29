@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import net.dv8tion.jda.api.events.user.update.UserUpdateNameEvent;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -34,9 +34,9 @@ public class MongoDbUpdate extends Events implements Command {
 
     //update Database
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         //connect to database
-        if (event.getMessage().getContentRaw().equals("~db.update") && event.getAuthor().getId().equals("639544573114187797")) {
+        if (ctx.getEvent().getMessage().getContentRaw().equals("~db.update") && ctx.getAuthor().getId().equals("639544573114187797")) {
             //for each document
             for (Document doc : mongoDb.getCollection("guilds").find()) {
                 String guildId = doc.getString("guildId");
@@ -126,8 +126,8 @@ public class MongoDbUpdate extends Events implements Command {
             }
             //close database
             mongoDb.close();
-            if (event.getMessage().getContentRaw().equals("db.create") && event.getAuthor().getId().equals("639544573114187797")) {
-                MongoDbDocuments.guild(event.getGuild());
+            if (ctx.getEvent().getMessage().getContentRaw().equals("db.create") && ctx.getAuthor().getId().equals("639544573114187797")) {
+                MongoDbDocuments.guild(ctx.getGuild());
             }
         }
 

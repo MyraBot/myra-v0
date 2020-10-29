@@ -16,6 +16,7 @@ public class CommandEmbeds {
                 .addField("`general`", "\uD83C\uDF88 │ The main commands of the bot", false)
                 .addField("`fun`", "\uD83D\uDD79 │ Commands to play around with", false)
                 .addField("`leveling`", "\uD83C\uDFC6 │ Leveling", false)
+                .addField("`economy`", "\uD83D\uDCB0 │ Economy", false)
                 .addField("`music`", "\uD83D\uDCFB │ Music related commands", false)
                 .addField("`moderation`", "\uD83D\uDD28 │ Commands for security", false)
                 .addField("`administrator`", "\uD83D\uDD29 │ Server commands", false);
@@ -58,6 +59,15 @@ public class CommandEmbeds {
                 .addField("`" + Prefix.getPrefix(guild) + "rank <user>`", "\uD83C\uDFC5 │ Shows the rank of a user", false)
                 .addField("`" + Prefix.getPrefix(guild) + "leaderboard`", "\uD83E\uDD47 │ Shows the leaderboard", false)
                 .addField("`" + Prefix.getPrefix(guild) + "leveling background <url>`", "\uD83D\uDDBC │ Set a custom rank background", false);
+        return fun;
+    }
+
+    //leveling
+    public EmbedBuilder economy(Guild guild, String authorAvatar) {
+        EmbedBuilder fun = new EmbedBuilder()
+                .setAuthor("economy", null, authorAvatar)
+                .setColor(Manager.getUtilities().gray)
+                .addField("`" + Prefix.getPrefix(guild) + "daily`", "\uD83E\uDD47 │ Claim your daily reward", false);
         return fun;
     }
 
@@ -111,7 +121,8 @@ public class CommandEmbeds {
                 .addField("`" + Prefix.getPrefix(guild) + "welcome`", "\uD83D\uDC4B │ Welcome new users", false)
                 .addField("`" + Prefix.getPrefix(guild) + "notification`", "\uD83D\uDD14 │ set automatic notifications for you favorite streamers", false)
                 .addField("`" + Prefix.getPrefix(guild) + "suggestions`", "\uD83D\uDDF3 │ Set up the suggestions", false)
-                .addField("`" + Prefix.getPrefix(guild) + "leveling`", "\uD83C\uDFC6 │ Change some settings of leveling", false);
+                .addField("`" + Prefix.getPrefix(guild) + "leveling`", "\uD83C\uDFC6 │ Change some settings of leveling", false)
+                .addField("`" + Prefix.getPrefix(guild) + "economy`", "\uD83D\uDCB0 │ Change some settings of economy", false);
         return administrator;
     }
 

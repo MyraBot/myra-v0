@@ -6,7 +6,7 @@ import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.management.Manager;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 
 import java.util.List;
 
@@ -17,9 +17,9 @@ import java.util.List;
 )
 public class Leaderboard implements Command {
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         //get leaderboard
-        List<MemberDocument> leaderboardList = new Database(event.getGuild()).getMembers().getLeaderboard();
+        List<MemberDocument> leaderboardList = new Database(ctx.getGuild()).getMembers().getLeaderboard();
         //add top 10 members to String
         String top10 =
                 "1 \uD83D\uDC51 `" + leaderboardList.get(0).getLevel() + "` **" + leaderboardList.get(0).getName() + "**\n" +
@@ -34,10 +34,10 @@ public class Leaderboard implements Command {
                         "10 \uD83C\uDF97 `" + leaderboardList.get(9).getLevel() + "` **" + leaderboardList.get(9).getName() + "**\n";
         //create embed
         EmbedBuilder leaderboard = new EmbedBuilder()
-                .setAuthor(event.getGuild().getName() + "'s leaderboard", null, event.getGuild().getIconUrl())
+                .setAuthor(ctx.getGuild().getName() + "'s leaderboard", null, ctx.getGuild().getIconUrl())
                 .setColor(Manager.getUtilities().blue)
                 .setDescription(top10);
         //send message
-        event.getChannel().sendMessage(leaderboard.build()).queue();
+        ctx.getChannel().sendMessage(leaderboard.build()).queue();
     }
 }

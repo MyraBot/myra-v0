@@ -1,13 +1,12 @@
 package com.myra.dev.marian.listeners.suggestions;
 
-import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.time.Instant;
 
@@ -17,20 +16,20 @@ import java.time.Instant;
 )
 public class SubmitSuggestion implements Command {
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         // Get database
-        Database db = new Database(event.getGuild());
+        Database db = new Database(ctx.getGuild());
         //check if feature is disabled
         if (!db.getListenerManager().check("suggestions")) return;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
         // Usage
-        if (arguments.length == 0) {
+        if (ctx.getArguments().length == 0) {
             EmbedBuilder usage = new EmbedBuilder()
-                    .setAuthor("suggest", null, event.getAuthor().getEffectiveAvatarUrl())
+                    .setAuthor("suggest", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(utilities.gray)
-                    .addField("`" + Prefix.getPrefix(event.getGuild()) + "suggest <suggestion>`", "\uD83D\uDDF3 │ Suggest something", false);
-            event.getChannel().sendMessage(usage.build()).queue();
+                    .addField("`" + ctx.getPrefix() + "suggest <suggestion>`", "\uD83D\uDDF3 │ Suggest something", false);
+            ctx.getChannel().sendMessage(usage.build()).queue();
             return;
         }
         /**
@@ -38,22 +37,22 @@ public class SubmitSuggestion implements Command {
          */
         //if no channel is set
         if (db.get("suggestionsChannel").equals("not set")) {
-            utilities.error(event.getChannel(), "suggestions", "\uD83D\uDCA1", "No suggestion channel specified", "To set a suggestion channel type in `" + Prefix.getPrefix(event.getGuild()) + "suggestions channel <channel>`", event.getGuild().getIconUrl());
+            utilities.error(ctx.getChannel(), "suggestions", "\uD83D\uDCA1", "No suggestion channel specified", "To set a suggestion channel type in `" + ctx.getPrefix() + "suggestions channel <channel>`", ctx.getGuild().getIconUrl());
             return;
         }
         // Get suggestion
         String suggestion = "";
-        for (int i = 0; i < arguments.length; i++) {
-            suggestion += arguments[i] + " ";
+        for (int i = 0; i < ctx.getArguments().length; i++) {
+            suggestion += ctx.getArguments()[i] + " ";
         }
         //remove last space
         suggestion = suggestion.substring(0, suggestion.length() - 1);
         //send suggestion
-        event.getGuild().getTextChannelById(db.get("suggestionsChannel")).sendMessage(
+        ctx.getGuild().getTextChannelById(db.get("suggestionsChannel")).sendMessage(
                 new EmbedBuilder()
-                        .setAuthor("suggestion by " + event.getAuthor().getAsTag(), event.getMessage().getJumpUrl(), event.getGuild().getIconUrl())
-                        .setColor(utilities.getMemberRoleColour(event.getMember()))
-                        .setThumbnail(event.getAuthor().getEffectiveAvatarUrl())
+                        .setAuthor("suggestion by " + ctx.getAuthor().getAsTag(), ctx.getEvent().getMessage().getJumpUrl(), ctx.getGuild().getIconUrl())
+                        .setColor(utilities.getMemberRoleColour(ctx.getEvent().getMember()))
+                        .setThumbnail(ctx.getAuthor().getEffectiveAvatarUrl())
                         .setDescription(suggestion)
                         .setTimestamp(Instant.now())
                         .build()

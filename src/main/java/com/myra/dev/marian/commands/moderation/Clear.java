@@ -1,13 +1,12 @@
 package com.myra.dev.marian.commands.moderation;
 
-import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.commands.Command;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
 
@@ -17,43 +16,41 @@ import java.util.List;
 )
 public class Clear implements Command {
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         // If amount isn't a number
-        if (!arguments[0].matches("\\d+")) return;
+        if (!ctx.getArguments()[0].matches("\\d+")) return;
         // Missing permissions
-        if (!Permissions.isModerator(event.getMember())) return;
+        if (!Permissions.isModerator(ctx.getMember())) return;
         // Get utilities
         Utilities utilities = new Utilities();
         // Usage
-        if (arguments.length != 1) {
+        if (ctx.getArguments().length != 1) {
             EmbedBuilder embed = new EmbedBuilder()
-                    .setAuthor("clear", null, event.getAuthor().getEffectiveAvatarUrl())
+                    .setAuthor("clear", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(utilities.gray)
-                    .addField("`" + Prefix.getPrefix(event.getGuild()) + "clear <amount>`", "\uD83D\uDDD1 │ clear", true);
-            event.getChannel().sendMessage(embed.build()).queue();
+                    .addField("`" + ctx.getPrefix() + "clear <amount>`", "\uD83D\uDDD1 │ clear", true);
+            ctx.getChannel().sendMessage(embed.build()).queue();
             return;
         }
-        /**
-         * Clear messages
-         */
+// Clear messages
         // Delete messages
         try {
             // Retrieve messages
-            List<Message> messages = event.getChannel().getHistory().retrievePast(Integer.parseInt(arguments[0]) + 1).complete();
+            List<Message> messages = ctx.getChannel().getHistory().retrievePast(Integer.parseInt(ctx.getArguments()[0]) + 1).complete();
             // Delete messages
-            event.getChannel().deleteMessages(messages).queue();
+            ctx.getChannel().deleteMessages(messages).queue();
             // Success information
-            utilities.success(event.getChannel(), "clear", "\uD83D\uDDD1", "the message were deleted successfully", "`" + arguments[0] + "` messages have been deleted", event.getJDA().getSelfUser().getEffectiveAvatarUrl(), true, null);
+            utilities.success(ctx.getChannel(), "clear", "\uD83D\uDDD1", "the message were deleted successfully", "`" + ctx.getArguments()[0] + "` messages have been deleted", ctx.getEvent().getJDA().getSelfUser().getEffectiveAvatarUrl(), true, null);
         }
         // Errors
         catch (Exception exception) {
             //to many messages
-            if (arguments[0].equals("0") || exception.toString().startsWith("java.lang.IllegalArgumentException: Message retrieval")) {
-                utilities.error(event.getChannel(), "clear", "\uD83D\uDDD1", "Invalid amount of messages", "An amount between 1 and 100 messages can be deleted", event.getAuthor().getEffectiveAvatarUrl());
+            if (ctx.getArguments()[0].equals("0") || exception.toString().startsWith("java.lang.IllegalArgumentException: Message retrieval")) {
+                utilities.error(ctx.getChannel(), "clear", "\uD83D\uDDD1", "Invalid amount of messages", "An amount between 1 and 100 messages can be deleted", ctx.getAuthor().getEffectiveAvatarUrl());
             }
             //message too late
             else {
-                utilities.error(event.getChannel(), "clear", "\uD83D\uDDD1", "You selected too old messages", "I can't delete messages older than 2 weeks", event.getAuthor().getEffectiveAvatarUrl());
+                utilities.error(ctx.getChannel(), "clear", "\uD83D\uDDD1", "You selected too old messages", "I can't delete messages older than 2 weeks", ctx.getAuthor().getEffectiveAvatarUrl());
             }
         }
     }

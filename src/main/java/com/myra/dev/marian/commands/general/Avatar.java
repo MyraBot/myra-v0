@@ -6,7 +6,7 @@ import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 
 @CommandSubscribe(
         name = "avatar",
@@ -14,23 +14,23 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 )
 public class Avatar implements Command {
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         // Get utilities
         Utilities utilities = Manager.getUtilities();
         //get user
-        User user = event.getAuthor();
-        if (arguments.length != 0) {
-            user = utilities.getUser(event, arguments[0], "avatar", "\uD83D\uDDBC");
+        User user = ctx.getAuthor();
+        if (ctx.getArguments().length != 0) {
+            user = utilities.getUser(ctx.getEvent(), ctx.getArguments()[0], "avatar", "\uD83D\uDDBC");
             if (user == null) return;
         }
         //avatar
         EmbedBuilder avatar = new EmbedBuilder()
                 .setAuthor(user.getName() + "'s avatar:", user.getEffectiveAvatarUrl(), user.getEffectiveAvatarUrl());
-        if (event.getGuild().getMember(user) != null) {
-            avatar.setColor(utilities.getMemberRoleColour(event.getGuild().getMember(user)));
+        if (ctx.getGuild().getMember(user) != null) {
+            avatar.setColor(utilities.getMemberRoleColour(ctx.getGuild().getMember(user)));
         }
         avatar.setImage(user.getEffectiveAvatarUrl());
 
-        event.getChannel().sendMessage(avatar.build()).queue();
+        ctx.getChannel().sendMessage(avatar.build()).queue();
     }
 }

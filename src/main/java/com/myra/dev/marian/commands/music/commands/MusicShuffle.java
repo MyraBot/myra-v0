@@ -8,7 +8,7 @@ import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,36 +22,36 @@ import java.util.concurrent.BlockingQueue;
 public class MusicShuffle implements Command {
 
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         // Check for no arguments
-        if (arguments.length != 0) return;
+        if (ctx.getArguments().length != 0) return;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
 // Errors
         // Bot isn't connected to a voice channel
-        if (!event.getGuild().getAudioManager().isConnected()) {
-            utilities.error(event.getChannel(), "shuffle", "\uD83D\uDCE4", "I'm not connected to a voice channel", "Use `" + Prefix.getPrefix(event.getGuild()) + "join` to connect me to your voice channel", event.getAuthor().getEffectiveAvatarUrl());
+        if (!ctx.getGuild().getAudioManager().isConnected()) {
+            utilities.error(ctx.getChannel(), "shuffle", "\uD83D\uDCE4", "I'm not connected to a voice channel", "Use `" + ctx.getPrefix() + "join` to connect me to your voice channel", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         // No audio track is playing
-        if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
-            utilities.error(event.getChannel(), "shuffle", "\uD83C\uDFB2", "The player isn`t playing any song", "Use `" + Prefix.getPrefix(event.getGuild()) + "play <song>` to play a song", event.getAuthor().getEffectiveAvatarUrl());
+        if (PlayerManager.getInstance().getMusicManager(ctx.getGuild()).audioPlayer.getPlayingTrack() == null) {
+            utilities.error(ctx.getChannel(), "shuffle", "\uD83C\uDFB2", "The player isn`t playing any song", "Use `" + ctx.getPrefix() + "play <song>` to play a song", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
 // Shuffle queue
         // Get queue
-        BlockingQueue<AudioTrack> queue = PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.getQueue();
+        BlockingQueue<AudioTrack> queue = PlayerManager.getInstance().getMusicManager(ctx.getGuild()).scheduler.getQueue();
         List<AudioTrack> tracks = new ArrayList<>(queue);
         // Shuffle queue
         Collections.shuffle(tracks);
         // Replace
-        PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.getQueue().clear();
+        PlayerManager.getInstance().getMusicManager(ctx.getGuild()).scheduler.getQueue().clear();
         queue.addAll(tracks);
         // Success message
         EmbedBuilder success = new EmbedBuilder()
-                .setAuthor("shuffle", null, event.getAuthor().getEffectiveAvatarUrl())
+                .setAuthor("shuffle", null, ctx.getAuthor().getEffectiveAvatarUrl())
                 .setColor(utilities.blue)
                 .setDescription("The current queue was jumbled");
-        event.getChannel().sendMessage(success.build()).queue();
+        ctx.getChannel().sendMessage(success.build()).queue();
     }
 }

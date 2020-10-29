@@ -6,9 +6,9 @@ import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -20,13 +20,13 @@ import java.util.List;
 )
 public class LevelingRolesList implements Command {
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         // Missing permissions
-        if (!Permissions.isAdministrator(event.getMember())) return;
+        if (!Permissions.isAdministrator(ctx.getMember())) return;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
         // Get leveling roles
-        List<LevelingRolesDocument> rolesList = new Database(event.getGuild()).getLeveling().getLevelingRoles();
+        List<LevelingRolesDocument> rolesList = new Database(ctx.getGuild()).getLeveling().getLevelingRoles();
         // Sort roles
         Collections.sort(rolesList, Comparator.comparing(LevelingRolesDocument::getLevel).reversed());
         // Add all roles to String
@@ -41,11 +41,11 @@ public class LevelingRolesList implements Command {
             for (LevelingRolesDocument role : rolesList) {
                 // When there is a role to remove
                 if (!role.getRemove().equals("not set")) {
-                    roles += "• level: `" + role.getLevel() + "` add: " + event.getGuild().getRoleById(role.getRole()).getAsMention() + " remove:" + event.getGuild().getRoleById(role.getRole()).getAsMention();
+                    roles += "• level: `" + role.getLevel() + "` add: " + ctx.getGuild().getRoleById(role.getRole()).getAsMention() + " remove:" + ctx.getGuild().getRoleById(role.getRole()).getAsMention();
                     continue;
                 }
                 // When there is only a role to add
-                roles += "• level: `" + role.getLevel() + "` add: " + event.getGuild().getRoleById(role.getRole()).getAsMention();
+                roles += "• level: `" + role.getLevel() + "` add: " + ctx.getGuild().getRoleById(role.getRole()).getAsMention();
             }
         }
         // Create embed
@@ -53,6 +53,6 @@ public class LevelingRolesList implements Command {
                 .setAuthor("leveling roles list")
                 .setColor(utilities.blue)
                 .setDescription(roles);
-        event.getChannel().sendMessage(levelingRoles.build()).queue();
+        ctx.getChannel().sendMessage(levelingRoles.build()).queue();
     }
 }

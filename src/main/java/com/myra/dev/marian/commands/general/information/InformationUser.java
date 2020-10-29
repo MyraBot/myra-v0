@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -24,26 +24,24 @@ import java.util.List;
 public class InformationUser implements Command {
 
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         //get utilities
         Utilities utilities = Manager.getUtilities();
         Member user;
         String roleNames = "*this user has no roles*";
-        /**
-         * get user
-         */
+// Get user
         //yourself information
-        if (arguments.length == 0) {
-            user = event.getMember();
+        if (ctx.getArguments().length == 0) {
+            user = ctx.getEvent().getMember();
         }
         //get given member
         else {
             //if user isn't in the guild
-            if (event.getGuild().getMember(new Return().user(event, arguments[0], "information user", "\uD83D\uDC64")) == null) {
-                utilities.error(event.getChannel(), "information user", "\uD83D\uDC64", "No user found", "For this command the user has to be on this server", event.getAuthor().getEffectiveAvatarUrl());
+            if (ctx.getGuild().getMember(new Return().user(ctx.getEvent(), ctx.getArguments()[0], "information user", "\uD83D\uDC64")) == null) {
+                utilities.error(ctx.getChannel(), "information user", "\uD83D\uDC64", "No user found", "For this command the user has to be on this server", ctx.getAuthor().getEffectiveAvatarUrl());
                 return;
             }
-            user = event.getGuild().getMember(new Return().user(event, arguments[0], "information user", "\uD83D\uDC64"));
+            user = ctx.getGuild().getMember(new Return().user(ctx.getEvent(), ctx.getArguments()[0], "information user", "\uD83D\uDC64"));
         }
 
         List<Role> roles = user.getRoles();
@@ -80,7 +78,7 @@ public class InformationUser implements Command {
         //join time
         userInformation.addField("\uD83D\uDCC5 │ joined server", user.getTimeJoined().atZoneSameInstant(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("dd.MM.yyyy , hh:mm")), true);
         //booster
-        if (event.getGuild().getBoosters().contains(user))
+        if (ctx.getGuild().getBoosters().contains(user))
             userInformation.addField(utilities.nitroBoost + " │ is boosting", "since: " + user.getTimeBoosted().atZoneSameInstant(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("dd.MM.yyyy , hh:mm")), true);
         //permissions
         if (user.hasPermission(Permission.ADMINISTRATOR)) {
@@ -90,14 +88,11 @@ public class InformationUser implements Command {
         }
         userInformation.addField("\uD83D\uDCC3 │ roles", roleNames, false);
 
-        event.getChannel().sendMessage(userInformation.build()).queue();
+        ctx.getChannel().sendMessage(userInformation.build()).queue();
     }
 
     //return badges
     private String getBadges(Member user, Utilities utilities) {
-        /**
-         * get badges
-         */
         String badges = "";
         //bug hunter
         if (user.getUser().getFlags().toString().contains("BUG_HUNTER_LEVEL_1"))

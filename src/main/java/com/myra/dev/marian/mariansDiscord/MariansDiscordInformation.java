@@ -1,17 +1,18 @@
 package com.myra.dev.marian.mariansDiscord;
 
 import com.myra.dev.marian.utilities.management.commands.Command;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.io.File;
+
 @CommandSubscribe(
         name = "MDinformation"
 )
-public class MariansDiscordInformation implements Command{
+public class MariansDiscordInformation implements Command {
 
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         embeds embed = new embeds();
         File welcome = new File("D:/Projektdateien/bot/footage/welcome.jpg");
         File partner = new File("D:/Projektdateien/bot/footage/partner.jpg");
@@ -22,20 +23,20 @@ public class MariansDiscordInformation implements Command{
         File socialMedia = new File("D:/Projektdateien/bot/footage/social media.jpg");
 
 
-//            event.getChannel().sendFile(welcome).queue();
-        event.getChannel().editMessageById("726130459079213138", embed.welcome(event.getGuild().getName(), event.getGuild().getIconUrl()).build()).queue();
-//            event.getChannel().sendFile(partner).queue();
-//            event.getChannel().sendMessage(embed.partner().build()).queue();
-//            event.getChannel().sendFile(shop).queue();
-        event.getChannel().editMessageById("726130554721927168", embed.colour().build()).queue();
-//            event.getChannel().sendFile(levelingRoles).queue();
-        event.getChannel().editMessageById("726130554721927168", embed.leveling().build()).queue();
-//            event.getChannel().sendFile(designerRanks).queue();
-        event.getChannel().editMessageById("726130588184084490", embed.designer().build()).queue();
-//            event.getChannel().sendFile(socialMedia).queue();
-        event.getChannel().editMessageById("726130619653816381", embed.socialMedia().build()).queue();
-//            event.getChannel().sendFile(reactionRoles).queue();
-        event.getChannel().editMessageById("726130651593441400", embed.botChannels().build()).queue();
-        event.getChannel().editMessageById("726130652365324360", embed.packChannels().build()).queue();
+//            ctx.getChannel().sendFile(welcome).queue();
+        ctx.getChannel().editMessageById("726130459079213138", embed.welcome(ctx.getGuild().getName(), ctx.getGuild().getIconUrl()).build()).queue();
+//            ctx.getChannel().sendFile(partner).queue();
+//            ctx.getChannel().sendMessage(embed.partner().build()).queue();
+//            ctx.getChannel().sendFile(shop).queue();
+        ctx.getChannel().editMessageById("726130554721927168", embed.colour().build()).queue();
+//            ctx.getChannel().sendFile(levelingRoles).queue();
+        ctx.getChannel().editMessageById("726130554721927168", embed.leveling().build()).queue();
+//            ctx.getChannel().sendFile(designerRanks).queue();
+        ctx.getChannel().editMessageById("726130588184084490", embed.designer().build()).queue();
+//            ctx.getChannel().sendFile(socialMedia).queue();
+        ctx.getChannel().editMessageById("726130619653816381", embed.socialMedia().build()).queue();
+//            ctx.getChannel().sendFile(reactionRoles).queue();
+        ctx.getChannel().editMessageById("726130651593441400", embed.botChannels().build()).queue();
+        ctx.getChannel().editMessageById("726130652365324360", embed.packChannels().build()).queue();
     }
 }

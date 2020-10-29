@@ -3,7 +3,7 @@ package com.myra.dev.marian.commands.help;
 import com.myra.dev.marian.utilities.CommandEmbeds;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 
 @CommandSubscribe(
         name = "support",
@@ -11,10 +11,10 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 )
 public class Support implements Command {
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         //check for no arguments
-        if (arguments.length != 0) return;
+        if (ctx.getArguments().length != 0) return;
         CommandEmbeds commandEmbeds = new CommandEmbeds();
-        event.getChannel().sendMessage(commandEmbeds.supportServer(event.getJDA(), event.getAuthor().getEffectiveAvatarUrl()).build()).queue();
+        ctx.getChannel().sendMessage(commandEmbeds.supportServer(ctx.getEvent().getJDA(), ctx.getAuthor().getEffectiveAvatarUrl()).build()).queue();
     }
 }

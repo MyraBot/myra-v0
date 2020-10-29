@@ -9,7 +9,7 @@ import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,25 +22,25 @@ import java.util.concurrent.BlockingQueue;
 public class MusicQueue implements Command {
 
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         // Check for no arguments
-        if (arguments.length != 0) return;
+        if (ctx.getArguments().length != 0) return;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
 // Errors
         // Bot isn't connected to a voice channel
-        if (!event.getGuild().getAudioManager().isConnected()) {
-            utilities.error(event.getChannel(), "shuffle queue", "\uD83D\uDCE4", "I'm not connected to a voice channel", "Use `" + Prefix.getPrefix(event.getGuild()) + "join` to connect me to your voice channel", event.getAuthor().getEffectiveAvatarUrl());
+        if (!ctx.getGuild().getAudioManager().isConnected()) {
+            utilities.error(ctx.getChannel(), "shuffle queue", "\uD83D\uDCE4", "I'm not connected to a voice channel", "Use `" + ctx.getPrefix() + "join` to connect me to your voice channel", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         // No audio track is playing
-        if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
-            utilities.error(event.getChannel(), "shuffle queue", "\uD83C\uDFB2", "The player isn`t playing any song", "Use `" + Prefix.getPrefix(event.getGuild()) + "play <song>` to play a song", event.getAuthor().getEffectiveAvatarUrl());
+        if (PlayerManager.getInstance().getMusicManager(ctx.getGuild()).audioPlayer.getPlayingTrack() == null) {
+            utilities.error(ctx.getChannel(), "shuffle queue", "\uD83C\uDFB2", "The player isn`t playing any song", "Use `" + ctx.getPrefix() + "play <song>` to play a song", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
 // Send Queue
         // Get queue
-        BlockingQueue<AudioTrack> queue = PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.getQueue();
+        BlockingQueue<AudioTrack> queue = PlayerManager.getInstance().getMusicManager(ctx.getGuild()).scheduler.getQueue();
         // Get the first 15 audio tracks
         int trackCount = Math.min(queue.size(), 15);
         List<AudioTrack> tracks = new ArrayList<>(queue);
@@ -53,16 +53,16 @@ public class MusicQueue implements Command {
             songs = "none \uD83D\uDE14";
         }
         // Get audio player
-        AudioPlayer audioPlayer = PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer;
+        AudioPlayer audioPlayer = PlayerManager.getInstance().getMusicManager(ctx.getGuild()).audioPlayer;
         // Get current playing Song
         String currentPlaying = utilities.hyperlink(audioPlayer.getPlayingTrack().getInfo().title, audioPlayer.getPlayingTrack().getInfo().uri);
 
         EmbedBuilder queuedSongs = new EmbedBuilder()
-                .setAuthor("queue", null, event.getAuthor().getEffectiveAvatarUrl())
+                .setAuthor("queue", null, ctx.getAuthor().getEffectiveAvatarUrl())
                 .setColor(Manager.getUtilities().blue)
                 .addField("\uD83D\uDCC3 │ queued songs", songs, false)
                 .addField("\uD83D\uDCDA │ total songs", Integer.toString(queue.size()), false)
                 .addField("\uD83D\uDCBF │ current playing", currentPlaying, false);
-        event.getChannel().sendMessage(queuedSongs.build()).queue();
+        ctx.getChannel().sendMessage(queuedSongs.build()).queue();
     }
 }

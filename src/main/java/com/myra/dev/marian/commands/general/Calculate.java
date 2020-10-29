@@ -5,7 +5,7 @@ import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.management.Manager;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 
 @CommandSubscribe(
         name = "calculate",
@@ -13,22 +13,22 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 )
 public class Calculate implements Command {
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         //usage
-        if (arguments.length == 0 || arguments.length > 3) {
+        if (ctx.getArguments().length == 0 || ctx.getArguments().length > 3) {
             EmbedBuilder usage = new EmbedBuilder()
-                    .setAuthor("calculate", null, event.getMember().getUser().getEffectiveAvatarUrl())
+                    .setAuthor("calculate", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(Manager.getUtilities().gray)
-                    .addField("\uD83E\uDDEE │ let the bot calculate something for you", "`" + Prefix.getPrefix(event.getGuild()) + "calculate <number> <operator> <number>`", false);
-            event.getChannel().sendMessage(usage.build()).queue();
+                    .addField("\uD83E\uDDEE │ let the bot calculate something for you", "`" + ctx.getPrefix() + "calculate <number> <operator> <number>`", false);
+            ctx.getChannel().sendMessage(usage.build()).queue();
             return;
         }
         //calculate
         try {
-            double number1 = Double.parseDouble(arguments[0].replace(",", "."));
-            double number2 = Double.parseDouble(arguments[2].replace(",", "."));
+            double number1 = Double.parseDouble(ctx.getArguments()[0].replace(",", "."));
+            double number2 = Double.parseDouble(ctx.getArguments()[2].replace(",", "."));
             double result = 0;
-            switch (arguments[1]) {
+            switch (ctx.getArguments()[1]) {
                 case "+":
                     result = number1 + number2;
                     break;
@@ -46,13 +46,13 @@ public class Calculate implements Command {
                     break;
             }
             EmbedBuilder calculated = new EmbedBuilder()
-                    .setAuthor("calculated", null, event.getAuthor().getEffectiveAvatarUrl())
+                    .setAuthor("calculated", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(Manager.getUtilities().blue)
-                    .setDescription("the result of " + arguments[0] + " " + arguments[1].replace("*", "⋅").replace("x", "⋅").replace("/", ":") + " " + arguments[2] + " = " + result);
-            event.getChannel().sendMessage(calculated.build()).queue();
+                    .setDescription("the result of " + ctx.getArguments()[0] + " " + ctx.getArguments()[1].replace("*", "⋅").replace("x", "⋅").replace("/", ":") + " " + ctx.getArguments()[2] + " = " + result);
+            ctx.getChannel().sendMessage(calculated.build()).queue();
         } catch (Exception e) {
             e.printStackTrace();
-            Manager.getUtilities().error(event.getChannel(), "calculate", "\uD83E\uDDEE", "Error occurred", e.getMessage(), event.getAuthor().getEffectiveAvatarUrl());
+            Manager.getUtilities().error(ctx.getChannel(), "calculate", "\uD83E\uDDEE", "Error occurred", e.getMessage(), ctx.getAuthor().getEffectiveAvatarUrl());
         }
     }
 }

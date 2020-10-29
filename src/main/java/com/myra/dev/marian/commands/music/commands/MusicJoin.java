@@ -6,7 +6,7 @@ import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 
 @SuppressWarnings("ConstantConditions")
 @CommandSubscribe(
@@ -14,35 +14,35 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 )
 public class MusicJoin implements Command {
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         // Check for no arguments
-        if (arguments.length != 0) return;
+        if (ctx.getArguments().length != 0) return;
 // ERRORS
         // Get utilities
         Utilities utilities = Manager.getUtilities();
         // Already connected to a voice channel
-        if (event.getGuild().getAudioManager().isConnected()) {
-            utilities.error(event.getChannel(), "join", "\uD83D\uDCE5", "I can only be in one channel at a time", "I'm already connected to **" + event.getGuild().getAudioManager().getConnectedChannel().getName() + "**", event.getAuthor().getEffectiveAvatarUrl());
+        if (ctx.getGuild().getAudioManager().isConnected()) {
+            utilities.error(ctx.getChannel(), "join", "\uD83D\uDCE5", "I can only be in one channel at a time", "I'm already connected to **" + ctx.getGuild().getAudioManager().getConnectedChannel().getName() + "**", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         // Member didn't joined voice call yet
-        if (!event.getMember().getVoiceState().inVoiceChannel()) {
-            utilities.error(event.getChannel(), "join", "\uD83D\uDCE5", "Please join a voice channel first", "In order for me to join a voice channel, you must already be connected to a voice channel", event.getAuthor().getEffectiveAvatarUrl());
+        if (!ctx.getMember().getVoiceState().inVoiceChannel()) {
+            utilities.error(ctx.getChannel(), "join", "\uD83D\uDCE5", "Please join a voice channel first", "In order for me to join a voice channel, you must already be connected to a voice channel", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         // Missing permissions to connect
-        if (!event.getGuild().getSelfMember().hasPermission(event.getMember().getVoiceState().getChannel(), Permission.VOICE_CONNECT)) {
-            utilities.error(event.getChannel(), "join", "\uD83D\uDCE5", "I'm missing permissions to join your voice channel", "please give me the permission `Connect` under the `VOICE PERMISSIONS` category", event.getAuthor().getEffectiveAvatarUrl());
+        if (!ctx.getGuild().getSelfMember().hasPermission(ctx.getMember().getVoiceState().getChannel(), Permission.VOICE_CONNECT)) {
+            utilities.error(ctx.getChannel(), "join", "\uD83D\uDCE5", "I'm missing permissions to join your voice channel", "please give me the permission `Connect` under the `VOICE PERMISSIONS` category", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
 // JOIN VOICE CHANNEL
         // Open audio connection
-        event.getGuild().getAudioManager().openAudioConnection(event.getMember().getVoiceState().getChannel());
+        ctx.getGuild().getAudioManager().openAudioConnection(ctx.getMember().getVoiceState().getChannel());
         // Send success message
         EmbedBuilder success = new EmbedBuilder()
-                .setAuthor("join", null, event.getAuthor().getEffectiveAvatarUrl())
+                .setAuthor("join", null, ctx.getAuthor().getEffectiveAvatarUrl())
                 .setColor(utilities.blue)
-                .setDescription("Joined voice channel: **" + event.getMember().getVoiceState().getChannel().getName() + "**");
-        event.getChannel().sendMessage(success.build()).queue();
+                .setDescription("Joined voice channel: **" + ctx.getMember().getVoiceState().getChannel().getName() + "**");
+        ctx.getChannel().sendMessage(success.build()).queue();
     }
 }

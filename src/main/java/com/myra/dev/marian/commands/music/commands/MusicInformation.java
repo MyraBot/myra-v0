@@ -8,7 +8,7 @@ import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 
 @CommandSubscribe(
         name = "music information",
@@ -17,38 +17,38 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 public class MusicInformation implements Command {
     //TODO
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         // Check for no arguments
-        if (arguments.length != 0) return;
+        if (ctx.getArguments().length != 0) return;
         // Get audio player
-        AudioPlayer player = PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer;
+        AudioPlayer player = PlayerManager.getInstance().getMusicManager(ctx.getGuild()).audioPlayer;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
         //the bot isn't connected to any voice channel
-        if (!event.getGuild().getAudioManager().isConnected()) {
+        if (!ctx.getGuild().getAudioManager().isConnected()) {
             utilities.error(
-                    event.getChannel(),
+                    ctx.getChannel(),
                     "track information", "\uD83D\uDDD2",
                     "I'm not connected to a voice channel",
-                    "Use `" + Prefix.getPrefix(event.getGuild()) + "join` to connect me to your voice channel",
-                    event.getAuthor().getEffectiveAvatarUrl());
+                    "Use `" + ctx.getPrefix() + "join` to connect me to your voice channel",
+                    ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         //bot isn't playing any song
-        if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
-            utilities.error(event.getChannel(),
+        if (PlayerManager.getInstance().getMusicManager(ctx.getGuild()).audioPlayer.getPlayingTrack() == null) {
+            utilities.error(ctx.getChannel(),
                     "track information", "\uD83D\uDDD2",
                     "The player isn`t playing any song",
-                    "Use `" + Prefix.getPrefix(event.getGuild()) + "play <song>` to play a song",
-                    event.getAuthor().getEffectiveAvatarUrl());
+                    "Use `" + ctx.getPrefix() + "play <song>` to play a song",
+                    ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         EmbedBuilder info = new EmbedBuilder()
-                .setAuthor(player.getPlayingTrack().getInfo().title + " by " + player.getPlayingTrack().getInfo().author, player.getPlayingTrack().getInfo().uri, event.getAuthor().getEffectiveAvatarUrl())
+                .setAuthor(player.getPlayingTrack().getInfo().title + " by " + player.getPlayingTrack().getInfo().author, player.getPlayingTrack().getInfo().uri, ctx.getAuthor().getEffectiveAvatarUrl())
                 .setColor(utilities.blue)
                 .setDescription(player.isPaused() ? "\u23F8\uFE0F " : "\u23F8\uFE0F " + utilities.formatTime(player.getPlayingTrack().getPosition()) + " - " + utilities.formatTime(player.getPlayingTrack().getDuration()))
                 .setFooter(displayPosition(player));
-        event.getChannel().sendMessage(info.build()).queue();
+        ctx.getChannel().sendMessage(info.build()).queue();
     }
 
     private String displayPosition(AudioPlayer player) {

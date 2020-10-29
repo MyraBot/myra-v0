@@ -4,7 +4,7 @@ import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 
 import java.awt.*;
 import java.time.Instant;
@@ -14,18 +14,18 @@ import java.time.Instant;
 )
 public class WelcomeEmbedPreview implements Command {
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
-        Database db = new Database(event.getGuild());
+    public void execute(CommandContext ctx) throws Exception {
+        Database db = new Database(ctx.getGuild());
         //get variables
         String welcomeColour = db.getNested("welcome").get("welcomeColour");
         String welcomeEmbedMessage = db.getNested("welcome").get("welcomeEmbedMessage");
         //build embed
         EmbedBuilder join = new EmbedBuilder()
-                .setAuthor("welcome", null, event.getGuild().getIconUrl())
+                .setAuthor("welcome", null, ctx.getGuild().getIconUrl())
                 .setColor(Color.decode(welcomeColour))
-                .setThumbnail(event.getAuthor().getEffectiveAvatarUrl())
-                .setDescription(welcomeEmbedMessage.replace("{user}", event.getMember().getAsMention()).replace("{server}", event.getGuild().getName()).replace("{count}", Integer.toString(event.getGuild().getMemberCount())))
+                .setThumbnail(ctx.getAuthor().getEffectiveAvatarUrl())
+                .setDescription(welcomeEmbedMessage.replace("{user}", ctx.getEvent().getMember().getAsMention()).replace("{server}", ctx.getGuild().getName()).replace("{count}", Integer.toString(ctx.getGuild().getMemberCount())))
                 .setTimestamp(Instant.now());
-        event.getChannel().sendMessage(join.build()).queue();
+        ctx.getChannel().sendMessage(join.build()).queue();
     }
 }

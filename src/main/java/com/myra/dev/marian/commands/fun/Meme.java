@@ -4,7 +4,7 @@ import com.myra.dev.marian.APIs.Reddit;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.management.Manager;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 
 @CommandSubscribe(
         name = "meme",
@@ -12,11 +12,11 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 )
 public class Meme implements Command {
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         try {
-            event.getChannel().sendMessage(new Reddit().getMeme(event.getAuthor()).build()).queue();
+            ctx.getChannel().sendMessage(new Reddit().getMeme(ctx.getAuthor()).build()).queue();
         } catch (Exception e) {
-            Manager.getUtilities().error(event.getChannel(), "meme", "\uD83E\uDD2A", "Couldn't load meme", "Please try again later", event.getAuthor().getEffectiveAvatarUrl());
+            Manager.getUtilities().error(ctx.getChannel(), "meme", "\uD83E\uDD2A", "Couldn't load meme", "Please try again later", ctx.getAuthor().getEffectiveAvatarUrl());
         }
     }
 }

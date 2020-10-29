@@ -1,25 +1,25 @@
 package com.myra.dev.marian.commands.leveling.administrator;
 
-import com.myra.dev.marian.database.Prefix;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.management.Manager;
+import com.myra.dev.marian.utilities.management.commands.Command;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
+import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+
 @CommandSubscribe(
         name = "leveling"
 )
 public class LevelingHelp implements Command {
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         // Check for no arguments
-        if (arguments.length != 0) return;
+        if (ctx.getArguments().length != 0) return;
         // Send message
         EmbedBuilder help = new EmbedBuilder()
-                .setAuthor("leveling", null, event.getAuthor().getEffectiveAvatarUrl())
+                .setAuthor("leveling", null, ctx.getAuthor().getEffectiveAvatarUrl())
                 .setColor(Manager.getUtilities().gray)
-                .addField("`" + Prefix.getPrefix(event.getGuild()) + "leveling set <user> <level>`", "\uD83C\uDFC6 │ Change the level of a user", false)
-                .addField("`" + Prefix.getPrefix(event.getGuild()) + "leveling roles`", "\uD83D\uDD17 │ Link a role to a level", false);
-        event.getChannel().sendMessage(help.build()).queue();
+                .addField("`" + ctx.getPrefix() + "leveling set <user> <level>`", "\uD83C\uDFC6 │ Change the level of a user", false)
+                .addField("`" + ctx.getPrefix() + "leveling roles`", "\uD83D\uDD17 │ Link a role to a level", false);
+        ctx.getChannel().sendMessage(help.build()).queue();
     }
 }

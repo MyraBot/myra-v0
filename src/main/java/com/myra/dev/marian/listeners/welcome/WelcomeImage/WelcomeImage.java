@@ -1,15 +1,15 @@
 package com.myra.dev.marian.listeners.welcome.WelcomeImage;
 
 import com.myra.dev.marian.database.Prefix;
-import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.management.Events;
+import com.myra.dev.marian.utilities.management.Manager;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 
 public class WelcomeImage extends Events {
 
-    public void memberJoined(GuildMemberJoinEvent event) throws Exception{
+    public void memberJoined(GuildMemberJoinEvent event) throws Exception {
         Database db = new Database(event.getGuild());
 
         //check if feature is disabled

@@ -6,7 +6,7 @@ import com.myra.dev.marian.utilities.management.Events;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
 import java.util.Arrays;
@@ -17,9 +17,9 @@ import java.util.Arrays;
 )
 public class Commands extends Events implements Command {
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         //menu
-        Message message = event.getChannel().sendMessage(CommandEmbeds.commands(event.getAuthor().getEffectiveAvatarUrl()).build()).complete();
+        Message message = ctx.getChannel().sendMessage(CommandEmbeds.commands(ctx.getAuthor().getEffectiveAvatarUrl()).build()).complete();
         //add reactions
         message.addReaction("\uD83C\uDF88").queue();
         message.addReaction("\uD83D\uDD79").queue();
@@ -28,7 +28,7 @@ public class Commands extends Events implements Command {
         message.addReaction("\uD83D\uDD28").queue();
         message.addReaction("\uD83D\uDD29").queue();
 
-        MessageReaction.add("commands", message.getId(), event.getChannel(), event.getAuthor(), true);
+        MessageReaction.add("commands", message.getId(), ctx.getChannel(), ctx.getAuthor(), true);
     }
 
     @Override

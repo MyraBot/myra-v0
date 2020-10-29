@@ -11,7 +11,7 @@ import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
 @CommandSubscribe(
@@ -19,27 +19,27 @@ import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEve
 )
 public class WelcomeImageFont extends Events implements Command {
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         //missing permissions
-        if (!event.getMember().hasPermission(Permission.ADMINISTRATOR)) return;
+        if (!Permissions.isAdministrator(ctx.getMember())) return;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
         //change font
         EmbedBuilder fontSelection = new EmbedBuilder()
-                .setAuthor("welcome image font", null, event.getAuthor().getEffectiveAvatarUrl())
+                .setAuthor("welcome image font", null, ctx.getAuthor().getEffectiveAvatarUrl())
                 .setColor(utilities.blue)
                 .addField("fonts",
                         "1\uFE0F\u20E3 default \n" +
                                 "2\uFE0F\u20E3 modern \n" +
                                 "3\uFE0F\u20E3 handwritten",
                         false);
-        Message message = event.getChannel().sendMessage(fontSelection.build()).complete();
+        Message message = ctx.getChannel().sendMessage(fontSelection.build()).complete();
         //add reactions
         message.addReaction("1\uFE0F\u20E3").queue();
         message.addReaction("2\uFE0F\u20E3").queue();
         message.addReaction("3\uFE0F\u20E3").queue();
 
-        MessageReaction.add("welcomeImageFont", message.getId(), event.getChannel(), event.getAuthor(), true);
+        MessageReaction.add("welcomeImageFont", message.getId(), ctx.getChannel(), ctx.getAuthor(), true);
     }
 
     //reaction

@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import org.bson.Document;
 
 import java.time.Instant;
@@ -38,41 +38,41 @@ public class Tempban extends Events implements Command {
     }
 
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         //missing permissions
-        if (!Permissions.isModerator(event.getMember())) return;
+        if (!Permissions.isModerator(ctx.getMember())) return;
         // Get Utilities
         Utilities utilities = Manager.getUtilities();
         //command usage
-        if (arguments.length == 0) {
+        if (ctx.getArguments().length == 0) {
             EmbedBuilder usage = new EmbedBuilder()
-                    .setAuthor("tempban", null, event.getAuthor().getEffectiveAvatarUrl())
+                    .setAuthor("tempban", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(utilities.gray)
-                    .addField("`" + Prefix.getPrefix(event.getGuild()) + "tempban <user> <duration><time unit> [reason]`", "\u23F1\uFE0F │ Ban a user for a certain amount of time", false)
+                    .addField("`" + ctx.getPrefix() + "tempban <user> <duration><time unit> [reason]`", "\u23F1\uFE0F │ Ban a user for a certain amount of time", false)
                     .setFooter("Accepted time units: seconds, minutes, hours, days");
-            event.getChannel().sendMessage(usage.build()).queue();
+            ctx.getChannel().sendMessage(usage.build()).queue();
             return;
         }
         /**
          * tempban
          */
         //get arguments
-        String durationRaw = arguments[1];
+        String durationRaw = ctx.getArguments()[1];
         String reason = "";
-        if (arguments.length > 2) {
-            for (int i = 2; i < arguments.length; i++) {
-                reason += arguments[i] + " ";
+        if (ctx.getArguments().length > 2) {
+            for (int i = 2; i < ctx.getArguments().length; i++) {
+                reason += ctx.getArguments()[i] + " ";
             }
             //remove last space
             reason = reason.substring(0, reason.length() - 1);
         }
         //if the duration is not [NumberLetters]
         if (!durationRaw.matches("[0-9]+[a-zA-z]+")) {
-            utilities.error(event.getChannel(), "tempban", "\u23F1\uFE0F", "Invalid time", "please note: `<time><time unit>`", event.getAuthor().getEffectiveAvatarUrl());
+            utilities.error(ctx.getChannel(), "tempban", "\u23F1\uFE0F", "Invalid time", "please note: `<time><time unit>`", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         //get user
-        User user = utilities.getModifiedUser(event, arguments[0], "tempban", "\u23F1\uFE0F");
+        User user = utilities.getModifiedUser(ctx.getEvent(), ctx.getArguments()[0], "tempban", "\u23F1\uFE0F");
         if (user == null) return;
         //return duration as a list
         List durationList = Manager.getUtilities().getDuration(durationRaw);
@@ -84,14 +84,14 @@ public class Tempban extends Events implements Command {
                 .setAuthor( user.getAsTag() + " got temporary banned", null, user.getEffectiveAvatarUrl())
                 .setColor(utilities.red)
                 .setDescription("\u23F1\uFE0F │ " + user.getAsMention() + " got banned for **" + duration + " " + timeUnit.toString().toLowerCase() + "**")
-                .setFooter("requested by " + event.getAuthor().getAsTag(), event.getAuthor().getEffectiveAvatarUrl())
+                .setFooter("requested by " + ctx.getAuthor().getAsTag(), ctx.getAuthor().getEffectiveAvatarUrl())
                 .setTimestamp(Instant.now());
         //direct message ban
         EmbedBuilder directMessageBan = new EmbedBuilder()
-                .setAuthor("You got temporary banned", null, event.getGuild().getIconUrl())
+                .setAuthor("You got temporary banned", null, ctx.getGuild().getIconUrl())
                 .setColor(Manager.getUtilities().red)
-                .setDescription("\u23F1\uFE0F │ You got banned on `" + event.getGuild().getName() + "` for **" + duration + " " + timeUnit.toString().toLowerCase() + "**")
-                .setFooter("requested by " + event.getAuthor().getAsTag(), event.getAuthor().getEffectiveAvatarUrl())
+                .setDescription("\u23F1\uFE0F │ You got banned on `" + ctx.getGuild().getName() + "` for **" + duration + " " + timeUnit.toString().toLowerCase() + "**")
+                .setFooter("requested by " + ctx.getAuthor().getAsTag(), ctx.getAuthor().getEffectiveAvatarUrl())
                 .setTimestamp(Instant.now());
         //with reason
         if (reason != null) {
@@ -104,20 +104,20 @@ public class Tempban extends Events implements Command {
             directMessageBan.addField("\uD83D\uDCC4 │ no reason", "there was no reason given", false);
         }
         //send messages
-        event.getChannel().sendMessage(guildMessageBan.build()).queue();
+        ctx.getChannel().sendMessage(guildMessageBan.build()).queue();
         user.openPrivateChannel().queue((channel) -> {
             channel.sendMessage(directMessageBan.build()).queue();
         });
         //with reason
         if (reason != null) {
-            event.getGuild().getMember(user).ban(7, reason).queue();
+            ctx.getGuild().getMember(user).ban(7, reason).queue();
         }
         //without reason
         else {
-            event.getGuild().getMember(user).ban(7).queue();
+            ctx.getGuild().getMember(user).ban(7).queue();
         }
         //create unban Document
-        Document document = createUnban(user.getId(), event.getGuild().getId(), durationInMilliseconds, event.getAuthor().getId());
+        Document document = createUnban(user.getId(), ctx.getGuild().getId(), durationInMilliseconds, ctx.getAuthor().getId());
         /**
          * unban
          */
@@ -127,9 +127,9 @@ public class Tempban extends Events implements Command {
             @Override
             public void run() {
                 //unban
-                event.getGuild().unban(user).queue();
+                ctx.getGuild().unban(user).queue();
                 //send unban message
-                unbanMessage(user, event.getGuild(), event.getAuthor());
+                unbanMessage(user, ctx.getGuild(), ctx.getAuthor());
                 //delete document
 
                 mongoDb.getCollection("unbans").deleteOne(document);

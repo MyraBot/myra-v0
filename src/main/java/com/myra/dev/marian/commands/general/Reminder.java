@@ -2,15 +2,14 @@ package com.myra.dev.marian.commands.general;
 
 import com.mongodb.client.MongoCollection;
 import com.myra.dev.marian.database.MongoDb;
-import com.myra.dev.marian.database.Prefix;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.management.Events;
 import com.myra.dev.marian.utilities.management.Manager;
+import com.myra.dev.marian.utilities.management.commands.Command;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
+import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.bson.Document;
 
 import java.util.List;
@@ -32,54 +31,52 @@ public class Reminder extends Events implements Command {
     }
 
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         //usage
-        if (arguments.length == 0) {
+        if (ctx.getArguments().length == 0) {
             EmbedBuilder usage = new EmbedBuilder()
-                    .setAuthor("reminder", null, event.getMember().getUser().getEffectiveAvatarUrl())
+                    .setAuthor("reminder", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(Manager.getUtilities().gray)
-                    .addField("`" + Prefix.getPrefix(event.getGuild()) + "reminder <duration><time unit> <description>`", "\u23F0 │ Reminds you after a specific amount of time", false)
+                    .addField("`" + ctx.getPrefix() + "reminder <duration><time unit> <description>`", "\u23F0 │ Reminds you after a specific amount of time", false)
                     .setFooter("Accepted time units: seconds, minutes, hours, days");
-            event.getChannel().sendMessage(usage.build()).queue();
+            ctx.getChannel().sendMessage(usage.build()).queue();
             return;
         }
-        /**
-         * set reminder
-         */
+// Set reminder
         //get arguments
-        String durationRaw = arguments[0];
-        String reason = "";
-        for (int i = 1; i < arguments.length; i++) {
-            reason += arguments[i] + " ";
+        String durationRaw = ctx.getArguments()[0];
+        StringBuilder reason = new StringBuilder();
+        for (int i = 1; i < ctx.getArguments().length; i++) {
+            reason.append(ctx.getArguments()[i]).append(" ");
         }
         //remove last space
-        reason = reason.substring(0, reason.length() - 1);
+        reason = new StringBuilder(reason.substring(0, reason.length() - 1));
         //if the string is not (NumberLetters)
         if (!durationRaw.matches("[0-9]+[a-zA-z]+")) {
-            Manager.getUtilities().error(event.getChannel(), "reminder", "\u23F0", "Invalid time", "please note: `<time><time unit>`", event.getAuthor().getEffectiveAvatarUrl());
+            Manager.getUtilities().error(ctx.getChannel(), "reminder", "\u23F0", "Invalid time", "please note: `<time><time unit>`", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         //return duration as a list
-        List durationList = Manager.getUtilities().getDuration(durationRaw);
-        String duration = durationList.get(0).toString();
-        long durationInMilliseconds = Long.parseLong(durationList.get(1).toString());
-        TimeUnit timeUnit = TimeUnit.valueOf(durationList.get(2).toString());
+        List<String> durationList = Manager.getUtilities().getDuration(durationRaw);
+        String duration = durationList.get(0);
+        long durationInMilliseconds = Long.parseLong(durationList.get(1));
+        TimeUnit timeUnit = TimeUnit.valueOf(durationList.get(2));
         //reminder info
         EmbedBuilder reminderInfo = new EmbedBuilder()
-                .setAuthor("reminder", null, event.getAuthor().getEffectiveAvatarUrl())
+                .setAuthor("reminder", null, ctx.getAuthor().getEffectiveAvatarUrl())
                 .setColor(Manager.getUtilities().blue)
                 .setDescription("Im gonna remind you in " + duration + " " + timeUnit.toString().toLowerCase() + "!");
-        event.getChannel().sendMessage(reminderInfo.build()).queue();
+        ctx.getChannel().sendMessage(reminderInfo.build()).queue();
         //create reminder document
-        Document document = createReminder(event.getAuthor().getId(), durationInMilliseconds + System.currentTimeMillis(), reason, timeUnit);
+        Document document = createReminder(ctx.getAuthor().getId(), durationInMilliseconds + System.currentTimeMillis(), reason.toString(), timeUnit);
         //delay
-        String finalReason = reason;
+        String finalReason = reason.toString();
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 //send reminder
-                remind(event.getAuthor(), finalReason);
+                remind(ctx.getAuthor(), finalReason);
                 //delete document
                 mongoDb.getCollection("reminders").deleteOne(document);
             }

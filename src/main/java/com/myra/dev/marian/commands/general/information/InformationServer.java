@@ -7,7 +7,7 @@ import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
 import java.time.ZoneId;
@@ -20,24 +20,24 @@ import java.time.format.DateTimeFormatter;
 )
 public class InformationServer extends Events implements Command {
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
+    public void execute(CommandContext ctx) throws Exception {
         //servers information
         EmbedBuilder server = new EmbedBuilder()
-                .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
+                .setAuthor(ctx.getGuild().getName(), null, ctx.getGuild().getIconUrl())
                 .setColor(Manager.getUtilities().blue)
-                .setThumbnail(event.getGuild().getIconUrl())
-                .addField("\uD83D\uDC51 │ owner", event.getGuild().getOwner().getAsMention(), true)
-                .addField("\uD83C\uDF9F │ server id", event.getGuild().getId(), true)
+                .setThumbnail(ctx.getGuild().getIconUrl())
+                .addField("\uD83D\uDC51 │ owner", ctx.getGuild().getOwner().getAsMention(), true)
+                .addField("\uD83C\uDF9F │ server id", ctx.getGuild().getId(), true)
                 .addBlankField(true)
-                .addField("\uD83D\uDE80 │ boosts", "level " + event.getGuild().getBoostTier().toString().replace("NONE", "0").replace("TIER_", "") + " (" + event.getGuild().getBoostCount() + " boosts)", true)
-                .addField("\uD83E\uDDEE │ member count", Integer.toString(event.getGuild().getMemberCount()), true)
+                .addField("\uD83D\uDE80 │ boosts", "level " + ctx.getGuild().getBoostTier().toString().replace("NONE", "0").replace("TIER_", "") + " (" + ctx.getGuild().getBoostCount() + " boosts)", true)
+                .addField("\uD83E\uDDEE │ member count", Integer.toString(ctx.getGuild().getMemberCount()), true)
                 .addBlankField(true)
-                .addField("\uD83D\uDCC6 │ created at", event.getGuild().getTimeCreated().getDayOfMonth() + " " + event.getGuild().getTimeCreated().getMonth() + " " + event.getGuild().getTimeCreated().getYear(), true);
-        Message message = event.getChannel().sendMessage(server.build()).complete();
+                .addField("\uD83D\uDCC6 │ created at", ctx.getGuild().getTimeCreated().getDayOfMonth() + " " + ctx.getGuild().getTimeCreated().getMonth() + " " + ctx.getGuild().getTimeCreated().getYear(), true);
+        Message message = ctx.getChannel().sendMessage(server.build()).complete();
         //reactions
         message.addReaction("\uD83D\uDCDC").queue();
 
-        MessageReaction.add("informationServer", message.getId(), event.getChannel(), event.getAuthor(), true);
+        MessageReaction.add("informationServer", message.getId(), ctx.getChannel(), ctx.getAuthor(), true);
     }
 
 

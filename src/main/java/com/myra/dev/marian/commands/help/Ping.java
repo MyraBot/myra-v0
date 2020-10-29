@@ -4,7 +4,7 @@ import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.management.Manager;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 
 @CommandSubscribe(
         name = "ping",
@@ -12,13 +12,13 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 )
 public class Ping implements Command {
     @Override
-    public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
-        if (!event.getAuthor().isBot()) {
+    public void execute(CommandContext ctx) throws Exception {
+        if (!ctx.getAuthor().isBot()) {
             EmbedBuilder ping = new EmbedBuilder()
-                    .setAuthor("pong", null, event.getAuthor().getEffectiveAvatarUrl())
+                    .setAuthor("pong", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(Manager.getUtilities().blue)
-                    .addField("\uD83C\uDFD3 │ latency", "My ping is `" + event.getJDA().getGatewayPing() + "` ms", true);
-            event.getChannel().sendMessage(ping.build()).queue();
+                    .addField("\uD83C\uDFD3 │ latency", "My ping is `" + ctx.getEvent().getJDA().getGatewayPing() + "` ms", true);
+            ctx.getChannel().sendMessage(ping.build()).queue();
         }
     }
 }
