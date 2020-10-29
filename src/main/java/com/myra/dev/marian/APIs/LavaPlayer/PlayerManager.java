@@ -40,7 +40,7 @@ public class PlayerManager {
         });
     }
 
-    public void loadAndPlay(TextChannel channel, String trackUrl, String authorAvatar, String thumbnailUrl) throws Exception {
+    public void loadAndPlay(TextChannel channel, String trackUrl, String authorAvatar, String thumbnailUrl) {
         // Get Utilities
         Utilities utilities = Manager.getUtilities();
         // Get music manager for guild
@@ -73,33 +73,6 @@ public class PlayerManager {
                         .setImage(thumbnailUrl);
                 channel.sendMessage(success.build()).queue();
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            //TODO die methoden hier drunter
-
-
-
-
-
-
-
-
-
-
-
             @Override
             public void noMatches() {
                 Manager.getUtilities().error(

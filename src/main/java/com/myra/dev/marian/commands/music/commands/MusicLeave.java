@@ -1,45 +1,58 @@
 package com.myra.dev.marian.commands.music.commands;
 
 import com.myra.dev.marian.database.Prefix;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
-import com.myra.dev.marian.utilities.management.Manager;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+
 @CommandSubscribe(
         name = "leave",
         aliases = {"disconnect"}
 )
 public class MusicLeave implements Command {
+
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
         // Check for no arguments
         if (arguments.length != 0) return;
-        //not connected to a voice channel
+        // Get utilities
+        Utilities utilities = Manager.getUtilities();
+// Errors
+        // Not connected to a voice channel
         if (!event.getGuild().getAudioManager().isConnected()) {
-            Manager.getUtilities().error(event.getChannel(),
-                    "disconnect", "\uD83D\uDCE4",
+            utilities.error(event.getChannel(),
+                    "leave", "\uD83D\uDCE4",
                     "I'm not connected to a voice channel",
                     "Use `" + Prefix.getPrefix(event.getGuild()) + "join` to connect me to your voice channel",
                     event.getAuthor().getEffectiveAvatarUrl());
             return;
         }
-        //author isn't in the same voice channel as the bot
+        // If author isn't in a voice channel yet
+        if (!event.getMember().getVoiceState().inVoiceChannel()) {
+            utilities.error(event.getChannel(), "leave", "\uD83D\uDCE4", "You need to join a voice channel first to use this command", "Use `" + Prefix.getPrefix(event.getGuild()) + "join` to let me join a voice channel", event.getAuthor().getEffectiveAvatarUrl());
+            return;
+        }
+        // Author isn't in the same voice channel as the bot
         if (!event.getGuild().getAudioManager().getConnectedChannel().getMembers().contains(event.getMember())) {
-            Manager.getUtilities().error(event.getChannel(),
-                    "disconnect", "\uD83D\uDCE4",
+            utilities.error(event.getChannel(),
+                    "leave", "\uD83D\uDCE4",
                     "You have to be in the same voice channel as me to use this command",
-                    "To kick me you have to be in **" + event.getGuild().getAudioManager().getConnectedChannel().getName() + "**",
+                    "To kick me you need to be in **" + event.getGuild().getAudioManager().getConnectedChannel().getName() + "**",
                     event.getAuthor().getEffectiveAvatarUrl());
             return;
         }
-        //left voice channel
+// Leave voice channel
+        // Leave from current channel
         event.getGuild().getAudioManager().closeAudioConnection();
-
-        Manager.getUtilities().success(event.getChannel(),
-                "disconnect", "\uD83D\uDCE4",
-                "Left voice channel",
-                "I left **" + event.getGuild().getAudioManager().getConnectedChannel().getName() + "**",
-                event.getAuthor().getEffectiveAvatarUrl(),
-                false, null);
+        // Send success message
+        EmbedBuilder success = new EmbedBuilder()
+                .setAuthor("leave", null, event.getAuthor().getEffectiveAvatarUrl())
+                .setColor(utilities.blue)
+                .setDescription("Left voice channel: **" + event.getMember().getVoiceState().getChannel().getName() + "**");
+        event.getChannel().sendMessage(success.build()).queue();
     }
 }

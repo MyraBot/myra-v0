@@ -15,6 +15,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
         aliases = {"music info", "track information", "track info", "track", "song", "song information", "song info"}
 )
 public class MusicInformation implements Command {
+    //TODO
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
         // Check for no arguments
@@ -52,9 +53,9 @@ public class MusicInformation implements Command {
 
     private String displayPosition(AudioPlayer player) {
         //split song duration in 15 parts
-        Long sections = player.getPlayingTrack().getDuration() / 15;
+        long sections = player.getPlayingTrack().getDuration() / 15;
         //get the part the song is in
-        Long atSection = player.getPlayingTrack().getPosition() / sections;
+        long atSection = player.getPlayingTrack().getPosition() / sections;
 
         StringBuilder positionRaw = new StringBuilder("000000000000000")
                 .insert(Math.toIntExact(atSection), '1');

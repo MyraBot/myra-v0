@@ -3,22 +3,27 @@ package com.myra.dev.marian.commands.music.commands;
 import com.myra.dev.marian.APIs.LavaPlayer.PlayerManager;
 import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
-import com.myra.dev.marian.utilities.management.Manager;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+
 @CommandSubscribe(
         name = "skip",
         aliases = {"next"}
 )
 public class MusicSkip implements Command {
+
     @Override
     public void execute(GuildMessageReceivedEvent event, String[] arguments) throws Exception {
         // Check for no arguments
         if (arguments.length != 0) return;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
-        //not connected to a voice channel
+// Errors
+        // Bot isn't connected to a voice channel
         if (!event.getGuild().getAudioManager().isConnected()) {
             utilities.error(
                     event.getChannel(),
@@ -28,7 +33,7 @@ public class MusicSkip implements Command {
                     event.getAuthor().getEffectiveAvatarUrl());
             return;
         }
-        //if no track is playing
+        // No audio track is playing
         if (PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack() == null) {
             utilities.error(
                     event.getChannel(),
@@ -38,14 +43,16 @@ public class MusicSkip implements Command {
                     event.getAuthor().getEffectiveAvatarUrl());
             return;
         }
-        // Skip current track
-        utilities.success(event.getChannel(),
-                "skip",
-                "\u23ED\uFE0F",
-                "skipped song",
-                "skipped **" + PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack().getInfo().title + "**",
-                event.getAuthor().getEffectiveAvatarUrl(),
-                false, null);
+// Skip current playing track
+        // Get audio player
+        AudioTrack track = PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack();
+        // Send success message
+        EmbedBuilder success = new EmbedBuilder()
+                .setAuthor("skip", track.getInfo().uri, event.getAuthor().getEffectiveAvatarUrl())
+                .setColor(utilities.blue)
+                .setDescription("Skipped track: " + utilities.hyperlink(track.getInfo().title, track.getInfo().uri));
+        event.getChannel().sendMessage(success.build()).queue();
+        // Skip track
         PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.nextTrack();
     }
 }

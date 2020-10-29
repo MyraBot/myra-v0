@@ -39,12 +39,15 @@ public class MusicPlay extends Events implements Command {
             event.getChannel().sendMessage(usage.build()).queue();
             return;
         }
-        /**
-         * Add a audio track to the queue
-         */
+// Add a audio track to the queue
         // If bot isn't in a voice channel
         if (!event.getGuild().getSelfMember().getVoiceState().inVoiceChannel()) {
             utilities.error(event.getChannel(), "play", "\uD83D\uDCBF", "I need to be in a voice channel", "Use `" + Prefix.getPrefix(event.getGuild()) + "join` to let me join a voice channel", event.getAuthor().getEffectiveAvatarUrl());
+            return;
+        }
+        // If author isn't in a voice channel yet
+        if (!event.getMember().getVoiceState().inVoiceChannel()) {
+            utilities.error(event.getChannel(), "play", "\uD83D\uDCBF", "You need to join a voice channel first to use this command", "Use `" + Prefix.getPrefix(event.getGuild()) + "join` to let me join a voice channel", event.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         // If author isn't in the same voice channel as bot
