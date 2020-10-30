@@ -1,15 +1,14 @@
 package com.myra.dev.marian.commands.economy;
 
-import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
 
 @CommandSubscribe(
         name = "balance",
@@ -33,11 +32,9 @@ public class Balance implements Command {
             ctx.getChannel().sendMessage(usage.build()).queue();
             return;
         }
-        /**
-         * Show balance
-         */
+// Show balance
         // Get self user
-        Member member = ctx.getEvent().getMember();
+        Member member = ctx.getMember();
         // Get given user
         if (ctx.getArguments().length == 1) {
             User user = utilities.getUser(ctx.getEvent(), ctx.getArguments()[0], "balance", currency);

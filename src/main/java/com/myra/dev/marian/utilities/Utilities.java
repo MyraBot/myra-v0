@@ -8,11 +8,9 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -24,12 +22,14 @@ public class Utilities {
     public int green = 0xffcc;
     public int gray = 0x282c34;
     //keys
+    @SuppressWarnings("SpellCheckingInspection")
     public String youTubeKey = "AIzaSyAOJVth0U1loodJ9ShNjocc1eKMZr-Xxsg";
     public String twitchClientId;
     public String twitchClientSecret;
     public String twitchRedirect_uri;
     public String giphyKey;
     public String HypixelKey;
+    @SuppressWarnings("SpellCheckingInspection")
     public String spotifyClientId = "f19bf0a7cb204c098dbdaaeedf47f842";
     public String spotifyClientSecret = "d4d48b2e4b474d098fa440a6d01ece42";
     //emotes
@@ -55,7 +55,9 @@ public class Utilities {
     //load
     public Utilities() {
         //keys
+        //noinspection SpellCheckingInspection
         twitchClientId = "2ns4hcj4kkd6vj3armlievqsw8znd3";
+        //noinspection SpellCheckingInspection
         twitchClientSecret = "kbvqhnosdqrezqhy8zuly9hapzeapn";
         twitchRedirect_uri = "http://localhost";
         giphyKey = "nV9Hhe5WbaVli6jg8Nlo2VcIB1kq5Ekq";
@@ -87,13 +89,13 @@ public class Utilities {
     }
 
     public String getString(String[] array) {
-        String string = "";
+        StringBuilder string = new StringBuilder();
         for (String s : array) {
-            string += s + " ";
+            string.append(s).append(" ");
         }
         //Remove last space
-        string = string.substring(0, string.length() - 1);
-        return string;
+        string = new StringBuilder(string.substring(0, string.length() - 1));
+        return string.toString();
     }
 
     //return colour of member
@@ -143,8 +145,8 @@ public class Utilities {
                 break;
         }
         //get duration
-        Long duration = Long.parseLong(providedInformation.replaceAll("[^\\d.]", ""));
-        Long durationInMilliseconds = timeUnit.toMillis(duration);
+        long duration = Long.parseLong(providedInformation.replaceAll("[^\\d.]", ""));
+        long durationInMilliseconds = timeUnit.toMillis(duration);
         //return as a list
         List time = new ArrayList();
         time.add(duration);
@@ -197,13 +199,13 @@ public class Utilities {
 
     //return user
     public User getUser(GuildMessageReceivedEvent event, String userRaw, String command, String commandEmoji) {
+        System.out.println(event.getMessage().getContentRaw());
         User user = null;
         //get jda
         JDA jda = event.getJDA();
         // If user is given by mention
-        if (userRaw.startsWith("<@!")) {
-            String id = userRaw.replaceAll("[<@!>]", "");
-            user = jda.getUserById(id);
+        if (userRaw.startsWith("<@")) {
+            user = event.getMessage().getMentionedMembers().get(0).getUser();
         }
         // If user is given by id
         if (user == null && userRaw.matches("\\d+")) {
@@ -224,8 +226,7 @@ public class Utilities {
         JDA jda = event.getJDA();
         // If user is given by mention
         if (userRaw.startsWith("<@!")) {
-            String id = userRaw.replaceAll("[<@!>]", "");
-            user = jda.getUserById(id);
+            user = event.getMessage().getMentionedMembers().get(0).getUser();
         }
         // If user is given by id
         if (user == null && userRaw.matches("\\d+")) {
@@ -234,7 +235,7 @@ public class Utilities {
         // If no user is given
         if (user == null) {
             error(event.getChannel(), command, commandEmoji, "No user given", "Please enter the id, tag or mention the user", event.getAuthor().getEffectiveAvatarUrl());
-            //return null;
+            return null;
         }
         //if member isn't in the guild
         if (event.getGuild().getMember(user) == null) {

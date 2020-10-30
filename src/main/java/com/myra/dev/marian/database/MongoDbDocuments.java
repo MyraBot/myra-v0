@@ -33,6 +33,10 @@ public class MongoDbDocuments {
             // Economy
             Document economy = new Document()
                     .append("currency", Manager.getUtilities().coin);
+            // Leveling
+            Document levelingDocument = new Document()
+                    .append("boost", 1)
+                    .append("roles", new Document());
             //commands
             Document commands = new Document
                     //general
@@ -97,6 +101,7 @@ public class MongoDbDocuments {
                         .append("guildName", guild.getName())
                         .append("prefix", Main.prefix)
                         .append("economy", economy)
+                        .append("leveling", levelingDocument)
                         .append("members", membersDocument)
                         .append("notificationChannel", "not set")
                         .append("streamers", streamers)
@@ -126,6 +131,7 @@ public class MongoDbDocuments {
                 .append("balance", 0)
                 .append("dailyStreak", 0)
                 .append("lastClaim", System.currentTimeMillis())
+                .append("rankBackground", "default")
                 .append("invites", 0);
         return membersDocument;
     }

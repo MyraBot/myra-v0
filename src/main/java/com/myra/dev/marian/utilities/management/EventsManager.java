@@ -1,5 +1,6 @@
 package com.myra.dev.marian.utilities.management;
 
+import com.mongodb.connection.Server;
 import com.myra.dev.marian.APIs.Twitch;
 import com.myra.dev.marian.commands.fun.TextFormatter;
 import com.myra.dev.marian.commands.general.Reminder;
@@ -19,6 +20,7 @@ import com.myra.dev.marian.listeners.notification.Notification;
 import com.myra.dev.marian.listeners.welcome.WelcomeImage.WelcomeImage;
 import com.myra.dev.marian.listeners.welcome.WelcomeImage.WelcomeImageFont;
 import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessage;
+import com.myra.dev.marian.mariansDiscord.ServerTracking;
 import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.utilities.management.commands.CommandService;
 import com.myra.dev.marian.utilities.management.listeners.ListenerService;
@@ -170,6 +172,8 @@ public class EventsManager extends ListenerAdapter {
         try {
             //add guild document
             new MongoDbUpdate().guildJoinEvent(event);
+            // Log
+            new ServerTracking().guildJoinEvent(event);
         } catch (Exception e) {
             e.printStackTrace();
         }

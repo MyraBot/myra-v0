@@ -42,7 +42,6 @@ public class MessageReaction extends Events {
                     hashMap.get(command).remove(messageId);
                     //remove all reactions
                     channel.retrieveMessageById(messageId).complete().clearReactions().queue();
-                    System.out.println(hashMap);
                 }
             }, 60 * 1000);
         }

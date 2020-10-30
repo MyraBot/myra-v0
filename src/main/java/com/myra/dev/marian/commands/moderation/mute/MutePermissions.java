@@ -11,8 +11,9 @@ import java.util.EnumSet;
 public class MutePermissions extends Events {
 
     public void textChannelCreateEvent(TextChannelCreateEvent event) {
-        Database db = new Database(event.getGuild());
-        Role muteRole = event.getGuild().getRoleById(db.get("muteRole"));
+        String id = new Database(event.getGuild()).get("muteRole");
+        if (id.equals("not set")) return;
+        Role muteRole = event.getGuild().getRoleById(id);
         if (muteRole == null) return;
         event.getChannel().getManager().putPermissionOverride(muteRole, null, EnumSet.of(Permission.MESSAGE_WRITE)).queue();
     }

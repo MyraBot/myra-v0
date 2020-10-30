@@ -59,14 +59,12 @@ public class MongoDbUpdate extends Events implements Command {
                 for (String memberId : members.keySet()) {
                     //get member document
                     Document memberDocument = (Document) members.get(memberId);
-
-                    memberDocument.append("rankBackground", "default");
+                    //memberDocument.append("rankBackground", "default");
                 }
 
 
                 Document economyDocument = new Document()
                         .append("currency", Manager.getUtilities().coin);
-
                 Document levelingDocument = new Document()
                         .append("boost", 1)
                         .append("roles", new Document());

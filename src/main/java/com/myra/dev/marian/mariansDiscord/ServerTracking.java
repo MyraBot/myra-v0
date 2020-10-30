@@ -1,11 +1,13 @@
 package com.myra.dev.marian.mariansDiscord;
 
+import com.myra.dev.marian.utilities.management.Events;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-public class ServerTracking extends ListenerAdapter {
-    public void onGuildJoin(GuildJoinEvent event) {
+public class ServerTracking extends Events {
+
+    public void guildJoinEvent(GuildJoinEvent event) {
         EmbedBuilder server = new EmbedBuilder();
         server.setTitle("I joined " + event.getGuild().getName());
         server.setThumbnail(event.getGuild().getIconUrl());
