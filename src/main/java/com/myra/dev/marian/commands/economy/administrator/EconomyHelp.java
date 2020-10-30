@@ -19,7 +19,7 @@ public class EconomyHelp implements Command {
         // Usage
         if (ctx.getArguments().length == 0) {
             EmbedBuilder usage = new EmbedBuilder()
-                    .setAuthor("leveling currency", null, ctx.getAuthor().getEffectiveAvatarUrl())
+                    .setAuthor("economy", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(Manager.getUtilities().gray)
                     .addField("`" + ctx.getPrefix() + "economy set <user> <balance>`", "\uD83D\uDC5B │ Change a users balance", false)
                     .addField("`" + ctx.getPrefix() + "economy currency <currency>`", new Database(ctx.getGuild()).getNested("economy").get("currency") + " │ Set a custom currency", false);
