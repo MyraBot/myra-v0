@@ -17,6 +17,8 @@ import net.dv8tion.jda.api.entities.User;
 public class Balance implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
+        // When 'EconomySet' class is meant
+        if (ctx.getArguments()[0].equalsIgnoreCase("set")) return;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
         // Get database
