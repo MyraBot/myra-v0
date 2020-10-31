@@ -23,13 +23,15 @@ public class Give implements Command {
             EmbedBuilder usage = new EmbedBuilder()
                     .setAuthor("give", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(utilities.gray)
-                    .addField("`" + ctx.getPrefix() + "give <user> <balance>", "\uD83D\uDCB8", false);
+                    .addField("`" + ctx.getPrefix() + "give <user> <balance>`", "\uD83D\uDCB8 │ Give credits to other users", false);
             ctx.getChannel().sendMessage(usage.build()).queue();
+            return;
         }
 // Errors
         // Amount of money aren't digits
         if (!ctx.getArguments()[1].matches("\\d+")) {
-            // TODO ERROR
+            utilities.error(ctx.getChannel(), "give", "\uD83D\uDCB8", "Invalid number", "Please only use digits", ctx.getAuthor().getEffectiveAvatarUrl());
+            return;
         }
 // Transfer money
         // Get user
@@ -38,6 +40,12 @@ public class Give implements Command {
         // Get database
         Database db = new Database(ctx.getGuild());
         // Transfer money
-        //db.getMembers().getMember(ctx.getGuild().getMember(user)).setBalance();
+        db.getMembers().getMember(ctx.getGuild().getMember(user)).setBalance(db.getMembers().getMember(ctx.getMember()).getBalance() + Integer.parseInt(ctx.getArguments()[1]));
+        // Success message
+        EmbedBuilder success = new EmbedBuilder()
+                .setAuthor("give", null, ctx.getAuthor().getEffectiveAvatarUrl())
+                .setColor(utilities.blue)
+                .setDescription(ctx.getAuthor().getAsMention() + " gave you `" + ctx.getArguments()[1] + "` " + db.getNested("economy").get("currency"));
+        ctx.getChannel().sendMessage(user.getAsMention() + success.build()).queue();
     }
 }

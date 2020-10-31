@@ -1,4 +1,4 @@
-package com.myra.dev.marian.commands.economy.administrator;
+package com.myra.dev.marian.commands.economy;
 
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.Permissions;
@@ -14,10 +14,10 @@ import net.dv8tion.jda.api.EmbedBuilder;
 public class EconomyHelp implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        // Missing permissions
-        if (!Permissions.isAdministrator(ctx.getMember())) return;
-        // Usage
-        if (ctx.getArguments().length == 0) {
+        // Check for no arguments
+        if (ctx.getArguments().length != 0) return;
+        // Administrator
+        if (Permissions.isAdministrator(ctx.getMember())) {
             EmbedBuilder usage = new EmbedBuilder()
                     .setAuthor("economy", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(Manager.getUtilities().gray)

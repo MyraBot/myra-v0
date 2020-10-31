@@ -1,6 +1,7 @@
 package com.myra.dev.marian.utilities;
 
 import com.myra.dev.marian.database.Prefix;
+import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.management.Manager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -10,7 +11,7 @@ public class CommandEmbeds {
 
     //commands list
     public static EmbedBuilder commands(String authorAvatar) {
-        EmbedBuilder commands = new EmbedBuilder()
+        return new EmbedBuilder()
                 .setAuthor("commands", null, authorAvatar)
                 .setColor(Manager.getUtilities().gray)
                 .addField("`general`", "\uD83C\uDF88 │ The main commands of the bot", false)
@@ -20,12 +21,11 @@ public class CommandEmbeds {
                 .addField("`music`", "\uD83D\uDCFB │ Music related commands", false)
                 .addField("`moderation`", "\uD83D\uDD28 │ Commands for security", false)
                 .addField("`administrator`", "\uD83D\uDD29 │ Server commands", false);
-        return commands;
     }
 
     //general
     public static EmbedBuilder general(net.dv8tion.jda.api.entities.Guild guild, String authorAvatar, String botName) {
-        EmbedBuilder general = new EmbedBuilder()
+        return new EmbedBuilder()
                 .setAuthor("general", null, authorAvatar)
                 .setColor(Manager.getUtilities().gray)
                 .addField("`" + Prefix.getPrefix(guild) + "help`", "\uD83E\uDDF0 │ Opens a menu with several helpful links and lists", false)
@@ -37,43 +37,41 @@ public class CommandEmbeds {
                 .addField("`" + Prefix.getPrefix(guild) + "avatar @user`", "\uD83D\uDDBC │ Gives you profile pictures of other people", false)
                 .addField("`" + Prefix.getPrefix(guild) + "information`", "\uD83D\uDDD2 │ Gives you information", false)
                 .addField("`" + Prefix.getPrefix(guild) + "suggest`", "\uD83D\uDDF3 │ Suggest something", false);
-        return general;
     }
 
     //fun
     public static EmbedBuilder fun(net.dv8tion.jda.api.entities.Guild guild, String authorAvatar) {
-        EmbedBuilder fun = new EmbedBuilder()
+        return new EmbedBuilder()
                 .setAuthor("fun", null, authorAvatar)
                 .setColor(Manager.getUtilities().gray)
                 .addField("`" + Prefix.getPrefix(guild) + "meme`", "\uD83E\uDD2A │ Shows a random meme", false)
                 .addField("`" + Prefix.getPrefix(guild) + "format <text>`", "\uD83D\uDDDA │ Change the font of your text", false)
                 .addField("`" + Prefix.getPrefix(guild) + "would you rather`", " │ Play a round of would you rather", false);
-        return fun;
     }
 
     //leveling
     public EmbedBuilder leveling(Guild guild, String authorAvatar) {
-        EmbedBuilder fun = new EmbedBuilder()
+        return new EmbedBuilder()
                 .setAuthor("leveling", null, authorAvatar)
                 .setColor(Manager.getUtilities().gray)
                 .addField("`" + Prefix.getPrefix(guild) + "rank <user>`", "\uD83C\uDFC5 │ Shows the rank of a user", false)
                 .addField("`" + Prefix.getPrefix(guild) + "leaderboard`", "\uD83E\uDD47 │ Shows the leaderboard", false)
                 .addField("`" + Prefix.getPrefix(guild) + "leveling background <url>`", "\uD83D\uDDBC │ Set a custom rank background", false);
-        return fun;
     }
 
     //leveling
     public EmbedBuilder economy(Guild guild, String authorAvatar) {
-        EmbedBuilder fun = new EmbedBuilder()
+        return new EmbedBuilder()
                 .setAuthor("economy", null, authorAvatar)
                 .setColor(Manager.getUtilities().gray)
-                .addField("`" + Prefix.getPrefix(guild) + "daily`", "\uD83E\uDD47 │ Claim your daily reward", false);
-        return fun;
+                .addField("`" + Prefix.getPrefix(guild) + "balance <user>`", new Database(guild).getNested("economy").get("currency") + " │ Shows how many " + new Database(guild).getNested("economy").get("currency") + " you have.", false)
+                .addField("`" + Prefix.getPrefix(guild) + "daily`", "\uD83E\uDD47 │ Claim your daily reward", false)
+                .addField("`" + Prefix.getPrefix(guild) + "give <user> <balance>", "\uD83D\uDCB8 │ Give credits to other users", false);
     }
 
     //music
     public EmbedBuilder music(net.dv8tion.jda.api.entities.Guild guild, String authorAvatar) {
-        EmbedBuilder music = new EmbedBuilder()
+        return new EmbedBuilder()
                 .setAuthor("music", null, authorAvatar)
                 .setColor(Manager.getUtilities().gray)
                 .addField("`" + Prefix.getPrefix(guild) + "join`", "\uD83D\uDCE5 │ Let the bot join your voice channel", false)
@@ -86,12 +84,11 @@ public class CommandEmbeds {
                 .addField("`" + Prefix.getPrefix(guild) + "queue`", "\uD83D\uDCC3 │ Shows the queue", false)
                 .addField("`" + Prefix.getPrefix(guild) + "music controller`", "\uD83C\uDF9A️ │ opens the music reactions controller", false)
                 .setFooter("supported platforms: YoutTube, SoundCloud, Bandcamp, Vimeo, Twitch streams");
-        return music;
     }
 
     //moderation
     public static EmbedBuilder moderation(net.dv8tion.jda.api.entities.Guild guild, String authorAvatar) {
-        EmbedBuilder moderation = new EmbedBuilder()
+        return new EmbedBuilder()
                 .setAuthor("moderation", null, authorAvatar)
                 .setColor(Manager.getUtilities().gray)
                 .addField("`" + Prefix.getPrefix(guild) + "moderation`", "\uD83D\uDD28 │ Display all moderation commands", false)
@@ -105,12 +102,11 @@ public class CommandEmbeds {
                 .addField("`" + Prefix.getPrefix(guild) + "unban <user>`", "\uD83D\uDD13 │ Unban a user", false)
                 .addField("`" + Prefix.getPrefix(guild) + "tempban <user> <duration><time unit> <reason>`", "\u23F1\uFE0F │ Ban a user for a certain amount of time", false)
                 .addField("`" + Prefix.getPrefix(guild) + "ban <user> <reason>`", "\uD83D\uDD12 │ Ban a user", false);
-        return moderation;
     }
 
     //administrator
     public EmbedBuilder administrator(net.dv8tion.jda.api.entities.Guild guild, String authorAvatar) {
-        EmbedBuilder administrator = new EmbedBuilder()
+        return new EmbedBuilder()
                 .setAuthor("administrator", null, authorAvatar)
                 .setColor(Manager.getUtilities().gray)
                 .addField("`" + Prefix.getPrefix(guild) + "prefix <prefix>`", "\uD83D\uDCCC │ Change the prefix of the bot", false)
@@ -123,27 +119,24 @@ public class CommandEmbeds {
                 .addField("`" + Prefix.getPrefix(guild) + "suggestions`", "\uD83D\uDDF3 │ Set up the suggestions", false)
                 .addField("`" + Prefix.getPrefix(guild) + "leveling`", "\uD83C\uDFC6 │ Change some settings of leveling", false)
                 .addField("`" + Prefix.getPrefix(guild) + "economy`", "\uD83D\uDCB0 │ Change some settings of economy", false);
-        return administrator;
     }
 
 
     //support server
     public EmbedBuilder supportServer(JDA jda, String authorAvatar) {
-        EmbedBuilder invite = new EmbedBuilder()
+        return new EmbedBuilder()
                 .setAuthor("support", "https://discord.gg/nG4uKuB", authorAvatar)
                 .setColor(Manager.getUtilities().blue)
                 .setThumbnail(jda.getGuildById("642809436515074053").getIconUrl())
                 .setDescription("\u26A0\uFE0F │ " + Manager.getUtilities().hyperlink("Report", "https://discord.gg/nG4uKuB") + " bugs and get " + Manager.getUtilities().hyperlink("help", "https://discord.gg/nG4uKuB") + "!");
-        return invite;
     }
 
     //invite bot
     public EmbedBuilder inviteJda(JDA jda, String authorAvatar) {
-        EmbedBuilder invite = new EmbedBuilder()
+        return new EmbedBuilder()
                 .setAuthor("invite", Manager.getUtilities().inviteJda(jda), authorAvatar)
                 .setColor(Manager.getUtilities().blue)
                 .setThumbnail(jda.getSelfUser().getEffectiveAvatarUrl())
                 .setDescription("[\u2709\uFE0F │ Invite me to your server!](" + Manager.getUtilities().inviteJda(jda) + " \"bot invite link\")");
-        return invite;
     }
 }

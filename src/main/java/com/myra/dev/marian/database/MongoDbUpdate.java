@@ -3,6 +3,7 @@ package com.myra.dev.marian.database;
 import com.myra.dev.marian.utilities.management.Events;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -11,7 +12,6 @@ import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import net.dv8tion.jda.api.events.user.update.UserUpdateNameEvent;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -145,12 +145,12 @@ public class MongoDbUpdate extends Events implements Command {
                 // Add guild to database
                 MongoDbDocuments.guild(guild);
             }
+            //get current members document
+            Document members = (Document) mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first().get("members");
 
             for (Member member : guild.getMembers()) {
                 //check if member is a bot
                 if (member.getUser().isBot()) continue;
-                //get current document
-                Document members = (Document) mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first().get("members");
                 //if member is already in guild document
                 if (members.containsKey(member.getId())) continue;
                 // Create new member document

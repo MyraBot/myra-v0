@@ -6,8 +6,9 @@ import com.myra.dev.marian.commands.administrator.Someone;
 import com.myra.dev.marian.commands.administrator.Toggle;
 import com.myra.dev.marian.commands.economy.Balance;
 import com.myra.dev.marian.commands.economy.Daily;
+import com.myra.dev.marian.commands.economy.Give;
 import com.myra.dev.marian.commands.economy.administrator.Currency;
-import com.myra.dev.marian.commands.economy.administrator.EconomyHelp;
+import com.myra.dev.marian.commands.economy.EconomyHelp;
 import com.myra.dev.marian.commands.economy.administrator.EconomySet;
 import com.myra.dev.marian.commands.fun.Meme;
 import com.myra.dev.marian.commands.fun.TextFormatter;
@@ -156,6 +157,7 @@ public class Manager {
 
                 new Balance(),
                 new Daily(),
+                new Give(),
                 // Fun
                 new Meme(),
                 new TextFormatter(),
