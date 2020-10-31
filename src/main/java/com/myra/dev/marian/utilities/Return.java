@@ -13,7 +13,6 @@ public class Return {
         //if user isn't given by mention / tag / id
         if (!(providedUser.startsWith("<@!") || providedUser.matches("[a-zA-z]+[#]+[0-9]+") || providedUser.matches("\\d+"))) {
             Manager.getUtilities().error(event.getChannel(), command, commandEmoji, "No user given", "Please enter the id, tag or mention the user", event.getAuthor().getEffectiveAvatarUrl());
-            System.out.println(event.getMessage().getContentRaw());
             return null;
         }
         //if user is given by tag
@@ -36,7 +35,6 @@ public class Return {
         //if user isn't given by mention / tag / id
         if (!(sentMessage[1].startsWith("<@!") || sentMessage[providedUser].matches("[a-zA-z]+[#]+[0-9]+") || sentMessage[providedUser].matches("\\d+"))) {
             Manager.getUtilities().error(event.getChannel(), command, commandEmoji, "No user given", "Please enter the id, tag or mention the user", event.getAuthor().getEffectiveAvatarUrl());
-            System.out.println(event.getMessage().getContentRaw());
             return null;
         }
         //if user is given by tag

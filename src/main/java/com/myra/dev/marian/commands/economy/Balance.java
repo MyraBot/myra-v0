@@ -17,8 +17,6 @@ import net.dv8tion.jda.api.entities.User;
 public class Balance implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        // When 'EconomySet' class is meant
-        if (ctx.getArguments()[0].equalsIgnoreCase("set")) return;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
         // Get database
@@ -27,6 +25,9 @@ public class Balance implements Command {
         String currency = db.getNested("economy").get("currency");
         // Usage
         if (ctx.getArguments().length > 1) {
+            // When 'EconomySet' class is meant
+            if (ctx.getArguments()[0].equalsIgnoreCase("set")) return;
+            // Usage
             EmbedBuilder usage = new EmbedBuilder()
                     .setAuthor("balance", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(utilities.gray)

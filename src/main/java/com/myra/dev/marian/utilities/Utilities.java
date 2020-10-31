@@ -199,7 +199,6 @@ public class Utilities {
 
     //return user
     public User getUser(GuildMessageReceivedEvent event, String userRaw, String command, String commandEmoji) {
-        System.out.println(event.getMessage().getContentRaw());
         User user = null;
         //get jda
         JDA jda = event.getJDA();
