@@ -80,6 +80,8 @@ public class Leveling {
          * send message
          */
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        outStream.flush();
+        outStream.close();
         ImageIO.write(background, "png", outStream);
         event.getChannel().sendMessage("> " + event.getMember().getAsMention() + " **reached a new level!**").queue();
         event.getChannel().sendFile(

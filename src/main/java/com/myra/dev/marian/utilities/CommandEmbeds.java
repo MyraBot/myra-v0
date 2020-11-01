@@ -40,7 +40,7 @@ public class CommandEmbeds {
     }
 
     //fun
-    public static EmbedBuilder fun(net.dv8tion.jda.api.entities.Guild guild, String authorAvatar) {
+    public EmbedBuilder fun(net.dv8tion.jda.api.entities.Guild guild, String authorAvatar) {
         return new EmbedBuilder()
                 .setAuthor("fun", null, authorAvatar)
                 .setColor(Manager.getUtilities().gray)

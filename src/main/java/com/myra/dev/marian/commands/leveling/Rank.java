@@ -1,21 +1,19 @@
 package com.myra.dev.marian.commands.leveling;
 
-import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.database.allMethods.GetMember;
 import com.myra.dev.marian.utilities.Graphic;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -27,6 +25,7 @@ import java.net.URL;
         name = "rank"
 )
 public class Rank implements Command {
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void execute(CommandContext ctx) throws Exception {
         Utilities utilities = Manager.getUtilities();
@@ -39,11 +38,9 @@ public class Rank implements Command {
             ctx.getChannel().sendMessage(usage.build()).queue();
             return;
         }
-        /**
-         * show rank
-         */
+// Show rank
         // Get self user
-        Member member = ctx.getEvent().getMember();
+        Member member = ctx.getMember();
         // If user is given
         if (ctx.getArguments().length == 1) {
             User user = utilities.getUser(ctx.getEvent(), ctx.getArguments()[0], "rank", "\uD83C\uDFC5");
@@ -92,10 +89,10 @@ public class Rank implements Command {
         //load font
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("default.ttf");
         Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-        //draw box over background
+/*        //draw box over background
         RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(5, 5, 340, 90, 15, 15);
         graphics2D.setColor(new Color(200, 255, 255, 50));
-        graphics2D.fill(roundedRectangle);
+        graphics2D.fill(roundedRectangle);*/
         //draw avatar
         graphics2D.drawImage(
                 avatar,
@@ -114,9 +111,7 @@ public class Rank implements Command {
                 graphic.imageCenter('y', avatar, background),
                 avatar.getWidth(), avatar.getHeight()
         );
-        /**
-         * level
-         */
+// Level
         //adjust font size
         font = font.deriveFont(15f);
         graphics.setFont(font);
@@ -133,9 +128,7 @@ public class Rank implements Command {
                 graphic.textCenter('x', level, font, background) - 40,
                 graphic.textCenter('y', level, font, background) + 50
         );
-        /**
-         * xp
-         */
+// Xp
         //adjust font size
         font = font.deriveFont(15f);
         graphics.setFont(font);
@@ -149,15 +142,13 @@ public class Rank implements Command {
                 graphic.textCenter('x', "xp:", font, background) + 75,
                 graphic.textCenter('y', "xp:", font, background)
         );
-        /**
-         * rank
-         */
+// Rank
         //adjust font size
         font = font.deriveFont(15f);
         graphics.setFont(font);
         //draw 'xp'
         graphics.drawString("rank:",
-                graphic.textCenter('x', "rank:", font, background) + 40, //+10 habe ich gemacht
+                graphic.textCenter('x', "rank:", font, background) + 40,
                 graphic.textCenter('y', "rank:", font, background) + 25
         );
         //draw xp
@@ -165,10 +156,10 @@ public class Rank implements Command {
                 graphic.textCenter('x', "rank:", font, background) + 85,
                 graphic.textCenter('y', "rank:", font, background) + 25
         );
-        /**
-         * send message
-         */
+// Send rank card
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        outStream.flush();
+        outStream.close();
         ImageIO.write(background, "png", outStream);
         ctx.getChannel().sendMessage("> " + member.getAsMention() + "**, you're level " + level + "**").queue();
         ctx.getChannel().sendFile(

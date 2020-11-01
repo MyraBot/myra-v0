@@ -22,6 +22,7 @@ import java.net.URL;
         name = "leveling background"
 )
 public class Background implements Command {
+
     @Override
     public void execute(CommandContext ctx) throws Exception {
         // Get utilities
@@ -40,9 +41,11 @@ public class Background implements Command {
         // Parse back to BufferedImage
         background = new Graphic().toBufferedImage(modifiedImage);
         // Parse to InputStream
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ImageIO.write(background, "png", os);
-        InputStream file = new ByteArrayInputStream(os.toByteArray());
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        outStream.flush();
+        outStream.close();
+        ImageIO.write(background, "png", outStream);
+        InputStream file = new ByteArrayInputStream(outStream.toByteArray());
         // Success
         EmbedBuilder success = new EmbedBuilder()
                 .setAuthor("rank background", null, ctx.getAuthor().getEffectiveAvatarUrl())

@@ -56,6 +56,8 @@ public class WelcomeImageRender {
          * send message
          */
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        outStream.flush();
+        outStream.close();
         ImageIO.write(background, "png", outStream);
         channel.sendFile(
                 new ByteArrayInputStream(outStream.toByteArray()),

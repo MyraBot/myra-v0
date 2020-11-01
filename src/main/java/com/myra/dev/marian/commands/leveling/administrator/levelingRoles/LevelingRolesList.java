@@ -30,29 +30,29 @@ public class LevelingRolesList implements Command {
         // Sort roles
         Collections.sort(rolesList, Comparator.comparing(LevelingRolesDocument::getLevel).reversed());
         // Add all roles to String
-        String roles = "";
+        StringBuilder roles = new StringBuilder();
 
         // If list is empty
         if (rolesList.isEmpty()) {
-            roles = "none";
+            roles = new StringBuilder("none");
         }
         // Else add all leveling roles to the String
         else {
             for (LevelingRolesDocument role : rolesList) {
                 // When there is a role to remove
                 if (!role.getRemove().equals("not set")) {
-                    roles += "• level: `" + role.getLevel() + "` add: " + ctx.getGuild().getRoleById(role.getRole()).getAsMention() + " remove:" + ctx.getGuild().getRoleById(role.getRole()).getAsMention();
+                    roles.append("• level: `").append(role.getLevel()).append("` add: ").append(ctx.getGuild().getRoleById(role.getRole()).getAsMention()).append(" remove:").append(ctx.getGuild().getRoleById(role.getRole()).getAsMention() + "\n");
                     continue;
                 }
                 // When there is only a role to add
-                roles += "• level: `" + role.getLevel() + "` add: " + ctx.getGuild().getRoleById(role.getRole()).getAsMention();
+                roles.append("• level: `").append(role.getLevel()).append("` add: ").append(ctx.getGuild().getRoleById(role.getRole()).getAsMention() + "\n");
             }
         }
         // Create embed
         EmbedBuilder levelingRoles = new EmbedBuilder()
-                .setAuthor("leveling roles list")
+                .setAuthor("leveling roles list", null, ctx.getAuthor().getEffectiveAvatarUrl())
                 .setColor(utilities.blue)
-                .setDescription(roles);
+                .setDescription(roles.toString());
         ctx.getChannel().sendMessage(levelingRoles.build()).queue();
     }
 }
