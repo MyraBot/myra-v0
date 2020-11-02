@@ -23,12 +23,7 @@ import java.util.concurrent.TimeUnit;
 )
 public class Reminder extends Events implements Command {
     //database
-    private static MongoDb mongoDb;
-
-    //set variable
-    public static void setDb(MongoDb db) {
-        mongoDb = db;
-    }
+    private final MongoDb mongoDb = MongoDb.getInstance();
 
     @Override
     public void execute(CommandContext ctx) throws Exception {

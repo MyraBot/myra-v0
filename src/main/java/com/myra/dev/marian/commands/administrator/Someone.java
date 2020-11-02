@@ -3,10 +3,10 @@ package com.myra.dev.marian.commands.administrator;
 import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.utilities.management.listeners.Listener;
 import com.myra.dev.marian.utilities.management.listeners.ListenerSubscribe;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.Random;
+
 @ListenerSubscribe(
         name = "@someone",
         needsExecutor = true

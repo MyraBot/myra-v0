@@ -1,11 +1,10 @@
 package com.myra.dev.marian.database.allMethods;
 
-import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.APIs.Twitch;
+import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.utilities.management.Manager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

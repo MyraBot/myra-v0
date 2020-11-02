@@ -1,18 +1,31 @@
 package com.myra.dev.marian.utilities;
 
-import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.management.Manager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.User;
 
 public class CommandEmbeds {
+    // Variables
+    private Guild guild;
+    private User author;
+    private JDA jda;
+    private String prefix;
+
+    // Constructor
+    public CommandEmbeds(Guild guild, JDA jda, User author, String prefix) {
+        this.guild = guild;
+        this.jda = jda;
+        this.author = author;
+        this.prefix = prefix;
+    }
 
     //commands list
-    public static EmbedBuilder commands(String authorAvatar) {
+    public EmbedBuilder commands() {
         return new EmbedBuilder()
-                .setAuthor("commands", null, authorAvatar)
+                .setAuthor("commands", null, author.getEffectiveAvatarUrl())
                 .setColor(Manager.getUtilities().gray)
                 .addField("`general`", "\uD83C\uDF88 │ The main commands of the bot", false)
                 .addField("`fun`", "\uD83D\uDD79 │ Commands to play around with", false)
@@ -24,117 +37,117 @@ public class CommandEmbeds {
     }
 
     //general
-    public static EmbedBuilder general(net.dv8tion.jda.api.entities.Guild guild, String authorAvatar, String botName) {
+    public EmbedBuilder general() {
         return new EmbedBuilder()
-                .setAuthor("general", null, authorAvatar)
+                .setAuthor("general", null, author.getEffectiveAvatarUrl())
                 .setColor(Manager.getUtilities().gray)
-                .addField("`" + Prefix.getPrefix(guild) + "help`", "\uD83E\uDDF0 │ Opens a menu with several helpful links and lists", false)
-                .addField("`" + Prefix.getPrefix(guild) + "commands`", "\uD83D\uDCC3 │ Shows this", false)
-                .addField("`" + Prefix.getPrefix(guild) + "invite`", "\u2709\uFE0F │ Invite " + botName + " to your server", false)
-                .addField("`" + Prefix.getPrefix(guild) + "support`", "\u26A0\uFE0F │ Join the support server to get help and report bugs", false)
-                .addField("`" + Prefix.getPrefix(guild) + "ping`", "\uD83C\uDFD3 │ Check the ping of the bot", false)
-                .addField("`" + Prefix.getPrefix(guild) + "calculate <number 1 <operator> <number 2>`", "\uD83E\uDDEE │ Let the bot calculate something for you", false)
-                .addField("`" + Prefix.getPrefix(guild) + "avatar @user`", "\uD83D\uDDBC │ Gives you profile pictures of other people", false)
-                .addField("`" + Prefix.getPrefix(guild) + "information`", "\uD83D\uDDD2 │ Gives you information", false)
-                .addField("`" + Prefix.getPrefix(guild) + "suggest`", "\uD83D\uDDF3 │ Suggest something", false);
+                .addField("`" + prefix + "help`", "\uD83E\uDDF0 │ Opens a menu with several helpful links and lists", false)
+                .addField("`" + prefix + "commands`", "\uD83D\uDCC3 │ Shows this", false)
+                .addField("`" + prefix + "invite`", "\u2709\uFE0F │ Invite " + jda.getSelfUser().getName() + " to your server", false)
+                .addField("`" + prefix + "support`", "\u26A0\uFE0F │ Join the support server to get help and report bugs", false)
+                .addField("`" + prefix + "ping`", "\uD83C\uDFD3 │ Check the ping of the bot", false)
+                .addField("`" + prefix + "calculate <number 1 <operator> <number 2>`", "\uD83E\uDDEE │ Let the bot calculate something for you", false)
+                .addField("`" + prefix + "avatar @user`", "\uD83D\uDDBC │ Gives you profile pictures of other people", false)
+                .addField("`" + prefix + "information`", "\uD83D\uDDD2 │ Gives you information", false)
+                .addField("`" + prefix + "suggest`", "\uD83D\uDDF3 │ Suggest something", false);
     }
 
     //fun
-    public EmbedBuilder fun(net.dv8tion.jda.api.entities.Guild guild, String authorAvatar) {
+    public EmbedBuilder fun() {
         return new EmbedBuilder()
-                .setAuthor("fun", null, authorAvatar)
+                .setAuthor("fun", null, author.getEffectiveAvatarUrl())
                 .setColor(Manager.getUtilities().gray)
-                .addField("`" + Prefix.getPrefix(guild) + "meme`", "\uD83E\uDD2A │ Shows a random meme", false)
-                .addField("`" + Prefix.getPrefix(guild) + "format <text>`", "\uD83D\uDDDA │ Change the font of your text", false)
-                .addField("`" + Prefix.getPrefix(guild) + "would you rather`", " │ Play a round of would you rather", false);
+                .addField("`" + prefix + "meme`", "\uD83E\uDD2A │ Shows a random meme", false)
+                .addField("`" + prefix + "format <text>`", "\uD83D\uDDDA │ Change the font of your text", false)
+                .addField("`" + prefix + "would you rather`", " │ Play a round of would you rather", false);
     }
 
     //leveling
-    public EmbedBuilder leveling(Guild guild, String authorAvatar) {
+    public EmbedBuilder leveling() {
         return new EmbedBuilder()
-                .setAuthor("leveling", null, authorAvatar)
+                .setAuthor("leveling", null, author.getEffectiveAvatarUrl())
                 .setColor(Manager.getUtilities().gray)
-                .addField("`" + Prefix.getPrefix(guild) + "rank <user>`", "\uD83C\uDFC5 │ Shows the rank of a user", false)
-                .addField("`" + Prefix.getPrefix(guild) + "leaderboard`", "\uD83E\uDD47 │ Shows the leaderboard", false)
-                .addField("`" + Prefix.getPrefix(guild) + "leveling background <url>`", "\uD83D\uDDBC │ Set a custom rank background", false);
+                .addField("`" + prefix + "rank <user>`", "\uD83C\uDFC5 │ Shows the rank of a user", false)
+                .addField("`" + prefix + "leaderboard`", "\uD83E\uDD47 │ Shows the leaderboard", false)
+                .addField("`" + prefix + "leveling background <url>`", "\uD83D\uDDBC │ Set a custom rank background", false);
     }
 
     //leveling
-    public EmbedBuilder economy(Guild guild, String authorAvatar) {
+    public EmbedBuilder economy() {
         return new EmbedBuilder()
-                .setAuthor("economy", null, authorAvatar)
+                .setAuthor("economy", null, author.getEffectiveAvatarUrl())
                 .setColor(Manager.getUtilities().gray)
-                .addField("`" + Prefix.getPrefix(guild) + "balance <user>`", new Database(guild).getNested("economy").get("currency") + " │ Shows how many " + new Database(guild).getNested("economy").get("currency") + " you have.", false)
-                .addField("`" + Prefix.getPrefix(guild) + "daily`", "\uD83E\uDD47 │ Claim your daily reward", false)
-                .addField("`" + Prefix.getPrefix(guild) + "give <user> <balance>", "\uD83D\uDCB8 │ Give credits to other users", false);
+                .addField("`" + prefix + "balance <user>`", new Database(guild).getNested("economy").get("currency") + " │ Shows how many " + new Database(guild).getNested("economy").get("currency") + " you have.", false)
+                .addField("`" + prefix + "daily`", "\uD83E\uDD47 │ Claim your daily reward", false)
+                .addField("`" + prefix + "give <user> <balance>`", "\uD83D\uDCB8 │ Give credits to other users", false);
     }
 
     //music
-    public EmbedBuilder music(net.dv8tion.jda.api.entities.Guild guild, String authorAvatar) {
+    public EmbedBuilder music() {
         return new EmbedBuilder()
-                .setAuthor("music", null, authorAvatar)
+                .setAuthor("music", null, author.getEffectiveAvatarUrl())
                 .setColor(Manager.getUtilities().gray)
-                .addField("`" + Prefix.getPrefix(guild) + "join`", "\uD83D\uDCE5 │ Let the bot join your voice channel", false)
-                .addField("`" + Prefix.getPrefix(guild) + "disconnect`", "\uD83D\uDCE4 │ Kick the bot from your voice channel", false)
-                .addField("`" + Prefix.getPrefix(guild) + "play <song>`", "\uD83D\uDCBF │ Add a song to the queue*", false)
-                .addField("`" + Prefix.getPrefix(guild) + "skip`", "\u23ED\uFE0F │ Skip the current song", false)
-                .addField("`" + Prefix.getPrefix(guild) + "clear queue`", "\uD83D\uDDD1 │ Clear the queue", false)
-                .addField("`" + Prefix.getPrefix(guild) + "shuffle`", "\uD83C\uDFB2 │ Jumble the current queue", false)
-                .addField("`" + Prefix.getPrefix(guild) + "track information`", "\uD83D\uDDD2 │ Get information about the current song", false)
-                .addField("`" + Prefix.getPrefix(guild) + "queue`", "\uD83D\uDCC3 │ Shows the queue", false)
-                .addField("`" + Prefix.getPrefix(guild) + "music controller`", "\uD83C\uDF9A️ │ opens the music reactions controller", false)
+                .addField("`" + prefix + "join`", "\uD83D\uDCE5 │ Let the bot join your voice channel", false)
+                .addField("`" + prefix + "disconnect`", "\uD83D\uDCE4 │ Kick the bot from your voice channel", false)
+                .addField("`" + prefix + "play <song>`", "\uD83D\uDCBF │ Add a song to the queue*", false)
+                .addField("`" + prefix + "skip`", "\u23ED\uFE0F │ Skip the current song", false)
+                .addField("`" + prefix + "clear queue`", "\uD83D\uDDD1 │ Clear the queue", false)
+                .addField("`" + prefix + "shuffle`", "\uD83C\uDFB2 │ Jumble the current queue", false)
+                .addField("`" + prefix + "track information`", "\uD83D\uDDD2 │ Get information about the current song", false)
+                .addField("`" + prefix + "queue`", "\uD83D\uDCC3 │ Shows the queue", false)
+                .addField("`" + prefix + "music controller`", "\uD83C\uDF9A️ │ opens the music reactions controller", false)
                 .setFooter("supported platforms: YoutTube, SoundCloud, Bandcamp, Vimeo, Twitch streams");
     }
 
     //moderation
-    public static EmbedBuilder moderation(net.dv8tion.jda.api.entities.Guild guild, String authorAvatar) {
+    public EmbedBuilder moderation() {
         return new EmbedBuilder()
-                .setAuthor("moderation", null, authorAvatar)
+                .setAuthor("moderation", null, author.getEffectiveAvatarUrl())
                 .setColor(Manager.getUtilities().gray)
-                .addField("`" + Prefix.getPrefix(guild) + "moderation`", "\uD83D\uDD28 │ Display all moderation commands", false)
-                .addField("`" + Prefix.getPrefix(guild) + "clear <amount>`", "\uD83D\uDDD1 │ Clear a certain amount of messages", false)
-                .addField("`" + Prefix.getPrefix(guild) + "kick <user>`", "\uD83D\uDCE4 │ Kick a user", false)
-                .addField("`" + Prefix.getPrefix(guild) + "nick <user>`", "\uD83D\uDD75 │ Change a users nickname", false)
-                .addField("`" + Prefix.getPrefix(guild) + "mute role <role>`", "\uD83D\uDCDD │ Change the mute role", false)
-                .addField("`" + Prefix.getPrefix(guild) + "unmute <user>`", "\uD83D\uDD08 │ Unmute a user", false)
-                .addField("`" + Prefix.getPrefix(guild) + "tempmute <user> <duration><time unit> <reason>`", "\u23F1\uFE0F │ Mute a user for a certain amount of time", false)
-                .addField("`" + Prefix.getPrefix(guild) + "mute <user>`", "\uD83D\uDD07 │ Mute a user", false)
-                .addField("`" + Prefix.getPrefix(guild) + "unban <user>`", "\uD83D\uDD13 │ Unban a user", false)
-                .addField("`" + Prefix.getPrefix(guild) + "tempban <user> <duration><time unit> <reason>`", "\u23F1\uFE0F │ Ban a user for a certain amount of time", false)
-                .addField("`" + Prefix.getPrefix(guild) + "ban <user> <reason>`", "\uD83D\uDD12 │ Ban a user", false);
+                .addField("`" + prefix + "moderation`", "\uD83D\uDD28 │ Display all moderation commands", false)
+                .addField("`" + prefix + "clear <amount>`", "\uD83D\uDDD1 │ Clear a certain amount of messages", false)
+                .addField("`" + prefix + "kick <user>`", "\uD83D\uDCE4 │ Kick a user", false)
+                .addField("`" + prefix + "nick <user>`", "\uD83D\uDD75 │ Change a users nickname", false)
+                .addField("`" + prefix + "mute role <role>`", "\uD83D\uDCDD │ Change the mute role", false)
+                .addField("`" + prefix + "unmute <user>`", "\uD83D\uDD08 │ Unmute a user", false)
+                .addField("`" + prefix + "tempmute <user> <duration><time unit> <reason>`", "\u23F1\uFE0F │ Mute a user for a certain amount of time", false)
+                .addField("`" + prefix + "mute <user>`", "\uD83D\uDD07 │ Mute a user", false)
+                .addField("`" + prefix + "unban <user>`", "\uD83D\uDD13 │ Unban a user", false)
+                .addField("`" + prefix + "tempban <user> <duration><time unit> <reason>`", "\u23F1\uFE0F │ Ban a user for a certain amount of time", false)
+                .addField("`" + prefix + "ban <user> <reason>`", "\uD83D\uDD12 │ Ban a user", false);
     }
 
     //administrator
-    public EmbedBuilder administrator(net.dv8tion.jda.api.entities.Guild guild, String authorAvatar) {
+    public EmbedBuilder administrator() {
         return new EmbedBuilder()
-                .setAuthor("administrator", null, authorAvatar)
+                .setAuthor("administrator", null, author.getEffectiveAvatarUrl())
                 .setColor(Manager.getUtilities().gray)
-                .addField("`" + Prefix.getPrefix(guild) + "prefix <prefix>`", "\uD83D\uDCCC │ Change the prefix of the bot", false)
-                .addField("`" + Prefix.getPrefix(guild) + "toggle <command>`", "\uD83D\uDD11 │ Toggle commands on or off", false)
-                .addField("`" + Prefix.getPrefix(guild) + "say <message>`", "\uD83D\uDCAC │ Let the bot say something", false)
+                .addField("`" + prefix + "prefix <prefix>`", "\uD83D\uDCCC │ Change the prefix of the bot", false)
+                .addField("`" + prefix + "toggle <command>`", "\uD83D\uDD11 │ Toggle commands on or off", false)
+                .addField("`" + prefix + "say <message>`", "\uD83D\uDCAC │ Let the bot say something", false)
                 .addField("`@someone`", "\uD83C\uDFB2 │ Replace in your message `@someone` with a random mention of a member", false)
-                .addField("`" + Prefix.getPrefix(guild) + "autorole @role`", "\uD83D\uDCDD │ Give a new joined member automatic a certain role", false)
-                .addField("`" + Prefix.getPrefix(guild) + "welcome`", "\uD83D\uDC4B │ Welcome new users", false)
-                .addField("`" + Prefix.getPrefix(guild) + "notification`", "\uD83D\uDD14 │ set automatic notifications for you favorite streamers", false)
-                .addField("`" + Prefix.getPrefix(guild) + "suggestions`", "\uD83D\uDDF3 │ Set up the suggestions", false)
-                .addField("`" + Prefix.getPrefix(guild) + "leveling`", "\uD83C\uDFC6 │ Change some settings of leveling", false)
-                .addField("`" + Prefix.getPrefix(guild) + "economy`", "\uD83D\uDCB0 │ Change some settings of economy", false);
+                .addField("`" + prefix + "autorole @role`", "\uD83D\uDCDD │ Give a new joined member automatic a certain role", false)
+                .addField("`" + prefix + "welcome`", "\uD83D\uDC4B │ Welcome new users", false)
+                .addField("`" + prefix + "notification`", "\uD83D\uDD14 │ set automatic notifications for you favorite streamers", false)
+                .addField("`" + prefix + "suggestions`", "\uD83D\uDDF3 │ Set up the suggestions", false)
+                .addField("`" + prefix + "leveling`", "\uD83C\uDFC6 │ Change some settings of leveling", false)
+                .addField("`" + prefix + "economy`", "\uD83D\uDCB0 │ Change some settings of economy", false);
     }
 
 
     //support server
-    public EmbedBuilder supportServer(JDA jda, String authorAvatar) {
+    public EmbedBuilder supportServer() {
         return new EmbedBuilder()
-                .setAuthor("support", "https://discord.gg/nG4uKuB", authorAvatar)
+                .setAuthor("support", "https://discord.gg/nG4uKuB", author.getEffectiveAvatarUrl())
                 .setColor(Manager.getUtilities().blue)
                 .setThumbnail(jda.getGuildById("642809436515074053").getIconUrl())
                 .setDescription("\u26A0\uFE0F │ " + Manager.getUtilities().hyperlink("Report", "https://discord.gg/nG4uKuB") + " bugs and get " + Manager.getUtilities().hyperlink("help", "https://discord.gg/nG4uKuB") + "!");
     }
 
     //invite bot
-    public EmbedBuilder inviteJda(JDA jda, String authorAvatar) {
+    public EmbedBuilder inviteJda() {
         return new EmbedBuilder()
-                .setAuthor("invite", Manager.getUtilities().inviteJda(jda), authorAvatar)
+                .setAuthor("invite", Manager.getUtilities().inviteJda(jda), author.getEffectiveAvatarUrl())
                 .setColor(Manager.getUtilities().blue)
                 .setThumbnail(jda.getSelfUser().getEffectiveAvatarUrl())
                 .setDescription("[\u2709\uFE0F │ Invite me to your server!](" + Manager.getUtilities().inviteJda(jda) + " \"bot invite link\")");

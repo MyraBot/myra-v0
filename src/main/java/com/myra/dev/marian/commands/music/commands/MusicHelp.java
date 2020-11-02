@@ -16,6 +16,6 @@ public class MusicHelp implements Command {
         // Check for no arguments
         if (ctx.getArguments().length != 0) return;
         // Run command
-        ctx.getChannel().sendMessage(new CommandEmbeds().music(ctx.getGuild(), ctx.getAuthor().getEffectiveAvatarUrl()).build()).queue();
+        ctx.getChannel().sendMessage(new CommandEmbeds(ctx.getGuild(), ctx.getEvent().getJDA(), ctx.getAuthor(), ctx.getPrefix()).music().build()).queue();
     }
 }

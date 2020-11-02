@@ -163,8 +163,7 @@ public class Utilities {
     }
 
     //error message
-    public void error(TextChannel textChannel, String command, String commandEmoji, String errorHeader, String
-            error, String authorAvatar) {
+    public void error(TextChannel textChannel, String command, String commandEmoji, String errorHeader, String error, String authorAvatar) {
         textChannel.sendMessage(new EmbedBuilder()
                 .setAuthor(command, null, authorAvatar)
                 .setColor(Manager.getUtilities().red)
@@ -174,8 +173,7 @@ public class Utilities {
     }
 
     //success info
-    public void success(TextChannel textChannel, String command, String commandEmoji, String successHeader, String
-            success, String authorAvatar, boolean deleteAfter5Seconds, String imageUrl) {
+    public void success(TextChannel textChannel, String command, String commandEmoji, String successHeader, String success, String authorAvatar, boolean deleteAfter5Seconds, String imageUrl) {
         if (deleteAfter5Seconds) {
             textChannel.sendMessage(new EmbedBuilder()
                     .setAuthor(command, null, authorAvatar)

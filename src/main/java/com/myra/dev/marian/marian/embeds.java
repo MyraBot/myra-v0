@@ -1,6 +1,7 @@
 package com.myra.dev.marian.marian;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.User;
 
 public class embeds {
 
@@ -30,34 +31,33 @@ public class embeds {
     }
 
     //buy able roles
-    public EmbedBuilder colour() {
-        EmbedBuilder buy = new EmbedBuilder();
-        buy.setTitle("buyable roles");
-        buy.setColor(0xFFD800);
-        buy.setDescription("You can buy these roles by typing in commands `..buy`");
-        buy.addField("", "25 000 \n <@&715462771688603678>  <@&715508379807645697>" +
-                "\n15 000 \n  <@&715462773512863804> <@&715498605162791042> <@&715500070610534480>" +
-                "\n15 000 \n  <@&715462773512863804> <@&715498605162791042> <@&715500070610534480>" +
-                "\n10 000 \n  <@&715462773525708832> <@&715462772615413811> <@&715462649390956567>" +
-                "\n5 000 \n  <@&715498892900302929>", false);
-        buy.addField("", "10 000 \n <@&714787219784597544> ➪ BE ABLE TO ADVERTISE IN  <#668403563223056384>" +
-                "\n1 000 000 \n <@&732929835814617099> ➪ secret :D", false);
-
-        return buy;
+    public EmbedBuilder colour(User author) {
+        return new EmbedBuilder()
+                .setAuthor("buyable roles", null, author.getEffectiveAvatarUrl())
+                .setColor(0xFFD800)
+                .setDescription("You can buy these roles by typing in commands `..buy`")
+                .addField("15 000", "<@&715462771688603678>  <@&715508379807645697>", false)
+                .addField("25 000", "<@&715462773512863804> <@&715498605162791042> <@&715500070610534480>", false)
+                .addField("10 000", "<@&715462773525708832> <@&715462772615413811> <@&715462649390956567>", false)
+                .addField("5 000", "<@&715498892900302929>", false)
+                .addField("25 000", "<@&715462771688603678>  <@&715508379807645697>", false)
+                .addField("25 000", "<@&715462771688603678>  <@&715508379807645697>", false)
+                .addField("10 000", "<@&714787219784597544> ➪ BE ABLE TO ADVERTISE IN  <#668403563223056384>", false)
+                .addField("1 000 00", "<@&732929835814617099> ➪ secret :D", false);
     }
 
     //leveling roles
-    public EmbedBuilder leveling() {
-        EmbedBuilder leveling = new EmbedBuilder();
-        leveling.setTitle("leveling roles");
-        leveling.setColor(0xFF006E);
-        leveling.setDescription("You can get these roles if you reach a specific level.");
-        leveling.addField("", "level 5 ➪ <@&688477543594197044>", true);
-        leveling.addField("", "level 15 ➪ <@&688477562313244763>", true);
-        leveling.addField("", "level 25 ➪ <@&688480420685545527>", true);
-        leveling.addField("", "level 50 ➪ <@&688480479371985031>", true);
-        leveling.addField("", "level 75 ➪ <@&688480479371985031>", true);
-        leveling.addField("", "level 100 ➪ <@&689878622361747494>", true);
+    public EmbedBuilder leveling(User author) {
+        EmbedBuilder leveling = new EmbedBuilder()
+                .setAuthor("leveling roles", null, author.getEffectiveAvatarUrl())
+                .setColor(0xFF006E)
+                .setDescription("You can get these roles if you reach a specific level.")
+                .addField("", "level 5 ➪ <@&688477543594197044>", true)
+                .addField("", "level 15 ➪ <@&688477562313244763>", true)
+                .addField("", "level 25 ➪ <@&688480420685545527>", true)
+                .addField("", "level 50 ➪ <@&688480479371985031>", true)
+                .addField("", "level 75 ➪ <@&688480479371985031>", true)
+                .addField("", "level 100 ➪ <@&689878622361747494>", true);
 
         return leveling;
     }

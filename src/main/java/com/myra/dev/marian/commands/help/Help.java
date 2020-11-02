@@ -1,6 +1,7 @@
 package com.myra.dev.marian.commands.help;
 
 import com.myra.dev.marian.Main;
+import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.CommandEmbeds;
 import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.utilities.Utilities;
@@ -49,16 +50,15 @@ public class Help extends Events implements Command {
         //if reaction was added on the wrong message return
         if (!MessageReaction.check(event, "help")) return;
 
+        CommandEmbeds embed = new CommandEmbeds(event.getGuild(), event.getJDA(), event.getUser(), new Database(event.getGuild()).get("prefix"));
         //invite bot
         if (event.getReactionEmote().getEmoji().equals("\u2709\uFE0F") && !event.getMember().getUser().isBot()) {
-            CommandEmbeds embed = new CommandEmbeds();
-            event.getChannel().editMessageById(event.getMessageIdLong(), embed.inviteJda(event.getJDA(), event.getUser().getEffectiveAvatarUrl()).build()).queue();
+            event.getChannel().sendMessage(embed.inviteJda().build()).queue();
             event.getChannel().clearReactionsById(event.getMessageId()).queue();
         }
         //support server
         if (event.getReactionEmote().getEmoji().equals("\u26A0\uFE0F") && !event.getMember().getUser().isBot()) {
-            CommandEmbeds embed = new CommandEmbeds();
-            event.getChannel().editMessageById(event.getMessageIdLong(), embed.supportServer(event.getJDA(), event.getUser().getEffectiveAvatarUrl()).build()).queue();
+            event.getChannel().sendMessage(embed.supportServer().build()).queue();
             event.getChannel().clearReactionsById(event.getMessageId()).queue();
         }
     }

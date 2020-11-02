@@ -1,10 +1,10 @@
 package com.myra.dev.marian.commands.fun;
 
 import com.myra.dev.marian.APIs.Reddit;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.management.Manager;
+import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandContext;
+import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 
 @CommandSubscribe(
         name = "meme",

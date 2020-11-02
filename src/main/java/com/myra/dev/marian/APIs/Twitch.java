@@ -1,7 +1,7 @@
 package com.myra.dev.marian.APIs;
 
-import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.Events;
+import com.myra.dev.marian.utilities.management.Manager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -41,6 +41,7 @@ public class Twitch extends Events {
             Twitch.accessToken = accessToken;
         }
     }
+
     //get game
     public String getGame(String gameId) throws IOException {
         OkHttpClient client = new OkHttpClient();
@@ -63,14 +64,6 @@ public class Twitch extends Events {
     //request stream
     public static EmbedBuilder twitchRequest(String channelName, TextChannel textChannel, Guild guild, String avatar) throws IOException {
         OkHttpClient client = new OkHttpClient();
-        //define variables
-        Boolean live = false;
-        String id = null;
-        String name = null;
-        String title = null;
-        String thumbnail = null;
-        String game = null;
-        String startedAt = null;
         //search channel request
         Request channel = new Request.Builder()
                 .addHeader("client-id", Manager.getUtilities().twitchClientId)
@@ -89,23 +82,21 @@ public class Twitch extends Events {
             Manager.getUtilities().error(textChannel, "notification twitch", "\uD83D\uDD14", "No channel found", "**" + channelName + "** doesn't exist", avatar);
         }
         JSONObject channelData = JsonChannel.getJSONArray("data").getJSONObject(0);
-        //return null if stream is offline
-        live = channelData.getBoolean("is_live");
+        // Return null if stream is offline
+        boolean live = channelData.getBoolean("is_live");
         if (!live) return null;
         //get values
-        id = channelData.getString("id");
-        name = channelData.getString("display_name");
-        title = channelData.getString("title");
-        thumbnail = channelData.getString("thumbnail_url");
-        game = new Twitch().getGame(channelData.getString("game_id"));
+        String id = channelData.getString("id");
+        String name = channelData.getString("display_name");
+        String title = channelData.getString("title");
+        String thumbnail = channelData.getString("thumbnail_url");
+        String game = new Twitch().getGame(channelData.getString("game_id"));
         //get stream start
         DateTimeFormatter dtf =
                 DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
         String strDate = channelData.getString("started_at").replace("Z", "");
-        startedAt = dtf.format(LocalDateTime.parse(strDate));
-        /**
-         * build embed
-         */
+        String startedAt = dtf.format(LocalDateTime.parse(strDate));
+// Build embed
         EmbedBuilder twitch = new EmbedBuilder()
                 .setAuthor(name, "https://www.twitch.tv/" + name, thumbnail)
                 .setColor(Manager.getUtilities().blue)
@@ -113,6 +104,7 @@ public class Twitch extends Events {
                         game
                 )
                 .setThumbnail(thumbnail)
+                .setImage("https://static-cdn.jtvnw.net/previews-ttv/live_user_" + name + "-1280x720.jpg")
                 .setFooter(startedAt);
         return twitch;
     }

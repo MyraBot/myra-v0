@@ -2,20 +2,19 @@ package com.myra.dev.marian.commands.moderation.ban;
 
 import com.mongodb.client.MongoCollection;
 import com.myra.dev.marian.database.MongoDb;
-import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.management.Events;
 import com.myra.dev.marian.utilities.management.Manager;
+import com.myra.dev.marian.utilities.management.commands.Command;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
+import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import org.bson.Document;
 
 import java.time.Instant;
@@ -185,7 +184,7 @@ public class Tempban extends Events implements Command {
                 /**
                  * if unban time isn't already reached
                  */
-                for (net.dv8tion.jda.api.entities.Guild.Ban ban : banList) {
+                for (Guild.Ban ban : banList) {
                     //if member left the server
                     if (event.getJDA().getGuildById(doc.getString("guildId")).getMemberById(doc.getString("userId")) == null) {
                         //delete document
@@ -231,7 +230,7 @@ public class Tempban extends Events implements Command {
         });
         //if no channel is set
         if (db.get("logChannel").equals("not set")) {
-            Manager.getUtilities().error(guild.getDefaultChannel(), "tempban", "\u23F1\uFE0F", "No log channel specified", "To set a log channel type in `" + Prefix.getPrefix(guild) + "log channel <channel>`", author.getEffectiveAvatarUrl());
+            Manager.getUtilities().error(guild.getDefaultChannel(), "tempban", "\u23F1\uFE0F", "No log channel specified", "To set a log channel type in `" +  new Database(guild).get("prefix") + "log channel <channel>`", author.getEffectiveAvatarUrl());
             return;
         }
         //get log channel

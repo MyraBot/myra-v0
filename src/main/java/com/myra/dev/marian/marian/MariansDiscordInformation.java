@@ -32,7 +32,7 @@ public class MariansDiscordInformation implements Command {
 //            ctx.getChannel().sendFile(levelingRoles).queue();
         ctx.getChannel().editMessageById("726130554721927168", embed.leveling().build()).queue();
 //            ctx.getChannel().sendFile(designerRanks).queue();
-        ctx.getChannel().editMessageById("726130588184084490", embed.designer().build()).queue();
+//        ctx.getChannel().editMessageById("726130588184084490", embed.designer().build()).queue();
 //            ctx.getChannel().sendFile(socialMedia).queue();
         ctx.getChannel().editMessageById("726130619653816381", embed.socialMedia().build()).queue();
 //            ctx.getChannel().sendFile(reactionRoles).queue();

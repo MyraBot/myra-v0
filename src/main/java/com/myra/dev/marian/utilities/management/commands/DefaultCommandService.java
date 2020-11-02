@@ -1,10 +1,8 @@
 package com.myra.dev.marian.utilities.management.commands;
 
 import com.myra.dev.marian.database.MongoDb;
-import com.myra.dev.marian.database.Prefix;
-import com.myra.dev.marian.utilities.management.Manager;
+import com.myra.dev.marian.database.allMethods.Database;
 import net.dv8tion.jda.api.entities.Guild;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.bson.Document;
 
@@ -68,16 +66,13 @@ public class DefaultCommandService implements CommandService {
         return this.commands;
     }
 
-    //Database
-    private final static MongoDb MONGO_DB = Manager.getDatabase();
-
     /**
      * {@inheritDoc}
      */
     @Override
     public void processCommandExecution(GuildMessageReceivedEvent event) throws Exception {
         //get prefix
-        String PREFIX = Prefix.getPrefix(event.getGuild());
+        String PREFIX = new Database(event.getGuild()).get("prefix");
         //return if message doesn't start with prefix
         if (!event.getMessage().getContentRaw().startsWith(PREFIX)) return;
         //get message without prefix
@@ -134,7 +129,7 @@ public class DefaultCommandService implements CommandService {
 
     private boolean isDisabled(String command, Guild guild) {
         // Get listener document
-        Document commands = (Document) MONGO_DB.getCollection("guilds").find(eq("guildId", guild.getId())).first().get("commands");
+        Document commands = (Document) MongoDb.getInstance().getCollection("guilds").find(eq("guildId", guild.getId())).first().get("commands");
         // If command isn't in the database
         if (command.equals("")) return false;
         // Return value of command

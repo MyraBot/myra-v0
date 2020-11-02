@@ -1,18 +1,17 @@
 package com.myra.dev.marian.listeners.leveling;
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.management.Events;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.listeners.Listener;
 import com.myra.dev.marian.utilities.management.listeners.ListenerSubscribe;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.time.Duration;
 import java.util.HashMap;
+
 @ListenerSubscribe(
         name = "leveling"
 )

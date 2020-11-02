@@ -1,11 +1,7 @@
 package com.myra.dev.marian.marian;
 
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.management.Events;
-import com.myra.dev.marian.utilities.management.Resources;
-import net.dv8tion.jda.api.EmbedBuilder;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 
 @CommandSubscribe(
         name = "dashboard",

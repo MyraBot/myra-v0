@@ -13,7 +13,6 @@ import com.myra.dev.marian.commands.music.MusicTimeout;
 import com.myra.dev.marian.commands.music.commands.MusicController;
 import com.myra.dev.marian.commands.music.commands.MusicPlay;
 import com.myra.dev.marian.database.MongoDbUpdate;
-import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.listeners.autorole.AutoroleAssign;
 import com.myra.dev.marian.listeners.leveling.Leveling;
 import com.myra.dev.marian.listeners.notification.Notification;
@@ -147,9 +146,6 @@ public class EventsManager extends ListenerAdapter {
             new MessageReaction().jdaReady(event);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            //load prefix
-            Prefix.load();
         }
     }
 

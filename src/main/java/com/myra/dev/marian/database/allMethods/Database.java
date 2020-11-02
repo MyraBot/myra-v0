@@ -1,7 +1,6 @@
 package com.myra.dev.marian.database.allMethods;
 
 import com.myra.dev.marian.database.MongoDb;
-import com.myra.dev.marian.utilities.management.Manager;
 import net.dv8tion.jda.api.entities.Guild;
 import org.bson.Document;
 
@@ -9,7 +8,7 @@ import static com.mongodb.client.model.Filters.eq;
 
 public class Database {
     // Database
-    private final MongoDb mongoDb = Manager.getDatabase();
+    private final MongoDb mongoDb = MongoDb.getInstance();
 
     //variable
     private Guild guild;

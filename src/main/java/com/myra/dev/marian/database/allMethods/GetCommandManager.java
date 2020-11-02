@@ -3,7 +3,6 @@ package com.myra.dev.marian.database.allMethods;
 import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.utilities.management.Manager;
 import net.dv8tion.jda.api.entities.Guild;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.bson.Document;
 

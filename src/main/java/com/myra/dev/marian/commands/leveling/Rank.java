@@ -117,7 +117,7 @@ public class Rank implements Command {
         graphics.setFont(font);
         //draw 'level'
         graphics.drawString("level:",
-                graphic.textCenter('x', level, font, background) - 55,
+                graphic.textCenter('x', level, font, background) - 50,
                 graphic.textCenter('y', level, font, background) - 15
         );
         //adjust font size
@@ -146,13 +146,13 @@ public class Rank implements Command {
         //adjust font size
         font = font.deriveFont(15f);
         graphics.setFont(font);
-        //draw 'xp'
+        //draw 'rank'
         graphics.drawString("rank:",
-                graphic.textCenter('x', "rank:", font, background) + 40,
+                graphic.textCenter('x', "rank:", font, background) + 35,
                 graphic.textCenter('y', "rank:", font, background) + 25
         );
-        //draw xp
-        graphics.drawString(String.valueOf(rank),
+        //draw rank
+        graphics.drawString("#" + rank,
                 graphic.textCenter('x', "rank:", font, background) + 85,
                 graphic.textCenter('y', "rank:", font, background) + 25
         );

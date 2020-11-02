@@ -6,9 +6,9 @@ import com.myra.dev.marian.commands.administrator.Someone;
 import com.myra.dev.marian.commands.administrator.Toggle;
 import com.myra.dev.marian.commands.economy.Balance;
 import com.myra.dev.marian.commands.economy.Daily;
+import com.myra.dev.marian.commands.economy.EconomyHelp;
 import com.myra.dev.marian.commands.economy.Give;
 import com.myra.dev.marian.commands.economy.administrator.Currency;
-import com.myra.dev.marian.commands.economy.EconomyHelp;
 import com.myra.dev.marian.commands.economy.administrator.EconomySet;
 import com.myra.dev.marian.commands.fun.Meme;
 import com.myra.dev.marian.commands.fun.TextFormatter;
@@ -23,9 +23,9 @@ import com.myra.dev.marian.commands.general.information.InformationUser;
 import com.myra.dev.marian.commands.help.*;
 import com.myra.dev.marian.commands.leveling.Background;
 import com.myra.dev.marian.commands.leveling.Leaderboard;
+import com.myra.dev.marian.commands.leveling.Rank;
 import com.myra.dev.marian.commands.leveling.administrator.LevelingHelp;
 import com.myra.dev.marian.commands.leveling.administrator.LevelingSet;
-import com.myra.dev.marian.commands.leveling.Rank;
 import com.myra.dev.marian.commands.leveling.administrator.levelingRoles.LevelingRolesAdd;
 import com.myra.dev.marian.commands.leveling.administrator.levelingRoles.LevelingRolesHelp;
 import com.myra.dev.marian.commands.leveling.administrator.levelingRoles.LevelingRolesList;
@@ -42,11 +42,11 @@ import com.myra.dev.marian.commands.moderation.mute.MuteRole;
 import com.myra.dev.marian.commands.moderation.mute.Tempmute;
 import com.myra.dev.marian.commands.moderation.mute.Unmute;
 import com.myra.dev.marian.commands.music.commands.*;
-import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.MongoDbUpdate;
 import com.myra.dev.marian.listeners.autorole.AutoRoleSet;
 import com.myra.dev.marian.listeners.autorole.AutoroleToggle;
-import com.myra.dev.marian.listeners.leveling.*;
+import com.myra.dev.marian.listeners.leveling.Leveling;
+import com.myra.dev.marian.listeners.leveling.LevelingListener;
 import com.myra.dev.marian.listeners.logging.LogChannel;
 import com.myra.dev.marian.listeners.notification.AddStreamer;
 import com.myra.dev.marian.listeners.notification.NotificationChannel;
@@ -59,6 +59,7 @@ import com.myra.dev.marian.listeners.suggestions.SuggestionsToggle;
 import com.myra.dev.marian.listeners.welcome.WelcomeChannel;
 import com.myra.dev.marian.listeners.welcome.WelcomeColour;
 import com.myra.dev.marian.listeners.welcome.WelcomeHelp;
+import com.myra.dev.marian.listeners.welcome.WelcomeImage.*;
 import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessageHelp;
 import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessageMessage;
 import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessagePreview;
@@ -67,7 +68,6 @@ import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedHelp;
 import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedMessage;
 import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedPreview;
 import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedToggle;
-import com.myra.dev.marian.listeners.welcome.WelcomeImage.*;
 import com.myra.dev.marian.marian.GetInvite;
 import com.myra.dev.marian.marian.Shutdown;
 import com.myra.dev.marian.utilities.Utilities;
@@ -82,25 +82,14 @@ public class Manager {
     //create HashMap
     public static HashMap<String, Events> commands = new HashMap<String, Events>();
 
-    final static MongoDb MONGO_DB = new MongoDb();
     final static Utilities UTILITIES = new Utilities();
     final static Leveling LEVELING = new Leveling();
     final static CommandService COMMAND_SERVICE = new DefaultCommandService();
     final static ListenerService LISTENER_SERVICE = new DefaultListenerService();
 
     public void start() {
-        //load database
-        MongoDbUpdate.setDb(MONGO_DB);
-
-        Reminder.setDb(MONGO_DB);
-
         //load commands
         commandRegistry();
-    }
-
-    // Return database
-    public static MongoDb getDatabase() {
-        return MONGO_DB;
     }
 
     // Return utilities
@@ -227,7 +216,7 @@ public class Manager {
                 new WelcomeEmbedToggle(),
                 new WelcomeEmbedMessage(),
                 new WelcomeEmbedPreview()
-                );
+        );
         // Register listeners
         LISTENER_SERVICE.register(
                 new LevelingListener(),

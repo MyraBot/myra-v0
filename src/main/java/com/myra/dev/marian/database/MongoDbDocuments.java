@@ -14,7 +14,7 @@ public class MongoDbDocuments {
 
     public static void guild(Guild guild) {
         try {
-            MongoDb db = Manager.getDatabase();
+            MongoDb db = MongoDb.getInstance();
             //get collections
             MongoCollection<Document> guilds = db.getCollection("guilds");
 
@@ -113,9 +113,6 @@ public class MongoDbDocuments {
                         .append("commands", commands)
                         .append("listeners", listeners);
                 guilds.insertOne(guildDoc);
-
-                //load Hashmap
-                Prefix.load();
             }
         } catch (Exception e) {
             e.printStackTrace();

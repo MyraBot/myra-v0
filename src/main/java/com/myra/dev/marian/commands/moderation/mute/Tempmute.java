@@ -2,20 +2,19 @@ package com.myra.dev.marian.commands.moderation.mute;
 
 import com.mongodb.client.MongoCollection;
 import com.myra.dev.marian.database.MongoDb;
-import com.myra.dev.marian.database.Prefix;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Events;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import org.bson.Document;
 
 import java.time.Instant;
@@ -28,6 +27,8 @@ import java.util.concurrent.TimeUnit;
         name = "tempmute"
 )
 public class Tempmute extends Events implements Command {
+    //Get database
+    private final MongoDb mongoDb = MongoDb.getInstance();
 
     @Override
     public void execute(CommandContext ctx) throws Exception {
@@ -111,8 +112,6 @@ public class Tempmute extends Events implements Command {
         //create unmute Document
         Document document = createUnmute(user.getId(), ctx.getGuild().getId(), durationInMilliseconds, ctx.getAuthor().getId());
 // Unmute
-        // Get database
-        MongoDb db = Manager.getDatabase();
         //delay
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -121,14 +120,14 @@ public class Tempmute extends Events implements Command {
                 //if member left the server
                 if (ctx.getGuild().getMemberById(document.getString("userId")) == null) {
                     //delete document
-                    db.getCollection("unmutes").deleteOne(document);
+                    mongoDb.getCollection("unmutes").deleteOne(document);
                 }
                 //remove role
                 ctx.getGuild().removeRoleFromMember(document.getString("userId"), ctx.getGuild().getRoleById(muteRoleId)).queue();
                 //send unmute message
                 unmuteMessage(user, ctx.getGuild(), ctx.getAuthor());
                 //delete document
-                db.getCollection("unmutes").deleteOne(document);
+                mongoDb.getCollection("unmutes").deleteOne(document);
 
             }
         }, durationInMilliseconds);
@@ -138,7 +137,7 @@ public class Tempmute extends Events implements Command {
     //create unmute document
     public Document createUnmute(String userId, String guildId, Long durationInMilliseconds, String moderatorId) {
 
-        MongoCollection<Document> guilds = Manager.getDatabase().getCollection("unmutes");
+        MongoCollection<Document> guilds = mongoDb.getCollection("unmutes");
         //create Document
         Document docToInsert = new Document()
                 .append("userId", userId)
@@ -166,7 +165,7 @@ public class Tempmute extends Events implements Command {
         });
         //if no channel is set
         if (db.get("logChannel").equals("not set")) {
-            Manager.getUtilities().error(guild.getDefaultChannel(), "tempban", "\u23F1\uFE0F", "No log channel specified", "To set a log channel type in `" + Prefix.getPrefix(guild) + "log channel <channel>`", author.getEffectiveAvatarUrl());
+            Manager.getUtilities().error(guild.getDefaultChannel(), "tempban", "\u23F1\uFE0F", "No log channel specified", "To set a log channel type in `" + db.get("prefix") + "log channel <channel>`", author.getEffectiveAvatarUrl());
             return;
         }
         //get log channel
@@ -182,10 +181,8 @@ public class Tempmute extends Events implements Command {
     }
 
     public void onReady(ReadyEvent event) throws Exception {
-        // Get MongoDb
-        MongoDb db = Manager.getDatabase();
         //for each document
-        for (Document doc : db.getCollection("unmutes").find()) {
+        for (Document doc : mongoDb.getCollection("unmutes").find()) {
             //get unmute time
             Long unmuteTime = doc.getLong("unmuteTime");
             //get guild
@@ -197,25 +194,25 @@ public class Tempmute extends Events implements Command {
                 //if member left the server
                 if (event.getJDA().getGuildById(doc.getString("guildId")).getMemberById(doc.getString("userId")) == null) {
                     //delete document
-                    db.getCollection("unmutes").deleteOne(doc);
+                    mongoDb.getCollection("unmutes").deleteOne(doc);
                 }
                 // No mute role set
                 if (new Database(guild).get("muteRole").equals("not set")) {
                     // No logging channel set
                     if (new Database(guild).get("logChannel").equals("not set")) {
-                        Manager.getUtilities().error(guild.getDefaultChannel(), "tempmute", "\u23F1\uFE0F", "No log channel specified", "To set a log channel type in `" + Prefix.getPrefix(guild) + "log channel <channel>`", guild.getIconUrl());
-                        Manager.getUtilities().error(guild.getDefaultChannel(), "tempmute", "\uD83D\uDD07", "You didn't specify a mute role", "To indicate a mute role, type in `" + Prefix.getPrefix(guild) + "mute role <role>`", guild.getIconUrl());
+                        Manager.getUtilities().error(guild.getDefaultChannel(), "tempmute", "\u23F1\uFE0F", "No log channel specified", "To set a log channel type in `" + new Database(guild).get("prefix") + "log channel <channel>`", guild.getIconUrl());
+                        Manager.getUtilities().error(guild.getDefaultChannel(), "tempmute", "\uD83D\uDD07", "You didn't specify a mute role", "To indicate a mute role, type in `" + new Database(guild).get("prefix") + "mute role <role>`", guild.getIconUrl());
                         return;
                     }
                     TextChannel logChannel = guild.getTextChannelById((new Database(guild).get("muteRole")));
-                    Manager.getUtilities().error(logChannel, "tempmute", "\uD83D\uDD07", "You didn't specify a mute role", "To indicate a mute role, type in `" + Prefix.getPrefix(guild) + "mute role <role>`", guild.getIconUrl());
+                    Manager.getUtilities().error(logChannel, "tempmute", "\uD83D\uDD07", "You didn't specify a mute role", "To indicate a mute role, type in `" + new Database(guild).get("prefix") + "mute role <role>`", guild.getIconUrl());
                 }
                 //remove role
                 guild.removeRoleFromMember(doc.getString("userId"), guild.getRoleById(new Database(guild).get("muteRole"))).queue();
                 //send unmute message
                 unmuteMessage(event.getJDA().getUserById(doc.getString("userId")), guild, event.getJDA().getUserById(doc.getString("moderatorId")));
                 //delete document
-                db.getCollection("unmutes").deleteOne(doc);
+                mongoDb.getCollection("unmutes").deleteOne(doc);
                 continue;
             }
             /**
@@ -229,14 +226,14 @@ public class Tempmute extends Events implements Command {
                     //if member left the server
                     if (event.getJDA().getGuildById(doc.getString("guildId")).getMemberById(doc.getString("userId")) == null) {
                         //delete document
-                        db.getCollection("unmutes").deleteOne(doc);
+                        mongoDb.getCollection("unmutes").deleteOne(doc);
                     }
                     //unmute
                     guild.removeRoleFromMember(doc.getString("userId"), guild.getRoleById(new Database(guild).get("muteRole"))).queue();
                     //send unmute message
                     unmuteMessage(event.getJDA().getUserById(doc.getString("userId")), guild, event.getJDA().getUserById(doc.getString("moderatorId")));
                     //delete document
-                    db.getCollection("unmutes").deleteOne(doc);
+                    mongoDb.getCollection("unmutes").deleteOne(doc);
                 }
             }, doc.getLong("unmuteTime") - System.currentTimeMillis());
         }

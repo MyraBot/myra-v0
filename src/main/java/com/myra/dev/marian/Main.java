@@ -1,6 +1,6 @@
 package com.myra.dev.marian;
 
-import com.myra.dev.marian.database.Prefix;
+
 import com.myra.dev.marian.utilities.ConsoleColours;
 import com.myra.dev.marian.utilities.management.EventsManager;
 import com.myra.dev.marian.utilities.management.Manager;
@@ -12,10 +12,7 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.*;
 
 public class Main {
@@ -25,18 +22,16 @@ public class Main {
     public static String marian = "639544573114187797";
 
 
-    //main method
+    // Main method
     public static void main(String[] args) throws Exception {
-        //Test
+        // Register commands
         new Manager().start();
-        //load main class
+        // Load main class
         new Main();
     }
 
     public Main() {
         try {
-            //load utilities
-            Prefix.load();
             //build bot
             DefaultShardManagerBuilder jda = new DefaultShardManagerBuilder("NzE4NDQ0NzA5NDQ1NjMyMTIy.Xto9xg.dQxtSFxxYHpKXOwLCtJuWM5w1MM")
                     //.enableIntents(GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MEMBERS)
@@ -52,10 +47,6 @@ public class Main {
             System.out.println(ConsoleColours.GREEN + "Bot online" + ConsoleColours.RESET);
             //change activity and profile picture
             changeUserInformation();
-
-
-//        Runtime.getRuntime().addShutdownHook(new Thread(() -> System.out.println("Shutdown Hook is running !")));
-//        System.out.println("Application Terminating ...");
         } catch (Exception e) {
             e.printStackTrace();
         }

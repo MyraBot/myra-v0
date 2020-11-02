@@ -60,6 +60,7 @@ public class PlayerManager {
                         .setImage(thumbnailUrl);
                 channel.sendMessage(success.build()).queue();
             }
+
             // Load a playlist into the queue
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
@@ -73,6 +74,7 @@ public class PlayerManager {
                         .setImage(thumbnailUrl);
                 channel.sendMessage(success.build()).queue();
             }
+
             @Override
             public void noMatches() {
                 Manager.getUtilities().error(

@@ -1,6 +1,6 @@
 package com.myra.dev.marian.listeners.welcome.WelcomeImage;
 
-import com.myra.dev.marian.database.Prefix;
+
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.management.Events;
 import com.myra.dev.marian.utilities.management.Manager;
@@ -16,7 +16,7 @@ public class WelcomeImage extends Events {
         if (!db.getListenerManager().check("welcomeImage")) return;
         //if no welcome channel is set
         if (db.getNested("welcome").get("welcomeChannel").equals("not set")) {
-            Manager.getUtilities().error(event.getGuild().getDefaultChannel(), "welcome image", "\uD83D\uDDBC", "No welcome channel specified", "To set a welcome channel type in `" + Prefix.getPrefix(event.getGuild()) + "welcome channel <channel>`", event.getGuild().getIconUrl());
+            Manager.getUtilities().error(event.getGuild().getDefaultChannel(), "welcome image", "\uD83D\uDDBC", "No welcome channel specified", "To set a welcome channel type in `" + new Database(event.getGuild()).get("prefix") + "welcome channel <channel>`", event.getGuild().getIconUrl());
             return;
         }
         TextChannel channel = event.getGuild().getTextChannelById(db.getNested("welcome").get("welcomeChannel"));

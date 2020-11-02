@@ -1,11 +1,12 @@
 package com.myra.dev.marian.commands.fun;
 
 import com.myra.dev.marian.utilities.management.commands.Command;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
 
 import java.util.Random;
+
 @CommandSubscribe(
         name = "would you rather",
         aliases = {"wyr"}

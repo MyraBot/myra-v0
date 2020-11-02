@@ -25,12 +25,7 @@ import static com.mongodb.client.model.Filters.eq;
 )
 public class MongoDbUpdate extends Events implements Command {
     //database
-    private static MongoDb mongoDb;
-
-    //set variable
-    public static void setDb(MongoDb db) {
-        mongoDb = db;
-    }
+    private final MongoDb mongoDb = MongoDb.getInstance();
 
     //update Database
     @Override

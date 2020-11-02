@@ -1,10 +1,10 @@
 package com.myra.dev.marian.commands.help;
 
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.management.Manager;
-import net.dv8tion.jda.api.EmbedBuilder;
+import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandContext;
+import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import net.dv8tion.jda.api.EmbedBuilder;
 
 @CommandSubscribe(
         name = "ping",

@@ -28,7 +28,9 @@ public class Prefix implements Command {
             return;
         }
 // Change the prefix
-        com.myra.dev.marian.database.Prefix.setPrefix(ctx.getGuild(), ctx.getArguments()[0]);
+        Database db = new Database(ctx.getGuild());
+        // Change prefix
+        db.set("prefix", ctx.getArguments()[0]);
         //success information
         Manager.getUtilities().success(ctx.getChannel(),
                 "prefix", "\uD83D\uDCCC",
@@ -39,7 +41,7 @@ public class Prefix implements Command {
         //prefix reset
         if (ctx.getEvent().getMessage().getContentRaw().equalsIgnoreCase(ctx.getEvent().getJDA().getSelfUser().getAsMention().replace("<@", "<@!") + "prefix")) {
             //Database
-            com.myra.dev.marian.database.Prefix.setPrefix(ctx.getGuild(), Main.prefix);
+            db.set("prefix", Main.prefix);
             //success info
             Manager.getUtilities().success(ctx.getChannel(),
                     "prefix", "\uD83D\uDCCC",
