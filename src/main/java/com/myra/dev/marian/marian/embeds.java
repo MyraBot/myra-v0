@@ -1,4 +1,4 @@
-package com.myra.dev.marian.mariansDiscord;
+package com.myra.dev.marian.marian;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 

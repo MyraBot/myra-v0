@@ -1,9 +1,8 @@
-package com.myra.dev.marian.mariansDiscord;
+package com.myra.dev.marian.marian;
 
 import com.myra.dev.marian.utilities.management.Events;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class ServerTracking extends Events {
 

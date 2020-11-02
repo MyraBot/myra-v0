@@ -1,6 +1,5 @@
 package com.myra.dev.marian.utilities.management;
 
-import com.mongodb.connection.Server;
 import com.myra.dev.marian.APIs.Twitch;
 import com.myra.dev.marian.InviteThanks;
 import com.myra.dev.marian.commands.fun.TextFormatter;
@@ -21,7 +20,8 @@ import com.myra.dev.marian.listeners.notification.Notification;
 import com.myra.dev.marian.listeners.welcome.WelcomeImage.WelcomeImage;
 import com.myra.dev.marian.listeners.welcome.WelcomeImage.WelcomeImageFont;
 import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessage;
-import com.myra.dev.marian.mariansDiscord.ServerTracking;
+import com.myra.dev.marian.marian.ServerTracking;
+import com.myra.dev.marian.marian.Shutdown;
 import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.utilities.management.commands.CommandService;
 import com.myra.dev.marian.utilities.management.listeners.ListenerService;
@@ -35,7 +35,6 @@ import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.events.user.update.UserUpdateNameEvent;
@@ -67,12 +66,16 @@ public class EventsManager extends ListenerAdapter {
      */
     public void onGuildMessageReactionAdd(GuildMessageReactionAddEvent event) {
         try {
+            // Shutdown
+            new Shutdown().guildMessageReactionAddEvent(event);
+            // Commands
             new Commands().guildMessageReactionAddEvent(event);
             new Help().guildMessageReactionAddEvent(event);
 
             new InformationServer().guildMessageReactionAddEvent(event);
-            //text formatter
+            // Text formatter
             new TextFormatter().guildMessageReactionAddEvent(event);
+            // Music
             new MusicPlay().guildMessageReactionAddEvent(event);
             new MusicController().guildMessageReactionAddEvent(event);
 

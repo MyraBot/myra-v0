@@ -13,9 +13,7 @@ import net.dv8tion.jda.api.entities.Message;
 import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
-import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 @CommandSubscribe(
         name = "music controller"
@@ -67,7 +65,7 @@ public class MusicController extends Events implements Command {
         message.addReaction("\u23ED\uFE0F").queue();
         message.addReaction("\u23F9\uFE0F").queue();
         //add message id to HashMap
-        MessageReaction.add("musicController", message.getId(), ctx.getChannel(), ctx.getAuthor(), false);
+        MessageReaction.add("musicController", message.getId(), Arrays.asList("\u23EF\uFE0F", "\u23ED\uFE0F", "\u23F9\uFE0F"), ctx.getChannel(), ctx.getAuthor(), false);
 
         //cancel timer
         cancel.scheduleAtFixedRate(new TimerTask() {

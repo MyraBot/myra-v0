@@ -13,6 +13,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
+import java.util.Arrays;
+
 @CommandSubscribe(
         name = "help",
         aliases = {"help me"}
@@ -38,7 +40,7 @@ public class Help extends Events implements Command {
         message.addReaction("\u2709\uFE0F").queue();
         message.addReaction("\u26A0\uFE0F").queue();
 
-        MessageReaction.add("help", message.getId(), ctx.getChannel(), ctx.getAuthor(), true);
+        MessageReaction.add("help", message.getId(), Arrays.asList("\u2709\uFE0F", "\u26A0\uFE0F"), ctx.getChannel(), ctx.getAuthor(), true);
     }
 
     //reactions

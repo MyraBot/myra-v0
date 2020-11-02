@@ -1,4 +1,4 @@
-package com.myra.dev.marian.mariansDiscord;
+package com.myra.dev.marian.marian;
 
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandContext;

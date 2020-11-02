@@ -7,12 +7,13 @@ import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Events;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+
+import java.util.Arrays;
 
 @CommandSubscribe(
         name = "welcome image font"
@@ -39,7 +40,7 @@ public class WelcomeImageFont extends Events implements Command {
         message.addReaction("2\uFE0F\u20E3").queue();
         message.addReaction("3\uFE0F\u20E3").queue();
 
-        MessageReaction.add("welcomeImageFont", message.getId(), ctx.getChannel(), ctx.getAuthor(), true);
+        MessageReaction.add("welcomeImageFont", message.getId(), Arrays.asList("1\uFE0F\u20E3", "2\uFE0F\u20E3", "3\uFE0F\u20E3"), ctx.getChannel(), ctx.getAuthor(), true);
     }
 
     //reaction

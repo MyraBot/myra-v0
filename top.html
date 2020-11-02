@@ -1,158 +1,97 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-      <!-- import handwritten font -->
-      <link href="https://fonts.googleapis.com/css?family=Major+Mono+Display|Courgette" rel="stylesheet">
-      <link href="https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap" >
-      <style type="text/css">
-        /* body properties */
-        body {
-        /*  background-image: url('https://wallpaperaccess.com/full/2292810.jpg');*/
-          background-size: cover;
-          background-attachment: fixed;
-          margin: none;
-          padding: none;
-        }
-        .headers {
-          color: gray;
-          font-family: 'Shadows Into Light', cursive;
-        }
-        img {
-          transition: 0.5s;
-          border-radius: 50%;
-        }
-        img:hover {
-          border-radius: 40%;
-        }
-        .text {
-          font-family: Arial;
-          color: gray;
-          margin-bottom: 50px;
-        }
+<!-- <img src="https://entity.nestedvar.dev/quiver/assets/Quiver-Banner-1800x200.png"> -->
+
+<div align="center">
+
+<a href="https://discord.gg/nG4uKuB">
+<img alt="Discord" src="
+https://img.shields.io/discord/
+642809436515074053
+?color=7289DA
+&label=Support
+&logo=Discord
+&logoColor=7289DA
+&style=for-the-badge
+">
+</a>
+
+<a href="https://discord.com/oauth2/authorize?scope=bot&client_id=718444709445632122&permissions=8">
+<img alt="Invite" src="
+https://img.shields.io/badge/
+✉️Invite-
+to_your_server-
+CCD9F0
+?style=for-the-badge
+">
+</a>
+
+</div>
+
+# 👋 Hey there!
+I'm Myra and I have some amazing free features including **leveling**, **music**, **moderation**, **twitch notification** and much more!
+
+# 📻 You like hearing music?
+Mee too! First you need to join a voice channel the bot should go into. For this use the command **~join**. Make sure I'm not in a voice channel yet. You don't want to disturb other people hearing music...<br/>
+Once I joined your voice channel you're good to go. Use **~play** to play some amazing songs (or annoying). The music tracks will be added to an queue, which is played in the correct order.<br/>
+You don't link the order? No problem! Use **~shuffle** to mix up the queue. Then noone knows where his favorite song was.<br/>
+If you're done with the super mega music party use **~leave** to let the bot leave the voice channel. She then also wants to rest a little.
+
+# 🏆 I want to make a contest with my friends!
+Well, what would be a bot without leveling? Just write some messages and you'll gain experience. With a certain amout of xp you reach a level. But don't take it too easy. It's getting harder to reach a level every time!<br/>
+You wan't to check your level? Use **~rank** to see your current **xp**, **level** and **rank**. I'll display it to you on a nice image, which you can customise using **~leveling background**!<br/>
+And if you want to see, who the contest won you can type in **~leaderboard**. This will show you the 10 most annoying users! *Reminder: You should be on the top of this list*
+
+<!--
+# 📚 So what can it do?
+Here's a short list! Of course, the more Arrows you add to Quiver, the more features you can add to it (that's the whole point)!
+<table width="100%" align="center" text-align="center">
+  <tr>
+    <th>Command</th>
+    <th>Short Description</th>
+    <th>Usage</th>
+  </tr>
+  <tr>
+    <td><a href="https://nestedvariables.tk/quiver/commands?cmd=set">set</a></td>
+    <td>Changes settings for the whole guild</td>
+    <td>[prefix]set prefix {prefix} <br/> set locale {<a href="#-languages">locale</a>}
+  </tr>
+  <tr>
+    <td><a href="https://nestedvariables.tk/quiver/commands?cmd=arrows">arrows</td>
+    <td>Displays a list of arrows that are currently loaded and enabled</td>
+    <td>[prefix]arrows</td>
+  </tr>
+  <tr>
+    <td><a href="https://nestedvariables.tk/quiver/commands?cmd=reload">reload</a></td>
+    <td>Reloads Quiver to integrate new changes</td>
+    <td>[prefix]reload</td>
+  </tr>
+</table>
+
+# 🏳 Languages!
+We want to make Quiver accessible to anyone, so we aim to integrate as many languages as we can! Quiver has an _extremely super ultra simple_ translation system that supports any language! If you would like to contribute and translate Quiver to another language, we'd really appreciate it! Here's a cheeky link to some translation instructions: (coming soooooon, I swear).
+
+<table width="100%" align="center" text-align="center">
+  <tr>
+    <th>Language</th>
+    <th>Locale Code</th>
+  </tr>
+  <tr>
+    <td>United States English</td>
+    <td>en_US</td>
+  </tr>
+  <tr>
+    <td>Israeli Hebrew</td>
+    <td>he_IL</td>
+  </tr>
+  <tr>
+    <td>Saudi Arabian Arabic</td>
+    <td>ar_SA</td>
+  </tr>
+</table>
+-->
 
 
-        button {
-          letter-spacing: 1px;
-          text-decoration: none;
-          font-size: 200%;
-          color: #fff;
-          font-family: 'Courgette'
-        }
+# 🎁 What now?
+[Invite me]() to your server to use all the cool features! Get started by using **~help**
 
-        button {
-
-          border: none;
-          background-color: #64b6ea;
-          padding: 15px 50px;
-          border-radius: 5px;
-          box-shadow: 0 5px 0 0 #5ba7e4;
-
-          margin-right: 50px;
-          margin-left: 50px;
-        }
-
-        button:active {
-          transform: translateY(5px);
-          box-shadow: none;
-        }
-
-
-
-        .inviteButton, .supportButton {
-          transition: 0.5s;
-          margin-left: 15px;
-          margin-right: 15px;
-          text-transform: uppercase;
-          font-family: Arial;
-          color: #B0ffff;
-          text-decoration: none;
-          padding: 0 20px;
-          background-color: #ccd9f0;
-          border: 10px solid #ccd9f0;
-          border-radius: 25px;
-        }
-        .inviteButton:hover, .supportButton:hover {
-          text-decoration: none;
-          color: #B0ffff;
-          border-radius: 15px;
-        }
-
-      </style>
-    <!-- title -->
-    <title>Myra discord bot</title>
-  </head>
-  <body>
-  <!--    <body background = "#282c34">    -->
-  <center>
-    <!-- title -->
-    <div class="headers">
-        <h1>Myra</h1>
-    </div>
-    <!-- profile picture -->
-    <img src="https://cdn.discordapp.com/avatars/718444709445632122/ce2126c00be3e76f2750767c571b2835.png"alt="profile picture"/>
-    <!-- features -->
-    <div class="headers">
-        <h1>features</h1>
-    </div>
-    <div class="text">
-      <p>
-        • welcome new users <br>
-        • play music <br>
-        • moderation <br>
-        • memes <br>
-        • twitch notifications <br>
-      </p>
-    </div>
-    <div class="text">
-      <p>
-        all commands <br>
-        • ~avatar │ Gives you profile pictures of other people <br>
-        • ~information │ Gives you information about users <br>
-        • ~suggest │ Suggest something <br>
-
-        • ~meme │ Shows a random meme <br>
-        • ~format │ Change the font of your text <br>
-        • ~would you rather │ Play a round of would you rather <br>
-
-        • ~rank │ Shows the rank of a user <br>
-        • ~leaderboard │ Shows the leaderboard <br>
-
-        • ~music │ shows all availible music commands <br>
-
-        • ~clear │ Clear a certain amount of messages <br>
-        • ~kick │ Kick a user <br>
-        • ~nick │ Change a users nickname <br>
-        • ~mute │ Mute a user <br>
-        • ~tempmute │ Mute a user for a certain amount of time <br>
-        • ~unmute │ Unmute a user <br>
-        • ~ban │ Ban a user <br>
-        • ~unban │ Unban a user <br>
-        • ~tempban │ Ban a user for a certain amount of time <br>
-
-        • ~prefix │ Change the prefix of the bot <br>
-        • ~toggle │ Toggle commands on or off <br>
-        • ~say │ Let the bot say something <br>
-        • @someone │ Replace in your message @someone with a random mention of a member <br>
-        • ~autorole │ Give a new joined member automatic a certain role <br>
-        • ~welcome │ Welcome new users <br>
-        • ~notification │ set automatic notifications for you favorite streamers <br>
-        • ~suggestions │ Set up the suggestions <br>
-        • ~leveling │ Change some settings of leveling <br>
-      </p>
-    </div>
-    <a href="https://discord.com/api/oauth2/authorize?client_id=718444709445632122&permissions=8&scope=bot">
-      <button>test 1</button>
-    </a>
-    <a href="https://discord.com/api/oauth2/authorize?client_id=718444709445632122&permissions=8&scope=bot">
-      <button>test 2</button>
-    </a>
-
-<!--    <a target="_blank" onclick="" href="https://discord.com/api/oauth2/authorize?client_id=718444709445632122&permissions=8&scope=bot"></a>
-
-          <a class="inviteButton" target="_blank"  href="https://discord.com/api/oauth2/authorize?client_id=718444709445632122&permissions=8&scope=bot">invite me!</a>
-          <a class="supportButton" target="_blank" href="https://discord.gg/nG4uKuB">support</a>
-        -->
-  </center>
-  </body>
-</html>
+# 💡 I have a cool idea!
+Well, [I'm](https://discord.com/users/639544573114187797) still developing Myra, so if I found a bug or have a cool feature suggestion, please join my [Discord](https://discord.gg/nG4uKuB) and report/suggest i there!

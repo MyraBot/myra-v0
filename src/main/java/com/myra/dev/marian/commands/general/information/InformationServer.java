@@ -4,14 +4,15 @@ import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.utilities.management.Events;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
+import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 
 @CommandSubscribe(
         command = "information",
@@ -37,7 +38,7 @@ public class InformationServer extends Events implements Command {
         //reactions
         message.addReaction("\uD83D\uDCDC").queue();
 
-        MessageReaction.add("informationServer", message.getId(), ctx.getChannel(), ctx.getAuthor(), true);
+        MessageReaction.add("informationServer", message.getId(), Arrays.asList("\uD83D\uDCDC"), ctx.getChannel(), ctx.getAuthor(), true);
     }
 
 

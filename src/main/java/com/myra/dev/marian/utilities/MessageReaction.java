@@ -5,29 +5,41 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import org.bson.Document;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class MessageReaction extends Events {
 
-    private static HashMap<String, HashMap<String, User>> hashMap = new HashMap();
+    private static HashMap<String, HashMap<String, Document>> hashMap = new HashMap();
 
-    public static void add(String command, String messageId, TextChannel channel, User user, Boolean timeOut) {
+    public static void add(String command, String messageId, List<String> emojis, TextChannel channel, User user, Boolean timeOut) {
         //create new key
         if (hashMap.get(command) == null) {
             // Create HashMap
-            HashMap<String, User> map = new HashMap<>();
+            HashMap<String, Document> map = new HashMap<>();
+            // Create Document
+            Document reaction = new Document()
+                    .append("messageId", messageId)
+                    .append("user", user.getId())
+                    .append("emojis", emojis);
             // Put the message id and the author in the HashMap
-            map.put(messageId, user);
+            map.put(messageId, reaction);
             // Add the command to the HashMap
             hashMap.put(command, map);
         }
         // Add to existing command
         else {
+            // Create Document
+            Document reaction = new Document()
+                    .append("messageId", messageId)
+                    .append("user", user.getId())
+                    .append("emojis", emojis);
             // Add the message id and the author to the hashmap
-            hashMap.get(command).put(messageId, user);
+            hashMap.get(command).put(messageId, reaction);
         }
         // When the command has a time out
         if (timeOut) {
@@ -36,11 +48,11 @@ public class MessageReaction extends Events {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    // Can't find the command
-                    if (!hashMap.get(command).containsKey(messageId)) return;
+                    // Reaction already removed
+                    if (hashMap.get(command).get(messageId) == null) return;
                     // Remove message id from hashmap
                     hashMap.get(command).remove(messageId);
-                    //remove all reactions
+                    // Remove all reactions
                     channel.retrieveMessageById(messageId).complete().clearReactions().queue();
                 }
             }, 60 * 1000);
@@ -55,12 +67,23 @@ public class MessageReaction extends Events {
     }
 
     public static boolean check(GuildMessageReactionAddEvent event, String command) {
-        // When command isn't in the hashMap yet
-        if (hashMap.get(command) == null) return false;
         // When author is a bot
         if (event.getUser().isBot()) return false;
-        // Check for the right author
-        if (hashMap.get(command).get(event.getMessageId()).equals(event.getUser())) return true;
-        else return false;
+        // When command isn't in the hashMap yet
+        if (hashMap.get(command) == null) return false;
+        // Return if emoji is emote
+        if (event.getReactionEmote().isEmote()) return false;
+        // Check for the right message
+        if (hashMap.get(command).containsKey(event.getMessageId())) {
+            // Get Document
+            Document reaction = hashMap.get(command).get(event.getMessageId());
+            // Check for right author
+            if (!reaction.getString("user").equals(event.getUserId())) return false;
+            // Check for right emoji
+            if (!reaction.getList("emojis", String.class).contains(event.getReactionEmote().getEmoji())) return false;
+            // Delete message from Hashmap
+            hashMap.get(command).remove(event.getMessageId());
+            return true;
+        } else return false;
     }
 }

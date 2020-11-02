@@ -23,7 +23,7 @@ import com.myra.dev.marian.commands.general.information.InformationUser;
 import com.myra.dev.marian.commands.help.*;
 import com.myra.dev.marian.commands.leveling.Background;
 import com.myra.dev.marian.commands.leveling.Leaderboard;
-import com.myra.dev.marian.commands.leveling.LevelingHelp;
+import com.myra.dev.marian.commands.leveling.administrator.LevelingHelp;
 import com.myra.dev.marian.commands.leveling.administrator.LevelingSet;
 import com.myra.dev.marian.commands.leveling.Rank;
 import com.myra.dev.marian.commands.leveling.administrator.levelingRoles.LevelingRolesAdd;
@@ -68,7 +68,8 @@ import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedMessage;
 import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedPreview;
 import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedToggle;
 import com.myra.dev.marian.listeners.welcome.WelcomeImage.*;
-import com.myra.dev.marian.mariansDiscord.GetInvite;
+import com.myra.dev.marian.marian.GetInvite;
+import com.myra.dev.marian.marian.Shutdown;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.commands.CommandService;
 import com.myra.dev.marian.utilities.management.commands.DefaultCommandService;
@@ -119,6 +120,7 @@ public class Manager {
                 // Marian
                 new MongoDbUpdate(),
                 new GetInvite(),
+                new Shutdown(),
                 // Administrator
                 new Prefix(),
                 new Say(),

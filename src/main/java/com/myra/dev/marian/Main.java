@@ -27,6 +27,7 @@ public class Main {
 
     //main method
     public static void main(String[] args) throws Exception {
+        //Test
         new Manager().start();
         //load main class
         new Main();

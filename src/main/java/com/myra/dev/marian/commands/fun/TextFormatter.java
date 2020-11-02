@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -169,7 +170,7 @@ public class TextFormatter extends Events implements Command {
         message.addReaction("\uD83D\uDD8B").queue();
         message.addReaction("\uD83C\uDF39").queue();
         //save message id
-        MessageReaction.add("format", message.getId(), ctx.getChannel(), ctx.getAuthor(), true);
+        MessageReaction.add("format", message.getId(), Arrays.asList("\uD83C\uDDE9\uD83C\uDDEA", "\uD83D\uDD8B", "\uD83C\uDF39"),ctx.getChannel(), ctx.getAuthor(), true);
     }
 
     /**

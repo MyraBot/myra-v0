@@ -27,6 +27,15 @@ public class Background implements Command {
     public void execute(CommandContext ctx) throws Exception {
         // Get utilities
         Utilities utilities = Manager.getUtilities();
+        // Usage
+        if (ctx.getArguments().length != 1) {
+            EmbedBuilder usage = new EmbedBuilder()
+                    .setAuthor("leveling background", null, ctx.getAuthor().getEffectiveAvatarUrl())
+                    .setColor(utilities.gray)
+                    .addField("`" + ctx.getPrefix() + "leveling set <user> <level>`", "\uD83C\uDFC6 │ Change the level of a user", false);
+            ctx.getChannel().sendMessage(usage.build()).queue();
+            return;
+        }
         // Check if argument is an image
         try {
             ImageIO.read(new URL(ctx.getArguments()[0]));

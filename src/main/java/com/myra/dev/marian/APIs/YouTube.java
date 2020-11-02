@@ -11,11 +11,11 @@ import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -72,6 +72,6 @@ public class YouTube {
 
         message.addReaction("\uD83D\uDEAB").queue();
         // Add reaction to HashMap
-        MessageReaction.add("play", message.getId(), event.getChannel(), event.getAuthor(), false);
+        MessageReaction.add("play", message.getId(), Arrays.asList("1\uFE0F\u20E3", "2\uFE0F\u20E3", "3\uFE0F\u20E3", "4\uFE0F\u20E3", "5\uFE0F\u20E3", "5\uFE0F\u20E3", "\uD83D\uDEAB"), event.getChannel(), event.getAuthor(), false);
     }
 }
