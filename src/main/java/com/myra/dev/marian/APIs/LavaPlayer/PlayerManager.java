@@ -98,7 +98,7 @@ public class PlayerManager {
             }
         });
         // Set volume
-        musicManager.audioPlayer.setVolume(25);
+        musicManager.audioPlayer.setVolume(50);
     }
 
     // Return PlayerManager class
