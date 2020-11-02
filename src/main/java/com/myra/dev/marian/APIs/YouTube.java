@@ -20,17 +20,24 @@ import java.util.HashMap;
 import java.util.List;
 
 public class YouTube {
+    // Connect to YouTube
+    private final com.google.api.services.youtube.YouTube youTube = new com.google.api.services.youtube.YouTube.Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance(),
+            new HttpRequestInitializer() {
+                public void initialize(HttpRequest request) throws IOException {
+                }
+            })
+            .setApplicationName("CloudStudios bot")
+            .setYouTubeRequestInitializer(new YouTubeRequestInitializer(Manager.getUtilities().youTubeKey))
+            .build();
+
+    // Throw exception ^
+    public YouTube() throws GeneralSecurityException, IOException {
+    }
+
     // Search song
     public void search(String name, HashMap<String, List<SearchResult>> results, GuildMessageReceivedEvent event) throws IOException, GeneralSecurityException {
         // Get utilities
         Utilities utilities = Manager.getUtilities();
-        // Connect to YouTube
-        com.google.api.services.youtube.YouTube youTube = new com.google.api.services.youtube.YouTube.Builder(
-                GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance(), new HttpRequestInitializer() {
-            public void initialize(HttpRequest request) throws IOException {
-            }
-        }).setApplicationName("Myra").setYouTubeRequestInitializer(new YouTubeRequestInitializer(utilities.youTubeKey)).build();
-
         com.google.api.services.youtube.YouTube.Search.List search = youTube.search().list("id,snippet")
                 //Search for keyword
                 .setQ(name)
