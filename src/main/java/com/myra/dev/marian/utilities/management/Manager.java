@@ -122,6 +122,7 @@ public class Manager {
                 new Invite(),
                 new Ping(),
                 new Support(),
+                new Vote(),
                 // General
                 new InformationHelp(),
                 new InformationServer(),

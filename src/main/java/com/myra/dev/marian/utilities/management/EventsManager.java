@@ -1,7 +1,7 @@
 package com.myra.dev.marian.utilities.management;
 
 import com.myra.dev.marian.APIs.Twitch;
-import com.myra.dev.marian.InviteThanks;
+import com.myra.dev.marian.commands.help.InviteThanks;
 import com.myra.dev.marian.commands.fun.TextFormatter;
 import com.myra.dev.marian.commands.general.Reminder;
 import com.myra.dev.marian.commands.general.information.InformationServer;
