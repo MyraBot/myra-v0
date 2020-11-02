@@ -53,12 +53,12 @@ public class Help extends Events implements Command {
         CommandEmbeds embed = new CommandEmbeds(event.getGuild(), event.getJDA(), event.getUser(), new Database(event.getGuild()).get("prefix"));
         //invite bot
         if (event.getReactionEmote().getEmoji().equals("\u2709\uFE0F") && !event.getMember().getUser().isBot()) {
-            event.getChannel().sendMessage(embed.inviteJda().build()).queue();
+            event.getChannel().editMessageById(event.getMessageId(), embed.inviteJda().build()).queue();
             event.getChannel().clearReactionsById(event.getMessageId()).queue();
         }
         //support server
         if (event.getReactionEmote().getEmoji().equals("\u26A0\uFE0F") && !event.getMember().getUser().isBot()) {
-            event.getChannel().sendMessage(embed.supportServer().build()).queue();
+            event.getChannel().editMessageById(event.getMessageId(), embed.supportServer().build()).queue();
             event.getChannel().clearReactionsById(event.getMessageId()).queue();
         }
     }

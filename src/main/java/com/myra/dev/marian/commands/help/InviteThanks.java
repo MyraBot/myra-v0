@@ -1,4 +1,4 @@
-package com.myra.dev.marian;
+package com.myra.dev.marian.commands.help;
 
 import com.myra.dev.marian.utilities.management.Events;
 import com.myra.dev.marian.utilities.management.Manager;

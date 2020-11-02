@@ -94,7 +94,7 @@
             <name>jcenter-bintray</name>
             <url>https://jcenter.bintray.com</url>
         </repository>
-        <!-- SPOTIFY -->
+        <!-- SPOTIFY & TOP.GG -->
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>

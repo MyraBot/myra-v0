@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.entities.User;
 
 public class embeds {
 
-    //W E L C O M E
+    // Welcome
     public EmbedBuilder welcome(String guildName, String guildImage) {
         EmbedBuilder welcome = new EmbedBuilder();
         welcome.setTitle("welcome to " + guildName);
@@ -17,9 +17,8 @@ public class embeds {
 
         return welcome;
     }
-    //R O L E S
 
-    //partner
+    // Partner
     public EmbedBuilder partner() {
         EmbedBuilder partner = new EmbedBuilder();
         partner.setTitle("Partner");
@@ -30,7 +29,7 @@ public class embeds {
         return partner;
     }
 
-    //buy able roles
+    // Buyable roles
     public EmbedBuilder colour(User author) {
         return new EmbedBuilder()
                 .setAuthor("buyable roles", null, author.getEffectiveAvatarUrl())
@@ -46,7 +45,7 @@ public class embeds {
                 .addField("1 000 00", "<@&732929835814617099> ➪ secret :D", false);
     }
 
-    //leveling roles
+    // Leveling roles
     public EmbedBuilder leveling(User author) {
         EmbedBuilder leveling = new EmbedBuilder()
                 .setAuthor("leveling roles", null, author.getEffectiveAvatarUrl())
@@ -62,7 +61,7 @@ public class embeds {
         return leveling;
     }
 
-    //designer roles
+    // Designer roles
     public EmbedBuilder designer() {
         EmbedBuilder designer = new EmbedBuilder();
         designer.setTitle("designer roles");
@@ -76,9 +75,8 @@ public class embeds {
 
         return designer;
     }
-    //O T H E R
 
-    //my social Media
+    // Social media
     public EmbedBuilder socialMedia() {
         EmbedBuilder socialMedia = new EmbedBuilder();
         socialMedia.setTitle("my social Media");
@@ -90,9 +88,8 @@ public class embeds {
 
         return socialMedia;
     }
-    //R E A C T I O N  R O L E S
 
-    //bot related channels
+    // Bot related channels
     public EmbedBuilder botChannels() {
         EmbedBuilder botChannels = new EmbedBuilder();
         botChannels.setTitle("bot related channels");
@@ -102,13 +99,11 @@ public class embeds {
         return botChannels;
     }
 
-    //texture pack related channels
+    // Texture pack related channels
     public EmbedBuilder packChannels() {
-        EmbedBuilder packChannels = new EmbedBuilder();
-        packChannels.setTitle("texture pack related channels");
-        packChannels.setColor(0x40DAAB);
-        packChannels.setDescription("React with [\u270F\uFE0F] to see the texture pack related channels. You will see sneak peaks and my releases!");
-
-        return packChannels;
+        return new EmbedBuilder()
+                .setTitle("texture pack related channels")
+                .setColor(0x40DAAB)
+                .setDescription("React with [\u270F\uFE0F] to see the texture pack related channels. You will see sneak peaks and my releases!");
     }
 }

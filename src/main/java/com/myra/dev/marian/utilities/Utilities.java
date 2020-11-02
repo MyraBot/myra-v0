@@ -30,6 +30,7 @@ public class Utilities {
     public final String HypixelKey = "6cb5b7e7-66ab-477d-9d18-4f029e676d37";
     public final String spotifyClientId = "f19bf0a7cb204c098dbdaaeedf47f842";
     public final String spotifyClientSecret = "d4d48b2e4b474d098fa440a6d01ece42";
+    public final String topGgKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxODQ0NDcwOTQ0NTYzMjEyMiIsImJvdCI6dHJ1ZSwiaWF0IjoxNjA0MzMwMTg3fQ.-zX8YHLdiH9w6pmDceN0fHDjTAJd9FbDiNXM2sftoA4";
     //emotes
     public final String offline = "<:Offline:749616594916868098>";
     public final String idle = "<:Idle:749616593973018665>";
