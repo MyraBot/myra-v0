@@ -1,7 +1,7 @@
 package com.myra.dev.marian.listeners.welcome.welcomeEmbed;
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.Permissions;
+
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
@@ -10,14 +10,13 @@ import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 @CommandSubscribe(
-        name = "welcome embed message"
+        name = "welcome embed message",
+        requires = "administrator"
 )
 public class WelcomeEmbedMessage implements Command {
 
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        // Missing permissions
-        if (!Permissions.isAdministrator(ctx.getMember())) return;
         // Utilities
         Utilities utilities = Manager.getUtilities();
         // Usage

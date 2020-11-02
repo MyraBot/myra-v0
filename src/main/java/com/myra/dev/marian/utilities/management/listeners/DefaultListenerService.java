@@ -1,6 +1,8 @@
 package com.myra.dev.marian.utilities.management.listeners;
 
 import com.myra.dev.marian.utilities.management.commands.CommandService;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.ArrayList;
@@ -88,6 +90,7 @@ public class DefaultListenerService implements ListenerService {
                 }
                 //check for executors
                 if (executors.stream().anyMatch(event.getMessage().getContentRaw().toLowerCase()::contains)) {
+                    if (!hasPermissions(event.getMember(), entry.getValue().requires())) return;
                     //run listener
                     entry.getKey().execute(event);
                 }
@@ -104,6 +107,18 @@ public class DefaultListenerService implements ListenerService {
             if (implement == Listener.class) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    private boolean hasPermissions(Member member, String requiresPermission) {
+        switch (requiresPermission) {
+            case "member":
+                return true;
+            case "moderator":
+                return member.hasPermission(Permission.VIEW_AUDIT_LOGS);
+            case "administrator":
+                return member.hasPermission(Permission.ADMINISTRATOR);
         }
         return false;
     }

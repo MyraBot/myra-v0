@@ -2,7 +2,7 @@ package com.myra.dev.marian.commands.moderation.mute;
 
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.Permissions;
+
 import com.myra.dev.marian.utilities.Return;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
@@ -14,14 +14,13 @@ import net.dv8tion.jda.api.entities.User;
 import java.time.Instant;
 
 @CommandSubscribe(
-        name = "mute"
+        name = "mute",
+        requires = "moderator"
 )
 public class Mute implements Command {
 
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        //missing permissions
-        if (!Permissions.isModerator(ctx.getMember())) return;
         //split message
         String[] sentMessage = ctx.getEvent().getMessage().getContentRaw().split("\\s+", 3);
         //command usage

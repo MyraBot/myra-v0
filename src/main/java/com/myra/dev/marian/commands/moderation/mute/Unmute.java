@@ -1,7 +1,7 @@
 package com.myra.dev.marian.commands.moderation.mute;
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.Permissions;
+
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
@@ -13,13 +13,12 @@ import net.dv8tion.jda.api.entities.User;
 import java.time.Instant;
 
 @CommandSubscribe(
-        name = "unmute"
+        name = "unmute",
+        requires = "moderator"
 )
 public class Unmute implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        //missing permissions
-        if (!Permissions.isModerator(ctx.getMember())) return;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
         //command usage

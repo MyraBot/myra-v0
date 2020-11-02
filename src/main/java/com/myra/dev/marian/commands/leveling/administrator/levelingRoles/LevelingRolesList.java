@@ -2,7 +2,7 @@ package com.myra.dev.marian.commands.leveling.administrator.levelingRoles;
 
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.database.documents.LevelingRolesDocument;
-import com.myra.dev.marian.utilities.Permissions;
+
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
@@ -16,13 +16,12 @@ import java.util.List;
 
 @CommandSubscribe(
         name = "leveling roles list",
-        aliases = {"leveling role list"}
+        aliases = {"leveling role list"},
+        requires = "administrator"
 )
 public class LevelingRolesList implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        // Missing permissions
-        if (!Permissions.isAdministrator(ctx.getMember())) return;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
         // Get leveling roles

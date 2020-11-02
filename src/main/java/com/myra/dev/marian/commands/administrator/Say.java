@@ -1,6 +1,6 @@
 package com.myra.dev.marian.commands.administrator;
 
-import com.myra.dev.marian.utilities.Permissions;
+
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandContext;
@@ -9,13 +9,12 @@ import net.dv8tion.jda.api.EmbedBuilder;
 
 @CommandSubscribe(
         name = "say",
-        aliases = {"write", "sag mal bitte"}
+        aliases = {"write"},
+        requires = "administrator"
 )
 public class Say implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        //missing permissions
-        if (!Permissions.isAdministrator(ctx.getMember())) return;
         //command usage
         if (ctx.getArguments().length == 0) {
             EmbedBuilder embed = new EmbedBuilder()

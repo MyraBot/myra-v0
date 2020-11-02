@@ -2,7 +2,9 @@ package com.myra.dev.marian.utilities.management.commands;
 
 import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.allMethods.Database;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.bson.Document;
 
@@ -119,6 +121,8 @@ public class DefaultCommandService implements CommandService {
                  */
                 // Check if command is disabled
                 if (isDisabled(entry.getValue().command(), event.getGuild())) return;
+                // Check for required permissions
+                if (!hasPermissions(event.getMember(), entry.getValue().requires())) return;
                 //filter arguments
                 String[] commandArguments = Arrays.copyOfRange(splitMessage, executor.length, splitMessage.length);
                 //run command
@@ -145,6 +149,18 @@ public class DefaultCommandService implements CommandService {
             if (implement == Command.class) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    private boolean hasPermissions(Member member, String requiresPermission) {
+        switch (requiresPermission) {
+            case "member":
+                return true;
+            case "moderator":
+                return member.hasPermission(Permission.VIEW_AUDIT_LOGS);
+            case "administrator":
+                return member.hasPermission(Permission.ADMINISTRATOR);
         }
         return false;
     }

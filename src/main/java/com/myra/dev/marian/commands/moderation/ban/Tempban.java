@@ -3,7 +3,7 @@ package com.myra.dev.marian.commands.moderation.ban;
 import com.mongodb.client.MongoCollection;
 import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.Permissions;
+
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Events;
 import com.myra.dev.marian.utilities.management.Manager;
@@ -25,7 +25,8 @@ import java.util.concurrent.TimeUnit;
 
 @CommandSubscribe(
         name = "tempban",
-        aliases = {"temp ban", "tempbean", "temp bean"}
+        aliases = {"temp ban", "tempbean", "temp bean"},
+        requires = "moderator"
 )
 public class Tempban extends Events implements Command {
     //database
@@ -38,8 +39,6 @@ public class Tempban extends Events implements Command {
 
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        //missing permissions
-        if (!Permissions.isModerator(ctx.getMember())) return;
         // Get Utilities
         Utilities utilities = Manager.getUtilities();
         //command usage

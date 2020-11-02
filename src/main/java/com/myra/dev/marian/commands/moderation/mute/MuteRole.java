@@ -1,7 +1,7 @@
 package com.myra.dev.marian.commands.moderation.mute;
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.Permissions;
+
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
@@ -12,13 +12,12 @@ import net.dv8tion.jda.api.entities.Role;
 
 @CommandSubscribe(
         name = "mute role",
-        aliases = {"muted role"}
+        aliases = {"muted role"},
+        requires = "moderator"
 )
 public class MuteRole implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        // Missing permissions
-        if (!Permissions.isModerator(ctx.getMember())) return;
         //command usage
         if (ctx.getArguments().length != 1) {
             EmbedBuilder embed = new EmbedBuilder()

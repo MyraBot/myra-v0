@@ -1,7 +1,7 @@
 package com.myra.dev.marian.listeners.notification;
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.Permissions;
+
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandContext;
@@ -10,13 +10,12 @@ import net.dv8tion.jda.api.EmbedBuilder;
 
 @CommandSubscribe(
         name = "notification twitch",
-        aliases = {"notification live", "notifications twitch", "notifications live"}
+        aliases = {"notification live", "notifications twitch", "notifications live"},
+        requires = "administrator"
 )
 public class AddStreamer implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        // Missing permission
-        if (!Permissions.isAdministrator(ctx.getMember())) return;
         // Usage
         if (ctx.getArguments().length == 0) {
             EmbedBuilder notificationUsage = new EmbedBuilder()

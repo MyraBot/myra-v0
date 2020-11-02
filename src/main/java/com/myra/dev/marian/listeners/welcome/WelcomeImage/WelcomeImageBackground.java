@@ -1,7 +1,7 @@
 package com.myra.dev.marian.listeners.welcome.WelcomeImage;
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.Permissions;
+
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
@@ -15,13 +15,12 @@ import java.net.URL;
 
 @CommandSubscribe(
         name = "welcome image background",
-        aliases = {"welcome image image"}
+        aliases = {"welcome image image"},
+        requires = "administrator"
 )
 public class WelcomeImageBackground implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        // Missing permissions
-        if (!Permissions.isAdministrator(ctx.getMember())) return;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
         // Usage

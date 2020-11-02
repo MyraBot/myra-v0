@@ -1,7 +1,7 @@
 package com.myra.dev.marian.listeners.notification;
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.Permissions;
+
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandContext;
@@ -12,13 +12,12 @@ import java.util.List;
 
 @CommandSubscribe(
         name = "notification list",
-        aliases = {"notifications list"}
+        aliases = {"notifications list"},
+        requires = "administrator"
 )
 public class NotificationList implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        //missing permission
-        if (!Permissions.isAdministrator(ctx.getMember())) return;
         // Check for no arguments
         if (ctx.getArguments().length != 0) return;
         // Create embed

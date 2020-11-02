@@ -1,7 +1,7 @@
 package com.myra.dev.marian.listeners.autorole;
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.Permissions;
+
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
@@ -12,13 +12,12 @@ import net.dv8tion.jda.api.entities.Role;
 
 @CommandSubscribe(
         name = "autorole",
-        aliases = {"auto role", "defaultrole", "default role", "joinrole", "join role"}
+        aliases = {"auto role", "defaultrole", "default role", "joinrole", "join role"},
+        requires = "administrator"
 )
 public class AutoRoleSet implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        //missing permissions
-        if (!Permissions.isAdministrator(ctx.getMember())) return;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
         //command usage

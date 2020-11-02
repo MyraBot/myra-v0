@@ -1,7 +1,7 @@
 package com.myra.dev.marian.commands.moderation.ban;
 
 
-import com.myra.dev.marian.utilities.Permissions;
+
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
@@ -14,13 +14,12 @@ import java.time.Instant;
 
 @CommandSubscribe(
         name = "ban",
-        aliases = {"bean"}
+        aliases = {"bean"},
+        requires = "moderator"
 )
 public class Ban implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        // Missing permissions
-        if (!Permissions.isModerator(ctx.getMember())) return;
         // Get Utilities
         Utilities utilities = Manager.getUtilities();
         //command usage

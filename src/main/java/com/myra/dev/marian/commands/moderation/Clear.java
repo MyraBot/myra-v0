@@ -1,6 +1,6 @@
 package com.myra.dev.marian.commands.moderation;
 
-import com.myra.dev.marian.utilities.Permissions;
+
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandContext;
@@ -12,15 +12,14 @@ import java.util.List;
 
 @CommandSubscribe(
         name = "clear",
-        aliases = {"purge", "delete"}
+        aliases = {"purge", "delete"},
+        requires = "moderator"
 )
 public class Clear implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         // If amount isn't a number
         if (!ctx.getArguments()[0].matches("\\d+")) return;
-        // Missing permissions
-        if (!Permissions.isModerator(ctx.getMember())) return;
         // Get utilities
         Utilities utilities = new Utilities();
         // Usage

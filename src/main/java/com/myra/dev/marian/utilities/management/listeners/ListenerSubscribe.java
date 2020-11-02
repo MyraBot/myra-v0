@@ -13,23 +13,26 @@ import java.lang.annotation.*;
 public @interface ListenerSubscribe {
 
     /**
-     * Retrieves the name of the command.
-     *
-     * @return The command name.
+     * Retrieves the name of the listener.
+     * @return The listener name.
      */
     String name();
 
     /**
-     * Retrieves all aliases of the command.
-     *
-     * @return The command aliases.
+     * Retrieves all aliases of the listener.
+     * @return The listener aliases.
      */
     String[] aliases() default "";
 
     /**
      * Retrieves the listener type.
-     *
      * @return If the command has to be executed with a keyword.
      */
     boolean needsExecutor() default false;
+
+    /**
+     * Retrieves the required permissions for this listener.
+     * @return The required permissions.
+     */
+    String requires() default "member";
 }

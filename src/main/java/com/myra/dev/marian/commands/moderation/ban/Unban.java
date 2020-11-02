@@ -1,6 +1,6 @@
 package com.myra.dev.marian.commands.moderation.ban;
 
-import com.myra.dev.marian.utilities.Permissions;
+
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
@@ -14,15 +14,14 @@ import java.util.List;
 
 @CommandSubscribe(
         name = "unban",
-        aliases = {"unbean"}
+        aliases = {"unbean"},
+        requires = "moderator"
 )
 public class Unban implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         //check for no arguments
         if (ctx.getArguments().length > 1) return;
-        //missing permissions
-        if (!Permissions.isModerator(ctx.getMember())) return;
         //command usage
         if (ctx.getArguments().length == 0) {
             EmbedBuilder embed = new EmbedBuilder()

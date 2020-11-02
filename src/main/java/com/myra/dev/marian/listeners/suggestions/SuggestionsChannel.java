@@ -1,7 +1,7 @@
 package com.myra.dev.marian.listeners.suggestions;
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.Permissions;
+
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
@@ -11,14 +11,13 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 @CommandSubscribe(
-        name = "suggestions channel"
+        name = "suggestions channel",
+        requires = "administrator"
 )
 public class SuggestionsChannel implements Command {
 
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        // Missing permissions
-        if (!Permissions.isAdministrator(ctx.getMember())) return;
         // get utilities
         Utilities utilities = Manager.getUtilities();
         // Usage

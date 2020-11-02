@@ -13,22 +13,25 @@ import java.lang.annotation.*;
 public @interface CommandSubscribe {
     /**
      * Retrieves the name of the command.
-     *
      * @return The command name.
      */
     String command() default "";
 
     /**
      * Retrieves the main executor of the command
-     *
      * @return The command executor.
      */
     String name();
 
     /**
      * Retrieves all aliases of the command.
-     *
      * @return The command aliases.
      */
     String[] aliases() default "";
+
+    /**
+     * Retrieves the required permissions for this command.
+     * @return The required permissions.
+     */
+    String requires() default "member";
 }

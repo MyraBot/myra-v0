@@ -2,7 +2,7 @@ package com.myra.dev.marian.listeners.welcome.WelcomeImage;
 
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.MessageReaction;
-import com.myra.dev.marian.utilities.Permissions;
+
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Events;
 import com.myra.dev.marian.utilities.management.Manager;
@@ -10,19 +10,19 @@ import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
 import java.util.Arrays;
 
 @CommandSubscribe(
-        name = "welcome image font"
+        name = "welcome image font",
+        requires = "administrator"
 )
 public class WelcomeImageFont extends Events implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        //missing permissions
-        if (!Permissions.isAdministrator(ctx.getMember())) return;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
         //change font
@@ -47,7 +47,7 @@ public class WelcomeImageFont extends Events implements Command {
     @Override
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) {
         //missing permissions
-        if (!Permissions.isAdministrator(event.getMember())) return;
+        if (!event.getMember().hasPermission(Permission.ADMINISTRATOR)) return;
         //if reaction was added on the wrong message return
         if (!MessageReaction.check(event, "welcomeImageFont")) return;
         // Get database

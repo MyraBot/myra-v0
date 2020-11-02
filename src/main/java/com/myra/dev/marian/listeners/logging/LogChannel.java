@@ -1,7 +1,7 @@
 package com.myra.dev.marian.listeners.logging;
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.Permissions;
+
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
@@ -12,14 +12,13 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 @CommandSubscribe(
         name = "log channel",
-        aliases = {"logging channel", "logs channel"}
+        aliases = {"logging channel", "logs channel"},
+        requires = "administrator"
 )
 public class LogChannel implements Command {
 
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        // Missing permission
-        if (!Permissions.isAdministrator(ctx.getMember())) return;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
         // Usage

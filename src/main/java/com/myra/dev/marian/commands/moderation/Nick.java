@@ -1,6 +1,6 @@
 package com.myra.dev.marian.commands.moderation;
 
-import com.myra.dev.marian.utilities.Permissions;
+
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
@@ -13,13 +13,12 @@ import java.time.Instant;
 
 @CommandSubscribe(
         name = "nick",
-        aliases = {"nickname", "change nickname"}
+        aliases = {"nickname", "change nickname"},
+        requires = "moderator"
 )
 public class Nick implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        //missing permissions
-        if (!Permissions.isModerator(ctx.getMember())) return;
         // Get utilities
         Utilities utilities = Manager.getUtilities();
         //command usage

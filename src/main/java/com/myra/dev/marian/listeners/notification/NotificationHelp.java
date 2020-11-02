@@ -1,6 +1,6 @@
 package com.myra.dev.marian.listeners.notification;
 
-import com.myra.dev.marian.utilities.Permissions;
+
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandContext;
@@ -9,13 +9,12 @@ import net.dv8tion.jda.api.EmbedBuilder;
 
 @CommandSubscribe(
         name = "notification",
-        aliases = {"notifications"}
+        aliases = {"notifications"},
+        requires = "administrator"
 )
 public class NotificationHelp implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        // Missing permissions
-        if (!Permissions.isAdministrator(ctx.getMember())) return;
         // Check for no arguments
         if (ctx.getArguments().length != 0) return;
         // Send message

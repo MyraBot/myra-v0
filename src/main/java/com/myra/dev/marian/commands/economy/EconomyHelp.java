@@ -1,7 +1,6 @@
 package com.myra.dev.marian.commands.economy;
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandContext;
@@ -9,22 +8,21 @@ import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 @CommandSubscribe(
-        name = "economy"
+        name = "economy",
+        requires = "administrator"
 )
 public class EconomyHelp implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         // Check for no arguments
         if (ctx.getArguments().length != 0) return;
-        // Administrator
-        if (Permissions.isAdministrator(ctx.getMember())) {
-            EmbedBuilder usage = new EmbedBuilder()
-                    .setAuthor("economy", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                    .setColor(Manager.getUtilities().gray)
-                    .addField("`" + ctx.getPrefix() + "economy set <user> <balance>`", "\uD83D\uDC5B │ Change a users balance", false)
-                    .addField("`" + ctx.getPrefix() + "economy currency <currency>`", new Database(ctx.getGuild()).getNested("economy").get("currency") + " │ Set a custom currency", false);
-            ctx.getChannel().sendMessage(usage.build()).queue();
-            return;
-        }
+        // Usage
+        EmbedBuilder usage = new EmbedBuilder()
+                .setAuthor("economy", null, ctx.getAuthor().getEffectiveAvatarUrl())
+                .setColor(Manager.getUtilities().gray)
+                .addField("`" + ctx.getPrefix() + "economy set <user> <balance>`", "\uD83D\uDC5B │ Change a users balance", false)
+                .addField("`" + ctx.getPrefix() + "economy currency <currency>`", new Database(ctx.getGuild()).getNested("economy").get("currency") + " │ Set a custom currency", false);
+        ctx.getChannel().sendMessage(usage.build()).queue();
+        return;
     }
 }
