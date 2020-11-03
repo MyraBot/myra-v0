@@ -142,12 +142,13 @@ public class Graphic {
         return resizedImage;
     }
 
-    //TODO comments
     /**
-     * @param image
-     * @param x
-     * @param y
-     * @return
+     * Resize an image using custom X and Y values.
+     *
+     * @param image The image, which should be resized.
+     * @param x New width.
+     * @param y New height.
+     * @return Returns a resized image as a BufferedImage Object.
      */
     public BufferedImage resizeImage(BufferedImage image, Integer x, Integer y) {
         Image temp = image.getScaledInstance(x, y, Image.SCALE_SMOOTH);
