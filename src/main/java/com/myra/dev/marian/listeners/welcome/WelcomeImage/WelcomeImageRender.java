@@ -11,8 +11,6 @@ import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -55,12 +53,8 @@ public class WelcomeImageRender {
         /**
          * send message
          */
-        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-        outStream.flush();
-        outStream.close();
-        ImageIO.write(background, "png", outStream);
         channel.sendFile(
-                new ByteArrayInputStream(outStream.toByteArray()),
+                graphic.toInputStream(background),
                 user.getName().toLowerCase() + "_welcome.png"
         ).queue();
     }
@@ -95,7 +89,7 @@ public class WelcomeImageRender {
         //draw 'level'
         graphics.drawString("welcome",
                 graphic.textCenter(Graphic.axis.X, "welcome", font, background),
-                graphic.textCenter(Graphic.axis.X, "welcome", font, background) + background.getHeight() / 5
+                graphic.textCenter(Graphic.axis.Y, "welcome", font, background) + background.getHeight() / 5
         );
         //draw user name
 

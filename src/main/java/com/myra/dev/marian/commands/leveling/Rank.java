@@ -15,8 +15,6 @@ import net.dv8tion.jda.api.entities.User;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -157,13 +155,9 @@ public class Rank implements Command {
                 graphic.textCenter(Graphic.axis.Y, "rank:", font, background) + 25
         );
 // Send rank card
-        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-        outStream.flush();
-        outStream.close();
-        ImageIO.write(background, "png", outStream);
         ctx.getChannel().sendMessage("> " + member.getAsMention() + "**, you're level " + level + "**").queue();
         ctx.getChannel().sendFile(
-                new ByteArrayInputStream(outStream.toByteArray()),
+                graphic.toInputStream(background),
                 member.getUser().getName().toLowerCase() + "_rank.png"
         ).queue();
     }

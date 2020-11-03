@@ -12,8 +12,6 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -78,13 +76,9 @@ public class Leveling {
         /**
          * send message
          */
-        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-        outStream.flush();
-        outStream.close();
-        ImageIO.write(background, "png", outStream);
         event.getChannel().sendMessage("> " + event.getMember().getAsMention() + " **reached a new level!**").queue();
         event.getChannel().sendFile(
-                new ByteArrayInputStream(outStream.toByteArray()),
+                graphic.toInputStream(background),
                 event.getMember().getUser().getName().toLowerCase() + "_level_up.png"
         ).queue();
         /**
