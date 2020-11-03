@@ -2,25 +2,27 @@ package com.myra.dev.marian.commands.leveling;
 
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.Graphic;
+import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.utilities.management.Events;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Arrays;
 
 @CommandSubscribe(
-        name = "leveling background"
+        name = "edit rank"
 )
-public class Background implements Command {
+public class Background extends Events implements Command {
 
     @Override
     public void execute(CommandContext ctx) throws Exception {
@@ -29,17 +31,24 @@ public class Background implements Command {
         // Usage
         if (ctx.getArguments().length != 1) {
             EmbedBuilder usage = new EmbedBuilder()
-                    .setAuthor("leveling background", null, ctx.getAuthor().getEffectiveAvatarUrl())
+                    .setAuthor("edit rank", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(utilities.gray)
-                    .addField("`" + ctx.getPrefix() + "leveling set <user> <level>`", "\uD83C\uDFC6 │ Change the level of a user", false);
+                    .addField("`" + ctx.getPrefix() + "edit rank <url>`", "\uD83D\uDDBC │ Set a custom rank background", false);
             ctx.getChannel().sendMessage(usage.build()).queue();
+            return;
+        }
+        // Get database
+        Database db = new Database(ctx.getGuild());
+        // Check if you have enough money
+        if (db.getMembers().getMember(ctx.getMember()).getBalance() <= 10000) {
+            utilities.error(ctx.getChannel(), "edit rank", "\uD83D\uDDBC", "Not enough money", "You need 10 000" + db.getNested("economy").get("currency"), ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         // Check if argument is an image
         try {
             ImageIO.read(new URL(ctx.getArguments()[0]));
         } catch (Exception e) {
-            utilities.error(ctx.getChannel(), "leveling background", "❓", "Invalid image", e.getMessage(), ctx.getAuthor().getEffectiveAvatarUrl());
+            utilities.error(ctx.getChannel(), "edit rank", "❓", "Invalid image", e.getMessage(), ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         // Get image from Url
@@ -47,19 +56,50 @@ public class Background implements Command {
         // Resize image
         background = new Graphic().resizeImage(background, 350, 100);
         // Parse to InputStream
-        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-        outStream.flush();
-        outStream.close();
-        ImageIO.write(background, "png", outStream);
-        InputStream file = new ByteArrayInputStream(outStream.toByteArray());
+        InputStream backgroundFile = new Graphic().toInputStream(background);
         // Success
         EmbedBuilder success = new EmbedBuilder()
-                .setAuthor("rank background", null, ctx.getAuthor().getEffectiveAvatarUrl())
+                .setAuthor("edit rank", null, ctx.getAuthor().getEffectiveAvatarUrl())
                 .setColor(utilities.blue)
-                .addField("\uD83C\uDFC1 │ Rank background updated", "Rank background changed to:", false)
-                .setImage("attachment://cat.png"); // Specify this in sendFile as "cat.png"
-        Message message = ctx.getChannel().sendFile(file, "cat.png").embed(success.build()).complete();
-        // Save new image in database
-        new Database(ctx.getGuild()).getMembers().getMember(ctx.getEvent().getMember()).setRankBackground(message.getEmbeds().get(0).getImage().getUrl());
+                .addField("\uD83C\uDFC1 │ New rank background", "Do you want to buy this background for 10000" + db.getNested("economy").get("currency"), false)
+                .setImage("attachment://background.png");
+        Message message = ctx.getChannel().sendFile(backgroundFile, "background.png").embed(success.build()).complete();
+        // Add reactions to message
+        message.addReaction("\u2705").queue(); // Checkmark
+        message.addReaction("\uD83D\uDEAB").queue(); // Barrier
+
+        MessageReaction.add("edit rank", message.getId(), Arrays.asList("\u2705", "\uD83D\uDEAB"), ctx.getChannel(), ctx.getAuthor(), true);
+    }
+
+
+    public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) {
+        // Check for right reaction
+        if (!MessageReaction.check(event, "edit rank")) return;
+
+        // Reaction emoji: "Checkmark"
+        if (event.getReactionEmote().getEmoji().equals("\u2705")) {
+            // Get database
+            Database db = new Database(event.getGuild());
+            // Update balance
+            db.getMembers().getMember(event.getMember()).setBalance(db.getMembers().getMember(event.getMember()).getBalance() - 10000);
+            // Send success
+            Manager.getUtilities().success(event.getChannel(),
+                    "edit rank", "\uD83D\uDDBC",
+                    "New rank background",
+                    "You bought a new rank background:",
+                    event.getUser().getEffectiveAvatarUrl(), false, event.getChannel().retrieveMessageById(event.getMessageId()).complete().getEmbeds().get(0).getImage().getUrl()
+            );
+            // Save new image in database
+            db.getMembers().getMember(event.getMember()).setRankBackground(event.getChannel().retrieveMessageById(event.getMessageId()).complete().getEmbeds().get(0).getImage().getUrl());
+        }
+        // Reaction emoji: "Barrier"
+        else if (event.getReactionEmote().getEmoji().equals("\uD83D\uDEAB")) {
+            // Send success
+            EmbedBuilder success = new EmbedBuilder()
+                    .setAuthor("edit rank")
+                    .setColor(Manager.getUtilities().blue)
+                    .setDescription("Your purchase has been canceled");
+            event.getChannel().sendMessage(success.build()).queue();
+        }
     }
 }

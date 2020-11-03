@@ -7,6 +7,7 @@ import com.myra.dev.marian.commands.general.Reminder;
 import com.myra.dev.marian.commands.general.information.InformationServer;
 import com.myra.dev.marian.commands.help.Commands;
 import com.myra.dev.marian.commands.help.Help;
+import com.myra.dev.marian.commands.leveling.Background;
 import com.myra.dev.marian.commands.moderation.mute.MutePermissions;
 import com.myra.dev.marian.commands.moderation.mute.Tempmute;
 import com.myra.dev.marian.commands.music.MusicTimeout;
@@ -72,6 +73,8 @@ public class EventsManager extends ListenerAdapter {
             new Help().guildMessageReactionAddEvent(event);
 
             new InformationServer().guildMessageReactionAddEvent(event);
+            // Change rank background
+            new Background().guildMessageReactionAddEvent(event);
             // Text formatter
             new TextFormatter().guildMessageReactionAddEvent(event);
             // Music

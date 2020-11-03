@@ -69,7 +69,7 @@ public class CommandEmbeds {
                 .setColor(Manager.getUtilities().gray)
                 .addField("`" + prefix + "rank <user>`", "\uD83C\uDFC5 │ Shows the rank of a user", false)
                 .addField("`" + prefix + "leaderboard`", "\uD83E\uDD47 │ Shows the leaderboard", false)
-                .addField("`" + prefix + "leveling background <url>`", "\uD83D\uDDBC │ Set a custom rank background", false);
+                .addField("`" + prefix + "edit rank <url>`", "\uD83D\uDDBC │ Set a custom rank background", false);
     }
 
     //leveling

@@ -5,7 +5,10 @@ import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 public class Graphic {
@@ -146,8 +149,8 @@ public class Graphic {
      * Resize an image using custom X and Y values.
      *
      * @param image The image, which should be resized.
-     * @param x New width.
-     * @param y New height.
+     * @param x     New width.
+     * @param y     New height.
      * @return Returns a resized image as a BufferedImage Object.
      */
     public BufferedImage resizeImage(BufferedImage image, Integer x, Integer y) {
@@ -198,5 +201,13 @@ public class Graphic {
 
         // Return the buffered image
         return bimage;
+    }
+
+    public InputStream toInputStream(BufferedImage image) throws IOException {
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        outStream.flush();
+        outStream.close();
+        ImageIO.write(image, "png", outStream);
+        return new ByteArrayInputStream(outStream.toByteArray());
     }
 }
