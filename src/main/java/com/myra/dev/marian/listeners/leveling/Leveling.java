@@ -54,8 +54,8 @@ public class Leveling {
         //draw avatar
         graphics2D.drawImage(
                 avatar,
-                graphic.imageCenter('x', avatar, background) - 200,
-                graphic.imageCenter('y', avatar, background),
+                graphic.imageCenter(Graphic.axis.X, avatar, background) - 200,
+                graphic.imageCenter(Graphic.axis.Y, avatar, background),
                 null);
 
         //draw circle around avatar
@@ -66,14 +66,14 @@ public class Leveling {
                 BasicStroke.JOIN_ROUND
         ));
         graphics2D.drawOval(
-                graphic.imageCenter('x', avatar, background) - 200,
-                graphic.imageCenter('y', avatar, background),
+                graphic.imageCenter(Graphic.axis.X, avatar, background) - 200,
+                graphic.imageCenter(Graphic.axis.Y, avatar, background),
                 avatar.getWidth(), avatar.getHeight()
         );
         //draw 'level'
         graphics.drawString("level " + newLevel,
-                graphic.textCenter('x', "level " + newLevel, font, background) - 55,
-                graphic.textCenter('y', "level " + newLevel, font, background) + 40
+                graphic.textCenter(Graphic.axis.X, "level " + newLevel, font, background) - 55,
+                graphic.textCenter(Graphic.axis.Y, "level " + newLevel, font, background) + 40
         );
         /**
          * send message

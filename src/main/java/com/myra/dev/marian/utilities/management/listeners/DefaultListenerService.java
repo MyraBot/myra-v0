@@ -98,6 +98,11 @@ public class DefaultListenerService implements ListenerService {
         }
     }
 
+    /**
+     * Check if the Class is a listener.
+     * @param cls The class of the listener, which should be executed.
+     * @return Returns if the Listener contains the annotation.
+     */
     private boolean isSubscribed(Class<?> cls) {
         return cls.isAnnotationPresent(ListenerSubscribe.class);
     }
@@ -111,6 +116,12 @@ public class DefaultListenerService implements ListenerService {
         return false;
     }
 
+    /**
+     * Check if a member is allowed to execute the listener.
+     * @param member The author, who executed the listener.
+     * @param requiresPermission The permission the member needs to execute the listener.
+     * @return Returns if the member can execute the listener.
+     */
     private boolean hasPermissions(Member member, String requiresPermission) {
         switch (requiresPermission) {
             case "member":

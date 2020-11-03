@@ -74,8 +74,8 @@ public class WelcomeImageRender {
         //draw avatar
         graphics2D.drawImage(
                 avatar,
-                graphic.imageCenter('x', avatar, background),
-                graphic.imageCenter('y', avatar, background) - background.getHeight() / 4,
+                graphic.imageCenter(Graphic.axis.X, avatar, background),
+                graphic.imageCenter(Graphic.axis.Y, avatar, background) - background.getHeight() / 4,
                 null);
         //draw circle around avatar
         graphics2D.setColor(Color.white);
@@ -85,8 +85,8 @@ public class WelcomeImageRender {
                 BasicStroke.JOIN_ROUND
         ));
         graphics2D.drawOval(
-                graphic.imageCenter('x', avatar, background),
-                graphic.imageCenter('y', avatar, background) - background.getHeight() / 4,
+                graphic.imageCenter(Graphic.axis.X, avatar, background),
+                graphic.imageCenter(Graphic.axis.Y, avatar, background) - background.getHeight() / 4,
                 avatar.getWidth(), avatar.getHeight()
         );
         //draw 'welcome'
@@ -94,8 +94,8 @@ public class WelcomeImageRender {
         graphics.setFont(font);
         //draw 'level'
         graphics.drawString("welcome",
-                graphic.textCenter('x', "welcome", font, background),
-                graphic.textCenter('y', "welcome", font, background) + background.getHeight() / 5
+                graphic.textCenter(Graphic.axis.X, "welcome", font, background),
+                graphic.textCenter(Graphic.axis.X, "welcome", font, background) + background.getHeight() / 5
         );
         //draw user name
 
@@ -111,8 +111,8 @@ public class WelcomeImageRender {
         graphics.setFont(font);
         //draw user name
         graphics.drawString(user.getName(),
-                graphic.textCenter('x', user.getName(), font, background),
-                (int) (graphic.textCenter('y', user.getName(), font, background) + background.getHeight() / 2.25)
+                graphic.textCenter(Graphic.axis.X, user.getName(), font, background),
+                (int) (graphic.textCenter(Graphic.axis.Y, user.getName(), font, background) + background.getHeight() / 2.25)
         );
     }
 
@@ -125,8 +125,8 @@ public class WelcomeImageRender {
         //draw avatar
         graphics2D.drawImage(
                 avatar,
-                graphic.imageCenter('x', avatar, background),
-                graphic.imageCenter('y', avatar, background) - background.getHeight() / 3,
+                graphic.imageCenter(Graphic.axis.X, avatar, background),
+                graphic.imageCenter(Graphic.axis.Y, avatar, background) - background.getHeight() / 3,
                 null);
         //draw circle around avatar
         graphics2D.setColor(Color.white);
@@ -136,8 +136,8 @@ public class WelcomeImageRender {
                 BasicStroke.JOIN_ROUND
         ));
         graphics2D.drawOval(
-                graphic.imageCenter('x', avatar, background),
-                graphic.imageCenter('y', avatar, background) - background.getHeight() / 3,
+                graphic.imageCenter(Graphic.axis.X, avatar, background),
+                graphic.imageCenter(Graphic.axis.Y, avatar, background) - background.getHeight() / 3,
                 avatar.getWidth(), avatar.getHeight()
         );
         //draw 'welcome'
@@ -145,8 +145,8 @@ public class WelcomeImageRender {
         graphics.setFont(font);
         //draw 'level'
         graphics.drawString("welcome",
-                graphic.textCenter('x', "welcome", font, background),
-                graphic.textCenter('y', "welcome", font, background)
+                graphic.textCenter(Graphic.axis.X, "welcome", font, background),
+                graphic.textCenter(Graphic.axis.Y, "welcome", font, background)
         );
         //draw user name
 
@@ -162,8 +162,8 @@ public class WelcomeImageRender {
         graphics.setFont(font);
         //draw user name
         graphics.drawString(user.getName(),
-                graphic.textCenter('x', user.getName(), font, background),
-                (graphic.textCenter('y', user.getName(), font, background) + background.getHeight() / 5)
+                graphic.textCenter(Graphic.axis.X, user.getName(), font, background),
+                (graphic.textCenter(Graphic.axis.Y, user.getName(), font, background) + background.getHeight() / 5)
         );
     }
 }

@@ -11,7 +11,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -46,9 +45,7 @@ public class Background implements Command {
         // Get image from Url
         BufferedImage background = ImageIO.read(new URL(ctx.getArguments()[0]));
         // Resize image
-        Image modifiedImage = background.getScaledInstance(350, 100, Image.SCALE_SMOOTH);
-        // Parse back to BufferedImage
-        background = new Graphic().toBufferedImage(modifiedImage);
+        background = new Graphic().resizeImage(background, 350, 100);
         // Parse to InputStream
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
         outStream.flush();

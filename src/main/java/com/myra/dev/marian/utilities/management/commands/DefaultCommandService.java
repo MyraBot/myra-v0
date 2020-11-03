@@ -140,6 +140,11 @@ public class DefaultCommandService implements CommandService {
         return !commands.getBoolean(command);
     }
 
+    /**
+     * Check if the Class is a command.
+     * @param cls The class of the command, which should be executed.
+     * @return Returns if the Command contains the annotation.
+     */
     private boolean isSubscribed(Class<?> cls) {
         return cls.isAnnotationPresent(CommandSubscribe.class);
     }
@@ -153,6 +158,12 @@ public class DefaultCommandService implements CommandService {
         return false;
     }
 
+    /**
+     * Check if a member is allowed to execute the command.
+     * @param member The author, who executed the command.
+     * @param requiresPermission The permission the member needs to execute the command.
+     * @return Returns if the member can execute the command.
+     */
     private boolean hasPermissions(Member member, String requiresPermission) {
         switch (requiresPermission) {
             case "member":

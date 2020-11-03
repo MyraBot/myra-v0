@@ -9,7 +9,19 @@ import java.io.IOException;
 import java.net.URL;
 
 public class Graphic {
-    //enable anti aliasing for Graphics
+    /**
+     * The enum for the X and Y axis
+     */
+    public static enum axis {
+        X,
+        Y
+    }
+
+    /**
+     * Enable anti aliasing.
+     *
+     * @param g The Graphics Object.
+     */
     public void enableAntiAliasing(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(
@@ -18,51 +30,66 @@ public class Graphic {
         );
     }
 
-    //enable anti aliasing for Graphics 2D
+/*    //enable anti aliasing for Graphics 2D
     public void enableAntiAliasing(Graphics2D g2d) {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-    }
+    }*/
 
-    //draw avatar
+    /**
+     * Get a avatar as a BufferedImage.
+     *
+     * @param avatarUrl The URL of the avatar.
+     * @return Returns the avatar as a BufferedImage.
+     * @throws IOException
+     */
     public BufferedImage getAvatar(String avatarUrl) throws IOException {
-        BufferedImage result = null;
-        //read image from url
+        // Read image from URL
         BufferedImage avatar = ImageIO.read(new URL(avatarUrl));
 
         int diameter = Math.min(avatar.getWidth(), avatar.getHeight());
         BufferedImage mask = new BufferedImage(avatar.getWidth(), avatar.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D g2d = mask.createGraphics();
-        applyQualityRenderingHints(g2d);
+        new Graphic().applyQualityRenderingHints(g2d);
         g2d.fillOval(0, 0, diameter - 1, diameter - 1);
         g2d.dispose();
 
+        BufferedImage result;
         result = new BufferedImage(diameter, diameter, BufferedImage.TYPE_INT_ARGB);
         g2d = result.createGraphics();
-        applyQualityRenderingHints(g2d);
+        new Graphic().applyQualityRenderingHints(g2d);
         int x = (diameter - avatar.getWidth()) / 2;
         int y = (diameter - avatar.getHeight()) / 2;
         g2d.drawImage(avatar, x, y, null);
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_IN));
         g2d.drawImage(mask, 0, 0, null);
         g2d.dispose();
+        // Return Avatar
         return result;
     }
 
-    //center text
-    public int textCenter(Character xOrY, String text, Font font, BufferedImage background) {
+    /**
+     * Center an text on a background.
+     *
+     * @param axis       The axis you want to calculate the middle.
+     * @param text       The text you want to draw on the background.
+     * @param font       The font you use for the text.
+     * @param background background you want to draw the image on.
+     * @return Returns the coordinates of the middle of the axis you chose.
+     */
+    public int textCenter(axis axis, String text, Font font, BufferedImage background) {
         FontRenderContext fontRenderContext = new FontRenderContext(new AffineTransform(), true, true);
 
         int center = 0;
-        //x
-        if (xOrY.equals('x')) {
+        // X axis
+        if (axis.equals(Graphic.axis.X)) {
             int xCenterText = (int) Math.round(font.getStringBounds(text, fontRenderContext).getWidth() / 2);
             int xCenterBackground = background.getWidth() / 2;
             center = xCenterBackground - xCenterText;
         }
-        //y
-        else if (xOrY.equals('y')) {
+        // Y axis
+        else if (axis.equals(Graphic.axis.Y)) {
             int yCenterText = (int) Math.round(font.getStringBounds(text, fontRenderContext).getHeight() / 2);
             int yCenterBackground = background.getHeight() / 2;
             center = yCenterBackground - yCenterText;
@@ -70,17 +97,24 @@ public class Graphic {
         return center;
     }
 
-    //center image
-    public int imageCenter(Character xOrY, BufferedImage image, BufferedImage background) {
+    /**
+     * Center an image on a background.
+     *
+     * @param axis       The axis you want to calculate the middle.
+     * @param image      The image you want to draw on the background.
+     * @param background The background you want to draw the image on.
+     * @return Returns the coordinates of the middle of the axis you chose.
+     */
+    public int imageCenter(axis axis, BufferedImage image, BufferedImage background) {
         int center = 0;
         //x
-        if (xOrY.equals('x')) {
+        if (axis.equals(Graphic.axis.X)) {
             int xCenterText = Math.round(image.getWidth() / 2);
             int xCenterBackground = background.getWidth() / 2;
             center = xCenterBackground - xCenterText;
         }
         //y
-        else if (xOrY.equals('y')) {
+        else if (axis.equals(Graphic.axis.Y)) {
             int yCenterText = Math.round(image.getHeight() / 2);
             int yCenterBackground = background.getHeight() / 2;
             center = yCenterBackground - yCenterText;
@@ -88,7 +122,13 @@ public class Graphic {
         return center;
     }
 
-    //resize Buffered images
+    /**
+     * Resize an squared BufferedImage.
+     *
+     * @param image  The raw BufferedImage.
+     * @param amount How much the image should be scaled.
+     * @return Returns a resized BufferedImage.
+     */
     public BufferedImage resizeSquaredImage(BufferedImage image, float amount) {
         int endSize = Math.round(image.getWidth() * amount);
 
@@ -102,8 +142,29 @@ public class Graphic {
         return resizedImage;
     }
 
+    //TODO comments
+    /**
+     * @param image
+     * @param x
+     * @param y
+     * @return
+     */
+    public BufferedImage resizeImage(BufferedImage image, Integer x, Integer y) {
+        Image temp = image.getScaledInstance(x, y, Image.SCALE_SMOOTH);
+        BufferedImage resizedImage = new BufferedImage(x, y, BufferedImage.TYPE_INT_ARGB);
 
-    //rendering hints
+        Graphics2D g2d = resizedImage.createGraphics();
+        g2d.drawImage(temp, 0, 0, null);
+        g2d.dispose();
+
+        return resizedImage;
+    }
+
+    /**
+     * Apply rendering hints
+     *
+     * @param g2d Graphic2D Object.
+     */
     public void applyQualityRenderingHints(Graphics2D g2d) {
         g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -114,7 +175,13 @@ public class Graphic {
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
     }
-    // Image to BufferedImage
+
+    /**
+     * Convert a Image Object to an BufferedImage Object.
+     *
+     * @param img The Image you want to convert.
+     * @return Returns a BufferedImage.
+     */
     public BufferedImage toBufferedImage(Image img) {
         if (img instanceof BufferedImage) {
             return (BufferedImage) img;

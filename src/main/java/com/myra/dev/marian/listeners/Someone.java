@@ -1,4 +1,4 @@
-package com.myra.dev.marian.commands.administrator;
+package com.myra.dev.marian.listeners;
 
 
 import com.myra.dev.marian.utilities.management.listeners.Listener;
@@ -15,8 +15,6 @@ import java.util.Random;
 public class Someone implements Listener {
     @Override
     public void execute(GuildMessageReceivedEvent event) throws Exception {
-        //check for 'someone'
-        if (!event.getMessage().getContentRaw().contains("@someone") || event.getAuthor().isBot()) return;
         //get random number
         Random random = new Random();
         int number = random.nextInt(event.getGuild().getMembers().size());
