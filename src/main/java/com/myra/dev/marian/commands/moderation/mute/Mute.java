@@ -2,8 +2,6 @@ package com.myra.dev.marian.commands.moderation.mute;
 
 
 import com.myra.dev.marian.database.allMethods.Database;
-
-import com.myra.dev.marian.utilities.Return;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandContext;
@@ -42,7 +40,7 @@ public class Mute implements Command {
             //if I used the mute role command
             if (sentMessage[1].equalsIgnoreCase("role")) return;
             //get user
-            user = new Return().userModified(ctx.getEvent(), sentMessage, "mute", "\uD83D\uDD08", 1);
+            user = Manager.getUtilities().getModifiedUser(ctx.getEvent(), sentMessage[1], "mute", "\uD83D\uDD08");
             //get mute role id
             muteRoleId = new Database(ctx.getGuild()).get("muteRole");
             //no mute role set

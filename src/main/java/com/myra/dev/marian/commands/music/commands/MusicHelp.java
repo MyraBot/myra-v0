@@ -6,6 +6,7 @@ import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 
 @CommandSubscribe(
+        command = "music",
         name = "music",
         aliases = {"radio"}
 )

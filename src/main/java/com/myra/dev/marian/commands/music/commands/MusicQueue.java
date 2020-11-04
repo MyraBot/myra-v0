@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 @CommandSubscribe(
+        command = "queue",
         name = "queue",
         aliases = {"songs", "tracks"}
 )

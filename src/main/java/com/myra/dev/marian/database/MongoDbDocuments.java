@@ -38,33 +38,30 @@ public class MongoDbDocuments {
                     .append("boost", 1)
                     .append("roles", new Document());
             //commands
-            Document commands = new Document
-                    //general
-                    ("help", true)
-                    .append("commands", true)
-                    .append("invite", true)
-                    .append("support", true)
-                    .append("ping", true)
+            Document commands = new Document()
                     .append("calculate", true)
                     .append("avatar", true)
                     .append("information", true)
                     .append("reminder", true)
-                    // Leveling
+
                     .append("rank", true)
                     .append("leaderboard", true)
-                    //fun
+                    .append("edit rank", true)
+
                     .append("meme", true)
-                    //music
+                    .append("text formatter", true)
+
                     .append("music", true)
                     .append("join", true)
-                    .append("disconnect", true)
+                    .append("leave", true)
                     .append("play", true)
                     .append("skip", true)
                     .append("clear queue", true)
                     .append("shuffle", true)
-                    .append("track information", true)
+                    .append("music information", true)
                     .append("queue", true)
-                    //moderation
+                    .append("music controller", true)
+
                     .append("moderation", true)
                     .append("clear", true)
                     .append("nick", true)

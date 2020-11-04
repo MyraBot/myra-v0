@@ -11,6 +11,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 @CommandSubscribe(
+        command = "clear queue",
         name = "clear queue",
         aliases = {"queue clear"}
 )

@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.Permission;
 
 @SuppressWarnings("ConstantConditions")
 @CommandSubscribe(
+        command = "join",
         name = "join"
 )
 public class MusicJoin implements Command {

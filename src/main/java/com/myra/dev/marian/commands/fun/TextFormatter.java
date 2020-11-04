@@ -16,6 +16,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 @CommandSubscribe(
+        command = "text formatter",
         name = "format",
         aliases = {"font"}
 )

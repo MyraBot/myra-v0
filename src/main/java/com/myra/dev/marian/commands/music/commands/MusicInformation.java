@@ -10,6 +10,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 @CommandSubscribe(
+        command = "music information",
         name = "music information",
         aliases = {"music info", "track information", "track info", "track", "song", "song information", "song info"}
 )

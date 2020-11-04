@@ -19,6 +19,7 @@ import java.util.List;
 
 @SuppressWarnings("ConstantConditions") // Requires '.enableCache(CacheFlag.VOICE_STATE)' to be not null
 @CommandSubscribe(
+        command = "play",
         name = "play"
 )
 public class MusicPlay extends Events implements Command {

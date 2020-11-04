@@ -10,6 +10,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 @CommandSubscribe(
+        command = "skip",
         name = "skip",
         aliases = {"next"}
 )

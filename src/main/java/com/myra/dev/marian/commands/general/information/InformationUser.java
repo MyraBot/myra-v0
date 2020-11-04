@@ -1,6 +1,5 @@
 package com.myra.dev.marian.commands.general.information;
 
-import com.myra.dev.marian.utilities.Return;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
@@ -37,11 +36,11 @@ public class InformationUser implements Command {
         //get given member
         else {
             //if user isn't in the guild
-            if (ctx.getGuild().getMember(new Return().user(ctx.getEvent(), ctx.getArguments()[0], "information user", "\uD83D\uDC64")) == null) {
+            if (ctx.getGuild().getMember(Manager.getUtilities().getUser(ctx.getEvent(), ctx.getArguments()[0], "information user", "\uD83D\uDC64")) == null) {
                 utilities.error(ctx.getChannel(), "information user", "\uD83D\uDC64", "No user found", "For this command the user has to be on this server", ctx.getAuthor().getEffectiveAvatarUrl());
                 return;
             }
-            user = ctx.getGuild().getMember(new Return().user(ctx.getEvent(), ctx.getArguments()[0], "information user", "\uD83D\uDC64"));
+            user = ctx.getGuild().getMember(Manager.getUtilities().getUser(ctx.getEvent(), ctx.getArguments()[0], "information user", "\uD83D\uDC64"));
         }
 
         List<Role> roles = user.getRoles();

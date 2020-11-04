@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 @CommandSubscribe(
+        command = "shuffle",
         name = "shuffle",
         aliases = {"random", "randomize"}
 )

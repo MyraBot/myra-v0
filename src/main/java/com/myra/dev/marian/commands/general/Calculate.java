@@ -8,6 +8,7 @@ import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 @CommandSubscribe(
+        command = "calculate",
         name = "calculate",
         aliases = {"cal"}
 )

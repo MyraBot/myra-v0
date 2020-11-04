@@ -32,8 +32,12 @@ public class MongoDbUpdate extends Events implements Command {
     public void execute(CommandContext ctx) throws Exception {
         //connect to database
         if (ctx.getEvent().getMessage().getContentRaw().equals("~db.update") && ctx.getAuthor().getId().equals("639544573114187797")) {
-            //for each document
+            // For each document
             for (Document doc : mongoDb.getCollection("guilds").find()) {
+                // Make backup
+//                mongoDb.getCollection("backup").insertOne(doc);
+
+                // Get variables
                 String guildId = doc.getString("guildId");
                 String guildName = doc.getString("guildName");
                 String prefix = doc.getString("prefix");
@@ -71,22 +75,36 @@ public class MongoDbUpdate extends Events implements Command {
                         .append("welcomeEmbedMessage", "Welcome {user} to {server}! Enjoy your stay")
                         .append("welcomeDirectMessage", "Welcome {user} to {server}! Enjoy your stay");
                 Document commandsNested = new Document()
-                        .append("commands", true)
-                        .append("help", true)
-                        .append("ping", true)
-                        .append("invite", true)
-                        .append("support", true)
+                        .append("calculate", commands.getBoolean("calculate"))
+                        .append("avatar", commands.getBoolean("avatar"))
+                        .append("information", commands.getBoolean("information"))
+                        .append("reminder", commands.getBoolean("reminder"))
 
-                        .append("information", true)
-                        .append("avatar", true)
-                        .append("calculate", true)
-                        .append("reminder", true)
+                        .append("rank", commands.getBoolean("rank"))
+                        .append("leaderboard", commands.getBoolean("leaderboard"))
+                        .append("edit rank", commands.getBoolean("edit rank"))
 
-                        .append("rank", true)
-                        .append("leaderboard", true)
+                        .append("meme", commands.getBoolean("meme"))
+                        .append("text formatter", commands.getBoolean("text formatter"))
 
-                        .append("meme", true)
-                        .append("textFormatter", true);
+                        .append("music", commands.getBoolean("music"))
+                        .append("join", commands.getBoolean("join"))
+                        .append("leave", commands.getBoolean("leave"))
+                        .append("play", commands.getBoolean("play"))
+                        .append("skip", commands.getBoolean("skip"))
+                        .append("clear queue", commands.getBoolean("clear queue"))
+                        .append("shuffle", commands.getBoolean("shuffle"))
+                        .append("music information", commands.getBoolean("music information"))
+                        .append("queue", commands.getBoolean("queue"))
+                        .append("music controller", commands.getBoolean("music controller"))
+
+                        .append("moderation", commands.getBoolean("moderation"))
+                        .append("clear", commands.getBoolean("clear"))
+                        .append("nick", commands.getBoolean("nick"))
+                        .append("kick", commands.getBoolean("kick"))
+                        .append("mute", commands.getBoolean("mute"))
+                        .append("ban", commands.getBoolean("ban"))
+                        .append("unban", commands.getBoolean("unban"));
                 Document listenersNested = new Document()
                         .append("welcomeImage", false)
                         .append("welcomeEmbed", false)
@@ -95,6 +113,8 @@ public class MongoDbUpdate extends Events implements Command {
                         .append("suggestions", false)
 
                         .append("autorole", false);
+
+
                 //create Document
                 Document guildDoc = new Document("guildId", guildId)
                         .append("guildName", guildName)
@@ -111,16 +131,12 @@ public class MongoDbUpdate extends Events implements Command {
                         .append("welcome", welcome)
                         .append("commands", commands)
                         .append("listeners", listeners);
+
                 //replace old one
                 mongoDb.getCollection("guilds").findOneAndReplace(
                         mongoDb.getCollection("guilds").find(eq("guildId", guildDoc.getString("guildId"))).first(),
                         guildDoc
                 );
-            }
-            //close database
-            mongoDb.close();
-            if (ctx.getEvent().getMessage().getContentRaw().equals("db.create") && ctx.getAuthor().getId().equals("639544573114187797")) {
-                MongoDbDocuments.guild(ctx.getGuild());
             }
         }
 
