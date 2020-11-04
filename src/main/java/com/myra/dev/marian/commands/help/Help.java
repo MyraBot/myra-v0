@@ -28,7 +28,7 @@ public class Help extends Events implements Command {
         Utilities utilities = Manager.getUtilities();
         //embed
         EmbedBuilder help = new EmbedBuilder()
-                .setAuthor("│ help", null, ctx.getAuthor().getEffectiveAvatarUrl())
+                .setAuthor("help", null, ctx.getAuthor().getEffectiveAvatarUrl())
                 .setColor(Manager.getUtilities().blue)
                 .setThumbnail(ctx.getEvent().getJDA().getSelfUser().getEffectiveAvatarUrl())
                 .setDescription(ctx.getEvent().getJDA().getSelfUser().getName() + " is a multi-purpose bot featuring moderation, music, welcoming and much more!\n" +
@@ -37,7 +37,7 @@ public class Help extends Events implements Command {
                 .addField("**\u2709\uFE0F │ invite**", utilities.hyperlink("Invite ", "https://discord.gg/nG4uKuB") + ctx.getEvent().getJDA().getSelfUser().getName() + " to your server", true)
                 .addField("**\u26A0\uFE0F │ support**", utilities.hyperlink("Report ", "https://discord.gg/nG4uKuB") + " bugs and get " + utilities.hyperlink("help ", "https://discord.gg/nG4uKuB"), true);
         Message message = ctx.getChannel().sendMessage(help.build()).complete();
-        //add reactions
+        // Add reactions
         message.addReaction("\u2709\uFE0F").queue();
         message.addReaction("\u26A0\uFE0F").queue();
 
@@ -47,7 +47,7 @@ public class Help extends Events implements Command {
     //reactions
     @Override
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) throws Exception {
-        //if reaction was added on the wrong message return
+        // If reaction was added on the wrong message return
         if (!MessageReaction.check(event, "help")) return;
 
         CommandEmbeds embed = new CommandEmbeds(event.getGuild(), event.getJDA(), event.getUser(), new Database(event.getGuild()).get("prefix"));

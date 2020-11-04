@@ -223,7 +223,15 @@ public class Utilities {
         return user;
     }
 
-    //return modified user
+    /**
+     * Get a user, who will be modified.
+     *
+     * @param event The GuildMessageReceivedEvent.
+     * @param userRaw      The String the user is given.
+     * @param command      The name of the command.
+     * @param commandEmoji The Emoji of the command.
+     * @return Returns the user as a User object.
+     */
     public User getModifiedUser(GuildMessageReceivedEvent event, String userRaw, String command, String
             commandEmoji) {
         User user = null;
@@ -267,7 +275,15 @@ public class Utilities {
         return user;
     }
 
-    //return text channel
+    /**
+     * Get a text channel.
+     *
+     * @param event The GuildMessageReceivedEvent.
+     * @param providedChannel The String the channel should be in.
+     * @param command The command name.
+     * @param commandEmoji The command emoji.
+     * @return Returns a channel as a TextChannel Object.
+     */
     public TextChannel getTextChannel(GuildMessageReceivedEvent event, String providedChannel, String
             command, String commandEmoji) {
         //if no channel is given
@@ -285,7 +301,15 @@ public class Utilities {
         return channel;
     }
 
-    //return role
+    /**
+     * Get a role.
+     *
+     * @param event The GuildMessageReceivedEvent.
+     * @param providedRole The String the role should be in.
+     * @param command The command name.
+     * @param commandEmoji The command Emoji.
+     * @return Returns a role as a Role Object.
+     */
     public Role getRole(GuildMessageReceivedEvent event, String providedRole, String command, String commandEmoji) {
         //no role given
         if (!(providedRole.startsWith("<@&") || providedRole.matches("\\d+"))) {
