@@ -74,7 +74,7 @@ public class Rank implements Command {
             background = ImageIO.read(new URL(backgroundUrl));
         }
 
-        Graphic graphic = new Graphic();
+        Graphic graphic = Graphic.getInstance();
 
         BufferedImage avatar = graphic.getAvatar(member.getUser().getEffectiveAvatarUrl());
         //resize avatar

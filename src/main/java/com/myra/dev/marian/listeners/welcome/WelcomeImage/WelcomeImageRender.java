@@ -38,7 +38,7 @@ public class WelcomeImageRender {
         String font = db.getNested("welcome").get("welcomeImageFont").toString();
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(font + ".ttf");
         //graphics
-        Graphic graphic = new Graphic();
+        Graphic graphic = Graphic.getInstance();
         Graphics graphics = background.getGraphics();
         Graphics2D graphics2D = (Graphics2D) graphics;
         //enable anti aliasing

@@ -1,6 +1,6 @@
 package com.myra.dev.marian.marian;
 
-import com.myra.dev.marian.Main;
+import com.myra.dev.marian.Bot;
 import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.utilities.management.Events;
 import com.myra.dev.marian.utilities.management.Manager;
@@ -20,7 +20,7 @@ public class Shutdown extends Events implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         // Access only for Marian
-        if (!ctx.getAuthor().getId().equals(Main.marian)) return;
+        if (!ctx.getAuthor().getId().equals(Bot.marian)) return;
         EmbedBuilder shutdown = new EmbedBuilder()
                 .setAuthor("shutdown", null, ctx.getAuthor().getEffectiveAvatarUrl())
                 .setColor(Manager.getUtilities().blue)

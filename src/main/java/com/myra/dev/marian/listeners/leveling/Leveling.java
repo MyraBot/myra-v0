@@ -33,7 +33,7 @@ public class Leveling {
         /**
          * level up image
          */
-        Graphic graphic = new Graphic();
+        Graphic graphic = Graphic.getInstance();
 
         BufferedImage background = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("levelUp.png"));
         BufferedImage avatar = graphic.getAvatar(event.getAuthor().getEffectiveAvatarUrl());

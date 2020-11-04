@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import java.io.InputStream;
 import java.util.*;
 
-public class Main {
+public class Bot {
     public static ShardManager shardManager;
 
     public static String prefix = "~";
@@ -27,10 +27,10 @@ public class Main {
         // Register commands
         new Manager().start();
         // Load main class
-        new Main();
+        new Bot();
     }
 
-    public Main() {
+    public Bot() {
         try {
             //build bot
             DefaultShardManagerBuilder jda = new DefaultShardManagerBuilder("NzE4NDQ0NzA5NDQ1NjMyMTIy.Xto9xg.dQxtSFxxYHpKXOwLCtJuWM5w1MM")

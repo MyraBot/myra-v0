@@ -54,9 +54,9 @@ public class Background extends Events implements Command {
         // Get image from Url
         BufferedImage background = ImageIO.read(new URL(ctx.getArguments()[0]));
         // Resize image
-        background = new Graphic().resizeImage(background, 350, 100);
+        background = Graphic.getInstance().resizeImage(background, 350, 100);
         // Parse to InputStream
-        InputStream backgroundFile = new Graphic().toInputStream(background);
+        InputStream backgroundFile = Graphic.getInstance().toInputStream(background);
         // Success
         EmbedBuilder success = new EmbedBuilder()
                 .setAuthor("edit rank", null, ctx.getAuthor().getEffectiveAvatarUrl())

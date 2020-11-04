@@ -1,6 +1,6 @@
 package com.myra.dev.marian.commands.administrator;
 
-import com.myra.dev.marian.Main;
+import com.myra.dev.marian.Bot;
 import com.myra.dev.marian.database.allMethods.Database;
 
 import com.myra.dev.marian.utilities.management.Manager;
@@ -40,12 +40,12 @@ public class Prefix implements Command {
         //prefix reset
         if (ctx.getEvent().getMessage().getContentRaw().equalsIgnoreCase(ctx.getEvent().getJDA().getSelfUser().getAsMention().replace("<@", "<@!") + "prefix")) {
             //Database
-            db.set("prefix", Main.prefix);
+            db.set("prefix", Bot.prefix);
             //success info
             Manager.getUtilities().success(ctx.getChannel(),
                     "prefix", "\uD83D\uDCCC",
                     "Prefix reset",
-                    "Prefix changed to `" + Main.prefix + "`",
+                    "Prefix changed to `" + Bot.prefix + "`",
                     ctx.getAuthor().getEffectiveAvatarUrl(),
                     false, null);
         }

@@ -12,6 +12,14 @@ import java.io.InputStream;
 import java.net.URL;
 
 public class Graphic {
+    // Create Instance
+    private final static Graphic GRAPHIC = new Graphic();
+
+    // Return Instance
+    public static Graphic getInstance() {
+        return GRAPHIC;
+    }
+
     /**
      * The enum for the X and Y axis
      */
@@ -54,14 +62,14 @@ public class Graphic {
         BufferedImage mask = new BufferedImage(avatar.getWidth(), avatar.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D g2d = mask.createGraphics();
-        new Graphic().applyQualityRenderingHints(g2d);
+        Graphic.getInstance().applyQualityRenderingHints(g2d);
         g2d.fillOval(0, 0, diameter - 1, diameter - 1);
         g2d.dispose();
 
         BufferedImage result;
         result = new BufferedImage(diameter, diameter, BufferedImage.TYPE_INT_ARGB);
         g2d = result.createGraphics();
-        new Graphic().applyQualityRenderingHints(g2d);
+        Graphic.getInstance().applyQualityRenderingHints(g2d);
         int x = (diameter - avatar.getWidth()) / 2;
         int y = (diameter - avatar.getHeight()) / 2;
         g2d.drawImage(avatar, x, y, null);

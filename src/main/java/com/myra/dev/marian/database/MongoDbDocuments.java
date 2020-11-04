@@ -1,7 +1,7 @@
 package com.myra.dev.marian.database;
 
 import com.mongodb.client.MongoCollection;
-import com.myra.dev.marian.Main;
+import com.myra.dev.marian.Bot;
 import com.myra.dev.marian.utilities.management.Manager;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -96,7 +96,7 @@ public class MongoDbDocuments {
                 //create Document
                 Document guildDoc = new Document("guildId", guild.getId())
                         .append("guildName", guild.getName())
-                        .append("prefix", Main.prefix)
+                        .append("prefix", Bot.prefix)
                         .append("economy", economy)
                         .append("leveling", levelingDocument)
                         .append("members", membersDocument)
