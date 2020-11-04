@@ -44,7 +44,6 @@ import com.myra.dev.marian.commands.music.commands.*;
 import com.myra.dev.marian.database.MongoDbUpdate;
 import com.myra.dev.marian.listeners.Someone;
 import com.myra.dev.marian.listeners.autorole.AutoRoleSet;
-import com.myra.dev.marian.listeners.autorole.AutoroleToggle;
 import com.myra.dev.marian.listeners.leveling.Leveling;
 import com.myra.dev.marian.listeners.leveling.LevelingListener;
 import com.myra.dev.marian.listeners.logging.LogChannel;
@@ -199,7 +198,6 @@ public class Manager {
                 new MusicController(),
                 // Autorole
                 new AutoRoleSet(),
-                new AutoroleToggle(),
                 // Notification
                 new NotificationHelp(),
 
