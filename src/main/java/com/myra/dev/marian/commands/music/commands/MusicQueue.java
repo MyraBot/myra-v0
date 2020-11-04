@@ -35,7 +35,7 @@ public class MusicQueue implements Command {
         }
         // No audio track is playing
         if (PlayerManager.getInstance().getMusicManager(ctx.getGuild()).audioPlayer.getPlayingTrack() == null) {
-            utilities.error(ctx.getChannel(), "shuffle queue", "\uD83C\uDFB2", "The player isn`t playing any song", "Use `" + ctx.getPrefix() + "play <song>` to play a song", ctx.getAuthor().getEffectiveAvatarUrl());
+            utilities.error(ctx.getChannel(), "shuffle queue", "\uD83C\uDFB2", "The player isn't playing any song", "Use `" + ctx.getPrefix() + "play <song>` to play a song", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
 // Send Queue
