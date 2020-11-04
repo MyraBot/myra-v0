@@ -64,7 +64,6 @@ public class DefaultCommandService implements CommandService {
      */
     @Override
     public Map<Command, CommandSubscribe> getCommands() {
-        System.out.println(this.commands);
         return this.commands;
     }
 
@@ -74,18 +73,18 @@ public class DefaultCommandService implements CommandService {
     @Override
     public void processCommandExecution(GuildMessageReceivedEvent event) throws Exception {
         //get prefix
-        String PREFIX = new Database(event.getGuild()).get("prefix");
-        //return if message doesn't start with prefix
-        if (!event.getMessage().getContentRaw().startsWith(PREFIX)) return;
-        //get message without prefix
-        String message = event.getMessage().getContentRaw().substring(PREFIX.length());
-        //split message
-        String[] splitMessage = message.split("\\s+");
+        final String prefix = new Database(event.getGuild()).get("prefix");
+        // If message doesn't start with prefix
+        if (!event.getMessage().getContentRaw().startsWith(prefix)) return;
+        // Get message without prefix
+        String rawMessage = event.getMessage().getContentRaw().substring(prefix.length());
+        // Split rawMessage
+        String[] splitMessage = rawMessage.split("\\s+");
 
         for (Map.Entry<Command, CommandSubscribe> entry : this.commands.entrySet()) {
-            //create list for keywords
+            // Create list for keywords
             List<String[]> executors = new ArrayList<>();
-            //Add name of command
+            // Add name of command
             executors.add(entry.getValue().name()
                     .replace("BOT_NAME", event.getJDA().getSelfUser().getName())
                     .replace("GUILD_NAME", event.getGuild().getName())
@@ -104,21 +103,20 @@ public class DefaultCommandService implements CommandService {
             }
             //check for every executor
             for (String[] executor : executors) {
-                //check if executor is longer than message
+                // Check if executor is longer than message
                 if (executor.length > splitMessage.length) continue;
                 //check for every argument
-                boolean Continue = true;
+                boolean Continue = false;
                 for (int i = 0; i < executor.length; i++) {
-                    //if one argument doesn't equal the executor
+                    //if one argument doesn't match the executor
                     if (!splitMessage[i].equalsIgnoreCase(executor[i])) {
-                        Continue = false;
+                        Continue = true;
                         break;
                     }
                 }
-                if (!Continue) continue;
-                /**
-                 * run command
-                 */
+                // Continue if not every argument matches the executor
+                if (Continue) continue;
+// Run command
                 // Check if command is disabled
                 if (isDisabled(entry.getValue().command(), event.getGuild())) return;
                 // Check for required permissions
@@ -126,22 +124,29 @@ public class DefaultCommandService implements CommandService {
                 //filter arguments
                 String[] commandArguments = Arrays.copyOfRange(splitMessage, executor.length, splitMessage.length);
                 //run command
-                entry.getKey().execute(new CommandContext(PREFIX, event, commandArguments));
+                entry.getKey().execute(new CommandContext(prefix, event, commandArguments));
             }
         }
     }
 
+    /**
+     * Check if a command is disabled.
+     *
+     * @param command The command to check.
+     * @param guild The guild the command was executed.
+     * @return Returns a Boolean value of isDisabled.
+     */
     private boolean isDisabled(String command, Guild guild) {
-        // Get listener document
-        Document commands = (Document) MongoDb.getInstance().getCollection("guilds").find(eq("guildId", guild.getId())).first().get("commands");
         // If command isn't in the database
         if (command.equals("")) return false;
+        // Get listener document
+        Document commands = (Document) MongoDb.getInstance().getCollection("guilds").find(eq("guildId", guild.getId())).first().get("commands");
         // Return value of command
         return !commands.getBoolean(command);
     }
 
     /**
-     * Check if the Class is a command.
+     * Check if the Class has the CommandSubscribe annotation.
      *
      * @param cls The class of the command, which should be executed.
      * @return Returns if the Command contains the annotation.
@@ -150,6 +155,12 @@ public class DefaultCommandService implements CommandService {
         return cls.isAnnotationPresent(CommandSubscribe.class);
     }
 
+    /**
+     * Check if the Class implements the Command Interface.
+     *
+     * @param cls The class of the command.
+     * @return Returns if the Command implements the Interface.
+     */
     private boolean hasCommand(Class<?> cls) {
         for (Class<?> implement : cls.getInterfaces()) {
             if (implement == Command.class) {

@@ -27,7 +27,11 @@ public class MusicController extends Events implements Command {
 
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        AudioPlayer player = PlayerManager.getInstance().getMusicManager(ctx.getGuild()).audioPlayer;
+        final AudioPlayer player = PlayerManager.getInstance().getMusicManager(ctx.getGuild()).audioPlayer;
+        // No audio track is playing
+        if (player.getPlayingTrack() == null) {
+            Manager.getUtilities().error(ctx.getChannel(), "music controller", "\uD83C\uDF9A", "The player isn`t playing any song", "Use `" + ctx.getPrefix() + "play <song>` to play a song", ctx.getAuthor().getEffectiveAvatarUrl());
+        }
         //music controller
         EmbedBuilder musicController = new EmbedBuilder()
                 .setAuthor("music", null, ctx.getEvent().getJDA().getSelfUser().getEffectiveAvatarUrl())

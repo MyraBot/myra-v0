@@ -13,10 +13,7 @@ public class AutoroleAssign extends Events {
             //get role
             String autoRole = db.get("autoRole");
             // Check if no role is set
-            if (autoRole.equals("not set")) {
-                Manager.getUtilities().error(event.getGuild().getDefaultChannel(), "autorole", "\uD83D\uDCDD", "You didn't specify a autorole", "To indicate a autorole, type in `" + new Database(event.getGuild()).get("prefix") + "autorole <role>`", event.getGuild().getIconUrl());
-                return;
-            }
+            if (autoRole.equals("not set")) return;
             //assign role
             event.getGuild().addRoleToMember(event.getMember(), event.getGuild().getRoleById(autoRole)).queue();
         } catch (Exception e) {

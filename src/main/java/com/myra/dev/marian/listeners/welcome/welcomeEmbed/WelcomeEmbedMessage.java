@@ -1,7 +1,6 @@
 package com.myra.dev.marian.listeners.welcome.welcomeEmbed;
 
 import com.myra.dev.marian.database.allMethods.Database;
-
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.management.Manager;
 import com.myra.dev.marian.utilities.management.commands.Command;
@@ -30,19 +29,14 @@ public class WelcomeEmbedMessage implements Command {
             return;
         }
         // Get message
-        String message = "";
-        for (int i = 1; i < ctx.getArguments().length; i++) {
-            message += ctx.getArguments()[i] + " ";
-        }
-        //remove last space
-        message = message.substring(0, message.length() - 1);
+        String message = utilities.getString(ctx.getArguments());
         // Get database
         Database db = new Database(ctx.getGuild());
         // Update database
         db.getNested("welcome").set("welcomeEmbedMessage", message, Manager.type.STRING);
         // Success
         utilities.success(ctx.getChannel(), "welcome embed message", "\uD83D\uDCAC",
-                "\uD83D\uDC4B │ welcome text changed to",
+                "welcome text changed to",
                 message
                         .replace("{user}", ctx.getAuthor().getAsMention())
                         .replace("{server}", ctx.getGuild().getName())
