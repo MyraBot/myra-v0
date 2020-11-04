@@ -27,6 +27,7 @@ public class CommandEmbeds {
         return new EmbedBuilder()
                 .setAuthor("commands", null, author.getEffectiveAvatarUrl())
                 .setColor(Manager.getUtilities().gray)
+                .addField("`help`", "\uD83D\uDCD6 │ Helpful commands", false)
                 .addField("`general`", "\uD83C\uDF88 │ The main commands of the bot", false)
                 .addField("`fun`", "\uD83D\uDD79 │ Commands to play around with", false)
                 .addField("`leveling`", "\uD83C\uDFC6 │ Leveling", false)
@@ -36,17 +37,26 @@ public class CommandEmbeds {
                 .addField("`administrator`", "\uD83D\uDD29 │ Server commands", false);
     }
 
+    // Help
+    public EmbedBuilder help() {
+        return new EmbedBuilder()
+                .setAuthor("help", null, author.getEffectiveAvatarUrl())
+                .setColor(Manager.getUtilities().gray)
+                .addField("`" + prefix + "help`", "\uD83E\uDDF0 │ Opens a menu with several helpful links and lists", false)
+                .addField("`" + prefix + "commands`", "\uD83D\uDCC3 │ Shows this", false)
+                .addField("`" + prefix + "invite`", "\u2709\uFE0F │ Invite me to your server", false)
+                .addField("`" + prefix + "support`", "\u26A0\uFE0F │ Join the support server to get help and report bugs", false)
+                .addField("`" + prefix + "ping`", "\uD83C\uDFD3 │ Check my latency", false)
+                .addField("`" + prefix + "vote`", "\uD83D\uDDF3 │ Vote for me on " + Manager.getUtilities().hyperlink("top.gg", "https://top.gg/bot/718444709445632122"), false);
+    }
+
+
     //general
     public EmbedBuilder general() {
         return new EmbedBuilder()
                 .setAuthor("general", null, author.getEffectiveAvatarUrl())
                 .setColor(Manager.getUtilities().gray)
-                .addField("`" + prefix + "help`", "\uD83E\uDDF0 │ Opens a menu with several helpful links and lists", false)
-                .addField("`" + prefix + "commands`", "\uD83D\uDCC3 │ Shows this", false)
-                .addField("`" + prefix + "invite`", "\u2709\uFE0F │ Invite " + jda.getSelfUser().getName() + " to your server", false)
-                .addField("`" + prefix + "support`", "\u26A0\uFE0F │ Join the support server to get help and report bugs", false)
-                .addField("`" + prefix + "ping`", "\uD83C\uDFD3 │ Check the ping of the bot", false)
-                .addField("`" + prefix + "calculate <number 1 <operator> <number 2>`", "\uD83E\uDDEE │ Let the bot calculate something for you", false)
+                .addField("`" + prefix + "calculate <number 1 <operator> <number 2>`", "\uD83E\uDDEE │ Let me calculate something for you", false)
                 .addField("`" + prefix + "avatar @user`", "\uD83D\uDDBC │ Gives you profile pictures of other people", false)
                 .addField("`" + prefix + "information`", "\uD83D\uDDD2 │ Gives you information", false)
                 .addField("`" + prefix + "suggest`", "\uD83D\uDDF3 │ Suggest something", false);
