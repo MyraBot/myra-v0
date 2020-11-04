@@ -32,10 +32,10 @@ public class WelcomeImageRender {
         }
         //if guild has a custom background
         else {
-            background = ImageIO.read(new URL(db.getNested("welcome").get("welcomeImageBackground")));
+            background = ImageIO.read(new URL(db.getNested("welcome").get("welcomeImageBackground").toString()));
         }
         //get font
-        String font = db.getNested("welcome").get("welcomeImageFont");
+        String font = db.getNested("welcome").get("welcomeImageFont").toString();
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(font + ".ttf");
         //graphics
         Graphic graphic = new Graphic();

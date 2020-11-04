@@ -50,11 +50,6 @@ public class Database {
         return new GetListenerManager(mongoDb, guild);
     }
 
-    //get commands
-    public GetCommandManager getCommandManager() {
-        return new GetCommandManager(mongoDb, guild);
-    }
-
     //get notification manager
     public GetNotificationManager getNotificationManager() {
         return new GetNotificationManager(mongoDb, guild);

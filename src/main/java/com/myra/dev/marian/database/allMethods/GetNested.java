@@ -1,6 +1,7 @@
 package com.myra.dev.marian.database.allMethods;
 
 import com.myra.dev.marian.database.MongoDb;
+import com.myra.dev.marian.utilities.management.Manager;
 import net.dv8tion.jda.api.entities.Guild;
 import org.bson.Document;
 
@@ -19,26 +20,35 @@ public class GetNested {
         this.nested = nested;
     }
 
-    /**
-     * methods
-     */
-    //get String
-    public String get(String key) {
+    // Get String
+    public Object get(String key) {
         //get nested object
         Document nestedDocument = (Document) mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first().get(nested);
         //return String
-        return nestedDocument.getString(key);
+        return nestedDocument.get(key);
     }
 
-    //set String
-    public void set(String key, String value) {
-        //get guildDocument
+    // Set Object
+    public void set(String key, Object value, Manager.type type) {
+        // Get guildDocument
         Document guildDocument = mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first();
         //get nested object
         Document nestedDocument = (Document) guildDocument.get(nested);
-        //replace String
-        nestedDocument.replace(key, value);
-        //replace guild Document
+// Get variable type
+        // String
+        if (type.equals(Manager.type.STRING)) {
+            // Replace String
+            nestedDocument.replace(key, (String) value);
+        }
+        if (type.equals(Manager.type.INTEGER)) {
+            // Replace String
+            nestedDocument.replace(key, (Integer) value);
+        }
+        if (type.equals(Manager.type.BOOLEAN)) {
+            // Replace String
+            nestedDocument.replace(key, (Boolean) value);
+        }
+        // Replace guild Document
         mongoDb.getCollection("guilds").findOneAndReplace(mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first(), guildDocument);
     }
 }

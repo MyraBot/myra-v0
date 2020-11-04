@@ -14,8 +14,8 @@ public class WelcomeDirectMessageRender {
         // Get database
         Database db = new Database(guild);
         // Get variables
-        String welcomeColour = db.getNested("welcome").get("welcomeColour");
-        String welcomeDirectMessage = db.getNested("welcome").get("welcomeDirectMessage");
+        String welcomeColour = db.getNested("welcome").get("welcomeColour").toString();
+        String welcomeDirectMessage = db.getNested("welcome").get("welcomeDirectMessage").toString();
         // Send direct message
         if (privateChannel != null) {
             privateChannel.sendMessage(new EmbedBuilder()

@@ -17,7 +17,6 @@ import static com.mongodb.client.model.Filters.eq;
  * Default implementation of the {@link CommandService}.
  */
 public class DefaultCommandService implements CommandService {
-
     private final Map<Command, CommandSubscribe> commands;
 
     public DefaultCommandService() {
@@ -65,6 +64,7 @@ public class DefaultCommandService implements CommandService {
      */
     @Override
     public Map<Command, CommandSubscribe> getCommands() {
+        System.out.println(this.commands);
         return this.commands;
     }
 
@@ -142,6 +142,7 @@ public class DefaultCommandService implements CommandService {
 
     /**
      * Check if the Class is a command.
+     *
      * @param cls The class of the command, which should be executed.
      * @return Returns if the Command contains the annotation.
      */
@@ -160,7 +161,8 @@ public class DefaultCommandService implements CommandService {
 
     /**
      * Check if a member is allowed to execute the command.
-     * @param member The author, who executed the command.
+     *
+     * @param member             The author, who executed the command.
      * @param requiresPermission The permission the member needs to execute the command.
      * @return Returns if the member can execute the command.
      */

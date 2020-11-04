@@ -40,17 +40,17 @@ public class WelcomeChannel implements Command {
         // Get database
         Database db = new Database(ctx.getGuild());
         // Get current welcome channel
-        String currentChannelId = db.getNested("welcome").get("welcomeChannel");
+        String currentChannelId = db.getNested("welcome").get("welcomeChannel").toString();
         //remove welcome channel
         if (currentChannelId.equals(channel.getId())) {
             //remove channel id
-            db.getNested("welcome").set("welcomeChannel", "not set");
+            db.getNested("welcome").set("welcomeChannel", "not set", Manager.type.STRING);
             //success
             utilities.success(ctx.getChannel(), "welcome channel", "\uD83D\uDCC1", "Welcome channel removed", "Welcome are no longer send in " + channel.getAsMention(), ctx.getAuthor().getEffectiveAvatarUrl(), false, null);
             return;
         }
         // Update database
-        db.getNested("welcome").set("welcomeChannel", channel.getId());
+        db.getNested("welcome").set("welcomeChannel", channel.getId(), Manager.type.STRING);
         // Success message
         utilities.success(ctx.getChannel(), "welcome channel", "\uD83D\uDCC1", "Welcome channel changed", "Welcome messages are now send in " + channel.getAsMention(), ctx.getAuthor().getEffectiveAvatarUrl(), false, null);
         // Success message in welcome channel

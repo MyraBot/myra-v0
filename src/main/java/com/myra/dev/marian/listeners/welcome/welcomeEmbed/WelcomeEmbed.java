@@ -24,10 +24,10 @@ public class WelcomeEmbed extends Events {
             return;
         }
         //get channel
-        TextChannel channel = event.getGuild().getTextChannelById(db.getNested("welcome").get("welcomeChannel"));
+        TextChannel channel = event.getGuild().getTextChannelById(db.getNested("welcome").get("welcomeChannel").toString());
         //get variables
-        String welcomeColour = db.getNested("welcome").get("welcomeColour");
-        String welcomeEmbedMessage = db.getNested("welcome").get("welcomeEmbedMessage");
+        String welcomeColour = db.getNested("welcome").get("welcomeColour").toString();
+        String welcomeEmbedMessage = db.getNested("welcome").get("welcomeEmbedMessage").toString();
         //send message
         EmbedBuilder join = new EmbedBuilder()
                 .setAuthor("welcome", null, event.getGuild().getIconUrl())

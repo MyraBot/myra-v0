@@ -60,6 +60,7 @@ public class MongoDbUpdate extends Events implements Command {
                     Document memberDocument = (Document) members.get(memberId);
                     //memberDocument.append("rankBackground", "default");
                 }
+                listeners.remove("autorole");
 
 
                 Document economyDocument = new Document()

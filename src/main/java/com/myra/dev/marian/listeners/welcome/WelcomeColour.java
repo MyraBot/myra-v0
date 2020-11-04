@@ -51,7 +51,7 @@ public class WelcomeColour implements Command {
             return;
         }
         //save in database
-        new Database(ctx.getGuild()).getNested("welcome").set("welcomeColour", hex);
+        new Database(ctx.getGuild()).getNested("welcome").set("welcomeColour", hex, Manager.type.INTEGER);
         //success
         utilities.success(ctx.getChannel(), "welcome embed colour", "\uD83C\uDFA8", "Updated Colour", "Colour changed to `" + hex.replace("0x", "#") + "`", ctx.getAuthor().getEffectiveAvatarUrl(), false, null);
     }

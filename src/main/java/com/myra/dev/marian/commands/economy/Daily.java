@@ -30,7 +30,7 @@ public class Daily implements Command {
         // Get reward
         int dailyReward = 0;
         // Get currency
-        String currency = new Database(ctx.getGuild()).getNested("economy").get("currency");
+        String currency = new Database(ctx.getGuild()).getNested("economy").get("currency").toString();
         // Create embed
         EmbedBuilder daily = new EmbedBuilder()
                 .setAuthor("daily", null, ctx.getAuthor().getEffectiveAvatarUrl())

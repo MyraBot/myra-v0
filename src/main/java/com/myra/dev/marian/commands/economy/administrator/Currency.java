@@ -39,7 +39,7 @@ public class Currency implements Command {
         //remove last space
         currency = currency.substring(0, currency.length() - 1);
         // Update database
-        db.getNested("economy").set("currency", currency);
+        db.getNested("economy").set("currency", currency, Manager.type.STRING);
         // Send success message
         utilities.success(ctx.getChannel(), "economy currency", currency, "Changed currency", "Changed currency to " + currency, ctx.getAuthor().getEffectiveAvatarUrl(), false, null);
     }

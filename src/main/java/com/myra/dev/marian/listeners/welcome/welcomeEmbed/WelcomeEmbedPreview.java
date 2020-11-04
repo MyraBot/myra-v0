@@ -17,8 +17,8 @@ public class WelcomeEmbedPreview implements Command {
     public void execute(CommandContext ctx) throws Exception {
         Database db = new Database(ctx.getGuild());
         //get variables
-        String welcomeColour = db.getNested("welcome").get("welcomeColour");
-        String welcomeEmbedMessage = db.getNested("welcome").get("welcomeEmbedMessage");
+        String welcomeColour = db.getNested("welcome").get("welcomeColour").toString();
+        String welcomeEmbedMessage = db.getNested("welcome").get("welcomeEmbedMessage").toString();
         //build embed
         EmbedBuilder join = new EmbedBuilder()
                 .setAuthor("welcome", null, ctx.getGuild().getIconUrl())

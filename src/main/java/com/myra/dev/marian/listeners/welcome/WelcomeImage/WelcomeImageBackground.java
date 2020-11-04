@@ -48,7 +48,7 @@ public class WelcomeImageBackground implements Command {
             return;
         }
         //save in database
-        new Database(ctx.getGuild()).getNested("welcome").set("welcomeImageBackground", ctx.getArguments()[0]);
+        new Database(ctx.getGuild()).getNested("welcome").set("welcomeImageBackground", ctx.getArguments()[0], Manager.type.STRING);
         //success
         utilities.success(ctx.getChannel(),
                 "welcome image background",

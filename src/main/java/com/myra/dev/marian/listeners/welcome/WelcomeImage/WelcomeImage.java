@@ -19,7 +19,7 @@ public class WelcomeImage extends Events {
             Manager.getUtilities().error(event.getGuild().getDefaultChannel(), "welcome image", "\uD83D\uDDBC", "No welcome channel specified", "To set a welcome channel type in `" + new Database(event.getGuild()).get("prefix") + "welcome channel <channel>`", event.getGuild().getIconUrl());
             return;
         }
-        TextChannel channel = event.getGuild().getTextChannelById(db.getNested("welcome").get("welcomeChannel"));
+        TextChannel channel = event.getGuild().getTextChannelById(db.getNested("welcome").get("welcomeChannel").toString());
         //send welcome image
         WelcomeImageRender welcomeImage = new WelcomeImageRender();
         welcomeImage.welcomeImage(event.getGuild(), event.getUser(), channel);

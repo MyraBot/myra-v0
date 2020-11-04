@@ -2,7 +2,6 @@ package com.myra.dev.marian.utilities.management;
 
 import com.myra.dev.marian.commands.administrator.Prefix;
 import com.myra.dev.marian.commands.administrator.Say;
-import com.myra.dev.marian.listeners.Someone;
 import com.myra.dev.marian.commands.administrator.Toggle;
 import com.myra.dev.marian.commands.economy.Balance;
 import com.myra.dev.marian.commands.economy.Daily;
@@ -43,6 +42,7 @@ import com.myra.dev.marian.commands.moderation.mute.Tempmute;
 import com.myra.dev.marian.commands.moderation.mute.Unmute;
 import com.myra.dev.marian.commands.music.commands.*;
 import com.myra.dev.marian.database.MongoDbUpdate;
+import com.myra.dev.marian.listeners.Someone;
 import com.myra.dev.marian.listeners.autorole.AutoRoleSet;
 import com.myra.dev.marian.listeners.autorole.AutoroleToggle;
 import com.myra.dev.marian.listeners.leveling.Leveling;
@@ -71,16 +71,21 @@ import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedToggle;
 import com.myra.dev.marian.marian.GetInvite;
 import com.myra.dev.marian.marian.Shutdown;
 import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandService;
+import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.management.commands.DefaultCommandService;
 import com.myra.dev.marian.utilities.management.listeners.DefaultListenerService;
 import com.myra.dev.marian.utilities.management.listeners.ListenerService;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Manager {
     //create HashMap
     public static HashMap<String, Events> commands = new HashMap<String, Events>();
+
+    public static enum type {STRING, INTEGER, BOOLEAN}
 
     final static Utilities UTILITIES = new Utilities();
     final static Leveling LEVELING = new Leveling();
@@ -90,6 +95,10 @@ public class Manager {
     public void start() {
         //load commands
         commandRegistry();
+    }
+
+    public static Map<Command, CommandSubscribe> getCommands() {
+        return COMMAND_SERVICE.getCommands();
     }
 
     // Return utilities

@@ -39,7 +39,7 @@ public class WelcomeEmbedMessage implements Command {
         // Get database
         Database db = new Database(ctx.getGuild());
         // Update database
-        db.getNested("welcome").set("welcomeEmbedMessage", message);
+        db.getNested("welcome").set("welcomeEmbedMessage", message, Manager.type.STRING);
         // Success
         utilities.success(ctx.getChannel(), "welcome embed message", "\uD83D\uDCAC",
                 "\uD83D\uDC4B │ welcome text changed to",
