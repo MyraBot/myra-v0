@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.entities.User;
 
 @CommandSubscribe(
         name = "give",
-        aliases = {"transfer"}
+        aliases = {"transfer", "pay"}
 )
 public class Give implements Command {
     @Override
