@@ -27,16 +27,21 @@ public class Give implements Command {
             ctx.getChannel().sendMessage(usage.build()).queue();
             return;
         }
+// Get user
+        final User user = utilities.getUser(ctx.getEvent(), ctx.getArguments()[0], "give", "\uD83D\uDCB8");
+        if (user == null) return;
 // Errors
         // Amount of money aren't digits
         if (!ctx.getArguments()[1].matches("\\d+")) {
             utilities.error(ctx.getChannel(), "give", "\uD83D\uDCB8", "Invalid number", "Please only use digits", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
-// Transfer money
-        // Get user
-        final User user = utilities.getUser(ctx.getEvent(), ctx.getArguments()[0], "give", "\uD83D\uDCB8");
-        if (user == null) return;
+        // User is bot
+        if (user.isBot()) {
+            utilities.error(ctx.getChannel(), "give", "\uD83D\uDCB8", "Invalid user", "You're not allowed to give credits to bots", ctx.getAuthor().getEffectiveAvatarUrl());
+            return;
+        }
+// Transfer money;
         // Get database
         Database db = new Database(ctx.getGuild());
         // Transfer money

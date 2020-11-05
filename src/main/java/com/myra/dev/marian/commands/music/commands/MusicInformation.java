@@ -15,15 +15,15 @@ import net.dv8tion.jda.api.EmbedBuilder;
         aliases = {"music info", "track information", "track info", "track", "song", "song information", "song info"}
 )
 public class MusicInformation implements Command {
-    //TODO
+
     @Override
     public void execute(CommandContext ctx) throws Exception {
         // Check for no arguments
         if (ctx.getArguments().length != 0) return;
         // Get audio player
-        AudioPlayer player = PlayerManager.getInstance().getMusicManager(ctx.getGuild()).audioPlayer;
+        final AudioPlayer player = PlayerManager.getInstance().getMusicManager(ctx.getGuild()).audioPlayer;
         // Get utilities
-        Utilities utilities = Manager.getUtilities();
+        final Utilities utilities = Manager.getUtilities();
         //the bot isn't connected to any voice channel
         if (!ctx.getGuild().getAudioManager().isConnected()) {
             utilities.error(

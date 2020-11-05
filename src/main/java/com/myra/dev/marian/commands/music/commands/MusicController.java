@@ -22,7 +22,7 @@ import java.util.TimerTask;
         name = "music controller"
 )
 public class MusicController extends Events implements Command {
-    //TODO
+
     private static HashMap<Message, Boolean> cancelTimer = new HashMap<>();
 
     @Override
