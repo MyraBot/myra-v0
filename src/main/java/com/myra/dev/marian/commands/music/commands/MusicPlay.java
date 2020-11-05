@@ -11,9 +11,11 @@ import com.myra.dev.marian.utilities.management.commands.Command;
 import com.myra.dev.marian.utilities.management.commands.CommandContext;
 import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -55,7 +57,6 @@ public class MusicPlay extends Events implements Command {
             utilities.error(ctx.getChannel(), "play", "\uD83D\uDCBF", "You need to be in the same voice channel as me to use this command", "Join `" + ctx.getGuild().getSelfMember().getVoiceState().getChannel().getName() + "` to use this command", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
-
         // Get song
         String song = utilities.getString(ctx.getArguments());
         // If song is url
@@ -68,7 +69,40 @@ public class MusicPlay extends Events implements Command {
         }
         // If song is given by name
         catch (Exception e) {
-            new YouTube().search(song, results, ctx.getEvent());
+            // Search on YouTube for song name
+            List<SearchResult> searchResults = YouTube.getInstance().search(song);
+            // Nothing found
+            if (results == null) {
+                utilities.error(
+                        ctx.getChannel(),
+                        "play", "\uD83D\uDCBF",
+                        "No results",
+                        "YouTube could not find **" + song + "**",
+                        ctx.getAuthor().getEffectiveAvatarUrl());
+                return;
+            }
+            // Song menu
+            EmbedBuilder songs = new EmbedBuilder()
+                    .setAuthor("choose a song", null, ctx.getAuthor().getEffectiveAvatarUrl())
+                    .setColor(utilities.blue)
+                    .addField("\uD83D\uDD0D │ track 1\uFE0F\u20E3", searchResults.get(0).getSnippet().getTitle(), false)
+                    .addField("\uD83D\uDD0D │ track 2\uFE0F\u20E3", searchResults.get(1).getSnippet().getTitle(), false)
+                    .addField("\uD83D\uDD0D │ track 3\uFE0F\u20E3", searchResults.get(2).getSnippet().getTitle(), false)
+                    .addField("\uD83D\uDD0D │ track 4\uFE0F\u20E3", searchResults.get(3).getSnippet().getTitle(), false)
+                    .addField("\uD83D\uDD0D │ track 5\uFE0F\u20E3", searchResults.get(4).getSnippet().getTitle(), false);
+            Message message = ctx.getChannel().sendMessage(songs.build()).complete();
+            // Save results in HashMap
+            results.put(message.getId(), searchResults);
+            //add reactions
+            message.addReaction("1\uFE0F\u20E3").queue();
+            message.addReaction("2\uFE0F\u20E3").queue();
+            message.addReaction("3\uFE0F\u20E3").queue();
+            message.addReaction("4\uFE0F\u20E3").queue();
+            message.addReaction("5\uFE0F\u20E3").queue();
+
+            message.addReaction("\uD83D\uDEAB").queue();
+            // Add reaction to HashMap
+            MessageReaction.add("play", message.getId(), Arrays.asList("1\uFE0F\u20E3", "2\uFE0F\u20E3", "3\uFE0F\u20E3", "4\uFE0F\u20E3", "5\uFE0F\u20E3", "5\uFE0F\u20E3", "\uD83D\uDEAB"), ctx.getChannel(), ctx.getAuthor(), false);
         }
     }
 
