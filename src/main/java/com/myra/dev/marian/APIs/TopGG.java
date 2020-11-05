@@ -1,6 +1,7 @@
 package com.myra.dev.marian.APIs;
 
 import com.myra.dev.marian.utilities.management.Manager;
+import net.dv8tion.jda.api.entities.User;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -9,10 +10,24 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 public class TopGG {
+    // Create Instance
+    private final static TopGG TOP_GG = new TopGG();
 
+    // Return the Instance
+    public static TopGG getInstance() {
+        return TOP_GG;
+    }
 
-    public static String getUpVotes() throws Exception {
-        OkHttpClient client = new OkHttpClient();
+    // Create a OkHttpClient
+    private final OkHttpClient client = new OkHttpClient();
+
+    /**
+     * Get the amount of votes for Myra.
+     *
+     * @return Returns the amount of votes as a String object.
+     * @throws IOException
+     */
+    public String getUpVotes() throws IOException {
         //make get request
         Request channel = new Request.Builder()
                 .url("https://top.gg/api/bots/718444709445632122")
@@ -24,18 +39,33 @@ public class TopGG {
             channelOutput = channelResponse.body().string();
         }
         //create Json object
-        String votes = new JSONObject(channelOutput).get("points").toString();
-
-
+        String votes = new JSONObject(channelOutput).getString("points");
+        // Return votes
         return votes;
     }
 
-    public static void test() throws IOException {
- /*       DiscordBotListAPI api = new DiscordBotListAPI.Builder()
-                .token(Manager.getUtilities().topGgKey)
-                .botId("718444709445632122")
+    /**
+     * Checks if a user has voted.
+     *
+     * @param user The user to check.
+     * @return Returns a boolean value if the user voted for my bot in the last 12 hours.
+     * @throws IOException
+     */
+    public boolean hasVoted(User user) throws IOException {
+        //make get request
+        Request channel = new Request.Builder()
+                .url("https://top.gg/api/bots/718444709445632122/check?userId=" + user.getId())
+                .header("Authorization", Manager.getUtilities().topGgKey)
                 .build();
-
-        System.out.println(api.getStats("votes"));*/
+        //execute call
+        String channelOutput;
+        try (Response channelResponse = client.newCall(channel).execute()) {
+            channelOutput = channelResponse.body().string();
+        }
+        //create Json object
+        Integer votes = new JSONObject(channelOutput).getInt("voted");
+        // Return if user voted
+        if (votes != 0) return true;
+        else return false;
     }
 }
