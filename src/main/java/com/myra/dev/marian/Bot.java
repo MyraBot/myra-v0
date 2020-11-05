@@ -7,54 +7,58 @@ import com.myra.dev.marian.utilities.management.Manager;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Icon;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
+import javax.security.auth.login.LoginException;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Bot {
     public static ShardManager shardManager;
 
-    public static String prefix = "~";
-    public static String marian = "639544573114187797";
-
+    public final static String prefix = "~";
+    public final static String marian = "639544573114187797";
 
     // Main method
-    public static void main(String[] args) throws Exception {
-        // Register commands
-        new Manager().start();
-        // Load main class
+    public static void main(String[] args) throws LoginException {
         new Bot();
     }
 
-    public Bot() {
-        try {
-            //build bot
-            DefaultShardManagerBuilder jda = new DefaultShardManagerBuilder("NzE4NDQ0NzA5NDQ1NjMyMTIy.Xto9xg.dQxtSFxxYHpKXOwLCtJuWM5w1MM")
-                    //.enableIntents(GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MEMBERS)
-                    //.enableCache(CacheFlag.ACTIVITY)
-                    .enableCache(CacheFlag.VOICE_STATE)
-                    .setMemberCachePolicy(MemberCachePolicy.ALL)
-                    .setStatus(OnlineStatus.IDLE);
-            //event listeners
 
-            jda.addEventListeners(new EventsManager());
-
-            shardManager = jda.build();
-            System.out.println(ConsoleColours.GREEN + "Bot online" + ConsoleColours.RESET);
-            //change activity and profile picture
-            changeUserInformation();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private Bot() throws LoginException {
+        DefaultShardManagerBuilder jda = DefaultShardManagerBuilder.createDefault("NzE4NDQ0NzA5NDQ1NjMyMTIy.Xto9xg.dQxtSFxxYHpKXOwLCtJuWM5w1MM")
+                //.enableIntents(GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MEMBERS)
+                //.enableCache(CacheFlag.ACTIVITY)
+                .enableIntents(GatewayIntent.GUILD_MEMBERS) // Need GatewayIntent.GUILD_MEMBERS for MemberCachePolicy.ALL
+                .setMemberCachePolicy(MemberCachePolicy.ALL)
+                .enableCache(CacheFlag.VOICE_STATE)
+                .setStatus(OnlineStatus.IDLE)
+                .addEventListeners(new EventsManager());
+        // Build JDA
+        shardManager = jda.build();
+        // Change activity and profile picture
+        changeUserInformation();
+        // Register commands
+        new Manager().start();
+        // Send ready information
+        System.out.println(ConsoleColours.GREEN + "Bot online" + ConsoleColours.RESET);
+        // Add console listener
+        consoleListener();
     }
 
-    public void changeUserInformation() throws Exception {
-        //get profile pictures
-        List<InputStream> profilePictures = new ArrayList();
+    private void changeUserInformation() {
+        // Get profile pictures
+        ArrayList<InputStream> profilePictures = new ArrayList<>();
         profilePictures.add(this.getClass().getClassLoader().getResourceAsStream("profilePicture1.png"));
         profilePictures.add(this.getClass().getClassLoader().getResourceAsStream("profilePicture2.png"));
         profilePictures.add(this.getClass().getClassLoader().getResourceAsStream("profilePicture3.png"));
@@ -63,19 +67,19 @@ public class Bot {
         profilePictures.add(this.getClass().getClassLoader().getResourceAsStream("profilePicture6.png"));
         profilePictures.add(this.getClass().getClassLoader().getResourceAsStream("profilePicture7.png"));
         profilePictures.add(this.getClass().getClassLoader().getResourceAsStream("profilePicture8.png"));
-        //get a random one
+        // Get a random one
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 // Get random number
                 int random = new Random().nextInt(profilePictures.size());
-                //change profile
+                // Change profile
                 shardManager.getShards().forEach(bot -> {
                     try {
-                        //change status
+                        // Change status
                         bot.getPresence().setActivity(Activity.listening("~help │ v0.6.3 │ " + bot.getGuilds().size() + " servers"));
-                        //change profile picture
+                        // Change profile picture
                         bot.getSelfUser().getManager().setAvatar(
                                 Icon.from(profilePictures.get(random))).queue();
                     } catch (Exception e) {
@@ -84,5 +88,29 @@ public class Bot {
                 });
             }
         }, 5 * 1000, 45 * 100 * 1000);
+    }
+
+    private void consoleListener() {
+        String line;
+        // Create a Buffered reader, which reads the lines of the console
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            while ((line = reader.readLine()) != null) {
+                // Shutdown command
+                if (line.equalsIgnoreCase("shutdown")) {
+                    if (shardManager != null) {
+                        shardManager.setStatus(OnlineStatus.OFFLINE);
+                        shardManager.shutdown();
+                        System.out.println(ConsoleColours.RED + "Bot offline" + ConsoleColours.RESET);
+                    }
+                }
+                // Help command
+                else {
+                    System.out.println("Use " + ConsoleColours.RED + "shutdown" + ConsoleColours.RESET + " to shutdown the program");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

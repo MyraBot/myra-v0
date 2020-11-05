@@ -67,6 +67,7 @@ import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedHelp;
 import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedMessage;
 import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedPreview;
 import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedToggle;
+import com.myra.dev.marian.marian.Dashboard;
 import com.myra.dev.marian.marian.GetInvite;
 import com.myra.dev.marian.marian.Shutdown;
 import com.myra.dev.marian.utilities.Utilities;
@@ -117,6 +118,7 @@ public class Manager {
                 // Marian
                 new MongoDbUpdate(),
                 new GetInvite(),
+                new Dashboard(),
                 new Shutdown(),
                 // Administrator
                 new Prefix(),
