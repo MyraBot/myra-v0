@@ -79,7 +79,6 @@ public class CommandCooldown {
             // Add guild and 'memberMap' HashMap to 'cooldown' HashMap
             cooldown.put(guild, memberMap);
         }
-        System.out.println("false überschritten");
         return true;
     }
 }
