@@ -18,7 +18,7 @@ public class CommandCooldown {
 
 
     //                     Guild          Member          Command Time
-    private static HashMap<Guild, HashMap<Member, HashMap<String, Long>>> cooldown = new HashMap<>();
+    private final static HashMap<Guild, HashMap<Member, HashMap<String, Long>>> cooldown = new HashMap<>();
 
     public boolean addCommand(CommandContext ctx, String command, Integer durationInSeconds) {
         // Get variables
@@ -34,11 +34,13 @@ public class CommandCooldown {
                     final int durationInMillis = durationInSeconds * 1000;
                     // Last execution
                     final long lastExecution = cooldown.get(guild).get(member).get(command);
-
                     // If duration didn't pass
                     if (cooldown.get(guild).get(member).get(command) + durationInMillis >= System.currentTimeMillis()) {
-                        ctx.getChannel().sendMessage("> \u23F3 Cooldown").queue(message -> { // ⏳
-                            message.delete().queueAfter(System.currentTimeMillis() - lastExecution + durationInMillis, TimeUnit.MILLISECONDS);
+                        // Get time until you can use the command
+                        final long wait = TimeUnit.MILLISECONDS.toSeconds((lastExecution + durationInMillis) - System.currentTimeMillis());
+                        // Send cooldown message
+                        ctx.getChannel().sendMessage("> \u23F3 **Cooldown** " + wait + " seconds").queue(message -> { // ⏳
+                            message.delete().queueAfter((lastExecution + durationInMillis) - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
                         });
                         return false;
                     } else {
@@ -77,6 +79,7 @@ public class CommandCooldown {
             // Add guild and 'memberMap' HashMap to 'cooldown' HashMap
             cooldown.put(guild, memberMap);
         }
+        System.out.println("false überschritten");
         return true;
     }
 }
