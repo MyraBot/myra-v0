@@ -1,6 +1,6 @@
 package com.myra.dev.marian.commands.music;
 
-import com.myra.dev.marian.utilities.management.Events;
+import com.myra.dev.marian.management.Events;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;

@@ -1,6 +1,7 @@
 package com.myra.dev.marian.utilities;
 
-import com.myra.dev.marian.utilities.management.Manager;
+import com.myra.dev.marian.Bot;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
@@ -16,6 +17,35 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class Utilities {
+    private final static Utilities getUtils = new Utilities();
+
+    public static Utilities getUtils() {
+        return getUtils;
+    }
+
+    public void loadEmotes(JDA JDA) {
+        final JDA jda = JDA;
+        // Emotes
+        this.offline = getEmote(jda, "Offline");
+        this.idle = getEmote(jda, "Idle");
+        this.doNotDisturb = getEmote(jda, "DoNotDisturb");
+        this.online = getEmote(jda, "Online");
+
+        this.nitroBoost = getEmote(jda, "NitroBoost");
+        this.coin = getEmote(jda, "Coin");
+        // Badges
+        this.bugHunter = getEmote(jda, "BugHunter");
+        this.bugHunterLvl2 = getEmote(jda, "BugHunterLvl2");
+
+        this.bravery = getEmote(jda, "Bravery");
+        this.brilliance = getEmote(jda, "Brilliance");
+        this.balance = getEmote(jda, "Balance");
+
+        this.partner = getEmote(jda, "Partner");
+        this.verifiedDeveloper = getEmote(jda, "VerifiedDeveloper");
+        this.staff = getEmote(jda, "Staff");
+    }
+
     //colours
     public final int red = 0xFF0055;
     public final int blue = 0xccd9f0;
@@ -32,24 +62,33 @@ public class Utilities {
     public final String spotifyClientSecret = "d4d48b2e4b474d098fa440a6d01ece42";
     public final String topGgKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxODQ0NDcwOTQ0NTYzMjEyMiIsImJvdCI6dHJ1ZSwiaWF0IjoxNjA0MzMwMTg3fQ.-zX8YHLdiH9w6pmDceN0fHDjTAJd9FbDiNXM2sftoA4";
     //emotes
-    public final String offline = "<:Offline:749616594916868098>";
-    public final String idle = "<:Idle:749616593973018665>";
-    public final String doNotDisturb = "<:DoNotDisturb:749616593939726346>";
-    public final String online = "<:Online:749616597647491154>";
+    public String offline;
+    public String idle;
+    public String doNotDisturb;
+    public String online;
 
-    public final String nitroBoost = "<:NitroBoost:726467129217646634>";
-    public final String coin = "<:coin:768420796157919232>";
+    public String nitroBoost;
+    public String coin;
     // Badges
-    public final String bugHunter = "<:BugHunter:751101984756465805>";
-    public final String bugHunterLvl2 = "<:BugHunterLvl2:751101984769310732>";
+    public String bugHunter;
+    public String bugHunterLvl2;
 
-    public final String bravery = "<:Bravery:751102172158099600>";
-    public final String brilliance = "<:Brilliance:751102172640444477>";
-    public final String balance = "<:balance:751102171092615219>";
+    public String bravery;
+    public String brilliance;
+    public String balance;
 
-    public final String partner = "<:Partner:748984597584412883>";
-    public final String verifiedDeveloper = "<:VerifiedDeveloper:726467094413181019>";
-    public final String staff = "<:staff:751105613831995454>";
+    public String partner;
+    public String verifiedDeveloper;
+    public String staff;
+
+    /**
+     * @param name The name of the emote.
+     * @return Returns an emote from Myra's Server.
+     */
+    public String getEmote(JDA jda, String name) {
+        if (jda.getGuildById(Bot.myraServer).getEmotesByName(name, true).isEmpty()) return null;
+        return jda.getGuildById(Bot.myraServer).getEmotesByName(name, true).get(0).getAsMention();
+    }
 
     /**
      * Get a clickable message, which redirects you to a link.
@@ -167,7 +206,7 @@ public class Utilities {
     public void error(TextChannel textChannel, String command, String commandEmoji, String errorHeader, String error, String authorAvatar) {
         textChannel.sendMessage(new EmbedBuilder()
                 .setAuthor(command, null, authorAvatar)
-                .setColor(Manager.getUtilities().red)
+                .setColor(Utilities.getUtils().red)
                 .addField("\uD83D\uDEA7 │ " + errorHeader, error, false)
                 .build())
                 .queue();
@@ -178,7 +217,7 @@ public class Utilities {
         if (deleteAfter5Seconds) {
             textChannel.sendMessage(new EmbedBuilder()
                     .setAuthor(command, null, authorAvatar)
-                    .setColor(Manager.getUtilities().green)
+                    .setColor(Utilities.getUtils().green)
                     .addField("\uD83C\uDFC1 │ " + successHeader, success, false)
                     .setImage(imageUrl)
                     .build()
@@ -186,7 +225,7 @@ public class Utilities {
         } else {
             textChannel.sendMessage(new EmbedBuilder()
                     .setAuthor(command, null, authorAvatar)
-                    .setColor(Manager.getUtilities().green)
+                    .setColor(Utilities.getUtils().green)
                     .addField("\uD83C\uDFC1 │ " + successHeader, success, false)
                     .setImage(imageUrl)
                     .build()
@@ -226,7 +265,7 @@ public class Utilities {
     /**
      * Get a user, who will be modified.
      *
-     * @param event The GuildMessageReceivedEvent.
+     * @param event        The GuildMessageReceivedEvent.
      * @param userRaw      The String the user is given.
      * @param command      The name of the command.
      * @param commandEmoji The Emoji of the command.
@@ -278,10 +317,10 @@ public class Utilities {
     /**
      * Get a text channel.
      *
-     * @param event The GuildMessageReceivedEvent.
+     * @param event           The GuildMessageReceivedEvent.
      * @param providedChannel The String the channel should be in.
-     * @param command The command name.
-     * @param commandEmoji The command emoji.
+     * @param command         The command name.
+     * @param commandEmoji    The command emoji.
      * @return Returns a channel as a TextChannel Object.
      */
     public TextChannel getTextChannel(GuildMessageReceivedEvent event, String providedChannel, String
@@ -304,9 +343,9 @@ public class Utilities {
     /**
      * Get a role.
      *
-     * @param event The GuildMessageReceivedEvent.
+     * @param event        The GuildMessageReceivedEvent.
      * @param providedRole The String the role should be in.
-     * @param command The command name.
+     * @param command      The command name.
      * @param commandEmoji The command Emoji.
      * @return Returns a role as a Role Object.
      */

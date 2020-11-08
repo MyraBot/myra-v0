@@ -3,11 +3,11 @@ package com.myra.dev.marian.commands.music.commands;
 import com.myra.dev.marian.APIs.LavaPlayer.PlayerManager;
 import com.myra.dev.marian.APIs.LavaPlayer.TrackScheduler;
 import com.myra.dev.marian.utilities.MessageReaction;
-import com.myra.dev.marian.utilities.management.Events;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.management.Events;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -30,13 +30,13 @@ public class MusicController extends Events implements Command {
         final AudioPlayer player = PlayerManager.getInstance().getMusicManager(ctx.getGuild()).audioPlayer;
         // No audio track is playing
         if (player.getPlayingTrack() == null) {
-            Manager.getUtilities().error(ctx.getChannel(), "music controller", "\uD83C\uDF9A", "The player isn't playing any song", "Use `" + ctx.getPrefix() + "play <song>` to play a song", ctx.getAuthor().getEffectiveAvatarUrl());
+            Utilities.getUtils().error(ctx.getChannel(), "music controller", "\uD83C\uDF9A", "The player isn't playing any song", "Use `" + ctx.getPrefix() + "play <song>` to play a song", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         //music controller
         EmbedBuilder musicController = new EmbedBuilder()
                 .setAuthor("music", null, ctx.getEvent().getJDA().getSelfUser().getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().blue)
+                .setColor(Utilities.getUtils().blue)
                 .addField("current playing track", PlayerManager.getInstance().getMusicManager(ctx.getGuild()).audioPlayer.getPlayingTrack().getInfo().title, false)
                 .setFooter(displayPosition(player));
         Message message = ctx.getChannel().sendMessage(musicController.build()).complete();
@@ -60,7 +60,7 @@ public class MusicController extends Events implements Command {
                     update.addField("\u23F8 │ player paused", player.getPlayingTrack().getInfo().title, false);
                 } else {
                     update
-                            .setColor(Manager.getUtilities().blue)
+                            .setColor(Utilities.getUtils().blue)
                             .addField("\u25B6 │ current playing track", PlayerManager.getInstance().getMusicManager(ctx.getGuild()).audioPlayer.getPlayingTrack().getInfo().title, false)
                             .setFooter(displayPosition(player));
                 }

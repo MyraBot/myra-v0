@@ -1,10 +1,10 @@
 package com.myra.dev.marian.listeners.welcome;
 
 
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 @CommandSubscribe(
@@ -19,7 +19,7 @@ public class WelcomeHelp implements Command {
         // Usage
         EmbedBuilder welcomeUsage = new EmbedBuilder()
                 .setAuthor("welcome", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().gray)
+                .setColor(Utilities.getUtils().gray)
                 .addField("`" + ctx.getPrefix() + "welcome image`", "\uD83D\uDDBC │ Change the settings for the welcome image", false)
                 .addField("`" + ctx.getPrefix() + "welcome embed`", "\uD83D\uDCC7 │ Change the settings for the welcome embed", false)
                 .addField("`" + ctx.getPrefix() + "welcome direct message`", "\u2709\uFE0F │ Change the settings for the welcome direct message", false)

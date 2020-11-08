@@ -1,10 +1,10 @@
 package com.myra.dev.marian.commands.music.commands;
 
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 
@@ -20,7 +20,7 @@ public class MusicJoin implements Command {
         if (ctx.getArguments().length != 0) return;
 // ERRORS
         // Get utilities
-        Utilities utilities = Manager.getUtilities();
+        Utilities utilities = Utilities.getUtils();
         // Already connected to a voice channel
         if (ctx.getGuild().getAudioManager().isConnected()) {
             utilities.error(ctx.getChannel(), "join", "\uD83D\uDCE5", "I can only be in one channel at a time", "I'm already connected to **" + ctx.getGuild().getAudioManager().getConnectedChannel().getName() + "**", ctx.getAuthor().getEffectiveAvatarUrl());

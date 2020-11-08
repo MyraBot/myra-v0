@@ -1,10 +1,12 @@
 package com.myra.dev.marian.commands.moderation;
 
 
+import com.myra.dev.marian.Bot;
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 
@@ -21,7 +23,7 @@ public class Clear implements Command {
         // If amount isn't a number
         if (!ctx.getArguments()[0].matches("\\d+")) return;
         // Get utilities
-        Utilities utilities = new Utilities();
+        Utilities utilities = Utilities.getUtils();
         // Usage
         if (ctx.getArguments().length != 1) {
             EmbedBuilder embed = new EmbedBuilder()

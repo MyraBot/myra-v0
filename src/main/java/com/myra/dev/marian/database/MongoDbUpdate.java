@@ -1,10 +1,10 @@
 package com.myra.dev.marian.database;
 
-import com.myra.dev.marian.utilities.management.Events;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.management.Events;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -62,13 +62,13 @@ public class MongoDbUpdate extends Events implements Command {
                 }
 
                 Document economyDocument = new Document()
-                        .append("currency", Manager.getUtilities().coin);
+                        .append("currency", Utilities.getUtils().coin);
                 Document levelingDocument = new Document()
                         .append("boost", 1)
                         .append("roles", new Document());
                 Document welcomeNested = new Document()
                         .append("welcomeChannel", "not set")
-                        .append("welcomeColour", Manager.getUtilities().blue)
+                        .append("welcomeColour", Utilities.getUtils().blue)
                         .append("welcomeImageBackground", "not set")
                         .append("welcomeImageFont", "default")
                         .append("welcomeEmbedMessage", "Welcome {user} to {server}! Enjoy your stay")

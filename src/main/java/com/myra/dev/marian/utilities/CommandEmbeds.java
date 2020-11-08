@@ -1,7 +1,7 @@
 package com.myra.dev.marian.utilities;
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.management.Manager;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
@@ -26,7 +26,7 @@ public class CommandEmbeds {
     public EmbedBuilder commands() {
         return new EmbedBuilder()
                 .setAuthor("commands", null, author.getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().gray)
+                .setColor(Utilities.getUtils().gray)
                 .addField("`help`", "\uD83D\uDCD6 │ Helpful commands", false)
                 .addField("`general`", "\uD83C\uDF88 │ The main commands of the bot", false)
                 .addField("`fun`", "\uD83D\uDD79 │ Commands to play around with", false)
@@ -41,13 +41,13 @@ public class CommandEmbeds {
     public EmbedBuilder help() {
         return new EmbedBuilder()
                 .setAuthor("help", null, author.getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().gray)
+                .setColor(Utilities.getUtils().gray)
                 .addField("`" + prefix + "help`", "\uD83E\uDDF0 │ Opens a menu with several helpful links and lists", false)
                 .addField("`" + prefix + "commands`", "\uD83D\uDCC3 │ Shows this", false)
                 .addField("`" + prefix + "invite`", "\u2709\uFE0F │ Invite me to your server", false)
                 .addField("`" + prefix + "support`", "\u26A0\uFE0F │ Join the support server to get help and report bugs", false)
                 .addField("`" + prefix + "ping`", "\uD83C\uDFD3 │ Check my latency", false)
-                .addField("`" + prefix + "vote`", "\uD83D\uDDF3 │ Vote for me on " + Manager.getUtilities().hyperlink("top.gg", "https://top.gg/bot/718444709445632122"), false);
+                .addField("`" + prefix + "vote`", "\uD83D\uDDF3 │ Vote for me on " + Utilities.getUtils().hyperlink("top.gg", "https://top.gg/bot/718444709445632122"), false);
     }
 
 
@@ -55,7 +55,7 @@ public class CommandEmbeds {
     public EmbedBuilder general() {
         return new EmbedBuilder()
                 .setAuthor("general", null, author.getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().gray)
+                .setColor(Utilities.getUtils().gray)
                 .addField("`" + prefix + "calculate <number 1 <operator> <number 2>`", "\uD83E\uDDEE │ Let me calculate something for you", false)
                 .addField("`" + prefix + "avatar @user`", "\uD83D\uDDBC │ Gives you profile pictures of other people", false)
                 .addField("`" + prefix + "information`", "\uD83D\uDDD2 │ Gives you information", false)
@@ -66,7 +66,7 @@ public class CommandEmbeds {
     public EmbedBuilder fun() {
         return new EmbedBuilder()
                 .setAuthor("fun", null, author.getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().gray)
+                .setColor(Utilities.getUtils().gray)
                 .addField("`" + prefix + "meme`", "\uD83E\uDD2A │ Shows a random meme", false)
                 .addField("`" + prefix + "format <text>`", "\uD83D\uDDDA │ Change the font of your text", false)
                 .addField("`" + prefix + "would you rather`", " │ Play a round of would you rather", false);
@@ -76,7 +76,7 @@ public class CommandEmbeds {
     public EmbedBuilder leveling() {
         return new EmbedBuilder()
                 .setAuthor("leveling", null, author.getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().gray)
+                .setColor(Utilities.getUtils().gray)
                 .addField("`" + prefix + "rank <user>`", "\uD83C\uDFC5 │ Shows the rank of a user", false)
                 .addField("`" + prefix + "leaderboard`", "\uD83E\uDD47 │ Shows the leaderboard", false)
                 .addField("`" + prefix + "edit rank <url>`", "\uD83D\uDDBC │ Set a custom rank background", false);
@@ -86,7 +86,7 @@ public class CommandEmbeds {
     public EmbedBuilder economy() {
         return new EmbedBuilder()
                 .setAuthor("economy", null, author.getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().gray)
+                .setColor(Utilities.getUtils().gray)
                 .addField("`" + prefix + "balance <user>`", new Database(guild).getNested("economy").get("currency") + " │ Shows how many " + new Database(guild).getNested("economy").get("currency") + " you have.", false)
                 .addField("`" + prefix + "daily`", "\uD83E\uDD47 │ Claim your daily reward", false)
                 .addField("`" + prefix + "give <user> <balance>`", "\uD83D\uDCB8 │ Give credits to other users", false);
@@ -96,7 +96,7 @@ public class CommandEmbeds {
     public EmbedBuilder music() {
         return new EmbedBuilder()
                 .setAuthor("music", null, author.getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().gray)
+                .setColor(Utilities.getUtils().gray)
                 .addField("`" + prefix + "join`", "\uD83D\uDCE5 │ Let the bot join your voice channel", false)
                 .addField("`" + prefix + "disconnect`", "\uD83D\uDCE4 │ Kick the bot from your voice channel", false)
                 .addField("`" + prefix + "play <song>`", "\uD83D\uDCBF │ Add a song to the queue*", false)
@@ -113,7 +113,7 @@ public class CommandEmbeds {
     public EmbedBuilder moderation() {
         return new EmbedBuilder()
                 .setAuthor("moderation", null, author.getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().gray)
+                .setColor(Utilities.getUtils().gray)
                 .addField("`" + prefix + "moderation`", "\uD83D\uDD28 │ Display all moderation commands", false)
                 .addField("`" + prefix + "clear <amount>`", "\uD83D\uDDD1 │ Clear a certain amount of messages", false)
                 .addField("`" + prefix + "kick <user>`", "\uD83D\uDCE4 │ Kick a user", false)
@@ -131,7 +131,7 @@ public class CommandEmbeds {
     public EmbedBuilder administrator() {
         return new EmbedBuilder()
                 .setAuthor("administrator", null, author.getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().gray)
+                .setColor(Utilities.getUtils().gray)
                 .addField("`" + prefix + "prefix <prefix>`", "\uD83D\uDCCC │ Change the prefix of the bot", false)
                 .addField("`" + prefix + "toggle <command>`", "\uD83D\uDD11 │ Toggle commands on or off", false)
                 .addField("`" + prefix + "say <message>`", "\uD83D\uDCAC │ Let the bot say something", false)
@@ -149,17 +149,17 @@ public class CommandEmbeds {
     public EmbedBuilder supportServer() {
         return new EmbedBuilder()
                 .setAuthor("support", "https://discord.gg/nG4uKuB", author.getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().blue)
+                .setColor(Utilities.getUtils().blue)
                 .setThumbnail(jda.getGuildById("642809436515074053").getIconUrl())
-                .setDescription("\u26A0\uFE0F │ " + Manager.getUtilities().hyperlink("Report", "https://discord.gg/nG4uKuB") + " bugs and get " + Manager.getUtilities().hyperlink("help", "https://discord.gg/nG4uKuB") + "!");
+                .setDescription("\u26A0\uFE0F │ " + Utilities.getUtils().hyperlink("Report", "https://discord.gg/nG4uKuB") + " bugs and get " + Utilities.getUtils().hyperlink("help", "https://discord.gg/nG4uKuB") + "!");
     }
 
     //invite bot
     public EmbedBuilder inviteJda() {
         return new EmbedBuilder()
-                .setAuthor("invite", Manager.getUtilities().inviteJda(jda), author.getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().blue)
+                .setAuthor("invite", Utilities.getUtils().inviteJda(jda), author.getEffectiveAvatarUrl())
+                .setColor(Utilities.getUtils().blue)
                 .setThumbnail(jda.getSelfUser().getEffectiveAvatarUrl())
-                .setDescription("[\u2709\uFE0F │ Invite me to your server!](" + Manager.getUtilities().inviteJda(jda) + " \"bot invite link\")");
+                .setDescription("[\u2709\uFE0F │ Invite me to your server!](" + Utilities.getUtils().inviteJda(jda) + " \"bot invite link\")");
     }
 }

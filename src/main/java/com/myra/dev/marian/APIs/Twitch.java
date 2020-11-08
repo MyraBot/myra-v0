@@ -1,7 +1,8 @@
 package com.myra.dev.marian.APIs;
 
-import com.myra.dev.marian.utilities.management.Events;
-import com.myra.dev.marian.utilities.management.Manager;
+import com.myra.dev.marian.management.Events;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -23,8 +24,8 @@ public class Twitch extends Events {
         //form parameters
         RequestBody body = new FormBody.Builder()
                 .add("scope", "channel_read")
-                .add("client_id", Manager.getUtilities().twitchClientId)
-                .add("client_secret", Manager.getUtilities().twitchClientSecret)
+                .add("client_id", Utilities.getUtils().twitchClientId)
+                .add("client_secret", Utilities.getUtils().twitchClientSecret)
                 .add("grant_type", "client_credentials")
                 .build();
         //build request
@@ -47,7 +48,7 @@ public class Twitch extends Events {
         OkHttpClient client = new OkHttpClient();
         //search channel request
         Request game = new Request.Builder()
-                .addHeader("client-id", Manager.getUtilities().twitchClientId)
+                .addHeader("client-id", Utilities.getUtils().twitchClientId)
                 .addHeader("Authorization", "Bearer " + Twitch.accessToken)
                 .url("https://api.twitch.tv/helix/games?id=" + gameId)
                 .build();
@@ -66,7 +67,7 @@ public class Twitch extends Events {
         OkHttpClient client = new OkHttpClient();
         //search channel request
         Request channel = new Request.Builder()
-                .addHeader("client-id", Manager.getUtilities().twitchClientId)
+                .addHeader("client-id", Utilities.getUtils().twitchClientId)
                 .addHeader("Authorization", "Bearer " + accessToken)
                 .url("https://api.twitch.tv/helix/search/channels?query=" + channelName)
                 .build();
@@ -79,7 +80,7 @@ public class Twitch extends Events {
         JSONObject JsonChannel = new JSONObject(channelOutput);
         //if no channel found
         if (JsonChannel.getJSONArray("data").length() == 0) {
-            Manager.getUtilities().error(textChannel, "notification twitch", "\uD83D\uDD14", "No channel found", "**" + channelName + "** doesn't exist", avatar);
+            Utilities.getUtils().error(textChannel, "notification twitch", "\uD83D\uDD14", "No channel found", "**" + channelName + "** doesn't exist", avatar);
         }
         JSONObject channelData = JsonChannel.getJSONArray("data").getJSONObject(0);
         // Return null if stream is offline
@@ -99,8 +100,8 @@ public class Twitch extends Events {
 // Build embed
         EmbedBuilder twitch = new EmbedBuilder()
                 .setAuthor(name, "https://www.twitch.tv/" + name, thumbnail)
-                .setColor(Manager.getUtilities().blue)
-                .setDescription(Manager.getUtilities().hyperlink(title, "https://www.twitch.tv/" + name) + "\n" +
+                .setColor(Utilities.getUtils().blue)
+                .setDescription(Utilities.getUtils().hyperlink(title, "https://www.twitch.tv/" + name) + "\n" +
                         game
                 )
                 .setThumbnail(thumbnail)

@@ -1,10 +1,10 @@
 package com.myra.dev.marian.commands.administrator;
 
 
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 @CommandSubscribe(
@@ -19,7 +19,7 @@ public class Say implements Command {
         if (ctx.getArguments().length == 0) {
             EmbedBuilder embed = new EmbedBuilder()
                     .setAuthor("say", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                    .setColor(Manager.getUtilities().gray)
+                    .setColor(Utilities.getUtils().gray)
                     .addField("`" + ctx.getPrefix() + "say <message>`", "\uD83D\uDCAC │ Let the bot say something", true);
             ctx.getChannel().sendMessage(embed.build()).queue();
             return;

@@ -1,9 +1,9 @@
 package com.myra.dev.marian.commands.general.information;
 
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 
@@ -23,7 +23,7 @@ public class InformationBot implements Command {
 
         EmbedBuilder bot = new EmbedBuilder()
                 .setAuthor(jda.getSelfUser().getName(), null, jda.getSelfUser().getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().blue)
+                .setColor(Utilities.getUtils().blue)
                 .setThumbnail(jda.getSelfUser().getEffectiveAvatarUrl())
                 .addField("\uD83D\uDD0C │ name", jda.getSelfUser().getName(), true)
                 .addField("\uD83D\uDC51 │ owner", jda.getUserById("639544573114187797").getAsTag(), true)

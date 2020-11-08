@@ -2,8 +2,8 @@ package com.myra.dev.marian.listeners.welcome.welcomeEmbed;
 
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.management.Events;
-import com.myra.dev.marian.utilities.management.Manager;
+import com.myra.dev.marian.management.Events;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
@@ -20,7 +20,7 @@ public class WelcomeEmbed extends Events {
         if (!db.getListenerManager().check("welcomeEmbed")) return;
         //if no welcome channel is set
         if (db.getNested("welcome").get("welcomeChannel").equals("not set")) {
-            Manager.getUtilities().error(event.getGuild().getDefaultChannel(), "welcome embed", "\uD83D\uDCC7", "No welcome channel specified", "To set a welcome channel type in `" + db.get("prefix") + "welcome channel <channel>`", event.getGuild().getIconUrl());
+            Utilities.getUtils().error(event.getGuild().getDefaultChannel(), "welcome embed", "\uD83D\uDCC7", "No welcome channel specified", "To set a welcome channel type in `" + db.get("prefix") + "welcome channel <channel>`", event.getGuild().getIconUrl());
             return;
         }
         //get channel

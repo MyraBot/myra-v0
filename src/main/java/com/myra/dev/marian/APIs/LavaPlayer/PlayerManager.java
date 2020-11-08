@@ -1,7 +1,7 @@
 package com.myra.dev.marian.APIs.LavaPlayer;
 
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.management.Manager;
+import com.myra.dev.marian.utilities.Utilities;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -42,7 +42,7 @@ public class PlayerManager {
 
     public void loadAndPlay(TextChannel channel, String trackUrl, String authorAvatar, String thumbnailUrl) {
         // Get Utilities
-        Utilities utilities = Manager.getUtilities();
+        Utilities utilities = Utilities.getUtils();
         // Get music manager for guild
         final GuildMusicManager musicManager = this.getMusicManager(channel.getGuild());
         // All methods
@@ -77,7 +77,7 @@ public class PlayerManager {
 
             @Override
             public void noMatches() {
-                Manager.getUtilities().error(
+                Utilities.getUtils().error(
                         channel,
                         "play", "\uD83D\uDCBF",
                         "Track not found",
@@ -88,7 +88,7 @@ public class PlayerManager {
 
             @Override
             public void loadFailed(FriendlyException e) {
-                Manager.getUtilities().error(
+                Utilities.getUtils().error(
                         channel,
                         "play", "\uD83D\uDCBF",
                         "Could not play the track",

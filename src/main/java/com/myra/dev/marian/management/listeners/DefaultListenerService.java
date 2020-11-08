@@ -1,6 +1,6 @@
-package com.myra.dev.marian.utilities.management.listeners;
+package com.myra.dev.marian.management.listeners;
 
-import com.myra.dev.marian.utilities.management.commands.CommandService;
+import com.myra.dev.marian.management.commands.CommandService;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;

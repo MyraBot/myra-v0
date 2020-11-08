@@ -1,11 +1,11 @@
 package com.myra.dev.marian.commands.general.information;
 
 import com.myra.dev.marian.utilities.MessageReaction;
-import com.myra.dev.marian.utilities.management.Events;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.management.Events;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
@@ -25,7 +25,7 @@ public class InformationServer extends Events implements Command {
         //servers information
         EmbedBuilder server = new EmbedBuilder()
                 .setAuthor(ctx.getGuild().getName(), null, ctx.getGuild().getIconUrl())
-                .setColor(Manager.getUtilities().blue)
+                .setColor(Utilities.getUtils().blue)
                 .setThumbnail(ctx.getGuild().getIconUrl())
                 .addField("\uD83D\uDC51 │ owner", ctx.getGuild().getOwner().getAsMention(), true)
                 .addField("\uD83C\uDF9F │ server id", ctx.getGuild().getId(), true)
@@ -53,7 +53,7 @@ public class InformationServer extends Events implements Command {
             //servers information
             EmbedBuilder server = new EmbedBuilder()
                     .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())
-                    .setColor(Manager.getUtilities().blue)
+                    .setColor(Utilities.getUtils().blue)
                     .setThumbnail(event.getGuild().getIconUrl())
                     .addField("\uD83D\uDC51 │ owner", event.getGuild().getOwner().getAsMention(), true)
                     .addField("\uD83C\uDF9F │ server id", event.getGuild().getId(), true)

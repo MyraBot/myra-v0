@@ -2,7 +2,7 @@ package com.myra.dev.marian.database.allMethods;
 
 import com.myra.dev.marian.APIs.Twitch;
 import com.myra.dev.marian.database.MongoDb;
-import com.myra.dev.marian.utilities.management.Manager;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -48,10 +48,10 @@ public class GetNotificationManager {
         //define embed builder
         EmbedBuilder streamer = new EmbedBuilder()
                 .setAuthor("streamers", null, event.getAuthor().getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().blue);
+                .setColor(Utilities.getUtils().blue);
         //if no streamer is found
         if (searchedStreamer.isEmpty()) {
-            Manager.getUtilities().error(event.getChannel(), "streamer", "\uD83D\uDCF9", "No streamer found", "Couldn't found the given streamer", event.getAuthor().getEffectiveAvatarUrl());
+            Utilities.getUtils().error(event.getChannel(), "streamer", "\uD83D\uDCF9", "No streamer found", "Couldn't found the given streamer", event.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         //get streamers
@@ -92,7 +92,7 @@ public class GetNotificationManager {
         OkHttpClient client = new OkHttpClient();
         //search channel request
         Request channel = new Request.Builder()
-                .addHeader("client-id", Manager.getUtilities().twitchClientId)
+                .addHeader("client-id", Utilities.getUtils().twitchClientId)
                 .addHeader("Authorization", "Bearer " + Twitch.accessToken)
                 .url("https://api.twitch.tv/helix/search/channels?query=" + channelName)
                 .build();

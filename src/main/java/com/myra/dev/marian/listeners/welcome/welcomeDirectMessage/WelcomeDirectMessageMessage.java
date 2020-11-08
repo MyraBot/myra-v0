@@ -2,10 +2,11 @@ package com.myra.dev.marian.listeners.welcome.welcomeDirectMessage;
 
 import com.myra.dev.marian.database.allMethods.Database;
 
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.management.Manager;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 @CommandSubscribe(
@@ -37,7 +38,7 @@ public class WelcomeDirectMessageMessage implements Command {
         db.getNested("welcome").set("welcomeDirectMessage", message, Manager.type.STRING);
         //success
         String welcomeMessage = db.getNested("welcome").get("welcomeDirectMessage").toString();
-        Manager.getUtilities().success(ctx.getChannel(), "welcome direct message", "\u2709\uFE0F", "Welcome message changed",
+        Utilities.getUtils().success(ctx.getChannel(), "welcome direct message", "\u2709\uFE0F", "Welcome message changed",
                 welcomeMessage
                         .replace("{user}", ctx.getAuthor().getAsMention())
                         .replace("{server}", ctx.getGuild().getName())

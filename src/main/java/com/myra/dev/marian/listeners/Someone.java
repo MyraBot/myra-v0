@@ -1,8 +1,8 @@
 package com.myra.dev.marian.listeners;
 
 
-import com.myra.dev.marian.utilities.management.listeners.Listener;
-import com.myra.dev.marian.utilities.management.listeners.ListenerSubscribe;
+import com.myra.dev.marian.management.listeners.Listener;
+import com.myra.dev.marian.management.listeners.ListenerSubscribe;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.Random;

@@ -1,11 +1,11 @@
 package com.myra.dev.marian.commands.fun;
 
 import com.myra.dev.marian.utilities.MessageReaction;
-import com.myra.dev.marian.utilities.management.Events;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.management.Events;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
@@ -128,7 +128,7 @@ public class TextFormatter extends Events implements Command {
         if (ctx.getArguments().length == 0) {
             EmbedBuilder usage = new EmbedBuilder()
                     .setAuthor("format", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                    .setColor(Manager.getUtilities().gray)
+                    .setColor(Utilities.getUtils().gray)
                     .addField("`" + ctx.getPrefix() + "format <text>`", "\uD83D\uDDDA │ Change the font of your text", false);
             ctx.getChannel().sendMessage(usage.build()).queue();
             return;
@@ -139,7 +139,7 @@ public class TextFormatter extends Events implements Command {
         //format options
         EmbedBuilder selection = new EmbedBuilder()
                 .setAuthor("format", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().blue)
+                .setColor(Utilities.getUtils().blue)
                 .addField("\uD83D\uDDDA │ format options",
                         oldGerman("\uD83C\uDDE9\uD83C\uDDEA │ Lorem ipsum dolor sit amet.\n") +
                                 handwritten("\uD83D\uDD8B │ Lorem ipsum dolor sit amet.\n") +
@@ -186,7 +186,7 @@ public class TextFormatter extends Events implements Command {
             //format message
             EmbedBuilder formatted = new EmbedBuilder()
                     .setAuthor("format", null, event.getUser().getEffectiveAvatarUrl())
-                    .setColor(Manager.getUtilities().blue)
+                    .setColor(Utilities.getUtils().blue)
                     .setDescription(oldGerman(messages.get(event.getMessageId())));
             event.getChannel().editMessageById(event.getMessageIdLong(), formatted.build()).queue();
             event.getChannel().clearReactionsById(event.getMessageId()).queue();
@@ -196,7 +196,7 @@ public class TextFormatter extends Events implements Command {
             //format message
             EmbedBuilder formatted = new EmbedBuilder()
                     .setAuthor("format", null, event.getUser().getEffectiveAvatarUrl())
-                    .setColor(Manager.getUtilities().blue)
+                    .setColor(Utilities.getUtils().blue)
                     .setDescription(handwritten(messages.get(event.getMessageId())));
             event.getChannel().editMessageById(event.getMessageIdLong(), formatted.build()).queue();
             event.getChannel().clearReactionsById(event.getMessageId()).queue();
@@ -206,7 +206,7 @@ public class TextFormatter extends Events implements Command {
             //format message
             EmbedBuilder formatted = new EmbedBuilder()
                     .setAuthor("format", null, event.getUser().getEffectiveAvatarUrl())
-                    .setColor(Manager.getUtilities().blue)
+                    .setColor(Utilities.getUtils().blue)
                     .setDescription(aesthetic(messages.get(event.getMessageId())));
             event.getChannel().editMessageById(event.getMessageIdLong(), formatted.build()).queue();
             event.getChannel().clearReactionsById(event.getMessageId()).queue();

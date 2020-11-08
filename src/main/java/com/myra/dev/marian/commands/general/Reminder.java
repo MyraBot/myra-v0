@@ -2,11 +2,11 @@ package com.myra.dev.marian.commands.general;
 
 import com.mongodb.client.MongoCollection;
 import com.myra.dev.marian.database.MongoDb;
-import com.myra.dev.marian.utilities.management.Events;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.management.Events;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -31,7 +31,7 @@ public class Reminder extends Events implements Command {
         if (ctx.getArguments().length == 0) {
             EmbedBuilder usage = new EmbedBuilder()
                     .setAuthor("reminder", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                    .setColor(Manager.getUtilities().gray)
+                    .setColor(Utilities.getUtils().gray)
                     .addField("`" + ctx.getPrefix() + "reminder <duration><time unit> <description>`", "\u23F0 │ Reminds you after a specific amount of time", false)
                     .setFooter("Accepted time units: seconds, minutes, hours, days");
             ctx.getChannel().sendMessage(usage.build()).queue();
@@ -48,18 +48,18 @@ public class Reminder extends Events implements Command {
         reason = new StringBuilder(reason.substring(0, reason.length() - 1));
         //if the string is not (NumberLetters)
         if (!durationRaw.matches("[0-9]+[a-zA-z]+")) {
-            Manager.getUtilities().error(ctx.getChannel(), "reminder", "\u23F0", "Invalid time", "please note: `<time><time unit>`", ctx.getAuthor().getEffectiveAvatarUrl());
+            Utilities.getUtils().error(ctx.getChannel(), "reminder", "\u23F0", "Invalid time", "please note: `<time><time unit>`", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         //return duration as a list
-        List<String> durationList = Manager.getUtilities().getDuration(durationRaw);
+        List<String> durationList = Utilities.getUtils().getDuration(durationRaw);
         String duration = durationList.get(0);
         long durationInMilliseconds = Long.parseLong(durationList.get(1));
         TimeUnit timeUnit = TimeUnit.valueOf(durationList.get(2));
         //reminder info
         EmbedBuilder reminderInfo = new EmbedBuilder()
                 .setAuthor("reminder", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().blue)
+                .setColor(Utilities.getUtils().blue)
                 .setDescription("Im gonna remind you in " + duration + " " + timeUnit.toString().toLowerCase() + "!");
         ctx.getChannel().sendMessage(reminderInfo.build()).queue();
         //create reminder document
@@ -95,7 +95,7 @@ public class Reminder extends Events implements Command {
     public void remind(User author, String description) {
         EmbedBuilder reminder = new EmbedBuilder()
                 .setAuthor(author.getName(), null, author.getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().blue)
+                .setColor(Utilities.getUtils().blue)
                 .addField("\u23F0 │ reminder", description, false);
         author.openPrivateChannel().queue((channel ->
                 channel.sendMessage(reminder.build()).queue()));

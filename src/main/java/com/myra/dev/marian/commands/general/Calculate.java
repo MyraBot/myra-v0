@@ -1,10 +1,10 @@
 package com.myra.dev.marian.commands.general;
 
 
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 @CommandSubscribe(
@@ -19,7 +19,7 @@ public class Calculate implements Command {
         if (ctx.getArguments().length == 0 || ctx.getArguments().length > 3) {
             EmbedBuilder usage = new EmbedBuilder()
                     .setAuthor("calculate", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                    .setColor(Manager.getUtilities().gray)
+                    .setColor(Utilities.getUtils().gray)
                     .addField("\uD83E\uDDEE │ let the bot calculate something for you", "`" + ctx.getPrefix() + "calculate <number> <operator> <number>`", false);
             ctx.getChannel().sendMessage(usage.build()).queue();
             return;
@@ -48,12 +48,12 @@ public class Calculate implements Command {
             }
             EmbedBuilder calculated = new EmbedBuilder()
                     .setAuthor("calculated", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                    .setColor(Manager.getUtilities().blue)
+                    .setColor(Utilities.getUtils().blue)
                     .setDescription("the result of " + ctx.getArguments()[0] + " " + ctx.getArguments()[1].replace("*", "⋅").replace("x", "⋅").replace("/", ":") + " " + ctx.getArguments()[2] + " = " + result);
             ctx.getChannel().sendMessage(calculated.build()).queue();
         } catch (Exception e) {
             e.printStackTrace();
-            Manager.getUtilities().error(ctx.getChannel(), "calculate", "\uD83E\uDDEE", "Error occurred", e.getMessage(), ctx.getAuthor().getEffectiveAvatarUrl());
+            Utilities.getUtils().error(ctx.getChannel(), "calculate", "\uD83E\uDDEE", "Error occurred", e.getMessage(), ctx.getAuthor().getEffectiveAvatarUrl());
         }
     }
 }

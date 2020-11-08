@@ -1,4 +1,4 @@
-package com.myra.dev.marian.utilities.management;
+package com.myra.dev.marian.management;
 
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.channel.text.TextChannelCreateEvent;

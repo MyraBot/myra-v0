@@ -2,10 +2,10 @@ package com.myra.dev.marian.listeners.suggestions;
 
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.time.Instant;
@@ -22,7 +22,7 @@ public class SubmitSuggestion implements Command {
         //check if feature is disabled
         if (!db.getListenerManager().check("suggestions")) return;
         // Get utilities
-        Utilities utilities = Manager.getUtilities();
+        Utilities utilities = Utilities.getUtils();
         // Usage
         if (ctx.getArguments().length == 0) {
             EmbedBuilder usage = new EmbedBuilder()

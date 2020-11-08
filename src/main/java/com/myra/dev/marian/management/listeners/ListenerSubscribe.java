@@ -1,4 +1,4 @@
-package com.myra.dev.marian.utilities.management.listeners;
+package com.myra.dev.marian.management.listeners;
 
 import java.lang.annotation.*;
 

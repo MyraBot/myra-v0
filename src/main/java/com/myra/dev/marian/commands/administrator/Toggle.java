@@ -2,11 +2,12 @@ package com.myra.dev.marian.commands.administrator;
 
 import com.myra.dev.marian.commands.help.Help;
 import com.myra.dev.marian.database.allMethods.Database;
+import com.myra.dev.marian.management.Manager;
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.util.Arrays;
@@ -21,7 +22,7 @@ public class Toggle implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         // Get utilities
-        Utilities utilities = Manager.getUtilities();
+        Utilities utilities = Utilities.getUtils();
         //command usage
         if (ctx.getArguments().length == 0) {
             EmbedBuilder usage = new EmbedBuilder()
@@ -38,8 +39,8 @@ public class Toggle implements Command {
             command = ctx.getArguments()[0].substring(ctx.getPrefix().length());
         } else command = ctx.getArguments()[0];
         // Go throw every command
-        for (Map.Entry<Command, CommandSubscribe> entry : Manager.getCommands().entrySet()) {
-            // If a alias matches the given command
+        // If a alias matches the given command
+        for (Map.Entry<Command, CommandSubscribe> entry : Manager.getCommands().entrySet())
             if (Arrays.stream(entry.getValue().aliases()).anyMatch(command::equalsIgnoreCase) || command.equalsIgnoreCase(entry.getValue().name())) {
                 // Command is a help command
                 if (entry.getKey().getClass().getPackage().equals(Help.class.getPackage())) {
@@ -61,7 +62,6 @@ public class Toggle implements Command {
                 }
                 return;
             }
-        }
         System.out.println(command);
         // Command doesn't exist
         utilities.error(ctx.getChannel(), "toggle", "\uD83D\uDD11", "Couldn't find command", "The command doesn't exist", ctx.getAuthor().getEffectiveAvatarUrl());

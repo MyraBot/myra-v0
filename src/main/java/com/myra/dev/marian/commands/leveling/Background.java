@@ -4,11 +4,11 @@ import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.Graphic;
 import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.management.Events;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.management.Events;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
@@ -27,7 +27,7 @@ public class Background extends Events implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         // Get utilities
-        Utilities utilities = Manager.getUtilities();
+        Utilities utilities = Utilities.getUtils();
         // Usage
         if (ctx.getArguments().length != 1) {
             EmbedBuilder usage = new EmbedBuilder()
@@ -83,7 +83,7 @@ public class Background extends Events implements Command {
             // Update balance
             db.getMembers().getMember(event.getMember()).setBalance(db.getMembers().getMember(event.getMember()).getBalance() - 10000);
             // Send success
-            Manager.getUtilities().success(event.getChannel(),
+            Utilities.getUtils().success(event.getChannel(),
                     "edit rank", "\uD83D\uDDBC",
                     "New rank background",
                     "You bought a new rank background:",
@@ -97,7 +97,7 @@ public class Background extends Events implements Command {
             // Send success
             EmbedBuilder success = new EmbedBuilder()
                     .setAuthor("edit rank")
-                    .setColor(Manager.getUtilities().blue)
+                    .setColor(Utilities.getUtils().blue)
                     .setDescription("Your purchase has been canceled");
             event.getChannel().sendMessage(success.build()).queue();
         }

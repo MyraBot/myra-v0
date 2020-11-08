@@ -1,9 +1,9 @@
 package com.myra.dev.marian.commands.help;
 
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 @CommandSubscribe(
@@ -16,7 +16,7 @@ public class Ping implements Command {
         if (!ctx.getAuthor().isBot()) {
             EmbedBuilder ping = new EmbedBuilder()
                     .setAuthor("pong", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                    .setColor(Manager.getUtilities().blue)
+                    .setColor(Utilities.getUtils().blue)
                     .addField("\uD83C\uDFD3 │ latency", "My ping is `" + ctx.getEvent().getJDA().getGatewayPing() + "` ms", true);
             ctx.getChannel().sendMessage(ping.build()).queue();
         }

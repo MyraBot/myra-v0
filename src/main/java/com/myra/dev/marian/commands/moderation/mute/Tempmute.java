@@ -5,11 +5,11 @@ import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.allMethods.Database;
 
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.management.Events;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.management.Events;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -34,7 +34,7 @@ public class Tempmute extends Events implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         // Get utilities
-        Utilities utilities = Manager.getUtilities();
+        Utilities utilities = Utilities.getUtils();
         //command usage
         if (ctx.getArguments().length == 0) {
             EmbedBuilder usage = new EmbedBuilder()
@@ -155,7 +155,7 @@ public class Tempmute extends Events implements Command {
         //direct message unmute
         EmbedBuilder directMessage = new EmbedBuilder()
                 .setAuthor("You got unmuted from " + guild.getName(), null, guild.getIconUrl())
-                .setColor(Manager.getUtilities().green)
+                .setColor(Utilities.getUtils().green)
                 .setDescription("You got unmuted from " + guild.getName())
                 .setFooter("requested by " + author.getAsTag(), author.getEffectiveAvatarUrl())
                 .setTimestamp(Instant.now());
@@ -164,7 +164,7 @@ public class Tempmute extends Events implements Command {
         });
         //if no channel is set
         if (db.get("logChannel").equals("not set")) {
-            Manager.getUtilities().error(guild.getDefaultChannel(), "tempban", "\u23F1\uFE0F", "No log channel specified", "To set a log channel type in `" + db.get("prefix") + "log channel <channel>`", author.getEffectiveAvatarUrl());
+            Utilities.getUtils().error(guild.getDefaultChannel(), "tempban", "\u23F1\uFE0F", "No log channel specified", "To set a log channel type in `" + db.get("prefix") + "log channel <channel>`", author.getEffectiveAvatarUrl());
             return;
         }
         //get log channel
@@ -172,7 +172,7 @@ public class Tempmute extends Events implements Command {
         //guild message unmute
         EmbedBuilder guildMessage = new EmbedBuilder()
                 .setAuthor(user.getAsTag() + " got unmuted", null, user.getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().blue)
+                .setColor(Utilities.getUtils().blue)
                 .setDescription(user.getAsMention() + " got unmuted")
                 .setFooter("requested by " + author.getAsTag(), author.getEffectiveAvatarUrl())
                 .setTimestamp(Instant.now());
@@ -199,12 +199,12 @@ public class Tempmute extends Events implements Command {
                 if (new Database(guild).get("muteRole").equals("not set")) {
                     // No logging channel set
                     if (new Database(guild).get("logChannel").equals("not set")) {
-                        Manager.getUtilities().error(guild.getDefaultChannel(), "tempmute", "\u23F1\uFE0F", "No log channel specified", "To set a log channel type in `" + new Database(guild).get("prefix") + "log channel <channel>`", guild.getIconUrl());
-                        Manager.getUtilities().error(guild.getDefaultChannel(), "tempmute", "\uD83D\uDD07", "You didn't specify a mute role", "To indicate a mute role, type in `" + new Database(guild).get("prefix") + "mute role <role>`", guild.getIconUrl());
+                        Utilities.getUtils().error(guild.getDefaultChannel(), "tempmute", "\u23F1\uFE0F", "No log channel specified", "To set a log channel type in `" + new Database(guild).get("prefix") + "log channel <channel>`", guild.getIconUrl());
+                        Utilities.getUtils().error(guild.getDefaultChannel(), "tempmute", "\uD83D\uDD07", "You didn't specify a mute role", "To indicate a mute role, type in `" + new Database(guild).get("prefix") + "mute role <role>`", guild.getIconUrl());
                         return;
                     }
                     TextChannel logChannel = guild.getTextChannelById((new Database(guild).get("muteRole")));
-                    Manager.getUtilities().error(logChannel, "tempmute", "\uD83D\uDD07", "You didn't specify a mute role", "To indicate a mute role, type in `" + new Database(guild).get("prefix") + "mute role <role>`", guild.getIconUrl());
+                    Utilities.getUtils().error(logChannel, "tempmute", "\uD83D\uDD07", "You didn't specify a mute role", "To indicate a mute role, type in `" + new Database(guild).get("prefix") + "mute role <role>`", guild.getIconUrl());
                 }
                 //remove role
                 guild.removeRoleFromMember(doc.getString("userId"), guild.getRoleById(new Database(guild).get("muteRole"))).queue();

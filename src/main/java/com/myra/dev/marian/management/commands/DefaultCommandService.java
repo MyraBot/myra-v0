@@ -1,4 +1,4 @@
-package com.myra.dev.marian.utilities.management.commands;
+package com.myra.dev.marian.management.commands;
 
 import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.allMethods.Database;

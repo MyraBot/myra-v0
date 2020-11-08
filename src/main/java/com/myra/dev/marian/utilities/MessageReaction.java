@@ -1,6 +1,6 @@
 package com.myra.dev.marian.utilities;
 
-import com.myra.dev.marian.utilities.management.Events;
+import com.myra.dev.marian.management.Events;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;

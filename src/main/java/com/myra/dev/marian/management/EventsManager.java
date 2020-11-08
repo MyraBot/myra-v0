@@ -1,4 +1,4 @@
-package com.myra.dev.marian.utilities.management;
+package com.myra.dev.marian.management;
 
 import com.myra.dev.marian.APIs.Twitch;
 import com.myra.dev.marian.commands.help.InviteThanks;
@@ -23,8 +23,9 @@ import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectM
 import com.myra.dev.marian.marian.ServerTracking;
 import com.myra.dev.marian.marian.Shutdown;
 import com.myra.dev.marian.utilities.MessageReaction;
-import com.myra.dev.marian.utilities.management.commands.CommandService;
-import com.myra.dev.marian.utilities.management.listeners.ListenerService;
+import com.myra.dev.marian.management.commands.CommandService;
+import com.myra.dev.marian.management.listeners.ListenerService;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.channel.text.TextChannelCreateEvent;
@@ -131,6 +132,8 @@ public class EventsManager extends ListenerAdapter {
      */
     public void onReady(ReadyEvent event) {
         try {
+            // Load emotes
+            Utilities.getUtils().loadEmotes(event.getJDA());
             //add missing members to the database
             new MongoDbUpdate().jdaReady(event);
             //load reminders

@@ -1,10 +1,10 @@
 package com.myra.dev.marian.commands.general.information;
 
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.Permission;
@@ -25,7 +25,7 @@ public class InformationUser implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         //get utilities
-        Utilities utilities = Manager.getUtilities();
+        Utilities utilities = Utilities.getUtils();
         Member user;
         String roleNames = "*this user has no roles*";
 // Get user
@@ -36,11 +36,11 @@ public class InformationUser implements Command {
         //get given member
         else {
             //if user isn't in the guild
-            if (ctx.getGuild().getMember(Manager.getUtilities().getUser(ctx.getEvent(), ctx.getArguments()[0], "information user", "\uD83D\uDC64")) == null) {
+            if (ctx.getGuild().getMember(Utilities.getUtils().getUser(ctx.getEvent(), ctx.getArguments()[0], "information user", "\uD83D\uDC64")) == null) {
                 utilities.error(ctx.getChannel(), "information user", "\uD83D\uDC64", "No user found", "For this command the user has to be on this server", ctx.getAuthor().getEffectiveAvatarUrl());
                 return;
             }
-            user = ctx.getGuild().getMember(Manager.getUtilities().getUser(ctx.getEvent(), ctx.getArguments()[0], "information user", "\uD83D\uDC64"));
+            user = ctx.getGuild().getMember(Utilities.getUtils().getUser(ctx.getEvent(), ctx.getArguments()[0], "information user", "\uD83D\uDC64"));
         }
 
         List<Role> roles = user.getRoles();
@@ -62,7 +62,7 @@ public class InformationUser implements Command {
         EmbedBuilder userInformation = new EmbedBuilder()
                 .setAuthor(" │ " + user.getUser().getAsTag(), user.getUser().getEffectiveAvatarUrl(), user.getUser().getEffectiveAvatarUrl())
                 .setThumbnail(user.getUser().getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().getMemberRoleColour(user))
+                .setColor(Utilities.getUtils().getMemberRoleColour(user))
                 .addField("\uD83C\uDF9F │ user id", user.getId(), true);
         //nickname
         if (user.getNickname() != null)

@@ -1,10 +1,10 @@
 package com.myra.dev.marian.listeners.notification;
 
 
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 @CommandSubscribe(
@@ -20,7 +20,7 @@ public class NotificationHelp implements Command {
         // Send message
         EmbedBuilder notificationUsage = new EmbedBuilder()
                 .setAuthor("notification", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().gray)
+                .setColor(Utilities.getUtils().gray)
                 .addField("`" + ctx.getPrefix() + "notification twitch <streamer>`", "\uD83D\uDCE1 │ Add and remove auto notifications for a twitch streamer", false)
                 .addField("`" + ctx.getPrefix() + "notification list`", "\uD83D\uDD14 │ Displays all users you get notification from", false)
                 .addField("`" + ctx.getPrefix() + "notification channel <channel>`", "\uD83D\uDCC1 │ Set the channel, the notifications will go", false);

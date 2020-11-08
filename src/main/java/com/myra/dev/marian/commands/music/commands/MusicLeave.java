@@ -1,10 +1,10 @@
 package com.myra.dev.marian.commands.music.commands;
 
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 @CommandSubscribe(
@@ -20,7 +20,7 @@ public class MusicLeave implements Command {
         // Check for no arguments
         if (ctx.getArguments().length != 0) return;
         // Get utilities
-        Utilities utilities = Manager.getUtilities();
+        Utilities utilities = Utilities.getUtils();
 // Errors
         // Not connected to a voice channel
         if (!ctx.getGuild().getAudioManager().isConnected()) {

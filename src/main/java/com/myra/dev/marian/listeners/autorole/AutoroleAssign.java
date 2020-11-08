@@ -1,8 +1,7 @@
 package com.myra.dev.marian.listeners.autorole;
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.management.Events;
-import com.myra.dev.marian.utilities.management.Manager;
+import com.myra.dev.marian.management.Events;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 
 public class AutoroleAssign extends Events {

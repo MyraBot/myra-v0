@@ -2,8 +2,8 @@ package com.myra.dev.marian.listeners.notification;
 
 import com.myra.dev.marian.APIs.Twitch;
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.management.Events;
-import com.myra.dev.marian.utilities.management.Manager;
+import com.myra.dev.marian.management.Events;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
@@ -34,7 +34,7 @@ public class Notification extends Events {
                         if (streamers.isEmpty()) continue;
                         //if no notification channel is set
                         if (channelRaw.equals("not set")) {
-                            Manager.getUtilities().error(guild.getDefaultChannel(), "notification", "\uD83D\uDD14", "No notification channel specified", "To set a notification channel type in `" +  db.get("prefix") + "notification channel <channel>`", guild.getIconUrl());
+                            Utilities.getUtils().error(guild.getDefaultChannel(), "notification", "\uD83D\uDD14", "No notification channel specified", "To set a notification channel type in `" +  db.get("prefix") + "notification channel <channel>`", guild.getIconUrl());
                             continue;
                         }
                         //get notification channel

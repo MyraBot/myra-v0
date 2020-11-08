@@ -1,9 +1,11 @@
 package com.myra.dev.marian;
 
 
+import com.myra.dev.marian.management.EventsManager;
+import com.myra.dev.marian.management.Manager;
+import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.ConsoleColours;
-import com.myra.dev.marian.utilities.management.EventsManager;
-import com.myra.dev.marian.utilities.management.Manager;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Icon;
@@ -28,6 +30,7 @@ public class Bot {
 
     public final static String prefix = "~";
     public final static String marian = "639544573114187797";
+    public final static String myraServer = "774269364244971571";
 
     // Main method
     public static void main(String[] args) throws LoginException {
@@ -37,12 +40,13 @@ public class Bot {
 
     private Bot() throws LoginException {
         DefaultShardManagerBuilder jda = DefaultShardManagerBuilder.createDefault("NzE4NDQ0NzA5NDQ1NjMyMTIy.Xto9xg.dQxtSFxxYHpKXOwLCtJuWM5w1MM")
-                //.enableIntents(GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MEMBERS)
-                //.enableCache(CacheFlag.ACTIVITY)
-                .enableIntents(GatewayIntent.GUILD_MEMBERS) // Need GatewayIntent.GUILD_MEMBERS for MemberCachePolicy.ALL
+                .enableIntents(GatewayIntent.GUILD_PRESENCES) // Need GatewayIntent.GUILD_PRESENCES for CacheFlag.ACTIVITY
+                .enableIntents(GatewayIntent.GUILD_MEMBERS)  // Need GatewayIntent.GUILD_MEMBERS for MemberCachePolicy.ALL
+                .enableCache(CacheFlag.ACTIVITY) // Need to get the activity of a member
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .enableCache(CacheFlag.VOICE_STATE)
                 .setStatus(OnlineStatus.IDLE)
+                .enableCache(CacheFlag.EMOTE) // Need to get emotes from other servers
                 .addEventListeners(new EventsManager());
         // Build JDA
         shardManager = jda.build();

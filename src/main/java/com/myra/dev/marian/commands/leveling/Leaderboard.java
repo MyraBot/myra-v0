@@ -2,10 +2,10 @@ package com.myra.dev.marian.commands.leveling;
 
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.database.documents.MemberDocument;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.util.List;
@@ -42,7 +42,7 @@ public class Leaderboard implements Command {
         //create embed
         EmbedBuilder leaderboard = new EmbedBuilder()
                 .setAuthor(ctx.getGuild().getName() + "'s leaderboard", null, ctx.getGuild().getIconUrl())
-                .setColor(Manager.getUtilities().blue)
+                .setColor(Utilities.getUtils().blue)
                 .setDescription(top10);
         //send message
         ctx.getChannel().sendMessage(leaderboard.build()).queue();

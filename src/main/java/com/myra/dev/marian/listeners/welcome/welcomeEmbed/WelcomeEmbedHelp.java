@@ -1,9 +1,9 @@
 package com.myra.dev.marian.listeners.welcome.welcomeEmbed;
 
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 @CommandSubscribe(
@@ -17,7 +17,7 @@ public class WelcomeEmbedHelp implements Command {
         // Usage
         EmbedBuilder welcomeEmbed = new EmbedBuilder()
                 .setAuthor("welcome embed", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().gray)
+                .setColor(Utilities.getUtils().gray)
                 .addField("`" + ctx.getPrefix() + "welcome embed toggle`", "\uD83D\uDD11 │ Toggle welcome embeds on and off", false)
                 .addField("`" + ctx.getPrefix() + "welcome embed message <message>`", "\uD83D\uDCAC │ Set the text of the embed message", false)
                 .addField("`" + ctx.getPrefix() + "welcome embed preview`", "\uD83D\uDCF8 │ Displays the current embed", false);

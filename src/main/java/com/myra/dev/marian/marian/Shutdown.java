@@ -2,11 +2,11 @@ package com.myra.dev.marian.marian;
 
 import com.myra.dev.marian.Bot;
 import com.myra.dev.marian.utilities.MessageReaction;
-import com.myra.dev.marian.utilities.management.Events;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.management.Events;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
@@ -23,7 +23,7 @@ public class Shutdown extends Events implements Command {
         if (!ctx.getAuthor().getId().equals(Bot.marian)) return;
         EmbedBuilder shutdown = new EmbedBuilder()
                 .setAuthor("shutdown", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().blue)
+                .setColor(Utilities.getUtils().blue)
                 .setDescription("Wait what!? You want me to take a break? Are you sure?");
         Message message = ctx.getChannel().sendMessage(shutdown.build()).complete();
         // Add reaction

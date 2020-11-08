@@ -3,10 +3,10 @@ package com.myra.dev.marian.commands.moderation.mute;
 import com.myra.dev.marian.database.allMethods.Database;
 
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Role;
 
@@ -22,7 +22,7 @@ public class MuteRole implements Command {
         if (ctx.getArguments().length != 1) {
             EmbedBuilder embed = new EmbedBuilder()
                     .setAuthor("mute role", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                    .setColor(Manager.getUtilities().gray)
+                    .setColor(Utilities.getUtils().gray)
                     .addField("`" + ctx.getPrefix() + "mute role <role>`", "\uD83D\uDD07 │ Change the mute role", true);
             ctx.getChannel().sendMessage(embed.build()).queue();
             return;
@@ -33,7 +33,7 @@ public class MuteRole implements Command {
         // Get database
         Database db = new Database(ctx.getGuild());
         // Get utilities
-        Utilities utilities = Manager.getUtilities();
+        Utilities utilities = Utilities.getUtils();
         // Get role
         Role role = utilities.getRole(ctx.getEvent(), ctx.getArguments()[0], "mute role", "\uD83D\uDD07");
         if (role == null) return;

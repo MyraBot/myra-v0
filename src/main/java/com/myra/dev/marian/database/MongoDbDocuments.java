@@ -2,7 +2,7 @@ package com.myra.dev.marian.database;
 
 import com.mongodb.client.MongoCollection;
 import com.myra.dev.marian.Bot;
-import com.myra.dev.marian.utilities.management.Manager;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import org.bson.Document;
@@ -32,7 +32,7 @@ public class MongoDbDocuments {
             }
             // Economy
             Document economy = new Document()
-                    .append("currency", Manager.getUtilities().coin);
+                    .append("currency", Utilities.getUtils().coin);
             // Leveling
             Document levelingDocument = new Document()
                     .append("boost", 1)
@@ -84,7 +84,7 @@ public class MongoDbDocuments {
             //welcome
             Document welcome = new Document()
                     .append("welcomeChannel", "not set")
-                    .append("welcomeColour", String.format("0x%06X", (0xFFFFFF & Manager.getUtilities().blue)))
+                    .append("welcomeColour", String.format("0x%06X", (0xFFFFFF & Utilities.getUtils().blue)))
                     .append("welcomeImageBackground", "not set")
                     .append("welcomeImageFont", "default")
                     .append("welcomeEmbedMessage", "Welcome {user} to {server}! Enjoy your stay")

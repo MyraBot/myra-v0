@@ -3,10 +3,10 @@ package com.myra.dev.marian.listeners.notification;
 import com.myra.dev.marian.database.allMethods.Database;
 
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -20,7 +20,7 @@ public class NotificationChannel implements Command {
     public void execute(CommandContext ctx) throws Exception {
         // Missing permissions
         // Get utilities
-        Utilities utilities = Manager.getUtilities();
+        Utilities utilities = Utilities.getUtils();
         // Usage
         if (ctx.getArguments().length != 1) {
             EmbedBuilder notificationUsage = new EmbedBuilder()
@@ -54,7 +54,7 @@ public class NotificationChannel implements Command {
         utilities.success(ctx.getChannel(), "notification channel", "\uD83D\uDD14", "Notification channel changed", "Notifications are now send in " + channel.getAsMention(), ctx.getAuthor().getEffectiveAvatarUrl(), false, null);
         EmbedBuilder success = new EmbedBuilder()
                 .setAuthor("notification channel", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().blue)
+                .setColor(Utilities.getUtils().blue)
                 .addField("\uD83D\uDCC1 │ Notification channel changed", "Media notifications are now send in here", false);
         channel.sendMessage(success.build()).queue();
     }

@@ -1,9 +1,10 @@
 package com.myra.dev.marian.listeners.leveling;
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.listeners.Listener;
-import com.myra.dev.marian.utilities.management.listeners.ListenerSubscribe;
+import com.myra.dev.marian.management.Manager;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.listeners.Listener;
+import com.myra.dev.marian.management.listeners.ListenerSubscribe;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;

@@ -2,12 +2,13 @@ package com.myra.dev.marian.commands.leveling;
 
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.database.allMethods.GetMember;
+import com.myra.dev.marian.management.Manager;
 import com.myra.dev.marian.utilities.Graphic;
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
@@ -26,7 +27,7 @@ public class Rank implements Command {
     @SuppressWarnings("ConstantConditions")
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        Utilities utilities = Manager.getUtilities();
+        Utilities utilities = Utilities.getUtils();
         // Usage
         if (ctx.getArguments().length > 1) {
             EmbedBuilder usage = new EmbedBuilder()
@@ -52,7 +53,7 @@ public class Rank implements Command {
         }
         //if member is bot
         if (member.getUser().isBot()) {
-            Manager.getUtilities().error(ctx.getChannel(), "rank", "\uD83C\uDFC5", member.getEffectiveName() + " is a bot", "Bots aren't allowed to participate in the ranking competition", ctx.getAuthor().getEffectiveAvatarUrl());
+            Utilities.getUtils().error(ctx.getChannel(), "rank", "\uD83C\uDFC5", member.getEffectiveName() + " is a bot", "Bots aren't allowed to participate in the ranking competition", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         //get variables

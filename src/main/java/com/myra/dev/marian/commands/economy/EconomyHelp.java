@@ -1,10 +1,10 @@
 package com.myra.dev.marian.commands.economy;
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 @CommandSubscribe(
@@ -19,7 +19,7 @@ public class EconomyHelp implements Command {
         // Usage
         EmbedBuilder usage = new EmbedBuilder()
                 .setAuthor("economy", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().gray)
+                .setColor(Utilities.getUtils().gray)
                 .addField("`" + ctx.getPrefix() + "economy set <user> <balance>`", "\uD83D\uDC5B │ Change a users balance", false)
                 .addField("`" + ctx.getPrefix() + "economy currency <currency>`", new Database(ctx.getGuild()).getNested("economy").get("currency") + " │ Set a custom currency", false);
         ctx.getChannel().sendMessage(usage.build()).queue();

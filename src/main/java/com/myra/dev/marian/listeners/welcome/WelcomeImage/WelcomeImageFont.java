@@ -1,13 +1,14 @@
 package com.myra.dev.marian.listeners.welcome.WelcomeImage;
 
 import com.myra.dev.marian.database.allMethods.Database;
+import com.myra.dev.marian.management.Manager;
 import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.management.Events;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.management.Events;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
@@ -23,7 +24,7 @@ public class WelcomeImageFont extends Events implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         // Get utilities
-        Utilities utilities = Manager.getUtilities();
+        Utilities utilities = Utilities.getUtils();
         //change font
         EmbedBuilder fontSelection = new EmbedBuilder()
                 .setAuthor("welcome image font", null, ctx.getAuthor().getEffectiveAvatarUrl())
@@ -55,15 +56,15 @@ public class WelcomeImageFont extends Events implements Command {
         switch (event.getReaction().getReactionEmote().getEmoji()) {
             case "1\uFE0F\u20E3":
                 db.getNested("welcome").set("welcomeImageFont", "default", Manager.type.STRING);
-                Manager.getUtilities().success(event.getChannel(), "welcome image font", "\uD83D\uDDDB", "Changed welcome image font", "You have changed the font to `default`", event.getUser().getEffectiveAvatarUrl(), false, null);
+                Utilities.getUtils().success(event.getChannel(), "welcome image font", "\uD83D\uDDDB", "Changed welcome image font", "You have changed the font to `default`", event.getUser().getEffectiveAvatarUrl(), false, null);
                 break;
             case "2\uFE0F\u20E3":
                 db.getNested("welcome").set("welcomeImageFont", "modern", Manager.type.STRING);
-                Manager.getUtilities().success(event.getChannel(), "welcome image font", "\uD83D\uDDDB", "Changed welcome image font", "You have changed the font to `modern`", event.getUser().getEffectiveAvatarUrl(), false, null);
+                Utilities.getUtils().success(event.getChannel(), "welcome image font", "\uD83D\uDDDB", "Changed welcome image font", "You have changed the font to `modern`", event.getUser().getEffectiveAvatarUrl(), false, null);
                 break;
             case "3\uFE0F\u20E3":
                 db.getNested("welcome").set("welcomeImageFont", "handwritten", Manager.type.STRING);
-                Manager.getUtilities().success(event.getChannel(), "welcome image font", "\uD83D\uDDDB", "Changed welcome image font", "You have changed the font to `handwritten`", event.getUser().getEffectiveAvatarUrl(), false, null);
+                Utilities.getUtils().success(event.getChannel(), "welcome image font", "\uD83D\uDDDB", "Changed welcome image font", "You have changed the font to `handwritten`", event.getUser().getEffectiveAvatarUrl(), false, null);
                 break;
         }
     }

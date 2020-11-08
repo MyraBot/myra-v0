@@ -1,4 +1,4 @@
-package com.myra.dev.marian.utilities.management.listeners;
+package com.myra.dev.marian.management.listeners;
 
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 

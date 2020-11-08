@@ -3,10 +3,10 @@ package com.myra.dev.marian.commands.moderation.mute;
 import com.myra.dev.marian.database.allMethods.Database;
 
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 
@@ -20,7 +20,7 @@ public class Unmute implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         // Get utilities
-        Utilities utilities = Manager.getUtilities();
+        Utilities utilities = Utilities.getUtils();
         //command usage
         if (ctx.getArguments().length != 1) {
             EmbedBuilder usage = new EmbedBuilder()
@@ -38,12 +38,12 @@ public class Unmute implements Command {
         String muteRoleId = new Database(ctx.getGuild()).get("muteRole");
         //no mute role set
         if (muteRoleId.equals("not set")) {
-            Manager.getUtilities().error(ctx.getChannel(), "unmute", "\uD83D\uDD08", "You didn't specify a mute role", "To indicate a mute role, type in `" + ctx.getPrefix() + "mute role <role>`", ctx.getAuthor().getEffectiveAvatarUrl());
+            Utilities.getUtils().error(ctx.getChannel(), "unmute", "\uD83D\uDD08", "You didn't specify a mute role", "To indicate a mute role, type in `" + ctx.getPrefix() + "mute role <role>`", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         // User is already muted
         if (!ctx.getGuild().getMember(user).getRoles().contains(ctx.getGuild().getRoleById(muteRoleId))) {
-            Manager.getUtilities().error(ctx.getChannel(), "unmute", "\uD83D\uDD08", "This user isn't muted", "Use `" + ctx.getPrefix() + "mute <user>` to mute a user", ctx.getAuthor().getEffectiveAvatarUrl());
+            Utilities.getUtils().error(ctx.getChannel(), "unmute", "\uD83D\uDD08", "This user isn't muted", "Use `" + ctx.getPrefix() + "mute <user>` to mute a user", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         //guild message

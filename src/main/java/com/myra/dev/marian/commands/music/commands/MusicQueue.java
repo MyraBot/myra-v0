@@ -2,10 +2,10 @@ package com.myra.dev.marian.commands.music.commands;
 
 import com.myra.dev.marian.APIs.LavaPlayer.PlayerManager;
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -26,7 +26,7 @@ public class MusicQueue implements Command {
         // Check for no arguments
         if (ctx.getArguments().length != 0) return;
         // Get utilities
-        Utilities utilities = Manager.getUtilities();
+        Utilities utilities = Utilities.getUtils();
 // Errors
         // Bot isn't connected to a voice channel
         if (!ctx.getGuild().getAudioManager().isConnected()) {
@@ -59,7 +59,7 @@ public class MusicQueue implements Command {
 
         EmbedBuilder queuedSongs = new EmbedBuilder()
                 .setAuthor("queue", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().blue)
+                .setColor(Utilities.getUtils().blue)
                 .addField("\uD83D\uDCC3 │ queued songs", songs, false)
                 .addField("\uD83D\uDCDA │ total songs", Integer.toString(queue.size()), false)
                 .addField("\uD83D\uDCBF │ current playing", currentPlaying, false);

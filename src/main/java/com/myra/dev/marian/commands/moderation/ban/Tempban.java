@@ -5,11 +5,11 @@ import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.allMethods.Database;
 
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.management.Events;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.management.Events;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -40,7 +40,7 @@ public class Tempban extends Events implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         // Get Utilities
-        Utilities utilities = Manager.getUtilities();
+        Utilities utilities = Utilities.getUtils();
         //command usage
         if (ctx.getArguments().length == 0) {
             EmbedBuilder usage = new EmbedBuilder()
@@ -73,7 +73,7 @@ public class Tempban extends Events implements Command {
         User user = utilities.getModifiedUser(ctx.getEvent(), ctx.getArguments()[0], "tempban", "\u23F1\uFE0F");
         if (user == null) return;
         //return duration as a list
-        List durationList = Manager.getUtilities().getDuration(durationRaw);
+        List durationList = Utilities.getUtils().getDuration(durationRaw);
         String duration = durationList.get(0).toString();
         long durationInMilliseconds = Long.parseLong(durationList.get(1).toString());
         TimeUnit timeUnit = TimeUnit.valueOf(durationList.get(2).toString());
@@ -87,7 +87,7 @@ public class Tempban extends Events implements Command {
         //direct message ban
         EmbedBuilder directMessageBan = new EmbedBuilder()
                 .setAuthor("You got temporary banned", null, ctx.getGuild().getIconUrl())
-                .setColor(Manager.getUtilities().red)
+                .setColor(Utilities.getUtils().red)
                 .setDescription("\u23F1\uFE0F │ You got banned on `" + ctx.getGuild().getName() + "` for **" + duration + " " + timeUnit.toString().toLowerCase() + "**")
                 .setFooter("requested by " + ctx.getAuthor().getAsTag(), ctx.getAuthor().getEffectiveAvatarUrl())
                 .setTimestamp(Instant.now());
@@ -220,7 +220,7 @@ public class Tempban extends Events implements Command {
         //direct message
         EmbedBuilder directMessage = new EmbedBuilder()
                 .setAuthor("│ You got unbanned", null, guild.getIconUrl())
-                .setColor(Manager.getUtilities().blue)
+                .setColor(Utilities.getUtils().blue)
                 .setDescription("\uD83D\uDD13 │ You got unbanned from " + guild.getName())
                 .setFooter("requested by " + author.getAsTag(), author.getEffectiveAvatarUrl())
                 .setTimestamp(Instant.now());
@@ -229,7 +229,7 @@ public class Tempban extends Events implements Command {
         });
         //if no channel is set
         if (db.get("logChannel").equals("not set")) {
-            Manager.getUtilities().error(guild.getDefaultChannel(), "tempban", "\u23F1\uFE0F", "No log channel specified", "To set a log channel type in `" +  new Database(guild).get("prefix") + "log channel <channel>`", author.getEffectiveAvatarUrl());
+            Utilities.getUtils().error(guild.getDefaultChannel(), "tempban", "\u23F1\uFE0F", "No log channel specified", "To set a log channel type in `" +  new Database(guild).get("prefix") + "log channel <channel>`", author.getEffectiveAvatarUrl());
             return;
         }
         //get log channel
@@ -237,7 +237,7 @@ public class Tempban extends Events implements Command {
         //guild message
         EmbedBuilder guildMessage = new EmbedBuilder()
                 .setAuthor("│ " + user.getAsTag() + " got unbanned", null, user.getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().blue)
+                .setColor(Utilities.getUtils().blue)
                 .setDescription("\uD83D\uDD13 │ " + user.getAsMention() + " got unbanned from " + guild.getName())
                 .setFooter("requested by " + author.getAsTag(), author.getEffectiveAvatarUrl())
                 .setTimestamp(Instant.now());

@@ -1,10 +1,10 @@
 package com.myra.dev.marian.commands.fun;
 
 import com.myra.dev.marian.APIs.Reddit;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 
 @CommandSubscribe(
         command = "meme",
@@ -17,7 +17,7 @@ public class Meme implements Command {
         try {
             ctx.getChannel().sendMessage(new Reddit().getMeme(ctx.getAuthor()).build()).queue();
         } catch (Exception e) {
-            Manager.getUtilities().error(ctx.getChannel(), "meme", "\uD83E\uDD2A", "Couldn't load meme", "Please try again later", ctx.getAuthor().getEffectiveAvatarUrl());
+            Utilities.getUtils().error(ctx.getChannel(), "meme", "\uD83E\uDD2A", "Couldn't load meme", "Please try again later", ctx.getAuthor().getEffectiveAvatarUrl());
         }
     }
 }

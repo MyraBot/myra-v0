@@ -3,10 +3,10 @@ package com.myra.dev.marian.commands.music.commands;
 import com.myra.dev.marian.APIs.LavaPlayer.PlayerManager;
 import com.myra.dev.marian.APIs.LavaPlayer.TrackScheduler;
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -22,7 +22,7 @@ public class MusicClearQueue implements Command {
         // Check for no arguments
         if (ctx.getArguments().length != 0) return;
         // Get utilities
-        final Utilities utilities = Manager.getUtilities();
+        final Utilities utilities = Utilities.getUtils();
         // Get track scheduler
         final TrackScheduler scheduler = PlayerManager.getInstance().getMusicManager(ctx.getGuild()).scheduler;
         // Get audio player

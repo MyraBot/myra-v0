@@ -2,10 +2,10 @@ package com.myra.dev.marian.commands.moderation.mute;
 
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 
@@ -25,7 +25,7 @@ public class Mute implements Command {
         if (sentMessage.length == 1) {
             EmbedBuilder usage = new EmbedBuilder()
                     .setAuthor("mute", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                    .setColor(Manager.getUtilities().gray)
+                    .setColor(Utilities.getUtils().gray)
                     .addField("`" + ctx.getPrefix() + "mute <user> <reason>`", "\uD83D\uDD07 │ mute a specific user", false)
                     .setFooter("you don't have to give a reason.");
             ctx.getChannel().sendMessage(usage.build()).queue();
@@ -40,17 +40,17 @@ public class Mute implements Command {
             //if I used the mute role command
             if (sentMessage[1].equalsIgnoreCase("role")) return;
             //get user
-            user = Manager.getUtilities().getModifiedUser(ctx.getEvent(), sentMessage[1], "mute", "\uD83D\uDD08");
+            user = Utilities.getUtils().getModifiedUser(ctx.getEvent(), sentMessage[1], "mute", "\uD83D\uDD08");
             //get mute role id
             muteRoleId = new Database(ctx.getGuild()).get("muteRole");
             //no mute role set
             if (muteRoleId.equals("not set")) {
-                Manager.getUtilities().error(ctx.getChannel(), "mute", "\uD83D\uDD07 ", "You didn't specify a mute role", "To indicate a mute role, type in `" + ctx.getPrefix() + "mute role <role>`", ctx.getAuthor().getEffectiveAvatarUrl());
+                Utilities.getUtils().error(ctx.getChannel(), "mute", "\uD83D\uDD07 ", "You didn't specify a mute role", "To indicate a mute role, type in `" + ctx.getPrefix() + "mute role <role>`", ctx.getAuthor().getEffectiveAvatarUrl());
                 return;
             }
             //user is already muted
             if (ctx.getGuild().getMember(user).getRoles().contains(ctx.getGuild().getRoleById(muteRoleId))) {
-                Manager.getUtilities().error(ctx.getChannel(), "mute", "\uD83D\uDD07", "This user is already muted", "Use `" + ctx.getPrefix() + "unmute <user>` to unmute a user", ctx.getAuthor().getEffectiveAvatarUrl());
+                Utilities.getUtils().error(ctx.getChannel(), "mute", "\uD83D\uDD07", "This user is already muted", "Use `" + ctx.getPrefix() + "unmute <user>` to unmute a user", ctx.getAuthor().getEffectiveAvatarUrl());
                 return;
             }
         } catch (Exception e) {
@@ -63,14 +63,14 @@ public class Mute implements Command {
         //guild message
         EmbedBuilder guildMessage = new EmbedBuilder()
                 .setAuthor(user.getAsTag() + " got muted", null, user.getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().red)
+                .setColor(Utilities.getUtils().red)
                 .setDescription("\uD83D\uDD07 │ " + user.getAsMention() + " got muted on " + ctx.getGuild().getName())
                 .setFooter("requested by " + ctx.getAuthor().getAsTag(), ctx.getAuthor().getEffectiveAvatarUrl())
                 .setTimestamp(Instant.now());
         //direct message
         EmbedBuilder directMessage = new EmbedBuilder()
                 .setAuthor("You got muted", null, user.getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().red)
+                .setColor(Utilities.getUtils().red)
                 .setDescription("\uD83D\uDD07 │ You got muted on " + ctx.getGuild().getName())
                 .setFooter("requested by " + ctx.getAuthor().getAsTag(), ctx.getAuthor().getEffectiveAvatarUrl())
                 .setTimestamp(Instant.now());

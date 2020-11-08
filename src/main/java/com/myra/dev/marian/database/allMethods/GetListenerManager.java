@@ -1,7 +1,7 @@
 package com.myra.dev.marian.database.allMethods;
 
 import com.myra.dev.marian.database.MongoDb;
-import com.myra.dev.marian.utilities.management.Manager;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.bson.Document;
@@ -44,9 +44,9 @@ public class GetListenerManager {
         mongoDb.getCollection("guilds").findOneAndReplace(mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first(), updatedDocument);
         //success information
         if (newValue) {
-            Manager.getUtilities().success(event.getChannel(), listener, commandEmoji, "`" + listener + "` got toggled on", "`" + listener + "` is now enabled", event.getAuthor().getEffectiveAvatarUrl(), false, null);
+            Utilities.getUtils().success(event.getChannel(), listener, commandEmoji, "`" + listener + "` got toggled on", "`" + listener + "` is now enabled", event.getAuthor().getEffectiveAvatarUrl(), false, null);
         } else {
-            Manager.getUtilities().success(event.getChannel(), listener, commandEmoji, "`" + listener + "` got toggled off", "`" + listener + "` is now disabled", event.getAuthor().getEffectiveAvatarUrl(), false, null);
+            Utilities.getUtils().success(event.getChannel(), listener, commandEmoji, "`" + listener + "` got toggled off", "`" + listener + "` is now disabled", event.getAuthor().getEffectiveAvatarUrl(), false, null);
         }
     }
 }

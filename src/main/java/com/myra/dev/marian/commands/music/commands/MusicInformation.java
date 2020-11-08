@@ -2,10 +2,10 @@ package com.myra.dev.marian.commands.music.commands;
 
 import com.myra.dev.marian.APIs.LavaPlayer.PlayerManager;
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -23,7 +23,7 @@ public class MusicInformation implements Command {
         // Get audio player
         final AudioPlayer player = PlayerManager.getInstance().getMusicManager(ctx.getGuild()).audioPlayer;
         // Get utilities
-        final Utilities utilities = Manager.getUtilities();
+        final Utilities utilities = Utilities.getUtils();
         //the bot isn't connected to any voice channel
         if (!ctx.getGuild().getAudioManager().isConnected()) {
             utilities.error(

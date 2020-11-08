@@ -1,6 +1,6 @@
 package com.myra.dev.marian.APIs;
 
-import com.myra.dev.marian.utilities.management.Manager;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.entities.User;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -31,7 +31,7 @@ public class TopGG {
         //make get request
         Request channel = new Request.Builder()
                 .url("https://top.gg/api/bots/718444709445632122")
-                .header("Authorization", Manager.getUtilities().topGgKey)
+                .header("Authorization", Utilities.getUtils().topGgKey)
                 .build();
         //execute call
         String channelOutput;
@@ -55,7 +55,7 @@ public class TopGG {
         //make get request
         Request channel = new Request.Builder()
                 .url("https://top.gg/api/bots/718444709445632122/check?userId=" + user.getId())
-                .header("Authorization", Manager.getUtilities().topGgKey)
+                .header("Authorization", Utilities.getUtils().topGgKey)
                 .build();
         //execute call
         String channelOutput;

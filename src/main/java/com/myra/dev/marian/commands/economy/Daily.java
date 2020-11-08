@@ -2,10 +2,10 @@ package com.myra.dev.marian.commands.economy;
 
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.database.allMethods.GetMember;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.util.Random;
@@ -34,12 +34,12 @@ public class Daily implements Command {
         // Create embed
         EmbedBuilder daily = new EmbedBuilder()
                 .setAuthor("daily", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().getMemberRoleColour(ctx.getEvent().getMember()));
+                .setColor(Utilities.getUtils().getMemberRoleColour(ctx.getEvent().getMember()));
 
         // Too early
         if (TimeUnit.MILLISECONDS.toHours(passedTime) < 12) {
             long nextBonusAt = lastClaim + TimeUnit.HOURS.toMillis(12);
-            String nextBonusIn = Manager.getUtilities().formatTime(nextBonusAt - System.currentTimeMillis());
+            String nextBonusIn = Utilities.getUtils().formatTime(nextBonusAt - System.currentTimeMillis());
 
 
             daily.setDescription("You need to wait more " + nextBonusIn);

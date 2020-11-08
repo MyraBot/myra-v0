@@ -3,10 +3,10 @@ package com.myra.dev.marian.commands.economy;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.database.allMethods.GetMember;
 import com.myra.dev.marian.utilities.CommandCooldown;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.util.Arrays;
@@ -35,7 +35,7 @@ public class Fish implements Command {
             // Send message
             ctx.getChannel().sendMessage(new EmbedBuilder()
                     .setAuthor("fish", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                    .setColor(Manager.getUtilities().blue)
+                    .setColor(Utilities.getUtils().blue)
                     .setDescription("\uD83C\uDFA3 │ " + message + " **+ " + reward + "**")
                     .build()
             ).queue();
@@ -55,7 +55,7 @@ public class Fish implements Command {
             // Send message
             ctx.getChannel().sendMessage(new EmbedBuilder()
                     .setAuthor("fish", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                    .setColor(Manager.getUtilities().blue)
+                    .setColor(Utilities.getUtils().blue)
                     .setDescription("\uD83C\uDFA3 │ " + message + " **- " + lostMoney + "**")
                     .build()
             ).queue();

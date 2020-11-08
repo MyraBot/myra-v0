@@ -3,10 +3,10 @@ package com.myra.dev.marian.listeners.suggestions;
 import com.myra.dev.marian.database.allMethods.Database;
 
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -19,7 +19,7 @@ public class SuggestionsChannel implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         // get utilities
-        Utilities utilities = Manager.getUtilities();
+        Utilities utilities = Utilities.getUtils();
         // Usage
         if (ctx.getArguments().length != 1) {
             // Usage
@@ -52,7 +52,7 @@ public class SuggestionsChannel implements Command {
         // Update database
         db.set("suggestionsChannel", channel.getId());
         //success message
-        Manager.getUtilities().success(ctx.getChannel(),
+        Utilities.getUtils().success(ctx.getChannel(),
                 "suggestions", "\uD83D\uDDF3",
                 "Suggestions channel changed",
                 "Suggestions are now sent in " + channel.getAsMention(),
@@ -60,7 +60,7 @@ public class SuggestionsChannel implements Command {
                 false, null);
         EmbedBuilder success = new EmbedBuilder()
                 .setAuthor("suggestions channel", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().blue)
+                .setColor(Utilities.getUtils().blue)
                 .addField("\uD83D\uDDF3 │ Notification channel changed", "Suggestions are now send in here", false);
         channel.sendMessage(success.build()).queue();
     }

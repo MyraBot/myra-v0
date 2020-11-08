@@ -2,10 +2,10 @@ package com.myra.dev.marian.commands.moderation;
 
 
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.management.Manager;
-import com.myra.dev.marian.utilities.management.commands.Command;
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
-import com.myra.dev.marian.utilities.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 
@@ -20,7 +20,7 @@ public class Kick implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         // Get utilities
-        Utilities utilities = Manager.getUtilities();
+        Utilities utilities = Utilities.getUtils();
         //command usage
         if (ctx.getArguments().length == 0) {
             EmbedBuilder embed = new EmbedBuilder()
@@ -48,14 +48,14 @@ public class Kick implements Command {
         //guild message
         EmbedBuilder guildMessage = new EmbedBuilder()
                 .setAuthor(user.getAsTag() + " got kicked", null, user.getEffectiveAvatarUrl())
-                .setColor(Manager.getUtilities().red)
+                .setColor(Utilities.getUtils().red)
                 .setDescription(user.getAsMention() + " got kicked from " + ctx.getGuild().getName())
                 .setFooter("requested by " + ctx.getAuthor().getAsTag(), ctx.getAuthor().getEffectiveAvatarUrl())
                 .setTimestamp(Instant.now());
         //direct message
         EmbedBuilder directMessage = new EmbedBuilder()
                 .setAuthor("You got kicked from " + ctx.getGuild().getName(), null, ctx.getGuild().getIconUrl())
-                .setColor(Manager.getUtilities().red)
+                .setColor(Utilities.getUtils().red)
                 .setDescription("You got kicked from " + ctx.getGuild().getName())
                 .setFooter("requested by " + ctx.getAuthor().getAsTag(), ctx.getAuthor().getEffectiveAvatarUrl())
                 .setTimestamp(Instant.now());

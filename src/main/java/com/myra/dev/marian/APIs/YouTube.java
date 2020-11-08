@@ -6,7 +6,7 @@ import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTubeRequestInitializer;
 import com.google.api.services.youtube.model.SearchResult;
-import com.myra.dev.marian.utilities.management.Manager;
+import com.myra.dev.marian.utilities.Utilities;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -27,7 +27,7 @@ public class YouTube {
                     }
                 })
                 .setApplicationName("CloudStudios bot")
-                .setYouTubeRequestInitializer(new YouTubeRequestInitializer(Manager.getUtilities().youTubeKey))
+                .setYouTubeRequestInitializer(new YouTubeRequestInitializer(Utilities.getUtils().youTubeKey))
                 .build();
 
         com.google.api.services.youtube.YouTube.Search.List search = youTube.search().list("id,snippet")

@@ -1,6 +1,6 @@
 package com.myra.dev.marian.utilities;
 
-import com.myra.dev.marian.utilities.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandContext;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 
