@@ -1,4 +1,4 @@
-package com.myra.dev.marian.management;
+package com.myra.dev.marian.utilities;
 
 import javax.management.Attribute;
 import javax.management.AttributeList;
