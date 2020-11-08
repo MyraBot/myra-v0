@@ -3,9 +3,7 @@ package com.myra.dev.marian;
 
 import com.myra.dev.marian.management.EventsManager;
 import com.myra.dev.marian.management.Manager;
-import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.ConsoleColours;
-import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Icon;
