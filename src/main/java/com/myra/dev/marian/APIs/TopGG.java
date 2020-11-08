@@ -39,9 +39,9 @@ public class TopGG {
             channelOutput = channelResponse.body().string();
         }
         //create Json object
-        String votes = new JSONObject(channelOutput).getString("points");
+        final int votes = new JSONObject(channelOutput).getInt("points");
         // Return votes
-        return votes;
+        return String.valueOf(votes);
     }
 
     /**
