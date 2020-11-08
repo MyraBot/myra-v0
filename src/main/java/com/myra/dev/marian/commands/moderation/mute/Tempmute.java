@@ -3,13 +3,11 @@ package com.myra.dev.marian.commands.moderation.mute;
 import com.mongodb.client.MongoCollection;
 import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.allMethods.Database;
-
-import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.Events;
-import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -19,8 +17,6 @@ import org.bson.Document;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 @CommandSubscribe(
@@ -111,9 +107,8 @@ public class Tempmute extends Events implements Command {
         //create unmute Document
         Document document = createUnmute(user.getId(), ctx.getGuild().getId(), durationInMilliseconds, ctx.getAuthor().getId());
 // Unmute
-        //delay
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
+        // Delay
+        Utilities.TIMER.schedule(new Runnable() {
             @Override
             public void run() {
                 //if member left the server
@@ -127,9 +122,8 @@ public class Tempmute extends Events implements Command {
                 unmuteMessage(user, ctx.getGuild(), ctx.getAuthor());
                 //delete document
                 mongoDb.getCollection("unmutes").deleteOne(document);
-
             }
-        }, durationInMilliseconds);
+        }, durationInMilliseconds, TimeUnit.MILLISECONDS);
     }
 
 
@@ -217,9 +211,8 @@ public class Tempmute extends Events implements Command {
             /**
              * if unmute time isn't already reached
              */
-            //delay
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
+            // Delay
+            Utilities.TIMER.schedule(new Runnable() {
                 @Override
                 public void run() {
                     //if member left the server
@@ -234,7 +227,7 @@ public class Tempmute extends Events implements Command {
                     //delete document
                     mongoDb.getCollection("unmutes").deleteOne(doc);
                 }
-            }, doc.getLong("unmuteTime") - System.currentTimeMillis());
+            }, doc.getLong("unmuteTime") - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
         }
     }
 }

@@ -1,19 +1,18 @@
 package com.myra.dev.marian.commands.fun;
 
-import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.management.Events;
-import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.MessageReaction;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 @CommandSubscribe(
         command = "text formatter",
@@ -133,10 +132,7 @@ public class TextFormatter extends Events implements Command {
             ctx.getChannel().sendMessage(usage.build()).queue();
             return;
         }
-        /**
-         * format options
-         */
-        //format options
+// Format options
         EmbedBuilder selection = new EmbedBuilder()
                 .setAuthor("format", null, ctx.getAuthor().getEffectiveAvatarUrl())
                 .setColor(Utilities.getUtils().blue)
@@ -158,20 +154,19 @@ public class TextFormatter extends Events implements Command {
         messages.put(message.getId(), text);
         //remove message
         if (messages.get(message) == null) {
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
+            Utilities.TIMER.schedule(new Runnable() {
                 @Override
                 public void run() {
                     messages.remove(message);
                 }
-            }, 60 * 1000);
+            }, 1, TimeUnit.MINUTES);
         }
         //add reactions
         message.addReaction("\uD83C\uDDE9\uD83C\uDDEA").queue();
         message.addReaction("\uD83D\uDD8B").queue();
         message.addReaction("\uD83C\uDF39").queue();
         //save message id
-        MessageReaction.add("format", message.getId(), Arrays.asList("\uD83C\uDDE9\uD83C\uDDEA", "\uD83D\uDD8B", "\uD83C\uDF39"),ctx.getChannel(), ctx.getAuthor(), true);
+        MessageReaction.add("format", message.getId(), Arrays.asList("\uD83C\uDDE9\uD83C\uDDEA", "\uD83D\uDD8B", "\uD83C\uDF39"), ctx.getChannel(), ctx.getAuthor(), true);
     }
 
     /**

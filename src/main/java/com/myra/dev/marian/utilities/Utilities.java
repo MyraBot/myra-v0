@@ -1,7 +1,6 @@
 package com.myra.dev.marian.utilities;
 
 import com.myra.dev.marian.Bot;
-import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
@@ -14,9 +13,12 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Utilities {
+    public final static ScheduledExecutorService TIMER = Executors.newScheduledThreadPool(5);
     private final static Utilities getUtils = new Utilities();
 
     public static Utilities getUtils() {

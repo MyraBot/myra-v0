@@ -9,8 +9,7 @@ import org.bson.Document;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 public class MessageReaction extends Events {
 
@@ -44,8 +43,7 @@ public class MessageReaction extends Events {
         // When the command has a time out
         if (timeOut) {
             //remove id
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
+            Utilities.TIMER.schedule(new Runnable() {
                 @Override
                 public void run() {
                     // Reaction already removed
@@ -55,7 +53,7 @@ public class MessageReaction extends Events {
                     // Remove all reactions
                     channel.retrieveMessageById(messageId).complete().clearReactions().queue();
                 }
-            }, 60 * 1000);
+            }, 1, TimeUnit.MINUTES);
         }
     }
 

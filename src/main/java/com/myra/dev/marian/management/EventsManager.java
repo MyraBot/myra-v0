@@ -198,7 +198,7 @@ public class EventsManager extends ListenerAdapter {
 
     public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
         try {
-            new Leveling().xpVoice(event);
+            // Events
         } catch (Exception e) {
             e.printStackTrace();
         }

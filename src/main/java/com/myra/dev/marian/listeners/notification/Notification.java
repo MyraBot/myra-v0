@@ -12,15 +12,13 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.ReadyEvent;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 public class Notification extends Events {
 
     public void jdaReady(ReadyEvent event) throws Exception {
         //run loop
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
+        Utilities.TIMER.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -34,7 +32,7 @@ public class Notification extends Events {
                         if (streamers.isEmpty()) continue;
                         //if no notification channel is set
                         if (channelRaw.equals("not set")) {
-                            Utilities.getUtils().error(guild.getDefaultChannel(), "notification", "\uD83D\uDD14", "No notification channel specified", "To set a notification channel type in `" +  db.get("prefix") + "notification channel <channel>`", guild.getIconUrl());
+                            Utilities.getUtils().error(guild.getDefaultChannel(), "notification", "\uD83D\uDD14", "No notification channel specified", "To set a notification channel type in `" + db.get("prefix") + "notification channel <channel>`", guild.getIconUrl());
                             continue;
                         }
                         //get notification channel
@@ -63,6 +61,6 @@ public class Notification extends Events {
                     e.printStackTrace();
                 }
             }
-        }, 5 * 60 * 1000, 5 * 60 * 1000);
+        }, 10, 5, TimeUnit.MINUTES);
     }
 }

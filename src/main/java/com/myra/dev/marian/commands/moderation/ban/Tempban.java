@@ -3,13 +3,11 @@ package com.myra.dev.marian.commands.moderation.ban;
 import com.mongodb.client.MongoCollection;
 import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.allMethods.Database;
-
-import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.Events;
-import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -19,8 +17,6 @@ import org.bson.Document;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 @CommandSubscribe(
@@ -79,7 +75,7 @@ public class Tempban extends Events implements Command {
         TimeUnit timeUnit = TimeUnit.valueOf(durationList.get(2).toString());
         //guild message ban
         EmbedBuilder guildMessageBan = new EmbedBuilder()
-                .setAuthor( user.getAsTag() + " got temporary banned", null, user.getEffectiveAvatarUrl())
+                .setAuthor(user.getAsTag() + " got temporary banned", null, user.getEffectiveAvatarUrl())
                 .setColor(utilities.red)
                 .setDescription("\u23F1\uFE0F │ " + user.getAsMention() + " got banned for **" + duration + " " + timeUnit.toString().toLowerCase() + "**")
                 .setFooter("requested by " + ctx.getAuthor().getAsTag(), ctx.getAuthor().getEffectiveAvatarUrl())
@@ -120,8 +116,7 @@ public class Tempban extends Events implements Command {
          * unban
          */
         //delay
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
+        Utilities.TIMER.schedule(new Runnable() {
             @Override
             public void run() {
                 //unban
@@ -129,11 +124,9 @@ public class Tempban extends Events implements Command {
                 //send unban message
                 unbanMessage(user, ctx.getGuild(), ctx.getAuthor());
                 //delete document
-
                 mongoDb.getCollection("unbans").deleteOne(document);
-
             }
-        }, durationInMilliseconds);
+        }, durationInMilliseconds, TimeUnit.MILLISECONDS);
     }
 
     public Document createUnban(String userId, String guildId, Long durationInMilliseconds, String moderatorId) {
@@ -191,8 +184,7 @@ public class Tempban extends Events implements Command {
                     }
                     if (ban.getUser().getId().equals(doc.getString("userId"))) {
                         //delay
-                        Timer timer = new Timer();
-                        timer.schedule(new TimerTask() {
+                        Utilities.TIMER.schedule(new Runnable() {
                             @Override
                             public void run() {
                                 //unban
@@ -202,8 +194,7 @@ public class Tempban extends Events implements Command {
                                 //delete document
                                 mongoDb.getCollection("unbans").deleteOne(doc);
                             }
-                        }, doc.getLong("unbanTime") - System.currentTimeMillis());
-
+                        }, doc.getLong("unbanTime") - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
                     }
                 }
             }
@@ -229,7 +220,7 @@ public class Tempban extends Events implements Command {
         });
         //if no channel is set
         if (db.get("logChannel").equals("not set")) {
-            Utilities.getUtils().error(guild.getDefaultChannel(), "tempban", "\u23F1\uFE0F", "No log channel specified", "To set a log channel type in `" +  new Database(guild).get("prefix") + "log channel <channel>`", author.getEffectiveAvatarUrl());
+            Utilities.getUtils().error(guild.getDefaultChannel(), "tempban", "\u23F1\uFE0F", "No log channel specified", "To set a log channel type in `" + new Database(guild).get("prefix") + "log channel <channel>`", author.getEffectiveAvatarUrl());
             return;
         }
         //get log channel

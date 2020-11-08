@@ -3,18 +3,16 @@ package com.myra.dev.marian.commands.general;
 import com.mongodb.client.MongoCollection;
 import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.management.Events;
-import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import org.bson.Document;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 @CommandSubscribe(
@@ -66,8 +64,7 @@ public class Reminder extends Events implements Command {
         Document document = createReminder(ctx.getAuthor().getId(), durationInMilliseconds + System.currentTimeMillis(), reason.toString(), timeUnit);
         //delay
         String finalReason = reason.toString();
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
+        Utilities.TIMER.schedule(new Runnable() {
             @Override
             public void run() {
                 //send reminder
@@ -75,7 +72,7 @@ public class Reminder extends Events implements Command {
                 //delete document
                 mongoDb.getCollection("reminders").deleteOne(document);
             }
-        }, durationInMilliseconds);
+        }, durationInMilliseconds, TimeUnit.MILLISECONDS);
     }
 
     //create document
@@ -120,8 +117,7 @@ public class Reminder extends Events implements Command {
             }
 
             //delay
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
+            Utilities.TIMER.schedule(new Runnable() {
                 @Override
                 public void run() {
                     //send reminder
@@ -129,9 +125,8 @@ public class Reminder extends Events implements Command {
                     //delete document
 
                     mongoDb.getCollection("reminders").deleteOne(doc);
-
                 }
-            }, doc.getLong("remindTime") - System.currentTimeMillis());
+            }, doc.getLong("remindTime") - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
         }
     }
 }

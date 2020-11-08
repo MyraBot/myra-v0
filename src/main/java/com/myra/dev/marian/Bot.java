@@ -4,6 +4,7 @@ package com.myra.dev.marian;
 import com.myra.dev.marian.management.EventsManager;
 import com.myra.dev.marian.management.Manager;
 import com.myra.dev.marian.utilities.ConsoleColours;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Icon;
@@ -20,8 +21,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 public class Bot {
     public static ShardManager shardManager;
@@ -70,8 +70,7 @@ public class Bot {
         profilePictures.add(this.getClass().getClassLoader().getResourceAsStream("profilePicture7.png"));
         profilePictures.add(this.getClass().getClassLoader().getResourceAsStream("profilePicture8.png"));
         // Get a random one
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
+        Utilities.TIMER.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 // Get random number
@@ -89,7 +88,7 @@ public class Bot {
                     }
                 });
             }
-        }, 5 * 1000, 45 * 100 * 1000);
+        }, 1, 45, TimeUnit.MINUTES);
     }
 
     private void consoleListener() {
