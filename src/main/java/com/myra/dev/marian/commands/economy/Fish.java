@@ -27,7 +27,7 @@ public class Fish implements Command {
         // Get randomizer
         Random random = new Random();
         // Caught a fish
-        if (random.nextInt(100) <= 75) {
+        if (random.nextInt(25) <= 20) {
             // Get win message
             final String message = winMessage().get(0);
             // Get price
