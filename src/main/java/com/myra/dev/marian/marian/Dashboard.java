@@ -1,6 +1,6 @@
 package com.myra.dev.marian.marian;
 
-import com.myra.dev.marian.management.Resources;
+import com.myra.dev.marian.utilities.Resources;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
