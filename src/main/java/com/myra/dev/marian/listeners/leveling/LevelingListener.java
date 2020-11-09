@@ -1,8 +1,6 @@
 package com.myra.dev.marian.listeners.leveling;
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.management.Manager;
-import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.listeners.Listener;
 import com.myra.dev.marian.management.listeners.ListenerSubscribe;
 import net.dv8tion.jda.api.entities.Guild;
@@ -17,19 +15,21 @@ import java.util.HashMap;
         name = "leveling"
 )
 public class LevelingListener implements Listener {
+    private final static Leveling LEVELING = new Leveling();
+
     @Override
     public void execute(GuildMessageReceivedEvent event) throws Exception {
+        // Return if message is a command
+        if (event.getMessage().getContentRaw().startsWith(new Database(event.getGuild()).get("prefix"))) return;
         if (!cooldown(event)) return;
         //check if member is bot
         if (event.getAuthor().isBot()) return;
-        //get instance of 'Leveling' class
-        Leveling leveling = Manager.getLeveling();
-        //check for level
-        leveling.levelUp(event);
+        //check for new level
+        LEVELING.levelUp(event);
         //save new xp
         new Database(
                 event.getGuild()).getMembers().getMember(event.getMember()).addXp(
-                leveling.xp(event.getMessage())
+                LEVELING.xp(event.getMessage())
         );
     }
 
