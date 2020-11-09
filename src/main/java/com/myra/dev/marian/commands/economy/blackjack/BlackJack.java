@@ -58,7 +58,7 @@ public class BlackJack extends Events implements Command {
             }
             // Not enought money
             if (new Database(ctx.getGuild()).getMembers().getMember(ctx.getMember()).getBalance() < Integer.parseInt(ctx.getArguments()[0])) {
-                Utilities.getUtils().error(ctx.getChannel(), "blackjack", "\uD83C\uDCCF", "You don't have enough money", "The bank doesn't want to lend you any more money", ctx.getAuthor().getEffectiveAvatarUrl());
+                Utilities.getUtils().error(ctx.getChannel(), "blackjack", "\uD83C\uDCCF", "You don't have enough money", "The bank doesn't want to lend you money anymore", ctx.getAuthor().getEffectiveAvatarUrl());
                 return;
             }
             // Create new Object of a player
