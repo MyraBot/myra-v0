@@ -21,6 +21,6 @@ public class UnicornRole extends Events {
                 Color colour = new Color((int) (Math.random() * 0x1000000));
                 unicornRole.getManager().setColor(colour).queue();
             }
-        }, 25, 5, TimeUnit.SECONDS);
+        }, 5, 5, TimeUnit.MINUTES);
     }
 }
