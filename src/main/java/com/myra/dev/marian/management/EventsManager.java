@@ -1,12 +1,13 @@
 package com.myra.dev.marian.management;
 
 import com.myra.dev.marian.APIs.Twitch;
-import com.myra.dev.marian.commands.help.InviteThanks;
+import com.myra.dev.marian.commands.economy.blackjack.BlackJack;
 import com.myra.dev.marian.commands.fun.TextFormatter;
 import com.myra.dev.marian.commands.general.Reminder;
 import com.myra.dev.marian.commands.general.information.InformationServer;
 import com.myra.dev.marian.commands.help.Commands;
 import com.myra.dev.marian.commands.help.Help;
+import com.myra.dev.marian.commands.help.InviteThanks;
 import com.myra.dev.marian.commands.leveling.Background;
 import com.myra.dev.marian.commands.moderation.mute.MutePermissions;
 import com.myra.dev.marian.commands.moderation.mute.Tempmute;
@@ -15,16 +16,16 @@ import com.myra.dev.marian.commands.music.commands.MusicController;
 import com.myra.dev.marian.commands.music.commands.MusicPlay;
 import com.myra.dev.marian.database.MongoDbUpdate;
 import com.myra.dev.marian.listeners.autorole.AutoroleAssign;
-import com.myra.dev.marian.listeners.leveling.Leveling;
 import com.myra.dev.marian.listeners.notification.Notification;
 import com.myra.dev.marian.listeners.welcome.WelcomeImage.WelcomeImage;
 import com.myra.dev.marian.listeners.welcome.WelcomeImage.WelcomeImageFont;
 import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessage;
-import com.myra.dev.marian.marian.ServerTracking;
-import com.myra.dev.marian.marian.Shutdown;
-import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.management.commands.CommandService;
 import com.myra.dev.marian.management.listeners.ListenerService;
+import com.myra.dev.marian.marian.ServerTracking;
+import com.myra.dev.marian.marian.Shutdown;
+import com.myra.dev.marian.marian.UnicornRole;
+import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -78,6 +79,8 @@ public class EventsManager extends ListenerAdapter {
             new Background().guildMessageReactionAddEvent(event);
             // Text formatter
             new TextFormatter().guildMessageReactionAddEvent(event);
+            // Blackjack
+            new BlackJack().guildMessageReactionAddEvent(event);
             // Music
             new MusicPlay().guildMessageReactionAddEvent(event);
             new MusicController().guildMessageReactionAddEvent(event);
@@ -91,7 +94,6 @@ public class EventsManager extends ListenerAdapter {
     /**
      * guild
      */
-    //guild name changed
     public void onGuildUpdateName(GuildUpdateNameEvent event) {
         try {
             new MongoDbUpdate().guildNameUpdated(event);
@@ -150,6 +152,8 @@ public class EventsManager extends ListenerAdapter {
             new Notification().jdaReady(event);
             //clear HashMap
             new MessageReaction().jdaReady(event);
+            // Unicorn role
+            new UnicornRole().jdaReady(event);
         } catch (Exception e) {
             e.printStackTrace();
         }

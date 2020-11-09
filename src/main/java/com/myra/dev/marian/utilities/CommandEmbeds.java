@@ -1,7 +1,6 @@
 package com.myra.dev.marian.utilities;
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
@@ -89,6 +88,8 @@ public class CommandEmbeds {
                 .setColor(Utilities.getUtils().gray)
                 .addField("`" + prefix + "balance <user>`", new Database(guild).getNested("economy").get("currency") + " │ Shows how many " + new Database(guild).getNested("economy").get("currency") + " you have.", false)
                 .addField("`" + prefix + "daily`", "\uD83E\uDD47 │ Claim your daily reward", false)
+                .addField("`" + prefix + "fish`", "\uD83C\uDFA3 │ Try to catch a fish", false)
+                .addField("`" + prefix + "blackjack <bet>`", "\uD83C\uDCCF │ Play blackjack against " + jda.getSelfUser().getName(), false)
                 .addField("`" + prefix + "give <user> <balance>`", "\uD83D\uDCB8 │ Give credits to other users", false);
     }
 
