@@ -19,6 +19,7 @@ import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEve
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 @CommandSubscribe(
         name = "blackjack",
@@ -56,7 +57,7 @@ public class BlackJack extends Events implements Command {
                 Utilities.getUtils().error(ctx.getChannel(), "blackjack", "\uD83C\uDCCF", "Invalid number", "Make sure you only use digits", ctx.getAuthor().getEffectiveAvatarUrl());
                 return;
             }
-            // Not enought money
+            // Not enough money
             if (new Database(ctx.getGuild()).getMembers().getMember(ctx.getMember()).getBalance() < Integer.parseInt(ctx.getArguments()[0])) {
                 Utilities.getUtils().error(ctx.getChannel(), "blackjack", "\uD83C\uDCCF", "You don't have enough money", "The bank doesn't want to lend you money anymore", ctx.getAuthor().getEffectiveAvatarUrl());
                 return;
@@ -115,12 +116,29 @@ public class BlackJack extends Events implements Command {
                     .addField("Your cards: " + player.getValue(),
                             // Player cards
                             playerCards,
-                            false)
-                    // Value of dealer cards
-                    .addField("Dealer shows:",
-                            // Player cards
-                            dealerCards,
                             false);
+            // Value of dealer cards
+            if (dealer.getValue() == 21 && dealer.getValue() == player.getValue()) {
+                match.addField("Dealer cards: " + dealer.getValue(),
+                        // Player cards
+                        dealerCards,
+                        false);
+            }
+            // Player won
+            if (player.getValue() == 21) {
+                match.addField("Dealer cards: " + dealer.getValue(),
+                        // Player cards
+                        dealerCards,
+                        false);
+            }
+            // Game contiues
+            else {
+                match.addField("Dealer shows: " + dealer.getValue(),
+                        // Player cards
+                        dealerCards,
+                        false);
+            }
+            match.setFooter(footer);
             // Update message
             Message message = ctx.getChannel().sendMessage(match.build()).complete();
             // Add reactions
@@ -269,9 +287,6 @@ public class BlackJack extends Events implements Command {
         String footer = getFooterStay(game, player, dealer, event);
         // Update message
         updateMessage(event.getUser(), player, dealer, event.getJDA(), event.getChannel(), event.getMessageId(), event.getReaction(), footer);
-        // Remove game
-        games.remove(event.getMessageId());
-        reaction.remove(event.getMessageId());
     }
 
     private String getFooterStay(Game game, Player player, Player dealer, GuildMessageReactionAddEvent event) {
@@ -333,11 +348,11 @@ public class BlackJack extends Events implements Command {
                     // Dealer cards
                     dealerCards,
                     false);
-            // Clear reactions
-            messageReaction.clearReactions().queue();
             // End game
             games.remove(messageId);
             reaction.remove(messageId);
+            // Clear reactions
+           channel.clearReactionsById(messageId).queue();
         }
 // Footer
         match.setFooter(footer);
