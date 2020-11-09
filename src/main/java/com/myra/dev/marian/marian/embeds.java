@@ -42,12 +42,13 @@ public class embeds {
                 .addField("25 000", "<@&715462771688603678>  <@&715508379807645697>", false)
                 .addField("25 000", "<@&715462771688603678>  <@&715508379807645697>", false)
                 .addField("10 000", "<@&714787219784597544> ➪ BE ABLE TO ADVERTISE IN  <#668403563223056384>", false)
+                .addField("100 000", "<@&774210055259947008> ➪ UR COLOUR WILL CHANGE EVERY 5 MINUTES", false)
                 .addField("1 000 00", "<@&732929835814617099> ➪ secret :D", false);
     }
 
     // Leveling roles
     public EmbedBuilder leveling(User author) {
-        EmbedBuilder leveling = new EmbedBuilder()
+        return new EmbedBuilder()
                 .setAuthor("leveling roles", null, author.getEffectiveAvatarUrl())
                 .setColor(0xFF006E)
                 .setDescription("You can get these roles if you reach a specific level.")
@@ -57,8 +58,6 @@ public class embeds {
                 .addField("", "level 50 ➪ <@&688480479371985031>", true)
                 .addField("", "level 75 ➪ <@&688480479371985031>", true)
                 .addField("", "level 100 ➪ <@&689878622361747494>", true);
-
-        return leveling;
     }
 
     // Designer roles
@@ -91,12 +90,10 @@ public class embeds {
 
     // Bot related channels
     public EmbedBuilder botChannels() {
-        EmbedBuilder botChannels = new EmbedBuilder();
-        botChannels.setTitle("bot related channels");
-        botChannels.setColor(0xE9E637);
-        botChannels.setDescription("React with [\uD83D\uDD0C] to see the bot related channels. You will see updates, bugs and planned features for the bot!");
-
-        return botChannels;
+        return new EmbedBuilder()
+                .setTitle("bot related channels")
+                .setColor(0xE9E637)
+                .setDescription("React with [\uD83D\uDD0C] to see the bot related channels. You will see updates, bugs and planned features for the bot!");
     }
 
     // Texture pack related channels

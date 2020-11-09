@@ -1,6 +1,5 @@
 package com.myra.dev.marian.management;
 
-import com.myra.dev.marian.Bot;
 import com.myra.dev.marian.commands.administrator.Prefix;
 import com.myra.dev.marian.commands.administrator.Say;
 import com.myra.dev.marian.commands.administrator.Toggle;
@@ -66,16 +65,16 @@ import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedHelp;
 import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedMessage;
 import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedPreview;
 import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedToggle;
-import com.myra.dev.marian.marian.Dashboard;
-import com.myra.dev.marian.marian.GetInvite;
-import com.myra.dev.marian.marian.Shutdown;
-import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandService;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
 import com.myra.dev.marian.management.commands.DefaultCommandService;
 import com.myra.dev.marian.management.listeners.DefaultListenerService;
 import com.myra.dev.marian.management.listeners.ListenerService;
+import com.myra.dev.marian.marian.Dashboard;
+import com.myra.dev.marian.marian.GetInvite;
+import com.myra.dev.marian.marian.MariansDiscordInformation;
+import com.myra.dev.marian.marian.Shutdown;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -110,6 +109,7 @@ public class Manager {
         COMMAND_SERVICE.register(
                 // Marian
                 new MongoDbUpdate(),
+                new MariansDiscordInformation(),
                 new GetInvite(),
                 new Dashboard(),
                 new Shutdown(),

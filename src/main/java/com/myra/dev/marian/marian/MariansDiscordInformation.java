@@ -38,5 +38,6 @@ public class MariansDiscordInformation implements Command {
 //            ctx.getChannel().sendFile(reactionRoles).queue();
         ctx.getChannel().editMessageById("726130651593441400", embed.botChannels().build()).queue();
         ctx.getChannel().editMessageById("726130652365324360", embed.packChannels().build()).queue();
+        ctx.getChannel().editMessageById("726130523998781513", embed.colour(ctx.getAuthor()).build()).queue();
     }
 }
