@@ -28,6 +28,7 @@ public class Bot {
 
     public final static String prefix = "~";
     public final static String marian = "639544573114187797";
+    public final static String marianServer = "642809436515074053";
     public final static String myraServer = "774269364244971571";
 
     // Main method
