@@ -3,6 +3,7 @@ package com.myra.dev.marian.commands.economy.blackjack;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 public class Game {
     // Values
@@ -48,5 +49,14 @@ public class Game {
      */
     public void removeCard(Card card) {
         leftCards.remove(card);
+    }
+
+    public Card getRandomCard() {
+        // Generate a random number
+        int random = new Random().nextInt(leftCards.size() - 1);
+        // Remove the cart from the game
+        removeCard(leftCards.get(random));
+        // Return a card
+        return leftCards.get(random);
     }
 }

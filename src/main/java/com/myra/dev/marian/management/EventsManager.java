@@ -24,7 +24,7 @@ import com.myra.dev.marian.management.commands.CommandService;
 import com.myra.dev.marian.management.listeners.ListenerService;
 import com.myra.dev.marian.marian.ServerTracking;
 import com.myra.dev.marian.marian.Shutdown;
-import com.myra.dev.marian.marian.UnicornRole;
+import com.myra.dev.marian.marian.Roles;
 import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.entities.Message;
@@ -153,7 +153,7 @@ public class EventsManager extends ListenerAdapter {
             //clear HashMap
             new MessageReaction().jdaReady(event);
             // Unicorn role
-            new UnicornRole().jdaReady(event);
+            new Roles().jdaReady(event);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -180,12 +180,14 @@ public class EventsManager extends ListenerAdapter {
 
     public void onGuildJoin(GuildJoinEvent event) {
         try {
-            //add guild document
+            // Add guild document to database
             new MongoDbUpdate().guildJoinEvent(event);
-            // Log
+            // Server tracking message
             new ServerTracking().guildJoinEvent(event);
             // Thank message to server owner
             new InviteThanks().guildJoinEvent(event);
+            // Add exclusive role to members, who use Myra on their server
+            new Roles().exclusive(event);
         } catch (Exception e) {
             e.printStackTrace();
         }
