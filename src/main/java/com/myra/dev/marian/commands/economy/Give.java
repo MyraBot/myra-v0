@@ -1,11 +1,11 @@
 package com.myra.dev.marian.commands.economy;
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.database.allMethods.GetMembers;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 
@@ -41,16 +41,20 @@ public class Give implements Command {
             utilities.error(ctx.getChannel(), "give", "\uD83D\uDCB8", "Invalid user", "You're not allowed to give credits to bots", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
-// Transfer money;
+// Transfer money
+        // Get money
+        final int amount = Integer.parseInt(ctx.getArguments()[1]);
         // Get database
-        Database db = new Database(ctx.getGuild());
+        final GetMembers members = new Database(ctx.getGuild()).getMembers();
         // Transfer money
-        db.getMembers().getMember(ctx.getGuild().getMember(user)).setBalance(db.getMembers().getMember(ctx.getMember()).getBalance() + Integer.parseInt(ctx.getArguments()[1]));
+        members.getMember(ctx.getGuild().getMember(user)).setBalance(members.getMember(ctx.getGuild().getMember(user)).getBalance() + amount); // Add money to given member
+        members.getMember(ctx.getMember()).setBalance(members.getMember(ctx.getMember()).getBalance() - amount); // Remove money of author
         // Success message
         EmbedBuilder success = new EmbedBuilder()
                 .setAuthor("give", null, ctx.getAuthor().getEffectiveAvatarUrl())
                 .setColor(utilities.blue)
-                .setDescription(ctx.getAuthor().getAsMention() + " gave you `" + ctx.getArguments()[1] + "` " + db.getNested("economy").get("currency"));
-        ctx.getChannel().sendMessage(user.getAsMention() + success.build()).queue();
+                .setDescription(ctx.getAuthor().getAsMention() + " gave you `" + ctx.getArguments()[1] + "` " + new Database(ctx.getGuild()).getNested("economy").get("currency"));
+        ctx.getChannel().sendMessage(user.getAsMention()).queue();
+        ctx.getChannel().sendMessage(success.build()).queue();
     }
 }
