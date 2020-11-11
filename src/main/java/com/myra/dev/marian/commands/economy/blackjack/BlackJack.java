@@ -99,6 +99,8 @@ public class BlackJack  implements Command {
 
 
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) {
+        // Wrong reaction
+        if (games.get(event.getMessageId()) == null) return;
         // Wrong user reacted to the message
         if (!games.get(event.getMessageId()).getPlayers().get(0).getPlayer().equals(event.getUser())) return;
         // Get game
