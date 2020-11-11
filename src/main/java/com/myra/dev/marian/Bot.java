@@ -71,6 +71,7 @@ public class Bot {
         profilePictures.add(this.getClass().getClassLoader().getResourceAsStream("profilePicture6.png"));
         profilePictures.add(this.getClass().getClassLoader().getResourceAsStream("profilePicture7.png"));
         profilePictures.add(this.getClass().getClassLoader().getResourceAsStream("profilePicture8.png"));
+        profilePictures.add(this.getClass().getClassLoader().getResourceAsStream("profilePicture9.png"));
         // Get a random one
         Utilities.TIMER.scheduleAtFixedRate(new Runnable() {
             @Override
