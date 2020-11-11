@@ -8,6 +8,7 @@ import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Icon;
+import net.dv8tion.jda.api.exceptions.RateLimitedException;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
@@ -32,13 +33,13 @@ public class Bot {
     public final static String myraServer = "774269364244971571";
 
     // Main method
-    public static void main(String[] args) throws LoginException {
+    public static void main(String[] args) throws LoginException, RateLimitedException {
         new Bot();
     }
 
 
-    private Bot() throws LoginException {
-        DefaultShardManagerBuilder jda = DefaultShardManagerBuilder.createDefault("NzE4NDQ0NzA5NDQ1NjMyMTIy.Xto9xg.dQxtSFxxYHpKXOwLCtJuWM5w1MM")
+    private Bot() throws LoginException, RateLimitedException {
+        DefaultShardManagerBuilder jda = DefaultShardManagerBuilder.createDefault("NzE4NDQ0NzA5NDQ1NjMyMTIy.Xto9xg.ZID1OF7fwPAql6V8ov6QiAYQWTE")
                 .enableIntents(GatewayIntent.GUILD_PRESENCES) // Need GatewayIntent.GUILD_PRESENCES for CacheFlag.ACTIVITY
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)  // Need GatewayIntent.GUILD_MEMBERS for MemberCachePolicy.ALL
                 .enableCache(CacheFlag.ACTIVITY) // Need to get the activity of a member
