@@ -73,24 +73,21 @@ public class Bot {
         profilePictures.add(this.getClass().getClassLoader().getResourceAsStream("profilePicture8.png"));
         profilePictures.add(this.getClass().getClassLoader().getResourceAsStream("profilePicture9.png"));
         // Get a random one
-        Utilities.TIMER.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                // Get random number
-                int random = new Random().nextInt(profilePictures.size());
-                // Change profile
-                shardManager.getShards().forEach(bot -> {
-                    try {
-                        // Change status
-                        bot.getPresence().setActivity(Activity.listening("~help │ v0.6.3 │ " + bot.getGuilds().size() + " servers"));
-                        // Change profile picture
-                        bot.getSelfUser().getManager().setAvatar(
-                                Icon.from(profilePictures.get(random))).queue();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                });
-            }
+        Utilities.TIMER.scheduleAtFixedRate(() -> {
+            // Get random number
+            int random = new Random().nextInt(profilePictures.size());
+            // Change profile
+            shardManager.getShards().forEach(bot -> {
+                try {
+                    // Change status
+                    bot.getPresence().setActivity(Activity.listening("~help │ v0.6.3 │ " + bot.getGuilds().size() + " servers"));
+                    // Change profile picture
+                    bot.getSelfUser().getManager().setAvatar(
+                            Icon.from(profilePictures.get(random))).queue();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
         }, 1, 45, TimeUnit.MINUTES);
     }
 
