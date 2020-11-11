@@ -4,7 +4,7 @@ import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.Graphic;
 import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.management.Events;
+
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
@@ -22,7 +22,7 @@ import java.util.Arrays;
 @CommandSubscribe(
         name = "edit rank"
 )
-public class Background extends Events implements Command {
+public class Background  implements Command {
 
     @Override
     public void execute(CommandContext ctx) throws Exception {

@@ -2,12 +2,12 @@ package com.myra.dev.marian.listeners.welcome.WelcomeImage;
 
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.management.Events;
+
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 
-public class WelcomeImage extends Events {
+public class WelcomeImage  {
 
     public void memberJoined(GuildMemberJoinEvent event) throws Exception {
         Database db = new Database(event.getGuild());

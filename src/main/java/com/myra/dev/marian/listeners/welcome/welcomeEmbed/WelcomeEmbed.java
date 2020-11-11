@@ -2,7 +2,7 @@ package com.myra.dev.marian.listeners.welcome.welcomeEmbed;
 
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.management.Events;
+
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -11,8 +11,7 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import java.awt.*;
 import java.time.Instant;
 
-public class WelcomeEmbed extends Events {
-    @Override
+public class WelcomeEmbed  {
     public void memberJoined(GuildMemberJoinEvent event) throws Exception {
         Database db = new Database(event.getGuild());
 

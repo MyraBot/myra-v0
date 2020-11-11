@@ -2,7 +2,7 @@ package com.myra.dev.marian.listeners.notification;
 
 import com.myra.dev.marian.APIs.Twitch;
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.management.Events;
+
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.events.ReadyEvent;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class Notification extends Events {
+public class Notification  {
 
     public void jdaReady(ReadyEvent event) throws Exception {
         //run loop

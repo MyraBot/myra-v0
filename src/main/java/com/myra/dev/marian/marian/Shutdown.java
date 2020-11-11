@@ -1,12 +1,11 @@
 package com.myra.dev.marian.marian;
 
 import com.myra.dev.marian.Bot;
-import com.myra.dev.marian.utilities.MessageReaction;
-import com.myra.dev.marian.management.Events;
-import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.MessageReaction;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
@@ -16,7 +15,7 @@ import java.util.Arrays;
 @CommandSubscribe(
         name = "shutdown"
 )
-public class Shutdown extends Events implements Command {
+public class Shutdown implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         // Access only for Marian

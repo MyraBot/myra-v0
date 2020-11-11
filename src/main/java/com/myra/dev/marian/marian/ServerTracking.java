@@ -1,10 +1,10 @@
 package com.myra.dev.marian.marian;
 
-import com.myra.dev.marian.management.Events;
+
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 
-public class ServerTracking extends Events {
+public class ServerTracking  {
 
     public void guildJoinEvent(GuildJoinEvent event) {
         EmbedBuilder server = new EmbedBuilder();

@@ -1,12 +1,12 @@
 package com.myra.dev.marian.commands.help;
 
-import com.myra.dev.marian.management.Events;
+
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 
-public class InviteThanks extends Events {
+public class InviteThanks  {
 
     public void guildJoinEvent(GuildJoinEvent event) throws Exception {
         // Get direct messages channel from the owner

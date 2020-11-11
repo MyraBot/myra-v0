@@ -3,7 +3,7 @@ package com.myra.dev.marian.commands.moderation.ban;
 import com.mongodb.client.MongoCollection;
 import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.management.Events;
+
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
         aliases = {"temp ban", "tempbean", "temp bean"},
         requires = "moderator"
 )
-public class Tempban extends Events implements Command {
+public class Tempban  implements Command {
     //database
     private static MongoDb mongoDb;
 

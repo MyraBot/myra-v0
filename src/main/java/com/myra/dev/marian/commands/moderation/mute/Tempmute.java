@@ -3,7 +3,7 @@ package com.myra.dev.marian.commands.moderation.mute;
 import com.mongodb.client.MongoCollection;
 import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.management.Events;
+
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
         name = "tempmute",
         requires = "moderator"
 )
-public class Tempmute extends Events implements Command {
+public class Tempmute  implements Command {
     //Get database
     private final MongoDb mongoDb = MongoDb.getInstance();
 

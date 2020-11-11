@@ -3,7 +3,7 @@ package com.myra.dev.marian.commands.help;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.CommandEmbeds;
 import com.myra.dev.marian.utilities.MessageReaction;
-import com.myra.dev.marian.management.Events;
+
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
@@ -16,7 +16,7 @@ import java.util.Arrays;
         name = "commands",
         aliases = {"command"}
 )
-public class Commands extends Events implements Command {
+public class Commands  implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         //menu
@@ -34,7 +34,6 @@ public class Commands extends Events implements Command {
         MessageReaction.add("commands", message.getId(), Arrays.asList("\uD83D\uDCD6", "\uD83C\uDF88", "\uD83D\uDD79", "\uD83C\uDFC6", "\uD83D\uDCB0", "\uD83D\uDCFB", "\uD83D\uDD28", "\uD83D\uDD29"), ctx.getChannel(), ctx.getAuthor(), true);
     }
 
-    @Override
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) throws Exception {
         //if reaction was added on the wrong message return
         if (!MessageReaction.check(event, "commands")) return;

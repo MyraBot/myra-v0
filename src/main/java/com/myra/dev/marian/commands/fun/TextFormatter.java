@@ -1,6 +1,6 @@
 package com.myra.dev.marian.commands.fun;
 
-import com.myra.dev.marian.management.Events;
+
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
         name = "format",
         aliases = {"font"}
 )
-public class TextFormatter extends Events implements Command {
+public class TextFormatter  implements Command {
     private static HashMap<String, String> messages = new HashMap<>();
 
     /**

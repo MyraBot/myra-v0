@@ -2,7 +2,7 @@ package com.myra.dev.marian.commands.general;
 
 import com.mongodb.client.MongoCollection;
 import com.myra.dev.marian.database.MongoDb;
-import com.myra.dev.marian.management.Events;
+
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
         name = "reminder",
         aliases = {"remind"}
 )
-public class Reminder extends Events implements Command {
+public class Reminder  implements Command {
     //database
     private final MongoDb mongoDb = MongoDb.getInstance();
 

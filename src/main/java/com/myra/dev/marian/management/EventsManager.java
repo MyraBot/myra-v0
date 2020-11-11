@@ -22,9 +22,9 @@ import com.myra.dev.marian.listeners.welcome.WelcomeImage.WelcomeImageFont;
 import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessage;
 import com.myra.dev.marian.management.commands.CommandService;
 import com.myra.dev.marian.management.listeners.ListenerService;
+import com.myra.dev.marian.marian.Roles;
 import com.myra.dev.marian.marian.ServerTracking;
 import com.myra.dev.marian.marian.Shutdown;
-import com.myra.dev.marian.marian.Roles;
 import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.entities.Message;
@@ -150,9 +150,7 @@ public class EventsManager extends ListenerAdapter {
             new Twitch().jdaReady(event);
             //load streamers
             new Notification().jdaReady(event);
-            //clear HashMap
-            new MessageReaction().jdaReady(event);
-            // Unicorn role
+            // Marian's Discord role
             new Roles().jdaReady(event);
         } catch (Exception e) {
             e.printStackTrace();
@@ -186,8 +184,6 @@ public class EventsManager extends ListenerAdapter {
             new ServerTracking().guildJoinEvent(event);
             // Thank message to server owner
             new InviteThanks().guildJoinEvent(event);
-            // Add exclusive role to members, who use Myra on their server
-            new Roles().exclusive(event);
         } catch (Exception e) {
             e.printStackTrace();
         }

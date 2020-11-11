@@ -71,18 +71,12 @@ import com.myra.dev.marian.management.commands.CommandSubscribe;
 import com.myra.dev.marian.management.commands.DefaultCommandService;
 import com.myra.dev.marian.management.listeners.DefaultListenerService;
 import com.myra.dev.marian.management.listeners.ListenerService;
-import com.myra.dev.marian.marian.Dashboard;
-import com.myra.dev.marian.marian.GetInvite;
-import com.myra.dev.marian.marian.MariansDiscordInformation;
-import com.myra.dev.marian.marian.Shutdown;
+import com.myra.dev.marian.marian.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Manager {
-    //create HashMap
-    public static HashMap<String, Events> commands = new HashMap<String, Events>();
-
     public static enum type {STRING, INTEGER, BOOLEAN}
 
     final static Leveling LEVELING = new Leveling();
@@ -109,7 +103,7 @@ public class Manager {
         COMMAND_SERVICE.register(
                 // Marian
                 new MongoDbUpdate(),
-                new MariansDiscordInformation(),
+                new InformationChannel(),
                 new GetInvite(),
                 new Dashboard(),
                 new Shutdown(),

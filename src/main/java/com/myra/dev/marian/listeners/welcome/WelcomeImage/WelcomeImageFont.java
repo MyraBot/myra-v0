@@ -4,7 +4,7 @@ import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.management.Manager;
 import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.management.Events;
+
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
@@ -20,7 +20,7 @@ import java.util.Arrays;
         name = "welcome image font",
         requires = "administrator"
 )
-public class WelcomeImageFont extends Events implements Command {
+public class WelcomeImageFont  implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         // Get utilities
@@ -44,7 +44,6 @@ public class WelcomeImageFont extends Events implements Command {
     }
 
     //reaction
-    @Override
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) {
         //missing permissions
         if (!event.getMember().hasPermission(Permission.ADMINISTRATOR)) return;

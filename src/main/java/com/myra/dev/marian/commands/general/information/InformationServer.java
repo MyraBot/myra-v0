@@ -1,7 +1,7 @@
 package com.myra.dev.marian.commands.general.information;
 
 import com.myra.dev.marian.utilities.MessageReaction;
-import com.myra.dev.marian.management.Events;
+
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
@@ -19,7 +19,7 @@ import java.util.Arrays;
         name = "information server",
         aliases = {"info server", "information guild", "info guild", "information GUILD_NAME", "info GUILD_NAME"}
 )
-public class InformationServer extends Events implements Command {
+public class InformationServer  implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         //servers information
@@ -42,7 +42,6 @@ public class InformationServer extends Events implements Command {
     }
 
 
-    @Override
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) {
         //if reaction was added on the wrong message return
         if (!MessageReaction.check(event, "informationServer")) return;

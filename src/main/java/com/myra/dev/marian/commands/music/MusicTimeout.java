@@ -1,14 +1,13 @@
 package com.myra.dev.marian.commands.music;
 
-import com.myra.dev.marian.management.Events;
+
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
 
 import java.util.concurrent.TimeUnit;
 
-public class MusicTimeout extends Events {
-    @Override
+public class MusicTimeout  {
     public void voiceChannelLeave(GuildVoiceLeaveEvent event) throws Exception {
         // User left same voice channel as bot
         if (event.getChannelLeft().equals(event.getGuild().getAudioManager().getConnectedChannel())) {
@@ -34,7 +33,6 @@ public class MusicTimeout extends Events {
         }
     }
 
-    @Override
     public void voiceChannelMove(GuildVoiceMoveEvent event) throws Exception {
         try {
             //user left same voice channel as bot and only bot is in the channel

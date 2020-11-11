@@ -5,7 +5,7 @@ import com.myra.dev.marian.APIs.LavaPlayer.PlayerManager;
 import com.myra.dev.marian.APIs.YouTube;
 import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.management.Events;
+
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
@@ -24,7 +24,7 @@ import java.util.List;
         command = "play",
         name = "play"
 )
-public class MusicPlay extends Events implements Command {
+public class MusicPlay  implements Command {
     private static HashMap<String, List<SearchResult>> results = new HashMap<>();
 
     @Override
@@ -107,7 +107,6 @@ public class MusicPlay extends Events implements Command {
     }
 
     //chose song
-    @Override
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) throws Exception {
         if (!MessageReaction.check(event, "play")) return;
         // Get chosen song

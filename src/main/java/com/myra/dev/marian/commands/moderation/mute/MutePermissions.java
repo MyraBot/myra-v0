@@ -1,14 +1,14 @@
 package com.myra.dev.marian.commands.moderation.mute;
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.management.Events;
+
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.channel.text.TextChannelCreateEvent;
 
 import java.util.EnumSet;
 
-public class MutePermissions extends Events {
+public class MutePermissions  {
 
     public void textChannelCreateEvent(TextChannelCreateEvent event) {
         String id = new Database(event.getGuild()).get("muteRole");

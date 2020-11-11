@@ -1,6 +1,6 @@
 package com.myra.dev.marian.database;
 
-import com.myra.dev.marian.management.Events;
+
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
@@ -23,7 +23,7 @@ import static com.mongodb.client.model.Filters.eq;
 @CommandSubscribe(
         name = "db.update"
 )
-public class MongoDbUpdate extends Events implements Command {
+public class MongoDbUpdate  implements Command {
     //database
     private final MongoDb mongoDb = MongoDb.getInstance();
 
@@ -147,7 +147,6 @@ public class MongoDbUpdate extends Events implements Command {
     }
 
     //add missing members to the database
-    @Override
     public void jdaReady(ReadyEvent event) throws Exception {
         for (Guild guild : event.getJDA().getGuilds()) {
             // If guild isn't in the database yet
@@ -181,7 +180,6 @@ public class MongoDbUpdate extends Events implements Command {
 
 
     //changed guild name
-    @Override
     public void guildNameUpdated(GuildUpdateNameEvent event) {
         Document guildDoc = mongoDb.getCollection("guilds").find(eq("guildId", event.getGuild().getId())).first();
         Bson updateGuildDoc = new Document("$set", new Document("guildName", event.getNewValue()));
@@ -189,7 +187,6 @@ public class MongoDbUpdate extends Events implements Command {
     }
 
     //add member to guild
-    @Override
     public void memberJoined(GuildMemberJoinEvent event) {
         //check if member is a bot
         if (event.getUser().isBot()) return;
@@ -212,7 +209,6 @@ public class MongoDbUpdate extends Events implements Command {
     }
 
     //delete document on guild leave
-    @Override
     public void guildLeaveEvent(GuildLeaveEvent event) {
         mongoDb.getCollection("guilds").deleteOne(eq("guildId", event.getGuild().getId()));
     }

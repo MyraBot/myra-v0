@@ -1,6 +1,6 @@
 package com.myra.dev.marian.APIs;
 
-import com.myra.dev.marian.management.Events;
+
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 
-public class Twitch extends Events {
+public class Twitch  {
     public static String accessToken;
 
     //get access token

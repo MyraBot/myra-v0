@@ -5,7 +5,7 @@ import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.CommandEmbeds;
 import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.management.Events;
+
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
@@ -20,7 +20,7 @@ import java.util.Arrays;
         name = "help",
         aliases = {"help me"}
 )
-public class Help extends Events implements Command {
+public class Help  implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         //check for no arguments
@@ -45,7 +45,6 @@ public class Help extends Events implements Command {
     }
 
     //reactions
-    @Override
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) throws Exception {
         // If reaction was added on the wrong message return
         if (!MessageReaction.check(event, "help")) return;

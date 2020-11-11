@@ -2,7 +2,7 @@ package com.myra.dev.marian.commands.economy.blackjack;
 
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.database.allMethods.GetMember;
-import com.myra.dev.marian.management.Events;
+
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
@@ -19,7 +19,7 @@ import java.util.HashMap;
         name = "blackjack",
         aliases = {"bj"}
 )
-public class BlackJack extends Events implements Command {
+public class BlackJack  implements Command {
     private static HashMap<String, Game> games = new HashMap<>();
 
     /**

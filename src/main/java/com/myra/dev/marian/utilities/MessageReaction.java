@@ -1,6 +1,6 @@
 package com.myra.dev.marian.utilities;
 
-import com.myra.dev.marian.management.Events;
+
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class MessageReaction extends Events {
+public class MessageReaction  {
 
     private static HashMap<String, HashMap<String, Document>> hashMap = new HashMap();
 

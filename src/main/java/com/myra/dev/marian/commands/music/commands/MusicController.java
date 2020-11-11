@@ -3,7 +3,7 @@ package com.myra.dev.marian.commands.music.commands;
 import com.myra.dev.marian.APIs.LavaPlayer.PlayerManager;
 import com.myra.dev.marian.APIs.LavaPlayer.TrackScheduler;
 import com.myra.dev.marian.utilities.MessageReaction;
-import com.myra.dev.marian.management.Events;
+
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
@@ -21,7 +21,7 @@ import java.util.TimerTask;
 @CommandSubscribe(
         name = "music controller"
 )
-public class MusicController extends Events implements Command {
+public class MusicController  implements Command {
 
     private static HashMap<Message, Boolean> cancelTimer = new HashMap<>();
 
@@ -109,7 +109,6 @@ public class MusicController extends Events implements Command {
     }
 
     //reactions
-    @Override
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) {
         //if reaction was added on the wrong message return
         if (!MessageReaction.check(event, "musicController")) return;
