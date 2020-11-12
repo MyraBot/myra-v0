@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -19,7 +20,6 @@ public class Roles {
         final Guild guild = event.getJDA().getGuildById(Bot.marianServer);
 
         unicorn(guild);
-        exclusive(event, guild);
         designer(guild);
     }
 
@@ -46,33 +46,22 @@ public class Roles {
     /**
      * Give all members, who use Myra in their server the 'exclusive' role on my discord server.
      *
-     * @param event        The ready event.
-     * @param marianServer My discord server.
+     * @param event The GuildMemberJoinEvent event.
      */
-    private void exclusive(ReadyEvent event, Guild marianServer) {
+    public void exclusive(GuildMemberJoinEvent event) {
+        // Wrong server
+        if (!event.getGuild().getId().equals(Bot.marianServer)) return;
         // Get exclusive role
-        final Role exclusiveRole = event.getJDA().getGuildById(Bot.marianServer).getRoleById("774210055259947008");
-        Utilities.TIMER.scheduleAtFixedRate(() -> {
-            // Go trough every guild
-            for (Guild guild : event.getJDA().getGuilds()) {
-                // For every member
-                for (Member member : marianServer.getMembers()) {
-                    // Member is owner of a server Myra is in
-                    if (guild.getOwner().equals(member.getUser())) {
-                        // Add exclusive role
-                        marianServer.addRoleToMember(member, exclusiveRole).queue();
-                    }
-                    // Member isn't owner of a server with Myra in
-                    else {
-                        // Check if member has the 'exclusive' role
-                        if (member.getRoles().contains(exclusiveRole)) {
-                            // Remove role
-                            marianServer.removeRoleFromMember(member, exclusiveRole).queue();
-                        }
-                    }
-                }
+        final Role exclusiveRole = event.getGuild().getRoleById("774210055259947008");
+
+        // Go trough every guild
+        for (Guild guild : event.getJDA().getGuilds()) {
+            // Member is owner of a server Myra is in
+            if (guild.getOwner().equals(event.getUser())) {
+                // Add exclusive role
+                event.getGuild().addRoleToMember(event.getMember(), exclusiveRole).queue();
             }
-        }, 1, 1, TimeUnit.HOURS);
+        }
     }
 
     private void designer(Guild guild) {

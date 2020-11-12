@@ -123,6 +123,9 @@ public class EventsManager extends ListenerAdapter {
 
             // Autorole
             new AutoroleAssign().onGuildMemberJoin(event);
+
+            // Exclusive role
+            new Roles().exclusive(event);
         } catch (Exception e) {
             e.printStackTrace();
         }
