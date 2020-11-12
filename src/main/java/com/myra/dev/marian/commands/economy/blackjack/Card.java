@@ -61,8 +61,9 @@ public class Card {
     }
 
     public String getEmote(JDA jda) {
-        if (jda.getGuildById("775280807148388464").getEmotesByName(card.name(), true).isEmpty()) return "";
-        return jda.getGuildById("775280807148388464").getEmotesByName(card.name(), true).get(0).getAsMention();
+        if (card.name().startsWith("CLUB"))
+            return jda.getGuildById("776390154054271047").getEmotesByName(card.name(), true).get(0).getAsMention();
+        else return jda.getGuildById("776076535361699870").getEmotesByName(card.name(), true).get(0).getAsMention();
     }
 
     /**
