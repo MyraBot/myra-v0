@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -32,7 +33,14 @@ public class WelcomeImageRender {
         }
         //if guild has a custom background
         else {
-            background = ImageIO.read(new URL(db.getNested("welcome").get("welcomeImageBackground").toString()));
+            // Url is available
+            try {
+                background = ImageIO.read(new URL(db.getNested("welcome").get("welcomeImageBackground").toString()));
+            }
+            // Invalid link
+            catch (IOException e) {
+                background = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("welcomeImage.png"));
+            }
         }
         //get font
         String font = db.getNested("welcome").get("welcomeImageFont").toString();
