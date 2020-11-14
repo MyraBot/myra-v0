@@ -6,22 +6,15 @@
 
     <groupId>Marian</groupId>
     <artifactId>Myra</artifactId>
-    <version>v0.6.3</version>
+    <version>v1.0.0</version>
 
     <dependencies>
         <!-- JDA -->
+        <!-- https://github.com/DV8FromTheWorld/JDA -->
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
             <version>4.2.0_214</version>
-        </dependency>
-        <!--JDA Utilities -->
-        <dependency>
-            <groupId>com.jagrosh</groupId>
-            <artifactId>jda-utilities</artifactId>
-            <version>3.0.4</version>
-            <scope>compile</scope>
-            <type>pom</type>
         </dependency>
         <!--JSON -->
         <dependency>
@@ -36,18 +29,11 @@
             <version>3.12.5</version>
         </dependency>
         <!-- LAVA PLAYER -->
-        <!-- old -->
         <dependency>
             <groupId>com.sedmelluq</groupId>
             <artifactId>lavaplayer</artifactId>
             <version>1.3.55</version>
         </dependency>
-        <!-- youtube fix
-        <dependency>
-            <groupId>com.github.Fabricio20</groupId>
-            <artifactId>lavaplayer</artifactId>
-            <version>ytfix</version>
-        </dependency> -->
         <!-- YOUTUBE -->
         <dependency>
             <groupId>com.google.apis</groupId>
