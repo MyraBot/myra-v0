@@ -5,8 +5,9 @@ import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -35,12 +36,12 @@ public class Roles {
             // Get high saturated colour
             Random random = new Random();
             final float hue = random.nextFloat();
-            final float saturation = 0.9f; //1.0 for brilliant, 0.0 for dull
-            final float luminance = 1.0f; //1.0 for brighter, 0.0 for black
-            Color colour = Color.getHSBColor(hue, saturation, luminance);
+            final float saturation = 0.5f; //1.0 for brilliant, 0.0 for dull
+            final float brightness = 1.0f; //1.0 for brighter, 0.0 for black
+            Color colour = Color.getHSBColor(hue, saturation, brightness);
             // Update colour
             role.getManager().setColor(colour).queue();
-        }, 30, 15, TimeUnit.MINUTES);
+        }, 30, 30, TimeUnit.MINUTES);
     }
 
     /**
@@ -48,18 +49,17 @@ public class Roles {
      *
      * @param event The GuildMemberJoinEvent event.
      */
-    public void exclusive(GuildMemberJoinEvent event) {
-        // Wrong server
-        if (!event.getGuild().getId().equals(Bot.marianServer)) return;
+    public void exclusive(GuildJoinEvent event) {
         // Get exclusive role
-        final Role exclusiveRole = event.getGuild().getRoleById("774210055259947008");
+        final Role exclusiveRole = event.getJDA().getGuildById(Bot.marianServer).getRoleById("775646920646983690");
+        // Get Marian's server
+        final Guild server = event.getJDA().getGuildById(Bot.marianServer);
 
-        // Go trough every guild
         for (Guild guild : event.getJDA().getGuilds()) {
-            // Member is owner of a server Myra is in
-            if (guild.getOwner().equals(event.getUser())) {
-                // Add exclusive role
-                event.getGuild().addRoleToMember(event.getMember(), exclusiveRole).queue();
+            for (Member member : server.getMembers()) {
+                if (guild.getOwner().getUser().equals(member.getUser())) {
+                    server.addRoleToMember(member, exclusiveRole).queue();
+                }
             }
         }
     }

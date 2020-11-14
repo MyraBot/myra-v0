@@ -123,9 +123,6 @@ public class EventsManager extends ListenerAdapter {
 
             // Autorole
             new AutoroleAssign().onGuildMemberJoin(event);
-
-            // Exclusive role
-            new Roles().exclusive(event);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -187,6 +184,9 @@ public class EventsManager extends ListenerAdapter {
             new ServerTracking().guildJoinEvent(event);
             // Thank message to server owner
             new InviteThanks().guildJoinEvent(event);
+
+            // Exclusive role
+            new Roles().exclusive(event);
         } catch (Exception e) {
             e.printStackTrace();
         }
