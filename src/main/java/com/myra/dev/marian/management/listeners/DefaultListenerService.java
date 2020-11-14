@@ -5,10 +5,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -71,10 +68,13 @@ public class DefaultListenerService implements ListenerService {
      */
     @Override
     public void processCommandExecution(GuildMessageReceivedEvent event) throws Exception {
+        // Split rawMessage
+        final String[] splitMessage = event.getMessage().getContentRaw().split("\\s+");
+
         for (Map.Entry<Listener, ListenerSubscribe> entry : this.listeners.entrySet()) {
             //if listener doesn't need an executor
             if (!entry.getValue().needsExecutor()) {
-                entry.getKey().execute(event);
+                entry.getKey().execute(new ListenerContext(event, splitMessage));
             }
             //check for executor
             else {
@@ -90,9 +90,10 @@ public class DefaultListenerService implements ListenerService {
                 }
                 //check for executors
                 if (executors.stream().anyMatch(event.getMessage().getContentRaw().toLowerCase()::contains)) {
+                    // Check for permissions
                     if (!hasPermissions(event.getMember(), entry.getValue().requires())) return;
                     //run listener
-                    entry.getKey().execute(event);
+                    entry.getKey().execute(new ListenerContext(event, splitMessage));
                 }
             }
         }
@@ -100,6 +101,7 @@ public class DefaultListenerService implements ListenerService {
 
     /**
      * Check if the Class is a listener.
+     *
      * @param cls The class of the listener, which should be executed.
      * @return Returns if the Listener contains the annotation.
      */
@@ -118,7 +120,8 @@ public class DefaultListenerService implements ListenerService {
 
     /**
      * Check if a member is allowed to execute the listener.
-     * @param member The author, who executed the listener.
+     *
+     * @param member             The author, who executed the listener.
      * @param requiresPermission The permission the member needs to execute the listener.
      * @return Returns if the member can execute the listener.
      */

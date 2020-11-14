@@ -6,5 +6,5 @@ public interface Listener {
     /**
      * Executes the command when the implementation if called.
      */
-    void execute(GuildMessageReceivedEvent event) throws Exception;
+    void execute(ListenerContext ctx) throws Exception;
 }

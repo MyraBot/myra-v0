@@ -2,6 +2,7 @@ package com.myra.dev.marian.listeners.leveling;
 
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.database.allMethods.GetMember;
+import com.myra.dev.marian.management.listeners.ListenerContext;
 import com.myra.dev.marian.utilities.Graphic;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.entities.Guild;
@@ -22,11 +23,11 @@ import java.util.TimerTask;
 
 public class Leveling {
 
-    public void levelUp(GuildMessageReceivedEvent event) throws Exception {
+    public void levelUp(ListenerContext ctx) throws Exception {
         //connect to database
-        GetMember getMember = new Database(event.getGuild()).getMembers().getMember(event.getMember());
+        GetMember getMember = new Database(ctx.getGuild()).getMembers().getMember(ctx.getMessage().getMember());
         //get new level
-        int newLevel = level(getMember.getXp() + xp(event.getMessage()));
+        int newLevel = level(getMember.getXp() + xp(ctx.getMessage()));
         //if current level is equal to new one
         if (getMember.getLevel() == newLevel) return;
         //update level in database
@@ -37,7 +38,7 @@ public class Leveling {
         Graphic graphic = Graphic.getInstance();
 
         BufferedImage background = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("levelUp.png"));
-        BufferedImage avatar = graphic.getAvatar(event.getAuthor().getEffectiveAvatarUrl());
+        BufferedImage avatar = graphic.getAvatar(ctx.getMessage().getAuthor().getEffectiveAvatarUrl());
         //resize avatar
         avatar = graphic.resizeSquaredImage(avatar, 0.75f);
         //graphics
@@ -77,15 +78,15 @@ public class Leveling {
         /**
          * send message
          */
-        event.getChannel().sendMessage("> " + event.getMember().getAsMention() + " **reached a new level!**").queue();
-        event.getChannel().sendFile(
+        ctx.getChannel().sendMessage("> " + ctx.getMessage().getMember().getAsMention() + " **reached a new level!**").queue();
+        ctx.getChannel().sendFile(
                 graphic.toInputStream(background),
-                event.getMember().getUser().getName().toLowerCase() + "_level_up.png"
+                ctx.getMessage().getAuthor().getName().toLowerCase() + "_level_up.png"
         ).queue();
         /**
          * Leveling role
          */
-        new Database(event.getGuild()).getLeveling().checkForNewOnesOwO(newLevel, event.getMember(), event.getGuild());
+        new Database(ctx.getGuild()).getLeveling().checkForNewOnesOwO(newLevel, ctx.getMessage().getMember(), ctx.getGuild());
     }
 
     //return xp

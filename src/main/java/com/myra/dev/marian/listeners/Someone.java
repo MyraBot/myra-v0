@@ -2,8 +2,8 @@ package com.myra.dev.marian.listeners;
 
 
 import com.myra.dev.marian.management.listeners.Listener;
+import com.myra.dev.marian.management.listeners.ListenerContext;
 import com.myra.dev.marian.management.listeners.ListenerSubscribe;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.Random;
 
@@ -14,15 +14,15 @@ import java.util.Random;
 )
 public class Someone implements Listener {
     @Override
-    public void execute(GuildMessageReceivedEvent event) throws Exception {
+    public void execute(ListenerContext ctx) throws Exception {
         //get random number
         Random random = new Random();
-        int number = random.nextInt(event.getGuild().getMembers().size());
+        int number = random.nextInt(ctx.getGuild().getMembers().size());
         //get random member
-        String randomMember = event.getGuild().getMembers().get(number).getAsMention();
+        String randomMember = ctx.getGuild().getMembers().get(number).getAsMention();
 
-        String message = event.getMessage().getContentRaw().replace("@someone", randomMember);
-        event.getChannel().deleteMessageById(event.getChannel().getLatestMessageIdLong()).queue();
-        event.getChannel().sendMessage(message).queue();
+        String message = ctx.getMessage().getContentRaw().replace("@someone", randomMember);
+        ctx.getChannel().deleteMessageById(ctx.getChannel().getLatestMessageIdLong()).queue();
+        ctx.getChannel().sendMessage(message).queue();
     }
 }

@@ -43,10 +43,11 @@ public class Bot {
                 .enableIntents(GatewayIntent.GUILD_PRESENCES) // Need GatewayIntent.GUILD_PRESENCES for CacheFlag.ACTIVITY
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)  // Need GatewayIntent.GUILD_MEMBERS for MemberCachePolicy.ALL
                 .enableCache(CacheFlag.ACTIVITY) // Need to get the activity of a member
-                .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .enableCache(CacheFlag.VOICE_STATE)
-                .setStatus(OnlineStatus.IDLE)
                 .enableCache(CacheFlag.EMOTE) // Need to get emotes from other servers
+                .setMemberCachePolicy(MemberCachePolicy.ALL)
+                .setStatus(OnlineStatus.IDLE)
+
                 .addEventListeners(new EventsManager());
         // Build JDA
         shardManager = jda.build();

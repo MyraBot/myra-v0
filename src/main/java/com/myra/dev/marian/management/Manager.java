@@ -41,6 +41,7 @@ import com.myra.dev.marian.commands.moderation.mute.Unmute;
 import com.myra.dev.marian.commands.music.commands.*;
 import com.myra.dev.marian.database.MongoDbUpdate;
 import com.myra.dev.marian.listeners.Someone;
+import com.myra.dev.marian.listeners.automoderation.Link;
 import com.myra.dev.marian.listeners.autorole.AutoRoleSet;
 import com.myra.dev.marian.listeners.leveling.Leveling;
 import com.myra.dev.marian.listeners.leveling.LevelingListener;
@@ -71,9 +72,11 @@ import com.myra.dev.marian.management.commands.CommandSubscribe;
 import com.myra.dev.marian.management.commands.DefaultCommandService;
 import com.myra.dev.marian.management.listeners.DefaultListenerService;
 import com.myra.dev.marian.management.listeners.ListenerService;
-import com.myra.dev.marian.marian.*;
+import com.myra.dev.marian.marian.Dashboard;
+import com.myra.dev.marian.marian.GetInvite;
+import com.myra.dev.marian.marian.InformationChannel;
+import com.myra.dev.marian.marian.Shutdown;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class Manager {
@@ -220,7 +223,9 @@ public class Manager {
         LISTENER_SERVICE.register(
                 new LevelingListener(),
 
-                new Someone()
+                new Someone(),
+                // Auto moderation
+                new Link()
         );
     }
 }

@@ -1,5 +1,6 @@
 package com.myra.dev.marian.marian;
 
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 
@@ -40,10 +41,8 @@ public class embeds {
                 .addField("10 000", "<@&715462773525708832> <@&715462772615413811> <@&715462649390956567>", false)
                 .addField("5 000", "<@&715498892900302929>", false)
                 .addField("25 000", "<@&715462771688603678>  <@&715508379807645697>", false)
-                .addField("25 000", "<@&715462771688603678>  <@&715508379807645697>", false)
                 .addField("10 000", "<@&714787219784597544> ➪ BE ABLE TO ADVERTISE IN  <#668403563223056384>", false)
-                .addField("100 000", "<@&774210055259947008> ➪ UR COLOUR WILL CHANGE EVERY 5 MINUTES", false)
-                .addField("1 000 00", "<@&732929835814617099> ➪ secret :D", false);
+                .addField("100 000", "<@&774210055259947008> ➪ UR COLOUR WILL CHANGE EVERY 5 MINUTES", false);
     }
 
     // Leveling roles
@@ -77,15 +76,16 @@ public class embeds {
 
     // Social media
     public EmbedBuilder socialMedia() {
-        EmbedBuilder socialMedia = new EmbedBuilder();
-        socialMedia.setTitle("my social Media");
-        socialMedia.setColor(0x0094FF);
-        socialMedia.addField("\uD83D\uDD17 │ YouTube", "[texture packs releases](https://www.youtube.com/channel/UCw4EmB5OUHFN5RplLLon_Xw? \"ᴍᴀʀɪᴀɴ ⚡ on YouTube\")", false);
-        socialMedia.addField("\uD83D\uDD17 │ Instagram", "[edits](https://www.instagram.com/mar._.ian/ \"ᴍᴀʀɪᴀɴ ⚡ on Instagram\")", false);
-        socialMedia.addField("\uD83D\uDD17 │ Twitter", "[idk lol](https://twitter.com/MarianGFX \"ᴍᴀʀɪᴀɴ ⚡ on Twitter\")", true);
-        socialMedia.addField("\uD83D\uDD17 │ Discord", "[join my discord server](https://discord.gg/nG4uKuB \"Marians discord server\")", false);
-
-        return socialMedia;
+        return new EmbedBuilder()
+                .setTitle("my social Media")
+                .setColor(0x0094FF)
+                .setDescription(Utilities.getUtils().hyperlink("YouTube", "https://www.youtube.com/channel/UCw4EmB5OUHFN5RplLLon_Xw") + "\n" +
+                        Utilities.getUtils().hyperlink("Twitter", "https://twitter.com/MarianGFX") + "\n" +
+                        Utilities.getUtils().hyperlink("Instagram", "https://www.instagram.com/mar._.ian/") + "\n" +
+                        Utilities.getUtils().hyperlink("SoundCloud", "https://soundcloud.com/user-533142830") + "\n" +
+                        Utilities.getUtils().hyperlink("Twitch", "https://www.twitch.tv/m5rian") + "\n" +
+                        Utilities.getUtils().hyperlink("Discord", "https://discord.gg/nG4uKuB")
+                );
     }
 
     // Bot related channels
