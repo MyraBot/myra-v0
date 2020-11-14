@@ -2,7 +2,6 @@ package com.myra.dev.marian.commands.economy.blackjack;
 
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.database.allMethods.GetMember;
-
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
@@ -19,7 +18,7 @@ import java.util.HashMap;
         name = "blackjack",
         aliases = {"bj"}
 )
-public class BlackJack  implements Command {
+public class BlackJack implements Command {
     private static HashMap<String, Game> games = new HashMap<>();
 
     /**
@@ -188,7 +187,7 @@ public class BlackJack  implements Command {
                     // Player cards
                     .addField("Your cards: " + player.getValue(), getPlayerCards(player, event.getJDA()), false)
                     // Dealer cards
-                    .addField("Dealer cards: " + dealer.getValue(), getDealerCards(dealer, event.getJDA()), false)
+                    .addField("Dealer cards: " + dealer.getValue(), getDealerCards(dealer, event.getJDA(), true), false)
                     .setFooter(footer);
             // Update message
             event.getChannel().editMessageById(event.getMessageId(), match.build()).queue();
@@ -221,7 +220,7 @@ public class BlackJack  implements Command {
             // Remove balance
             dbMember.setBalance(dbMember.getBalance() - game.getBetMoney());
             match
-                    .addField("Dealer cards: " + dealer.getValue(), getDealerCards(dealer, guild.getJDA()), false)
+                    .addField("Dealer cards: " + dealer.getValue(), getDealerCards(dealer, guild.getJDA(), true), false)
                     .setFooter("The dealer won!");
         }
         // Dealer's value is 21
@@ -229,7 +228,7 @@ public class BlackJack  implements Command {
             // Remove balance
             dbMember.setBalance(dbMember.getBalance() - game.getBetMoney());
             match
-                    .addField("Dealer cards: " + dealer.getValue(), getDealerCards(dealer, guild.getJDA()), false)
+                    .addField("Dealer cards: " + dealer.getValue(), getDealerCards(dealer, guild.getJDA(), true), false)
                     .setFooter("The dealer won!");
         }
         // If player's value is more than 21
@@ -237,7 +236,7 @@ public class BlackJack  implements Command {
             // Remove balance
             dbMember.setBalance(dbMember.getBalance() - game.getBetMoney());
             match
-                    .addField("Dealer cards: " + dealer.getValue(), getDealerCards(dealer, guild.getJDA()), false)
+                    .addField("Dealer cards: " + dealer.getValue(), getDealerCards(dealer, guild.getJDA(), true), false)
                     .setFooter("The dealer won!");
         }
 // Won
@@ -246,13 +245,13 @@ public class BlackJack  implements Command {
             // Add balance
             dbMember.setBalance(dbMember.getBalance() + game.getBetMoney() * 2);
             match
-                    .addField("Dealer cards: " + dealer.getValue(), getDealerCards(dealer, guild.getJDA()), false)
+                    .addField("Dealer cards: " + dealer.getValue(), getDealerCards(dealer, guild.getJDA(), true), false)
                     .setFooter("You won! +" + game.getBetMoney() * 2);
         }
         // Continue game
         else {
             match
-                    .addField("Dealer shows:", getDealerCards(dealer, guild.getJDA()), false)
+                    .addField("Dealer shows:", getDealerCards(dealer, guild.getJDA(), false), false)
                     .setFooter("Hit or stay?");
         }
         return match;
@@ -277,11 +276,15 @@ public class BlackJack  implements Command {
      * @param jda    The jda entity.
      * @return Returns a String with the cards of the dealer as emotes.
      */
-    private String getDealerCards(Player dealer, JDA jda) {
+    private String getDealerCards(Player dealer, JDA jda, boolean showsAll) {
         // Get cards of dealer as emotes
         String dealerCards = "";
         for (Card dealerCard : dealer.getCards()) {
-            dealerCards += dealerCard.getEmote(jda) + " ";
+            if (dealer.getCards().get(0).equals(dealerCard) && !showsAll) {
+                dealerCards += jda.getGuildById("776389239293607956").getEmotesByName("CardBlank", true).get(0).getAsMention() + " ";
+            } else
+                dealerCards += dealerCard.getEmote(jda) + " ";
+
         }
         return dealerCards;
     }

@@ -61,9 +61,11 @@ public class Card {
     }
 
     public String getEmote(JDA jda) {
-        if (card.name().startsWith("CLUB"))
+        if (!jda.getGuildById("776389239293607956").getEmotesByName(card.name(), true).isEmpty()) {
+            return jda.getGuildById("776389239293607956").getEmotesByName(card.name(), true).get(0).getAsMention();
+        } else if (!jda.getGuildById("776390154054271047").getEmotesByName(card.name(), true).isEmpty()) {
             return jda.getGuildById("776390154054271047").getEmotesByName(card.name(), true).get(0).getAsMention();
-        else return jda.getGuildById("776076535361699870").getEmotesByName(card.name(), true).get(0).getAsMention();
+        } else return "";
     }
 
     /**
