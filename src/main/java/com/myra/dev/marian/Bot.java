@@ -1,6 +1,5 @@
 package com.myra.dev.marian;
 
-
 import com.myra.dev.marian.management.EventsManager;
 import com.myra.dev.marian.management.Manager;
 import com.myra.dev.marian.utilities.ConsoleColours;
@@ -36,7 +35,6 @@ public class Bot {
     public static void main(String[] args) throws LoginException, RateLimitedException {
         new Bot();
     }
-
 
     private Bot() throws LoginException, RateLimitedException {
         DefaultShardManagerBuilder jda = DefaultShardManagerBuilder.createDefault("NzE4NDQ0NzA5NDQ1NjMyMTIy.Xto9xg.ZID1OF7fwPAql6V8ov6QiAYQWTE")
@@ -81,7 +79,7 @@ public class Bot {
             shardManager.getShards().forEach(bot -> {
                 try {
                     // Change status
-                    bot.getPresence().setActivity(Activity.listening("~help │ v0.6.3 │ " + bot.getGuilds().size() + " servers"));
+                    bot.getPresence().setActivity(Activity.listening("~help │ " + bot.getGuilds().size() + " servers"));
                     // Change profile picture
                     bot.getSelfUser().getManager().setAvatar(
                             Icon.from(profilePictures.get(random))).queue();
@@ -101,9 +99,13 @@ public class Bot {
                 // Shutdown command
                 if (line.equalsIgnoreCase("shutdown")) {
                     if (shardManager != null) {
+                        // Set status to "offline"
                         shardManager.setStatus(OnlineStatus.OFFLINE);
+                        // Stop shard manager
                         shardManager.shutdown();
                         System.out.println(ConsoleColours.RED + "Bot offline" + ConsoleColours.RESET);
+                        // Stop jar file from running
+                        System.exit(0);
                     }
                 }
                 // Help command

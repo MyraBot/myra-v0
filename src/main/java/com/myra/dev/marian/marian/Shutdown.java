@@ -38,5 +38,7 @@ public class Shutdown implements Command {
         event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().queue();
         // Shutdown JDA
         event.getJDA().shutdown();
+        // Shutdown whole program
+        System.exit(0);
     }
 }
