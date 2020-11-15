@@ -87,7 +87,7 @@ public class Bot {
                     e.printStackTrace();
                 }
             });
-        }, 1, 45, TimeUnit.MINUTES);
+        }, 0, 1, TimeUnit.HOURS);
     }
 
     private void consoleListener() {
