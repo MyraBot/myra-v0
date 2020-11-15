@@ -37,7 +37,7 @@ public class Bot {
     }
 
     private Bot() throws LoginException, RateLimitedException {
-        DefaultShardManagerBuilder jda = DefaultShardManagerBuilder.createDefault("NzczNTg3NDYxNjk5NDAzODE4.X6LZdw.B1yh04Edf11LhFxaChw8ZP0u4Y4")
+        DefaultShardManagerBuilder jda = DefaultShardManagerBuilder.createDefault("NzE4NDQ0NzA5NDQ1NjMyMTIy.Xto9xg.ZID1OF7fwPAql6V8ov6QiAYQWTE")
                 .enableIntents(GatewayIntent.GUILD_PRESENCES) // Need GatewayIntent.GUILD_PRESENCES for CacheFlag.ACTIVITY
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)  // Need GatewayIntent.GUILD_MEMBERS for MemberCachePolicy.ALL
                 .enableCache(CacheFlag.ACTIVITY) // Need to get the activity of a member
