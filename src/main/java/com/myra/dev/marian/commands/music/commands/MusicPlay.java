@@ -3,13 +3,11 @@ package com.myra.dev.marian.commands.music.commands;
 import com.google.api.services.youtube.model.SearchResult;
 import com.myra.dev.marian.APIs.LavaPlayer.PlayerManager;
 import com.myra.dev.marian.APIs.YouTube;
-import com.myra.dev.marian.utilities.MessageReaction;
-import com.myra.dev.marian.utilities.Utilities;
-
-import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.MessageReaction;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
@@ -24,7 +22,7 @@ import java.util.List;
         command = "play",
         name = "play"
 )
-public class MusicPlay  implements Command {
+public class MusicPlay implements Command {
     private static HashMap<String, List<SearchResult>> results = new HashMap<>();
 
     @Override
@@ -109,14 +107,22 @@ public class MusicPlay  implements Command {
     //chose song
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) throws Exception {
         if (!MessageReaction.check(event, "play")) return;
+        // Search canceled
+        if (event.getReactionEmote().getEmoji().equals("\uD83D\uDEAB")) {
+            // Clear reactions
+            event.getChannel().clearReactionsById(event.getMessageId()).queue();
+        }
         // Get chosen song
-        SearchResult song = results.get(event.getMessageId()).get(Integer.parseInt(event.getReactionEmote().getEmoji().replace("1️⃣", "0").replace("2️⃣", "1").replace("3️⃣", "2").replace("4️⃣", "3").replace("5️⃣", "4")));
-        if (song == null) return;
-        //get video url
-        String videoUrl = "https://www.youtube.com/watch?v=" + song.getId().getVideoId();
-        //play song
-        PlayerManager.getInstance().loadAndPlay(event.getChannel(), videoUrl, event.getUser().getEffectiveAvatarUrl(), "https://img.youtube.com/vi/" + song.getId().getVideoId() + "/maxresdefault.jpg");
-        //delete track selector
-        event.getChannel().deleteMessageById(event.getMessageId()).queue();
+        else {
+            SearchResult song = results.get(event.getMessageId()).get(Integer.parseInt(event.getReactionEmote().getEmoji().replace("1️⃣", "0").replace("2️⃣", "1").replace("3️⃣", "2").replace("4️⃣", "3").replace("5️⃣", "4")));
+            if (song == null) return;
+
+            //get video url
+            String videoUrl = "https://www.youtube.com/watch?v=" + song.getId().getVideoId();
+            //play song
+            PlayerManager.getInstance().loadAndPlay(event.getChannel(), videoUrl, event.getUser().getEffectiveAvatarUrl(), "https://img.youtube.com/vi/" + song.getId().getVideoId() + "/maxresdefault.jpg");
+            //delete track selector
+            event.getChannel().deleteMessageById(event.getMessageId()).queue();
+        }
     }
 }
