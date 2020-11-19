@@ -18,7 +18,8 @@ public class Reddit {
         String[] subreddits = {
                 "memes",
                 "meme",
-                "dankmemes"
+                "dankmemes",
+                "hmmm"
         };
         //get a random subreddit
         String subreddit = subreddits[random.nextInt(subreddits.length)];
