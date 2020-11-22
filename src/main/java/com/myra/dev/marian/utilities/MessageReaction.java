@@ -43,16 +43,13 @@ public class MessageReaction  {
         // When the command has a time out
         if (timeOut) {
             //remove id
-            Utilities.TIMER.schedule(new Runnable() {
-                @Override
-                public void run() {
-                    // Reaction already removed
-                    if (hashMap.get(command).get(messageId) == null) return;
-                    // Remove message id from hashmap
-                    hashMap.get(command).remove(messageId);
-                    // Remove all reactions
-                    channel.retrieveMessageById(messageId).complete().clearReactions().queue();
-                }
+            Utilities.TIMER.schedule(() -> {
+                // Reaction already removed
+                if (hashMap.get(command).get(messageId) == null) return;
+                // Remove all reactions
+                channel.retrieveMessageById(messageId).complete().clearReactions().complete();
+                // Remove message id from hashmap
+                hashMap.get(command).remove(messageId);
             }, 1, TimeUnit.MINUTES);
         }
     }

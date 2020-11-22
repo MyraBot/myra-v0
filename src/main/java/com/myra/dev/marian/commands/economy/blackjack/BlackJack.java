@@ -127,7 +127,7 @@ public class BlackJack implements Command {
             // Game ended
             else {
                 // Clear reaction
-                event.getChannel().clearReactionsById(event.getMessageId()).queue();
+                event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().complete();
                 // Remove game
                 games.remove(event.getMessageId());
             }
@@ -192,7 +192,7 @@ public class BlackJack implements Command {
             // Update message
             event.getChannel().editMessageById(event.getMessageId(), match.build()).queue();
             // Clear reaction
-            event.getChannel().clearReactionsById(event.getMessageId()).queue();
+            event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().complete();
             // Remove game
             games.remove(event.getMessageId());
         }

@@ -110,7 +110,7 @@ public class MusicPlay implements Command {
         // Search canceled
         if (event.getReactionEmote().getEmoji().equals("\uD83D\uDEAB")) {
             // Clear reactions
-            event.getChannel().clearReactionsById(event.getMessageId()).queue();
+            event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().complete();
         }
         // Get chosen song
         else {

@@ -184,7 +184,7 @@ public class TextFormatter  implements Command {
                     .setColor(Utilities.getUtils().blue)
                     .setDescription(oldGerman(messages.get(event.getMessageId())));
             event.getChannel().editMessageById(event.getMessageIdLong(), formatted.build()).queue();
-            event.getChannel().clearReactionsById(event.getMessageId()).queue();
+            event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().complete();
         }
         //return handwritten font
         if (event.getReactionEmote().getEmoji().equals("\uD83D\uDD8B") && !event.getMember().getUser().isBot()) {
@@ -194,7 +194,7 @@ public class TextFormatter  implements Command {
                     .setColor(Utilities.getUtils().blue)
                     .setDescription(handwritten(messages.get(event.getMessageId())));
             event.getChannel().editMessageById(event.getMessageIdLong(), formatted.build()).queue();
-            event.getChannel().clearReactionsById(event.getMessageId()).queue();
+            event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().complete();
         }
         //return old german font
         if (event.getReactionEmote().getEmoji().equals("\uD83C\uDF39") && !event.getMember().getUser().isBot()) {
@@ -204,7 +204,7 @@ public class TextFormatter  implements Command {
                     .setColor(Utilities.getUtils().blue)
                     .setDescription(aesthetic(messages.get(event.getMessageId())));
             event.getChannel().editMessageById(event.getMessageIdLong(), formatted.build()).queue();
-            event.getChannel().clearReactionsById(event.getMessageId()).queue();
+            event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().complete();
         }
     }
 }

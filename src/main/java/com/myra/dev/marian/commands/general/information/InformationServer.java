@@ -48,7 +48,7 @@ public class InformationServer  implements Command {
 
         if (event.getReactionEmote().getEmoji().equals("\uD83D\uDCDC")) {
             //remove reaction
-            event.getChannel().clearReactionsById(event.getMessageId()).queue();
+            event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().complete();
             //servers information
             EmbedBuilder server = new EmbedBuilder()
                     .setAuthor(event.getGuild().getName(), null, event.getGuild().getIconUrl())

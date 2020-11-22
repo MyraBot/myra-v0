@@ -53,12 +53,12 @@ public class Help  implements Command {
         //invite bot
         if (event.getReactionEmote().getEmoji().equals("\u2709\uFE0F") && !event.getMember().getUser().isBot()) {
             event.getChannel().editMessageById(event.getMessageId(), embed.inviteJda().build()).queue();
-            event.getChannel().clearReactionsById(event.getMessageId()).queue();
+            event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().complete();
         }
         //support server
         if (event.getReactionEmote().getEmoji().equals("\u26A0\uFE0F") && !event.getMember().getUser().isBot()) {
             event.getChannel().editMessageById(event.getMessageId(), embed.supportServer().build()).queue();
-            event.getChannel().clearReactionsById(event.getMessageId()).queue();
+            event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().complete();
         }
     }
 }
