@@ -47,7 +47,7 @@ public class Bot {
                 .enableCache(CacheFlag.EMOTE) // Need to get emotes from other servers
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
 
-                .setStatus(OnlineStatus.DO_NOT_DISTURB)
+                .setStatus(OnlineStatus.IDLE)
                 .setActivity(Activity.watching("loading bars fill"))
 
                 .addEventListeners(new Startup());
