@@ -1,5 +1,7 @@
 package com.myra.dev.marian.database.allMethods;
 
+import com.mongodb.Cursor;
+import com.mongodb.client.MongoCursor;
 import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.documents.MemberDocument;
 import net.dv8tion.jda.api.entities.Guild;
@@ -12,6 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.exists;
 
 public class GetMembers {
     //variables
@@ -34,21 +37,17 @@ public class GetMembers {
 
     //get sorted members
     public List<MemberDocument> getLeaderboard() {
-        //TODO
         //create leaderboard
         List<MemberDocument> leaderboard = new ArrayList<>();
-/*         // Get document with all members
-        Document membersDocument = (Document) guildDocument.get("members");
-        //get every member
-        for (Object document : membersDocument.values()) {
-            // Parse Object to Document
-            Document memberDocument = (Document) document;
-            // Add member document to leaderboard
-            leaderboard.add(new MemberDocument(memberDocument));
+
+        MongoCursor<Document> iterator = mongoDb.getCollection("users").find(exists(guild.getId())).iterator(); // Create an iterator of all members, who are in the guild
+        while (iterator.hasNext()) {
+            final Document document = iterator.next(); // Get next user document
+            leaderboard.add(new MemberDocument(document, guild));  // Add member to leaderboard
         }
-        //sort list
-        Collections.sort(leaderboard, Comparator.comparing(MemberDocument::getXp).reversed());
-          }*/
-        return leaderboard;
+        iterator.close(); // Close iterator
+
+        Collections.sort(leaderboard, Comparator.comparing(MemberDocument::getXp).reversed()); // Sort list
+        return leaderboard; // Return leaderboard
     }
 }
