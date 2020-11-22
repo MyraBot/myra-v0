@@ -1,12 +1,12 @@
 package com.myra.dev.marian.database;
 
 
-import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.Startup;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
@@ -23,7 +23,7 @@ import static com.mongodb.client.model.Filters.eq;
 @CommandSubscribe(
         name = "db.update"
 )
-public class MongoDbUpdate  implements Command {
+public class MongoDbUpdate implements Command {
     //database
     private final MongoDb mongoDb = MongoDb.getInstance();
 
@@ -113,7 +113,6 @@ public class MongoDbUpdate  implements Command {
 
                         .append("autorole", false);
 
-
                 //create Document
                 Document guildDoc = new Document("guildId", guildId)
                         .append("guildName", guildName)
@@ -138,99 +137,42 @@ public class MongoDbUpdate  implements Command {
                 );
             }
         }
-
     }
 
     //add guild document
-    public void guildJoinEvent(GuildJoinEvent event) {
+    public void guildJoinEvent(GuildJoinEvent event) throws Exception {
         MongoDbDocuments.guild(event.getGuild());
     }
 
-    //add missing members to the database
-    public void jdaReady(ReadyEvent event) throws Exception {
+    /**
+     * Add missing guild documents to database
+     *
+     * @param event The ReadyEvent.
+     * @throws Exception
+     */
+    public void updateDatabase(ReadyEvent event) throws Exception {
+        // Check every guild
         for (Guild guild : event.getJDA().getGuilds()) {
-            // If guild isn't in the database yet
+            // Guild isn't in database yet
             if (mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first() == null) {
-                // Add guild to database
-                MongoDbDocuments.guild(guild);
-            }
-            //get current members document
-            Document members = (Document) mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first().get("members");
-
-            for (Member member : guild.getMembers()) {
-                //check if member is a bot
-                if (member.getUser().isBot()) continue;
-                //if member is already in guild document
-                if (members.containsKey(member.getId())) continue;
-                // Create new member document
-                Document memberDocument = MongoDbDocuments.member(member);
-                //add new document
-                members.put(member.getId(), memberDocument);
-                //update 'members' Object
-                Document updatedDocument = mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first();
-                updatedDocument.replace("members", members);
-                //update database
-                mongoDb.getCollection("guilds").findOneAndReplace(
-                        mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first(),
-                        updatedDocument
-                );
+                MongoDbDocuments.guild(guild); // Create new guild document
             }
         }
+        Startup.next = !Startup.next; // Change next to true
     }
 
-
-    //changed guild name
+    /**
+     * Change guild name.
+     * @param event The GuildUpdateNameEvent event.
+     */
     public void guildNameUpdated(GuildUpdateNameEvent event) {
         Document guildDoc = mongoDb.getCollection("guilds").find(eq("guildId", event.getGuild().getId())).first();
         Bson updateGuildDoc = new Document("$set", new Document("guildName", event.getNewValue()));
         mongoDb.getCollection("guilds").findOneAndUpdate(guildDoc, updateGuildDoc);
     }
 
-    //add member to guild
-    public void memberJoined(GuildMemberJoinEvent event) {
-        //check if member is a bot
-        if (event.getUser().isBot()) return;
-        //get current document
-        Document members = (Document) mongoDb.getCollection("guilds").find(eq("guildId", event.getGuild().getId())).first().get("members");
-        // If member is already in guild document
-        if (members.values().contains(event.getMember().getId())) return;
-        //create new Member document
-        Document member = MongoDbDocuments.member(event.getMember());
-        // Add new document
-        members.put(event.getMember().getId(), member);
-        //update 'members' Object
-        Document updatedDocument = mongoDb.getCollection("guilds").find(eq("guildId", event.getGuild().getId())).first();
-        updatedDocument.replace("members", members);
-        //update database
-        mongoDb.getCollection("guilds").findOneAndReplace(
-                mongoDb.getCollection("guilds").find(eq("guildId", event.getGuild().getId())).first(),
-                updatedDocument
-        );
-    }
-
     //delete document on guild leave
     public void guildLeaveEvent(GuildLeaveEvent event) {
         mongoDb.getCollection("guilds").deleteOne(eq("guildId", event.getGuild().getId()));
-    }
-
-    // User changes name
-    public void userUpdateNameEvent(UserUpdateNameEvent event) {
-        // For each guilds document
-        for (Document guildDocument : mongoDb.getCollection("guilds").find()) {
-            // Check if user is in guild
-            if (!guildDocument.toString().contains(event.getUser().getId())) continue;
-            // Get guild document
-            Document updatedDocument = guildDocument;
-            // Get members document
-            Document members = (Document) updatedDocument.get("members");
-            // Get member document
-            Document member = (Document) members.get(event.getUser().getId());
-            // Replace old name
-            member.replace("name", event.getNewValue() + "#" + event.getUser().getDiscriminator());
-            // Replace members
-            updatedDocument.replace("members", members);
-            // Update guild document
-            mongoDb.getCollection("guilds").findOneAndReplace(guildDocument, updatedDocument);
-        }
     }
 }

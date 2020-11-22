@@ -4,7 +4,7 @@ import com.myra.dev.marian.database.MongoDb;
 import net.dv8tion.jda.api.entities.Guild;
 import org.bson.Document;
 
-import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.*;
 
 public class Database {
     // Database
@@ -23,7 +23,7 @@ public class Database {
      */
     //get String
     public String get(String key) {
-        return mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first().getString(key);
+        return mongoDb.getCollection("guilds").find(and(eq("guildId", guild.getId()), exists("prefix"))).first().getString(key);
     }
 
     //replace String

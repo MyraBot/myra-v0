@@ -17,13 +17,11 @@ public class GetMembers {
     //variables
     private MongoDb mongoDb;
     private Guild guild;
-    private Document guildDocument;
 
     //constructor
     public GetMembers(MongoDb mongoDb, Guild guild) {
         this.mongoDb = mongoDb;
         this.guild = guild;
-        this.guildDocument = mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first();
     }
 
     /**
@@ -31,18 +29,15 @@ public class GetMembers {
      */
     //get member
     public GetMember getMember(Member member) {
-        // Get document with all members
-        Document membersDocument = (Document) guildDocument.get("members");
-        // Get member document
-        Document memberDocument = (Document) membersDocument.get(member.getId());
-        return new GetMember(mongoDb, guild, guildDocument, memberDocument);
+        return new GetMember(mongoDb, guild, member);
     }
 
     //get sorted members
     public List<MemberDocument> getLeaderboard() {
+        //TODO
         //create leaderboard
         List<MemberDocument> leaderboard = new ArrayList<>();
-        // Get document with all members
+/*         // Get document with all members
         Document membersDocument = (Document) guildDocument.get("members");
         //get every member
         for (Object document : membersDocument.values()) {
@@ -53,6 +48,7 @@ public class GetMembers {
         }
         //sort list
         Collections.sort(leaderboard, Comparator.comparing(MemberDocument::getXp).reversed());
+          }*/
         return leaderboard;
     }
 }

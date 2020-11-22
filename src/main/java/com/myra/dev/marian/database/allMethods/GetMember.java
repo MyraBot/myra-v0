@@ -1,8 +1,11 @@
 package com.myra.dev.marian.database.allMethods;
 
+import com.mongodb.client.MongoCursor;
 import com.myra.dev.marian.database.MongoDb;
+import com.myra.dev.marian.database.MongoDbDocuments;
 import com.myra.dev.marian.database.documents.MemberDocument;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import org.bson.Document;
 
 import java.text.DecimalFormat;
@@ -13,40 +16,53 @@ import java.util.Comparator;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.exists;
 
 public class GetMember {
     //variables
     private MongoDb mongoDb;
     private Guild guild;
-    private Document guildDocument;
+    private Member member;
+    private Document userDocument;
     private Document memberDocument;
 
     //constructor
-    public GetMember(MongoDb mongoDb, Guild guild, Document guildDocument, Document memberDocument) {
+    public GetMember(MongoDb mongoDb, Guild guild, Member member) {
         this.mongoDb = mongoDb;
         this.guild = guild;
-        this.guildDocument = guildDocument;
-        this.memberDocument = memberDocument;
-    }
+        this.member = member;
+        // Member hasn't a document
+        if (mongoDb.getCollection("users").find(eq("userId", member.getId())).first() == null) {
+            System.out.println("creating a new user document");
+            Document userDocument = new Document(); // Create document for user
+            userDocument.put("userId", member.getId()); // Add user id
 
-    /**
-     * methods
-     */
+            Document guildMemberDocument = MongoDbDocuments.createGuildMemberDocument(member); // Create document for guild
+            userDocument.put(guild.getId(), guildMemberDocument); // Add document for guild to user document
+
+            mongoDb.getCollection("users").insertOne(userDocument);
+        }
+        this.userDocument = mongoDb.getCollection("users").find(eq("userId", member.getId())).first(); // Get user document
+        // Member hasn't a guild document
+        if (userDocument.get(guild.getId()) == null) {
+            // Creating new guild document
+            Document guildMemberDocument = MongoDbDocuments.createGuildMemberDocument(member); // Create document for guild
+            userDocument.put(guild.getId(), guildMemberDocument); // Add document for guild to user document
+            mongoDb.getCollection("users").findOneAndReplace(mongoDb.getCollection("users").find(eq("userId", member.getId())).first(), userDocument); // Update database
+        }
+        this.memberDocument = (Document) userDocument.get(guild.getId()); // Get the guild document of the member
+    }
 
     //get xp
     public int getXp() {
+        System.out.println(memberDocument.getInteger("xp"));
         return memberDocument.getInteger("xp");
     }
 
     // Add experience
     public void addXp(int xpToAdd) {
-        //update xp
-        memberDocument.replace("xp", memberDocument.getInteger("xp") + xpToAdd);
-        //update Document
-        mongoDb.getCollection("guilds").findOneAndReplace(
-                mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first(),
-                guildDocument
-        );
+        memberDocument.replace("xp", memberDocument.getInteger("xp") + xpToAdd); // Add xp
+        mongoDb.getCollection("users").findOneAndReplace(mongoDb.getCollection("users").find(eq("userId", member.getId())).first(), userDocument); // Update database
     }
 
     //get level
@@ -74,33 +90,26 @@ public class GetMember {
         //replace xp
         memberDocument.replace("xp", newXp);
         //update Document
-        mongoDb.getCollection("guilds").findOneAndReplace(
-                mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first(),
-                guildDocument
-        );
+        mongoDb.getCollection("users").findOneAndReplace(mongoDb.getCollection("users").find(eq("userId", member.getId())).first(), userDocument); // Update database
     }
 
     //get rank
     public int getRank() {
-        //create leaderboard
-        List<MemberDocument> leaderboard = new ArrayList<>();
-        //get every member
-        Document membersDocument = (Document) guildDocument.get("members");
-        // For every member document
-        for (Object document : membersDocument.values()) {
-            // Parse Object to Document
-            Document member = (Document) document;
-            // Add member to leaderboard
-            leaderboard.add(new MemberDocument(member));
+        List<MemberDocument> leaderboard = new ArrayList<>(); // Create leaderboard
+
+        final MongoCursor<Document> iterator = mongoDb.getCollection("users").find(exists(guild.getId())).iterator(); // Create an iterator of all members, who are in the guild
+        while (iterator.hasNext()) {
+            final Document document = iterator.next(); // Get next user document
+            leaderboard.add(new MemberDocument(document, guild));  // Add member to leaderboard
         }
-        // Sort list
-        Collections.sort(leaderboard, Comparator.comparing(MemberDocument::getXp).reversed());
+
+        Collections.sort(leaderboard, Comparator.comparing(MemberDocument::getXp).reversed());   // Sort list
         // Get rank
         int rank = 0;
         // Search for member
-        for (MemberDocument doc : leaderboard) {
-            if (doc.getId().equals(memberDocument.getString("id"))) {
-                rank = leaderboard.indexOf(doc) + 1;
+        for (MemberDocument memberDocument : leaderboard) {
+            if (memberDocument.getId().equals(member.getId())) {
+                rank = leaderboard.indexOf(memberDocument) + 1;
                 break;
             }
         }
@@ -118,10 +127,7 @@ public class GetMember {
         //replace balance
         memberDocument.replace("balance", balance);
         //update Document
-        mongoDb.getCollection("guilds").findOneAndReplace(
-                mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first(),
-                guildDocument
-        );
+        mongoDb.getCollection("users").findOneAndReplace(mongoDb.getCollection("users").find(eq("userId", member.getId())).first(), userDocument); // Update database
     }
 
     // Get last claimed reward
@@ -134,10 +140,7 @@ public class GetMember {
         // Replace 'lastClaim'
         memberDocument.replace("lastClaim", System.currentTimeMillis());
         // Update guild document
-        mongoDb.getCollection("guilds").findOneAndReplace(
-                mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first(),
-                guildDocument
-        );
+        mongoDb.getCollection("users").findOneAndReplace(mongoDb.getCollection("users").find(eq("userId", member.getId())).first(), userDocument); // Update database
     }
 
     // Get daily reward streak
@@ -150,15 +153,12 @@ public class GetMember {
         // Replace 'dailyStreak' with new value
         memberDocument.replace("dailyStreak", newStreak);
         // Update guild document
-        mongoDb.getCollection("guilds").findOneAndReplace(
-                mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first(),
-                guildDocument
-        );
+        mongoDb.getCollection("users").findOneAndReplace(mongoDb.getCollection("users").find(eq("userId", member.getId())).first(), userDocument); // Update database
     }
 
     // Get rank background
     public String getRankBackground() {
-    return memberDocument.getString("rankBackground");
+        return memberDocument.getString("rankBackground");
     }
 
     // Get rank background
@@ -166,9 +166,6 @@ public class GetMember {
         //replace balance
         memberDocument.replace("rankBackground", backgroundUrl);
         //update Document
-        mongoDb.getCollection("guilds").findOneAndReplace(
-                mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first(),
-                guildDocument
-        );
+        mongoDb.getCollection("users").findOneAndReplace(mongoDb.getCollection("users").find(eq("userId", member.getId())).first(), userDocument); // Update database
     }
 }

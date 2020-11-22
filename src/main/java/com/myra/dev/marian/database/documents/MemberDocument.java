@@ -1,32 +1,25 @@
 package com.myra.dev.marian.database.documents;
 
+import net.dv8tion.jda.api.entities.Guild;
 import org.bson.Document;
 
 public class MemberDocument {
     private String id;
-    private String name;
+
     private int level;
     private int xp;
     private int invites;
 
-    public MemberDocument(Document memberDocument) {
-        this.id = memberDocument.getString("id");
-        this.name = memberDocument.getString("name");
-        this.level = memberDocument.getInteger("level");
-        this.xp = memberDocument.getInteger("xp");
-        this.invites = memberDocument.getInteger("invites");
+    public MemberDocument(Document memberDocument, Guild guild) {
+        this.id = memberDocument.getString("userId");
+
+        final Document guildMemberDocument = (Document) memberDocument.get(guild.getId()); // Get document of guild
+        this.level = guildMemberDocument.getInteger("level");
+        this.xp = guildMemberDocument.getInteger("xp");
     }
 
     public String getId() {
         return id;
-    }
-
-    public String getFullName() {
-        return name;
-    }
-
-    public String getName() {
-        return name.substring(0, name.length() - 5);
     }
 
     public int getLevel() {
@@ -35,9 +28,5 @@ public class MemberDocument {
 
     public int getXp() {
         return xp;
-    }
-
-    public int getInvites() {
-        return invites;
     }
 }
