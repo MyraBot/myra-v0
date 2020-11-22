@@ -41,7 +41,6 @@ import com.myra.dev.marian.commands.moderation.mute.Unmute;
 import com.myra.dev.marian.commands.music.commands.*;
 import com.myra.dev.marian.database.MongoDbUpdate;
 import com.myra.dev.marian.listeners.Someone;
-import com.myra.dev.marian.listeners.automoderation.Link;
 import com.myra.dev.marian.listeners.autorole.AutoRoleSet;
 import com.myra.dev.marian.listeners.leveling.Leveling;
 import com.myra.dev.marian.listeners.leveling.LevelingListener;
@@ -226,9 +225,7 @@ public class Manager {
         LISTENER_SERVICE.register(
                 new LevelingListener(),
 
-                new Someone(),
-                // Auto moderation
-                new Link()
+                new Someone()
         );
     }
 }
