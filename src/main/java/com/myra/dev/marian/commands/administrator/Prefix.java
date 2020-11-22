@@ -19,24 +19,19 @@ public class Prefix implements Command {
             EmbedBuilder embed = new EmbedBuilder()
                     .setAuthor("prefix", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(Utilities.getUtils().gray)
-                    .addField("`" + ctx.getPrefix() + "prefix <prefix>`", "\uD83D\uDCCC │ Change the prefix of the bot", false)
-                    .addField("`" + "@" + ctx.getEvent().getJDA().getSelfUser().getName() + "prefix`", "\uD83D\uDCCC │ Reset the prefix of the bot", false);
+                    .addField("`" + ctx.getPrefix() + "prefix <prefix>`", "\uD83D\uDCCC │ Change the prefix of the bot", false);
             ctx.getChannel().sendMessage(embed.build()).queue();
             return;
         }
 // Change the prefix
-        // New prefix
-        String newPrefix = ctx.getArguments()[0];
-        if (newPrefix.equals("RESET")) newPrefix = "~";
-
         Database db = new Database(ctx.getGuild());
         // Change prefix
-        db.set("prefix", newPrefix);
+        db.set("prefix", ctx.getArguments()[0]);
         //success information
         Utilities.getUtils().success(ctx.getChannel(),
                 "prefix", "\uD83D\uDCCC",
                 "Prefix changed",
-                "Prefix changed to `" + newPrefix + "`",
+                "Prefix changed to `" + ctx.getArguments()[0] + "`",
                 ctx.getAuthor().getEffectiveAvatarUrl(),
                 false, null);
     }
