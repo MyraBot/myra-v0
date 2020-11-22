@@ -21,6 +21,7 @@ import com.myra.dev.marian.management.listeners.ListenerService;
 import com.myra.dev.marian.marian.Roles;
 import com.myra.dev.marian.marian.ServerTracking;
 import com.myra.dev.marian.marian.Shutdown;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.channel.text.TextChannelCreateEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
@@ -44,6 +45,7 @@ public class EventsManager extends ListenerAdapter {
      */
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         try {
+           if (!event.getGuild().getMember(event.getJDA().getSelfUser()).getPermissions().contains(Permission.MESSAGE_WRITE)) return;
             //if message is a server
             if (event.getMessage().getFlags().contains(Message.MessageFlag.IS_CROSSPOST)) return;
             //if message is a Webhook
