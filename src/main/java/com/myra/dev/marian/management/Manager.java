@@ -86,11 +86,6 @@ public class Manager {
     final static CommandService COMMAND_SERVICE = new DefaultCommandService();
     final static ListenerService LISTENER_SERVICE = new DefaultListenerService();
 
-    public void start() {
-        //load commands
-        commandRegistry();
-    }
-
     public static Map<Command, CommandSubscribe> getCommands() {
         return COMMAND_SERVICE.getCommands();
     }
@@ -100,7 +95,11 @@ public class Manager {
         return LEVELING;
     }
 
-    // Register events
+    public void registerFeatures() {
+        commandRegistry();
+        listenerRegistry();
+    }
+
     public void commandRegistry() {
         // Register commands
         COMMAND_SERVICE.register(
@@ -220,6 +219,9 @@ public class Manager {
                 new WelcomeEmbedMessage(),
                 new WelcomeEmbedPreview()
         );
+    }
+
+    private void listenerRegistry() {
         // Register listeners
         LISTENER_SERVICE.register(
                 new LevelingListener(),
