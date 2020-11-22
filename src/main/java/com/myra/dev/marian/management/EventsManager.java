@@ -1,22 +1,18 @@
 package com.myra.dev.marian.management;
 
-import com.myra.dev.marian.APIs.Twitch;
 import com.myra.dev.marian.commands.economy.blackjack.BlackJack;
 import com.myra.dev.marian.commands.fun.TextFormatter;
-import com.myra.dev.marian.commands.general.Reminder;
 import com.myra.dev.marian.commands.general.information.InformationServer;
 import com.myra.dev.marian.commands.help.Commands;
 import com.myra.dev.marian.commands.help.Help;
 import com.myra.dev.marian.commands.help.InviteThanks;
 import com.myra.dev.marian.commands.leveling.Background;
 import com.myra.dev.marian.commands.moderation.mute.MutePermissions;
-import com.myra.dev.marian.commands.moderation.mute.Tempmute;
 import com.myra.dev.marian.commands.music.MusicTimeout;
 import com.myra.dev.marian.commands.music.commands.MusicController;
 import com.myra.dev.marian.commands.music.commands.MusicPlay;
 import com.myra.dev.marian.database.MongoDbUpdate;
 import com.myra.dev.marian.listeners.autorole.AutoroleAssign;
-import com.myra.dev.marian.listeners.notification.Notification;
 import com.myra.dev.marian.listeners.welcome.WelcomeImage.WelcomeImage;
 import com.myra.dev.marian.listeners.welcome.WelcomeImage.WelcomeImageFont;
 import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessage;
@@ -25,10 +21,7 @@ import com.myra.dev.marian.management.listeners.ListenerService;
 import com.myra.dev.marian.marian.Roles;
 import com.myra.dev.marian.marian.ServerTracking;
 import com.myra.dev.marian.marian.Shutdown;
-import com.myra.dev.marian.utilities.MessageReaction;
-import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.channel.text.TextChannelCreateEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
@@ -113,9 +106,6 @@ public class EventsManager extends ListenerAdapter {
 
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
         try {
-            //update database
-            new MongoDbUpdate().memberJoined(event);
-
             //welcome image
             new WelcomeImage().memberJoined(event);
             //welcome direct message
@@ -123,35 +113,6 @@ public class EventsManager extends ListenerAdapter {
 
             // Autorole
             new AutoroleAssign().onGuildMemberJoin(event);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    /**
-     * jda ready
-     */
-    public void onReady(ReadyEvent event) {
-        try {
-            // Load emotes
-            Utilities.getUtils().loadEmotes(event.getJDA());
-            //add missing members to the database
-            new MongoDbUpdate().jdaReady(event);
-            //load reminders
-            new Reminder().onReady(event);
-            //load bans
-//            new Tempban().onReady(event);
-            //load mutes
-            new Tempmute().onReady(event);
-
-
-            //get access token for Twitch
-            new Twitch().jdaReady(event);
-            //load streamers
-            new Notification().jdaReady(event);
-            // Marian's Discord role
-            new Roles().jdaReady(event);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -204,15 +165,6 @@ public class EventsManager extends ListenerAdapter {
     public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
         try {
             // Events
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void onUserUpdateName(UserUpdateNameEvent event) {
-        try {
-            // Update database
-            new MongoDbUpdate().userUpdateNameEvent(event);
         } catch (Exception e) {
             e.printStackTrace();
         }
