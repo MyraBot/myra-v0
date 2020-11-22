@@ -24,7 +24,7 @@ public class Leaderboard implements Command {
         StringBuilder top10 = new StringBuilder();
         // Add first 10 members
         for (int i = 0; i < leaderboardList.size() - 2; i++) {
-            top10.append(i + 1 + " \uD83C\uDF97 `" + leaderboardList.get(i).getLevel() + "` **" + leaderboardList.get(i).getName() + "**\n");
+            top10.append(i + 1 + " \uD83C\uDF97 `" + leaderboardList.get(i).getLevel() + "` **" + ctx.getGuild().getMemberById(leaderboardList.get(i).getId()).getEffectiveName() + "**\n");
             // Show only the first 10 members
             if (i == 9) break;
         }
