@@ -40,7 +40,7 @@ public class Background  implements Command {
         // Get database
         Database db = new Database(ctx.getGuild());
         // Check if you have enough money
-        if (db.getMembers().getMember(ctx.getMember()).getBalance() <= 10000) {
+        if (db.getMembers().getMember(ctx.getMember()).getBalance() < 10000) {
             utilities.error(ctx.getChannel(), "edit rank", "\uD83D\uDDBC", "Not enough money", "You need 10 000" + db.getNested("economy").get("currency"), ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
