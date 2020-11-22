@@ -102,6 +102,7 @@ public class GetMember {
             final Document document = iterator.next(); // Get next user document
             leaderboard.add(new MemberDocument(document, guild));  // Add member to leaderboard
         }
+        iterator.close(); // Close the iterator
 
         Collections.sort(leaderboard, Comparator.comparing(MemberDocument::getXp).reversed());   // Sort list
         // Get rank
