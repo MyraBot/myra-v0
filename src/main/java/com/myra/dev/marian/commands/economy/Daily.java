@@ -1,14 +1,14 @@
 package com.myra.dev.marian.commands.economy;
 
+import com.myra.dev.marian.APIs.TopGG;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.database.allMethods.GetMember;
-import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 @CommandSubscribe(
@@ -25,12 +25,9 @@ public class Daily implements Command {
         long lastClaim = member.getLastClaim();
         // Get duration, which passed (in milliseconds)
         long passedTime = System.currentTimeMillis() - lastClaim;
-        // New streak
-        int streak = 0;
-        // Get reward
-        int dailyReward = 0;
-        // Get currency
-        String currency = new Database(ctx.getGuild()).getNested("economy").get("currency").toString();
+        int streak = 0; // Create daily streak variable
+        int dailyReward = 0; // Create reward variable
+        final String currency = new Database(ctx.getGuild()).getNested("economy").get("currency").toString(); // Get currency
         // Create embed
         EmbedBuilder daily = new EmbedBuilder()
                 .setAuthor("daily", null, ctx.getAuthor().getEffectiveAvatarUrl())
@@ -48,47 +45,37 @@ public class Daily implements Command {
         }
 
         // Claim reward
-        if (TimeUnit.MILLISECONDS.toHours(passedTime) > 12) {
-            // Update streak
-            streak = member.getDailyStreak() + 1;
+        if (TimeUnit.MILLISECONDS.toHours(passedTime) >= 12) {
+            // Didn't miss reward
+            if (TimeUnit.MILLISECONDS.toHours(passedTime) <= 24) {
+                streak = member.getDailyStreak() + 1; // Update streak
+            }
             // Missed reward
             if (TimeUnit.MILLISECONDS.toHours(passedTime) > 24) {
-                // Reset streak
-                streak = 1;
+                streak = 1; // Reset streak
             }
 
-            // Get bonus
-            if (streak != 1) { // With a steak of 1, you're not be able to receive a bonus
-                // Set probability
-                int percent = streak / 100 * 2;
-                Random random = new Random();
-                // If bonus is reached
-                if (random.nextInt() <= percent) {
-                    dailyReward = +500;
-                    daily.addField("\uD83D\uDCB0 │ bonus", "You got a bonus! Congratulations! **+ 500**", false);
-                }
-                // If bonus isn't reached
-                else {
-                    daily.addField("\uD83D\uDCB0 │ bonus", "You could have got a bonus here \uD83D\uDE14, BUT YOU DIDN'T <:lmao:768519476400095262>", false);
-                }
+
+            dailyReward += streak * 100; // Get daily reward
+            // Get vote bonus
+            if (TopGG.getInstance().hasVoted(ctx.getAuthor())) {
+                daily.setDescription("Thanks for voting **+ 500**\n");
+                dailyReward =+ 500;
             }
+            dailyReward += streak * 100;
+            int newBalance = member.getBalance() + dailyReward; // Get new balance
+
+            member.setBalance(newBalance); // Update balance
+            member.updateClaimedReward(); // Update last claim
+            member.setDailyStreak(streak); // Update streak
+
+            // Show reward
+            daily.appendDescription("**+" + dailyReward + "** " + currency + "! Now you have `" + newBalance + "` " + currency);
+            // Show streak
+            daily.setFooter("streak: " + streak + "/14");
+            // Send daily reward
+            ctx.getChannel().sendMessage(daily.build()).queue();
+
         }
-        // Get daily reward
-        dailyReward += streak * 100;
-        // Get new balance
-        int newBalance = member.getBalance() + dailyReward;
-        // Update balance
-        member.setBalance(newBalance);
-        // Update last claim
-        member.updateClaimedReward();
-        // Update streak
-        member.setDailyStreak(streak);
-
-        // Show reward
-        daily.setDescription("**+" + dailyReward + "** " + currency + "! Now you have `" + newBalance + "` " + currency);
-        // Show streak
-        daily.setFooter("streak: " + streak + "/14");
-        // Send daily reward
-        ctx.getChannel().sendMessage(daily.build()).queue();
     }
 }
