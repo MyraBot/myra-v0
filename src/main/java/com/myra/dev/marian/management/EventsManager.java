@@ -45,7 +45,6 @@ public class EventsManager extends ListenerAdapter {
      */
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         try {
-           if (!event.getGuild().getMember(event.getJDA().getSelfUser()).getPermissions().contains(Permission.MESSAGE_WRITE)) return;
             //if message is a server
             if (event.getMessage().getFlags().contains(Message.MessageFlag.IS_CROSSPOST)) return;
             //if message is a Webhook
@@ -54,6 +53,8 @@ public class EventsManager extends ListenerAdapter {
             commandService.processCommandExecution(event);
             listenerService.processCommandExecution(event);
         } catch (Exception e) {
+            if (e.toString().startsWith("net.dv8tion.jda.api.exceptions.InsufficientPermissionException: Cannot perform action due to a lack of Permission. Missing permission: MESSAGE_WRITE")) return;
+            event.getChannel().sendMessage("Error: Please report this to my developer!");
             e.printStackTrace();
         }
     }
@@ -115,6 +116,9 @@ public class EventsManager extends ListenerAdapter {
 
             // Autorole
             new AutoroleAssign().onGuildMemberJoin(event);
+
+            // Exclusive role
+            new Roles().exclusive(event);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -147,9 +151,6 @@ public class EventsManager extends ListenerAdapter {
             new ServerTracking().guildJoinEvent(event);
             // Thank message to server owner
             new InviteThanks().guildJoinEvent(event);
-
-            // Exclusive role
-            new Roles().exclusive(event);
         } catch (Exception e) {
             e.printStackTrace();
         }
