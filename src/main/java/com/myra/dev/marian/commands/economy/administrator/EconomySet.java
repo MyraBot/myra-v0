@@ -31,11 +31,8 @@ public class EconomySet implements Command {
             ctx.getChannel().sendMessage(usage.build()).queue();
             return;
         }
-        /**
-         * Change balance
-         */
+// Change balance
         // Get User
-        // Get self user
         Member member = ctx.getEvent().getMember();
         // Get given user
         if (ctx.getArguments().length == 2) {
