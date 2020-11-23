@@ -75,7 +75,6 @@ public class Daily implements Command {
             daily.setFooter("streak: " + streak + "/14");
             // Send daily reward
             ctx.getChannel().sendMessage(daily.build()).queue();
-
         }
     }
 }
