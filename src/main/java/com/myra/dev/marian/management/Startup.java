@@ -43,13 +43,10 @@ public class Startup extends ListenerAdapter {
             while (!next) {
                 try {
                     TimeUnit.SECONDS.sleep(10);
-                    System.out.println("passed once");
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt(); // restore interrupted status
                 }
             }
-            System.out.println("Loading database finished");
-
             //load reminders
             new Reminder().onReady(event);
             //load bans
