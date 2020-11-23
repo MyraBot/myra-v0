@@ -50,7 +50,7 @@ public class LevelingListener implements Listener {
         else if (cooldown.get(event.getGuild()).get(event.getMessage().getMember()) == null) {
             cooldown.get(event.getGuild()).put(event.getMessage().getMember(), event.getMessage());
         }
-        //check if 5 minutes passed
+        //check if 1 minutes passed
         else {
             if (Duration.between(event.getMessage().getTimeCreated(), cooldown.get(event.getGuild()).get(event.getMessage().getMember()).getTimeCreated()).toMinutes() < 1) {
                 cooldown.get(event.getGuild()).replace(event.getMessage().getMember(), event.getMessage());
