@@ -8,10 +8,11 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 
 import java.awt.*;
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class Roles {
@@ -49,16 +50,28 @@ public class Roles {
      *
      * @param event The GuildMemberJoinEvent event.
      */
-    public void exclusive(GuildJoinEvent event) {
+    public void exclusive(GuildMemberJoinEvent event) {
+        if (!event.getGuild().getId().equals(Bot.marianServer)) return; // Only run in my server
         // Get exclusive role
         final Role exclusiveRole = event.getJDA().getGuildById(Bot.marianServer).getRoleById("775646920646983690");
-        // Get Marian's server
-        final Guild server = event.getJDA().getGuildById(Bot.marianServer);
 
+        List<User> guildOwners = new ArrayList<>();
         for (Guild guild : event.getJDA().getGuilds()) {
-            for (Member member : server.getMembers()) {
-                if (guild.getOwner().getUser().equals(member.getUser())) {
-                    server.addRoleToMember(member, exclusiveRole).queue();
+            guildOwners.add(guild.getOwner().getUser());
+        }
+        Iterator<Member> iterator = event.getGuild().getMembers().iterator();
+        while (iterator.hasNext()) {
+            final Member member = iterator.next();
+            // Member is owner of a server
+            if (guildOwners.contains(member.getUser())) {
+                if (member.getRoles().contains(exclusiveRole)) continue; // Member already owns the exclusive role
+                event.getGuild().addRoleToMember(member, exclusiveRole).queue(); // Add exclusive role to member
+            }
+            // Member isn't owner of a server
+            else {
+                // Member has the exclusive role
+                if (member.getRoles().contains(exclusiveRole)) {
+                    event.getGuild().removeRoleFromMember(member, exclusiveRole).queue(); // Remove exclusive role from member
                 }
             }
         }
