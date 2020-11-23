@@ -23,10 +23,10 @@ public class Leaderboard implements Command {
         // Create leaderboard
         StringBuilder top10 = new StringBuilder();
         // Add first 10 members
-        for (int i = 0; i < leaderboardList.size() - 2; i++) {
-            top10.append(i + 1 + " \uD83C\uDF97 `" + leaderboardList.get(i).getLevel() + "` **" + ctx.getGuild().getMemberById(leaderboardList.get(i).getId()).getEffectiveName() + "**\n");
+        for (int i = 0; i < leaderboardList.size(); i++) {
             // Show only the first 10 members
-            if (i == 9) break;
+            if (i == 10) break;
+            top10.append(i + 1 + " \uD83C\uDF97 `" + leaderboardList.get(i).getLevel() + "` **" + ctx.getGuild().getMemberById(leaderboardList.get(i).getId()).getEffectiveName() + "**\n");
         }
         /*        String top10 =
                         "1 \uD83D\uDC51 `" + leaderboardList.get(0).getLevel() + "` **" + leaderboardList.get(0).getName() + "**\n" +
