@@ -32,9 +32,7 @@ public class GetMember {
         this.guild = guild;
         this.member = member;
         // Member hasn't a document
-        if (mongoDb.getCollection("users").find(eq("userId", member.getId())).first() == null) {
-            System.out.println("creating a new user document");
-            Document userDocument = new Document(); // Create document for user
+        if (mongoDb.getCollection("users").find(eq("userId", member.getId())).first() == null) { Document userDocument = new Document(); // Create document for user
             userDocument.put("userId", member.getId()); // Add user id
 
             Document guildMemberDocument = MongoDbDocuments.createGuildMemberDocument(member); // Create document for guild
@@ -55,7 +53,6 @@ public class GetMember {
 
     //get xp
     public int getXp() {
-        System.out.println(memberDocument.getInteger("xp"));
         return memberDocument.getInteger("xp");
     }
 
