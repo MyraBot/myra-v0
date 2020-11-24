@@ -142,7 +142,8 @@ public class DefaultCommandService implements CommandService {
         // Get listener document
         Document commands = (Document) MongoDb.getInstance().getCollection("guilds").find(eq("guildId", guild.getId())).first().get("commands");
         // Return value of command
-        return !commands.getBoolean(command);
+        if (commands.getBoolean(command) == null) return false; // Command doesn't exist
+        return !commands.getBoolean(command); // Return inverted value of command
     }
 
     /**
