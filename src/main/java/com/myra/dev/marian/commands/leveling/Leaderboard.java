@@ -2,12 +2,13 @@ package com.myra.dev.marian.commands.leveling;
 
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.database.documents.MemberDocument;
-import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 
+import java.util.Arrays;
 import java.util.List;
 
 @CommandSubscribe(
@@ -26,7 +27,8 @@ public class Leaderboard implements Command {
         for (int i = 0; i < leaderboardList.size(); i++) {
             // Show only the first 10 members
             if (i == 10) break;
-            top10.append(i + 1 + " \uD83C\uDF97 `" + leaderboardList.get(i).getLevel() + "` **" + ctx.getGuild().getMemberById(leaderboardList.get(i).getId()).getEffectiveName() + "**\n");
+            if (ctx.getGuild().getMemberById(leaderboardList.get(i).getId()) == null) continue;
+            top10.append(i + 1 + " \uD83C\uDF97 `" + leaderboardList.get(i).getLevel() + "` **" + ctx.getGuild().getMemberById(leaderboardList.get(i).getId()).getUser().getName() + "**\n");
         }
         /*        String top10 =
                         "1 \uD83D\uDC51 `" + leaderboardList.get(0).getLevel() + "` **" + leaderboardList.get(0).getName() + "**\n" +
