@@ -156,10 +156,9 @@ public class Rank implements Command {
                 graphic.textCenter(Graphic.axis.Y, "rank:", font, background) + 25
         );
 // Send rank card
-        ctx.getChannel().sendMessage("> " + member.getAsMention() + "**, you're level " + level + "**").queue();
-        ctx.getChannel().sendFile(
-                graphic.toInputStream(background),
-                member.getUser().getName().toLowerCase() + "_rank.png"
-        ).queue();
+        ctx.getChannel()
+                .sendMessage("> " + member.getAsMention() + "**, you're level " + level + "**")
+                .addFile(graphic.toInputStream(background), member.getUser().getName().toLowerCase() + "_rank.png")
+                .queue();
     }
 }
