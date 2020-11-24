@@ -75,17 +75,13 @@ public class Leveling {
                 graphic.textCenter(Graphic.axis.X, "level " + newLevel, font, background) - 55,
                 graphic.textCenter(Graphic.axis.Y, "level " + newLevel, font, background) + 40
         );
-        /**
-         * send message
-         */
-        ctx.getChannel().sendMessage("> " + ctx.getMessage().getMember().getAsMention() + " **reached a new level!**").queue();
-        ctx.getChannel().sendFile(
-                graphic.toInputStream(background),
-                ctx.getMessage().getAuthor().getName().toLowerCase() + "_level_up.png"
-        ).queue();
-        /**
-         * Leveling role
-         */
+// Send level up message
+        ctx.getChannel().
+                sendMessage("> " + ctx.getMessage().getMember().getAsMention() + " **reached a new level!**")
+                .addFile( graphic.toInputStream(background),
+                        ctx.getMessage().getAuthor().getName().toLowerCase() + "_level_up.png")
+                .queue();
+// Leveling role
         new Database(ctx.getGuild()).getLeveling().checkForNewOnesOwO(newLevel, ctx.getMessage().getMember(), ctx.getGuild());
     }
 
