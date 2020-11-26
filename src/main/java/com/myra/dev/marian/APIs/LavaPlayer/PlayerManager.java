@@ -1,5 +1,6 @@
 package com.myra.dev.marian.APIs.LavaPlayer;
 
+import com.myra.dev.marian.commands.music.commands.MusicDisplay;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.Utilities;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
@@ -28,6 +29,9 @@ public class PlayerManager {
         // Register sources
         AudioSourceManagers.registerRemoteSources(this.audioPlayerManager);
         AudioSourceManagers.registerRemoteSources(this.audioPlayerManager);
+        // Set buffer
+        audioPlayerManager.setFrameBufferDuration(1000);
+        audioPlayerManager.setItemLoaderThreadPoolSize(500);
     }
 
     public GuildMusicManager getMusicManager(Guild guild) {
