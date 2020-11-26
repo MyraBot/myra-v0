@@ -101,6 +101,7 @@ public class CommandEmbeds {
                 .addField("`" + prefix + "join`", "\uD83D\uDCE5 │ Let the bot join your voice channel", false)
                 .addField("`" + prefix + "disconnect`", "\uD83D\uDCE4 │ Kick the bot from your voice channel", false)
                 .addField("`" + prefix + "play <song>`", "\uD83D\uDCBF │ Add a song to the queue*", false)
+                .addField("`" + prefix + "stop`", "\u23F9 │ Stop the player", false)
                 .addField("`" + prefix + "skip`", "\u23ED\uFE0F │ Skip the current song", false)
                 .addField("`" + prefix + "clear queue`", "\uD83D\uDDD1 │ Clear the queue", false)
                 .addField("`" + prefix + "shuffle`", "\uD83C\uDFB2 │ Jumble the current queue", false)

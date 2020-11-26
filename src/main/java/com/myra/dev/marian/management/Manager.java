@@ -181,6 +181,7 @@ public class Manager {
                 new MusicJoin(),
                 new MusicLeave(),
                 new MusicPlay(),
+                new MusicStop(),
                 new MusicShuffle(),
                 new MusicRepeat(),
                 new MusicInformation(),
