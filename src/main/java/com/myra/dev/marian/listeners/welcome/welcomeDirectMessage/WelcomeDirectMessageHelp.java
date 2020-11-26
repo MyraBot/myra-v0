@@ -21,8 +21,7 @@ public class WelcomeDirectMessageHelp implements Command {
         EmbedBuilder welcomeDirectMessage = new EmbedBuilder()
                 .setAuthor("welcome direct message", null, ctx.getAuthor().getEffectiveAvatarUrl())
                 .addField("`" + ctx.getPrefix() + "welcome direct message toggle`", "\uD83D\uDD11 │ Toggle welcome images on and off", false)
-                .addField("`" + ctx.getPrefix() + "welcome direct message message <message>`", "\uD83D\uDCAC │ change the text of the direct messages", false)
-                .addField("`" + ctx.getPrefix() + "welcome direct message preview`", "\uD83D\uDCF8 │ Displays the current direct message", false);
+                .addField("`" + ctx.getPrefix() + "welcome direct message message <message>`", "\uD83D\uDCAC │ change the text of the direct messages", false);
         ctx.getChannel().sendMessage(welcomeDirectMessage.build()).queue();
     }
 }

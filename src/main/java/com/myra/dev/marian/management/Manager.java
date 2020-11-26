@@ -57,13 +57,12 @@ import com.myra.dev.marian.listeners.welcome.WelcomeChannel;
 import com.myra.dev.marian.listeners.welcome.WelcomeColour;
 import com.myra.dev.marian.listeners.welcome.WelcomeHelp;
 import com.myra.dev.marian.listeners.welcome.WelcomeImage.*;
+import com.myra.dev.marian.listeners.welcome.WelcomePreview;
 import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessageHelp;
 import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessageMessage;
-import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessagePreview;
 import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessageToggle;
 import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedHelp;
 import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedMessage;
-import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedPreview;
 import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedToggle;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandService;
@@ -199,11 +198,11 @@ public class Manager {
                 new NotificationList(),
                 // Welcome
                 new WelcomeHelp(),
+                new WelcomePreview(),
                 new WelcomeChannel(),
                 new WelcomeColour(),
                 // Welcome Image
                 new WelcomeImageHelp(),
-                new WelcomeImagePreview(),
                 new WelcomeImageToggle(),
                 new WelcomeImageBackground(),
                 new WelcomeImageFont(),
@@ -211,12 +210,10 @@ public class Manager {
                 new WelcomeDirectMessageHelp(),
                 new WelcomeDirectMessageToggle(),
                 new WelcomeDirectMessageMessage(),
-                new WelcomeDirectMessagePreview(),
                 // Welcome embed
                 new WelcomeEmbedHelp(),
                 new WelcomeEmbedToggle(),
-                new WelcomeEmbedMessage(),
-                new WelcomeEmbedPreview()
+                new WelcomeEmbedMessage()
         );
     }
 

@@ -19,8 +19,7 @@ public class WelcomeEmbedHelp implements Command {
                 .setAuthor("welcome embed", null, ctx.getAuthor().getEffectiveAvatarUrl())
                 .setColor(Utilities.getUtils().gray)
                 .addField("`" + ctx.getPrefix() + "welcome embed toggle`", "\uD83D\uDD11 │ Toggle welcome embeds on and off", false)
-                .addField("`" + ctx.getPrefix() + "welcome embed message <message>`", "\uD83D\uDCAC │ Set the text of the embed message", false)
-                .addField("`" + ctx.getPrefix() + "welcome embed preview`", "\uD83D\uDCF8 │ Displays the current embed", false);
+                .addField("`" + ctx.getPrefix() + "welcome embed message <message>`", "\uD83D\uDCAC │ Set the text of the embed message", false);
         ctx.getChannel().sendMessage(welcomeEmbed.build()).queue();
         return;
     }

@@ -13,15 +13,13 @@ import com.myra.dev.marian.commands.music.commands.MusicController;
 import com.myra.dev.marian.commands.music.commands.MusicPlay;
 import com.myra.dev.marian.database.MongoDbUpdate;
 import com.myra.dev.marian.listeners.autorole.AutoroleAssign;
-import com.myra.dev.marian.listeners.welcome.WelcomeImage.WelcomeImage;
 import com.myra.dev.marian.listeners.welcome.WelcomeImage.WelcomeImageFont;
-import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessage;
+import com.myra.dev.marian.listeners.welcome.WelcomeListener;
 import com.myra.dev.marian.management.commands.CommandService;
 import com.myra.dev.marian.management.listeners.ListenerService;
 import com.myra.dev.marian.marian.Roles;
 import com.myra.dev.marian.marian.ServerTracking;
 import com.myra.dev.marian.marian.Shutdown;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.channel.text.TextChannelCreateEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
@@ -33,7 +31,6 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.api.events.user.update.UserUpdateNameEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class EventsManager extends ListenerAdapter {
@@ -109,10 +106,8 @@ public class EventsManager extends ListenerAdapter {
 
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
         try {
-            //welcome image
-            new WelcomeImage().memberJoined(event);
-            //welcome direct message
-            new WelcomeDirectMessage().memberJoined(event);
+            // Welcome
+            new WelcomeListener().welcome(event);
 
             // Autorole
             new AutoroleAssign().onGuildMemberJoin(event);

@@ -22,9 +22,7 @@ public class WelcomeImageHelp implements Command {
                 .setColor(Utilities.getUtils().gray)
                 .addField("`" + ctx.getPrefix() + "welcome image toggle`", "\uD83D\uDD11 │ Toggle welcome images on and off", false)
                 .addField("`" + ctx.getPrefix() + "welcome image background <url>`", "\uD83D\uDDBC │ Change the background of the welcome images", false)
-                .addField("`" + ctx.getPrefix() + "welcome image font`", "\uD83D\uDDDB │ Change the font of the text", false)
-                .addField("`" + ctx.getPrefix() + "welcome image preview`", "\uD83D\uDCF8 │ Displays the current welcome image", false);
+                .addField("`" + ctx.getPrefix() + "welcome image font`", "\uD83D\uDDDB │ Change the font of the text", false);
         ctx.getChannel().sendMessage(usage.build()).queue();
-        return;
     }
 }
