@@ -42,10 +42,9 @@ public class EventsManager extends ListenerAdapter {
      */
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         try {
-            //if message is a server
-            if (event.getMessage().getFlags().contains(Message.MessageFlag.IS_CROSSPOST)) return;
-            //if message is a Webhook
-            if (event.getMessage().isWebhookMessage()) return;
+            if (event.getMessage().getFlags().contains(Message.MessageFlag.IS_CROSSPOST)) return; // Message is a server announcement
+            if (event.getMessage().isWebhookMessage()) return; // Message is a WebHook
+            if (event.getAuthor().isBot()) return; // Message is from another bot
 
             commandService.processCommandExecution(event);
             listenerService.processCommandExecution(event);
