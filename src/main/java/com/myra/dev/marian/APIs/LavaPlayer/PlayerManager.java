@@ -1,7 +1,5 @@
 package com.myra.dev.marian.APIs.LavaPlayer;
 
-import com.myra.dev.marian.commands.music.commands.MusicDisplay;
-import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.Utilities;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
