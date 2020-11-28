@@ -239,25 +239,25 @@ public class Utilities {
      * Get a user.
      *
      * @param event        The GuildMessageReceivedEvent.
-     * @param userRaw      The String the user is given.
+     * @param providedUser The String the user is given.
      * @param command      The name of the command.
      * @param commandEmoji The Emoji of the command.
      * @return Returns the user as a User object.
      */
-    public User getUser(GuildMessageReceivedEvent event, String userRaw, String command, String commandEmoji) {
-        User user = null;
-        //get jda
-        JDA jda = event.getJDA();
-        // If user is given by mention
-        if (userRaw.startsWith("<@")) {
-            user = event.getMessage().getMentionedMembers().get(0).getUser();
+    public User getUser(GuildMessageReceivedEvent event, String providedUser, String command, String commandEmoji) {
+        User user;
+        final JDA jda = event.getJDA();
+
+        // Role given by id or mention
+        if (providedUser.startsWith("<@") || providedUser.matches("\\d+")) {
+            user = jda.getUserById(providedUser.replaceAll("[<@!>]", ""));
         }
-        // If user is given by id
-        if (user == null && userRaw.matches("\\d+")) {
-            user = jda.getUserById(userRaw);
+        // Role given by name
+        else if (!jda.getUsersByName(providedUser, true).isEmpty()) {
+            user = jda.getUsersByName(providedUser, true).get(0);
         }
-        // If no user is given
-        if (user == null) {
+        // No role given
+        else {
             error(event.getChannel(), command, commandEmoji, "No user given", "Please enter the id or mention the user", event.getAuthor().getEffectiveAvatarUrl());
             return null;
         }
@@ -268,52 +268,46 @@ public class Utilities {
      * Get a user, who will be modified.
      *
      * @param event        The GuildMessageReceivedEvent.
-     * @param userRaw      The String the user is given.
+     * @param providedUser The String the user is given.
      * @param command      The name of the command.
      * @param commandEmoji The Emoji of the command.
      * @return Returns the user as a User object.
      */
-    public User getModifiedUser(GuildMessageReceivedEvent event, String userRaw, String command, String
-            commandEmoji) {
-        User user = null;
-        //get jda
-        JDA jda = event.getJDA();
-        // If user is given by mention
-        if (userRaw.startsWith("<@!")) {
-            user = event.getMessage().getMentionedMembers().get(0).getUser();
+    public User getModifiedUser(GuildMessageReceivedEvent event, String providedUser, String command, String commandEmoji) {
+        Member member;
+
+        // Role given by id or mention
+        if (providedUser.startsWith("<@") || providedUser.matches("\\d+")) {
+            member = event.getGuild().getMemberById(providedUser.replaceAll("[<@>]", ""));
         }
-        // If user is given by id
-        if (user == null && userRaw.matches("\\d+")) {
-            user = jda.getUserById(userRaw);
+        // Role given by name
+        else if (!event.getGuild().getMembersByEffectiveName(providedUser, true).isEmpty()) {
+            member = event.getGuild().getMembersByEffectiveName(providedUser, true).get(0);
         }
-        // If no user is given
-        if (user == null) {
-            error(event.getChannel(), command, commandEmoji, "No user given", "Please enter the id, tag or mention the user", event.getAuthor().getEffectiveAvatarUrl());
+        // No role given
+        else {
+            error(event.getChannel(), command, commandEmoji, "No user found", "Be sure the user is in the server", event.getAuthor().getEffectiveAvatarUrl());
             return null;
         }
-        //if member isn't in the guild
-        if (event.getGuild().getMember(user) == null) {
-            error(event.getChannel(), command, commandEmoji, "No user found", "The user you mentioned isn't on this server", event.getAuthor().getEffectiveAvatarUrl());
-            return null;
-        }
+
         //can't modify yourself
-        if (user.equals(event.getAuthor())) {
+        if (member.equals(event.getMember())) {
             error(event.getChannel(), command, commandEmoji, "Can't " + command + " the mentioned user", "You can't " + command + " yourself", event.getAuthor().getEffectiveAvatarUrl());
             return null;
         }
         //can't modify the owner
-        else if (event.getGuild().getMember(user).isOwner()) {
+        else if (member.isOwner()) {
             error(event.getChannel(), command, commandEmoji, "Can't " + command + " the mentioned user", "You can't " + command + " the owner of the server", event.getAuthor().getEffectiveAvatarUrl());
             return null;
         }
         //if user has a higher or equal role than you
-        if (!event.getGuild().getMember(user).getRoles().isEmpty()) {
-            if (event.getGuild().getMember(user).getRoles().get(0).getPosition() > event.getGuild().getMember(event.getJDA().getSelfUser()).getRoles().get(0).getPosition()) {
-                error(event.getChannel(), command, commandEmoji, "Can't " + command + " " + user.getName(), "I can't " + command + " a member with a higher or equal role than me", event.getAuthor().getEffectiveAvatarUrl());
+        if (!member.getRoles().isEmpty()) {
+            if (member.getRoles().get(0).getPosition() > event.getGuild().getMember(event.getJDA().getSelfUser()).getRoles().get(0).getPosition()) {
+                error(event.getChannel(), command, commandEmoji, "Can't " + command + " " + member.getEffectiveName(), "I can't " + command + " a member with a higher or equal role than me", event.getAuthor().getEffectiveAvatarUrl());
                 return null;
             }
         }
-        return user;
+        return member.getUser();
     }
 
     /**
@@ -325,16 +319,24 @@ public class Utilities {
      * @param commandEmoji    The command emoji.
      * @return Returns a channel as a TextChannel Object.
      */
-    public TextChannel getTextChannel(GuildMessageReceivedEvent event, String providedChannel, String
-            command, String commandEmoji) {
-        //if no channel is given
-        if (!(providedChannel.startsWith("<#") || providedChannel.matches("\\d+"))) {
+    public TextChannel getTextChannel(GuildMessageReceivedEvent event, String providedChannel, String command, String commandEmoji) {
+        TextChannel channel;
+
+        // Role given by id or mention
+        if (providedChannel.startsWith("<#") || providedChannel.matches("\\d+")) {
+            channel = event.getGuild().getTextChannelById(providedChannel.replaceAll("[<#>]", ""));
+        }
+        // Role given by name
+        else if (!event.getGuild().getTextChannelsByName(providedChannel, true).isEmpty()) {
+            channel = event.getGuild().getTextChannelsByName(providedChannel, true).get(0);
+        }
+        // No role given
+        else {
             error(event.getChannel(), command, commandEmoji, "No channel given", "Please enter the id or mention the channel", event.getAuthor().getEffectiveAvatarUrl());
             return null;
         }
-        //get channel
-        TextChannel channel = event.getGuild().getTextChannelById(providedChannel.replaceAll("[<#>]", ""));
-        //no channel found
+
+        // No role found
         if (channel == null) {
             error(event.getChannel(), command, commandEmoji, "No channel found", "The given channel doesn't exist", event.getAuthor().getEffectiveAvatarUrl());
             return null;
@@ -352,13 +354,23 @@ public class Utilities {
      * @return Returns a role as a Role Object.
      */
     public Role getRole(GuildMessageReceivedEvent event, String providedRole, String command, String commandEmoji) {
-        //no role given
-        if (!(providedRole.startsWith("<@&") || providedRole.matches("\\d+"))) {
+        Role role;
+
+        // Role given by id or mention
+        if (providedRole.startsWith("<@&") || providedRole.matches("\\d+")) {
+            role = event.getGuild().getRoleById(providedRole.replaceAll("[<@&>]", ""));
+        }
+        // Role given by name
+        else if (!event.getGuild().getRolesByName(providedRole, true).isEmpty()) {
+            role = event.getGuild().getRolesByName(providedRole, true).get(0);
+        }
+        // No role given
+        else {
             error(event.getChannel(), command, commandEmoji, "No role given", "Please enter a id or mention a role", event.getAuthor().getEffectiveAvatarUrl());
             return null;
         }
-        Role role = event.getGuild().getRoleById(providedRole.replaceAll("[<@&>]", ""));
-        //no role found
+
+        // No role found
         if (role == null) {
             error(event.getChannel(), command, commandEmoji, "No role found", "I couldn't find the specified role", event.getAuthor().getEffectiveAvatarUrl());
             return null;
