@@ -3,6 +3,7 @@ package com.myra.dev.marian.commands.leveling.administrator.levelingRoles;
 
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -10,7 +11,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 @CommandSubscribe(
         name = "leveling roles",
         aliases = {"leveling role"},
-        requires = "administrator"
+        requires = Permissions.ADMINISTRATOR
 )
 public class LevelingRolesHelp implements Command {
 

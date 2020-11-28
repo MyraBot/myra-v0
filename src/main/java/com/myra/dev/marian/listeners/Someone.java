@@ -1,16 +1,16 @@
 package com.myra.dev.marian.listeners;
 
-
 import com.myra.dev.marian.management.listeners.Listener;
 import com.myra.dev.marian.management.listeners.ListenerContext;
 import com.myra.dev.marian.management.listeners.ListenerSubscribe;
+import com.myra.dev.marian.utilities.Permissions;
 
 import java.util.Random;
 
 @ListenerSubscribe(
         name = "@someone",
         needsExecutor = true,
-        requires = "administrator"
+        requires = Permissions.ADMINISTRATOR
 )
 public class Someone implements Listener {
     @Override

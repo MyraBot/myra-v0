@@ -3,13 +3,14 @@ package com.myra.dev.marian.commands.moderation;
 import com.myra.dev.marian.utilities.CommandEmbeds;
 
 import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
 
 @CommandSubscribe(
         name = "moderation",
         aliases = {"mod"},
-        requires = "moderator"
+        requires = Permissions.MODERATOR
 )
 public class ModerationHelp implements Command {
     @Override

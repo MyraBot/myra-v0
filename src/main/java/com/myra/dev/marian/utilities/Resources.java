@@ -5,6 +5,7 @@ import javax.management.AttributeList;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import java.lang.management.ManagementFactory;
+import java.text.NumberFormat;
 
 public class Resources {
     public String getCpuLoad() throws Exception {
@@ -28,11 +29,9 @@ public class Resources {
             Runtime runtime = Runtime.getRuntime();
             long allocatedMemory = runtime.totalMemory();
             long freeMemory = runtime.freeMemory();
-            return (allocatedMemory - freeMemory) / 1000 / 1000 + "%";
+            return String.valueOf((allocatedMemory - freeMemory) / 1000 / 1000);
         } catch (Exception e) {
             return "There was an error while attempting to collect ram usage!";
         }
     }
-
-
 }

@@ -90,7 +90,8 @@ public class CommandEmbeds {
                 .addField("`" + prefix + "daily`", "\uD83E\uDD47 │ Claim your daily reward", false)
                 .addField("`" + prefix + "fish`", "\uD83C\uDFA3 │ Try to catch a fish", false)
                 .addField("`" + prefix + "blackjack <bet>`", "\uD83C\uDCCF │ Play blackjack against " + jda.getSelfUser().getName(), false)
-                .addField("`" + prefix + "give <user> <balance>`", "\uD83D\uDCB8 │ Give credits to other users", false);
+                .addField("`" + prefix + "give <user> <balance>`", "\uD83D\uDCB8 │ Give credits to other users", false)
+                .addField("`" + prefix + "buy <role>`", "\uD83D\uDED2 │ Buy a role from the role shop", false);
     }
 
     //music

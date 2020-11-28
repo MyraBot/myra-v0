@@ -72,6 +72,7 @@ import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedHelp;
 import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedMessage;
 import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedToggle;
 import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandService;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
 import com.myra.dev.marian.management.commands.DefaultCommandService;

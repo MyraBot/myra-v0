@@ -1,6 +1,8 @@
 package com.myra.dev.marian.management.listeners;
 
+import com.myra.dev.marian.Bot;
 import com.myra.dev.marian.management.commands.CommandService;
+import com.myra.dev.marian.utilities.Permissions;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -125,14 +127,17 @@ public class DefaultListenerService implements ListenerService {
      * @param requiresPermission The permission the member needs to execute the listener.
      * @return Returns if the member can execute the listener.
      */
-    private boolean hasPermissions(Member member, String requiresPermission) {
-        switch (requiresPermission) {
-            case "member":
-                return true;
-            case "moderator":
-                return member.hasPermission(Permission.VIEW_AUDIT_LOGS);
-            case "administrator":
-                return member.hasPermission(Permission.ADMINISTRATOR);
+    private boolean hasPermissions(Member member, Permissions requiresPermission) {
+        if (requiresPermission == Permissions.MARIAN) {
+            return member.getId().equals(Bot.marian);
+        } else if (requiresPermission == Permissions.SERVEROWNER) {
+            return member.isOwner();
+        } else if (requiresPermission == Permissions.ADMINISTRATOR) {
+            return member.hasPermission(Permission.ADMINISTRATOR);
+        } else if (requiresPermission == Permissions.MODERATOR) {
+            return member.hasPermission(Permission.VIEW_AUDIT_LOGS);
+        } else if (requiresPermission == Permissions.MEMBER) {
+            return true;
         }
         return false;
     }

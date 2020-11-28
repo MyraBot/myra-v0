@@ -6,6 +6,7 @@ import com.myra.dev.marian.database.documents.LevelingRolesDocument;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -17,7 +18,7 @@ import java.util.List;
 @CommandSubscribe(
         name = "leveling roles list",
         aliases = {"leveling role list"},
-        requires = "administrator"
+        requires = Permissions.ADMINISTRATOR
 )
 public class LevelingRolesList implements Command {
     @Override

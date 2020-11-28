@@ -6,6 +6,7 @@ import com.myra.dev.marian.management.Manager;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -15,7 +16,7 @@ import java.awt.*;
 @CommandSubscribe(
         name = "welcome colour",
         aliases = {"welcome color"},
-        requires = "administrator"
+        requires = Permissions.ADMINISTRATOR
 )
 public class WelcomeColour implements Command {
 

@@ -5,6 +5,7 @@ import com.myra.dev.marian.Bot;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -15,7 +16,7 @@ import java.util.List;
 @CommandSubscribe(
         name = "clear",
         aliases = {"purge", "delete"},
-        requires = "moderator"
+        requires = Permissions.MODERATOR
 )
 public class Clear implements Command {
     @Override

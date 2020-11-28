@@ -1,5 +1,7 @@
 package com.myra.dev.marian.management.commands;
 
+import com.myra.dev.marian.utilities.Permissions;
+
 import java.lang.annotation.*;
 
 /**
@@ -33,5 +35,5 @@ public @interface CommandSubscribe {
      * Retrieves the required permissions for this command.
      * @return The required permissions.
      */
-    String requires() default "member";
+    Permissions requires() default Permissions.MEMBER;
 }

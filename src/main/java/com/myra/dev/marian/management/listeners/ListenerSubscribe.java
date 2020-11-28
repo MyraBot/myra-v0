@@ -1,5 +1,7 @@
 package com.myra.dev.marian.management.listeners;
 
+import com.myra.dev.marian.utilities.Permissions;
+
 import java.lang.annotation.*;
 
 /**
@@ -34,5 +36,5 @@ public @interface ListenerSubscribe {
      * Retrieves the required permissions for this listener.
      * @return The required permissions.
      */
-    String requires() default "member";
+    Permissions requires() default Permissions.MEMBER;
 }

@@ -1,7 +1,9 @@
 package com.myra.dev.marian.management.commands;
 
+import com.myra.dev.marian.Bot;
 import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.allMethods.Database;
+import com.myra.dev.marian.utilities.Permissions;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -133,7 +135,7 @@ public class DefaultCommandService implements CommandService {
      * Check if a command is disabled.
      *
      * @param command The command to check.
-     * @param guild The guild the command was executed.
+     * @param guild   The guild the command was executed.
      * @return Returns a Boolean value of isDisabled.
      */
     private boolean isDisabled(String command, Guild guild) {
@@ -178,14 +180,17 @@ public class DefaultCommandService implements CommandService {
      * @param requiresPermission The permission the member needs to execute the command.
      * @return Returns if the member can execute the command.
      */
-    private boolean hasPermissions(Member member, String requiresPermission) {
-        switch (requiresPermission) {
-            case "member":
-                return true;
-            case "moderator":
-                return member.hasPermission(Permission.VIEW_AUDIT_LOGS);
-            case "administrator":
-                return member.hasPermission(Permission.ADMINISTRATOR);
+    private boolean hasPermissions(Member member, Permissions requiresPermission) {
+        if (requiresPermission == Permissions.MARIAN) {
+            return member.getId().equals(Bot.marian);
+        } else if (requiresPermission == Permissions.SERVEROWNER) {
+            return member.isOwner();
+        } else if (requiresPermission == Permissions.ADMINISTRATOR) {
+            return member.hasPermission(Permission.ADMINISTRATOR);
+        } else if (requiresPermission == Permissions.MODERATOR) {
+            return member.hasPermission(Permission.VIEW_AUDIT_LOGS);
+        } else if (requiresPermission == Permissions.MEMBER) {
+            return true;
         }
         return false;
     }
