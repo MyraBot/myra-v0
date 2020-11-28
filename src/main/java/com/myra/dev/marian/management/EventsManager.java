@@ -46,6 +46,8 @@ public class EventsManager extends ListenerAdapter {
             if (event.getMessage().isWebhookMessage()) return; // Message is a WebHook
             if (event.getAuthor().isBot()) return; // Message is from another bot
 
+            new EventWaiter().buy(event);
+
             commandService.processCommandExecution(event);
             listenerService.processCommandExecution(event);
         } catch (Exception e) {

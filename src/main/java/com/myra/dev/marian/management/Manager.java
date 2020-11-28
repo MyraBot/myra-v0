@@ -7,6 +7,8 @@ import com.myra.dev.marian.commands.economy.*;
 import com.myra.dev.marian.commands.economy.administrator.Currency;
 import com.myra.dev.marian.commands.economy.administrator.EconomySet;
 import com.myra.dev.marian.commands.economy.administrator.shop.ShopAdd;
+import com.myra.dev.marian.commands.economy.administrator.shop.ShopHelp;
+import com.myra.dev.marian.commands.economy.administrator.shop.ShopRemove;
 import com.myra.dev.marian.commands.economy.blackjack.BlackJack;
 import com.myra.dev.marian.commands.fun.Meme;
 import com.myra.dev.marian.commands.fun.TextFormatter;
@@ -153,7 +155,9 @@ public class Manager {
                 new EconomySet(),
                 new Currency(),
 
+                new ShopHelp(),
                 new ShopAdd(),
+                new ShopRemove(),
 
                 new Balance(),
                 new Daily(),
