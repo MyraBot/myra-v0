@@ -6,6 +6,7 @@ import com.myra.dev.marian.commands.administrator.Toggle;
 import com.myra.dev.marian.commands.economy.*;
 import com.myra.dev.marian.commands.economy.administrator.Currency;
 import com.myra.dev.marian.commands.economy.administrator.EconomySet;
+import com.myra.dev.marian.commands.economy.administrator.shop.ShopAdd;
 import com.myra.dev.marian.commands.economy.blackjack.BlackJack;
 import com.myra.dev.marian.commands.fun.Meme;
 import com.myra.dev.marian.commands.fun.TextFormatter;
@@ -21,6 +22,7 @@ import com.myra.dev.marian.commands.help.*;
 import com.myra.dev.marian.commands.leveling.Background;
 import com.myra.dev.marian.commands.leveling.Leaderboard;
 import com.myra.dev.marian.commands.leveling.Rank;
+import com.myra.dev.marian.commands.leveling.administrator.LevelingChannel;
 import com.myra.dev.marian.commands.leveling.administrator.LevelingHelp;
 import com.myra.dev.marian.commands.leveling.administrator.LevelingSet;
 import com.myra.dev.marian.commands.leveling.administrator.levelingRoles.LevelingRolesAdd;
@@ -56,7 +58,10 @@ import com.myra.dev.marian.listeners.suggestions.SuggestionsToggle;
 import com.myra.dev.marian.listeners.welcome.WelcomeChannel;
 import com.myra.dev.marian.listeners.welcome.WelcomeColour;
 import com.myra.dev.marian.listeners.welcome.WelcomeHelp;
-import com.myra.dev.marian.listeners.welcome.WelcomeImage.*;
+import com.myra.dev.marian.listeners.welcome.WelcomeImage.WelcomeImageBackground;
+import com.myra.dev.marian.listeners.welcome.WelcomeImage.WelcomeImageFont;
+import com.myra.dev.marian.listeners.welcome.WelcomeImage.WelcomeImageHelp;
+import com.myra.dev.marian.listeners.welcome.WelcomeImage.WelcomeImageToggle;
 import com.myra.dev.marian.listeners.welcome.WelcomePreview;
 import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessageHelp;
 import com.myra.dev.marian.listeners.welcome.welcomeDirectMessage.WelcomeDirectMessageMessage;
@@ -133,6 +138,8 @@ public class Manager {
                 new LevelingHelp(),
                 new LevelingSet(),
 
+                new LevelingChannel(),
+
                 new LevelingRolesHelp(),
                 new LevelingRolesList(),
                 new LevelingRolesAdd(),
@@ -146,11 +153,15 @@ public class Manager {
                 new EconomySet(),
                 new Currency(),
 
+                new ShopAdd(),
+
                 new Balance(),
                 new Daily(),
                 new Fish(),
                 new BlackJack(),
                 new Give(),
+
+                new Buy(),
                 // Fun
                 new Meme(),
                 new TextFormatter(),

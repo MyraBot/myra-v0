@@ -10,9 +10,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
-import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
-import net.dv8tion.jda.api.events.user.update.UserUpdateNameEvent;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -31,11 +29,12 @@ public class MongoDbUpdate implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         //connect to database
-        if (ctx.getEvent().getMessage().getContentRaw().equals("~db.update") && ctx.getAuthor().getId().equals("639544573114187797")) {
+        if (ctx.getAuthor().getId().equals("639544573114187797")) {
+            ctx.getChannel().sendMessage("> Updating database!").queue(); // Send info that it started updating the database
             // For each document
             for (Document doc : mongoDb.getCollection("guilds").find()) {
                 // Make backup
-//                mongoDb.getCollection("backup").insertOne(doc);
+                mongoDb.getCollection("backup").insertOne(doc);
 
                 // Get variables
                 String guildId = doc.getString("guildId");
@@ -43,7 +42,6 @@ public class MongoDbUpdate implements Command {
                 String prefix = doc.getString("prefix");
                 Document economy = (Document) doc.get("economy");
                 Document leveling = (Document) doc.get("leveling");
-                Document members = (Document) doc.get("members");
                 String notificationChannel = doc.getString("notificationChannel");
                 List<String> streamers = doc.getList("streamers", String.class);
                 String suggestionsChannel = doc.getString("suggestionsChannel");
@@ -54,18 +52,13 @@ public class MongoDbUpdate implements Command {
                 Document commands = (Document) doc.get("commands");
                 Document listeners = (Document) doc.get("listeners");
 
-
-                for (String memberId : members.keySet()) {
-                    //get member document
-                    Document memberDocument = (Document) members.get(memberId);
-                    //memberDocument.append("rankBackground", "default");
-                }
-
                 Document economyDocument = new Document()
-                        .append("currency", Utilities.getUtils().coin);
+                        .append("currency", economy.getString("currency"))
+                        .append("shop", new Document());
                 Document levelingDocument = new Document()
                         .append("boost", 1)
-                        .append("roles", new Document());
+                        .append("roles", leveling.get("roles"))
+                        .append("channel", "not set");
                 Document welcomeNested = new Document()
                         .append("welcomeChannel", "not set")
                         .append("welcomeColour", Utilities.getUtils().blue)
@@ -117,9 +110,8 @@ public class MongoDbUpdate implements Command {
                 Document guildDoc = new Document("guildId", guildId)
                         .append("guildName", guildName)
                         .append("prefix", prefix)
-                        .append("economy", economy)
-                        .append("leveling", leveling)
-                        .append("members", members)
+                        .append("economy", economyDocument)
+                        .append("leveling", levelingDocument)
                         .append("notificationChannel", notificationChannel)
                         .append("streamers", streamers)
                         .append("suggestionsChannel", suggestionsChannel)
@@ -136,6 +128,7 @@ public class MongoDbUpdate implements Command {
                         guildDoc
                 );
             }
+            ctx.getChannel().sendMessage("> Updated database!").queue(); // Send info that database updated was successful
         }
     }
 
@@ -163,6 +156,7 @@ public class MongoDbUpdate implements Command {
 
     /**
      * Change guild name.
+     *
      * @param event The GuildUpdateNameEvent event.
      */
     public void guildNameUpdated(GuildUpdateNameEvent event) {
