@@ -8,8 +8,6 @@ import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -18,8 +16,6 @@ import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Leveling {
 
@@ -76,11 +72,29 @@ public class Leveling {
                 graphic.textCenter(Graphic.axis.Y, "level " + newLevel, font, background) + 40
         );
 // Send level up message
-        ctx.getChannel().
-                sendMessage("> " + ctx.getMessage().getMember().getAsMention() + " **reached a new level!**")
-                .addFile( graphic.toInputStream(background),
-                        ctx.getMessage().getAuthor().getName().toLowerCase() + "_level_up.png")
-                .queue();
+        // If no level-up message channel is set
+        if (new Database(ctx.getGuild()).getNested("leveling").get("channel").equals("not set")) {
+            ctx.getChannel().
+                    sendMessage("> " + ctx.getMessage().getMember().getAsMention() + " **reached a new level!**")
+                    .addFile(graphic.toInputStream(background),
+                            ctx.getMessage().getAuthor().getName().toLowerCase() + "_level_up.png")
+                    .queue();
+        }
+        // Custom channel
+        else {
+            final String channelId = (String) new Database(ctx.getGuild()).getNested("leveling").get("channel"); // Get channel id
+            // Channel is invalid
+            if (ctx.getGuild().getTextChannelById(channelId) == null) {
+                Utilities.getUtils().error(ctx.getChannel(), "rank up", "\uD83C\uDF96", "Couldn't send your rank-up image", "The leveling channel is invalid", ctx.getGuild().getIconUrl());
+                return;
+            } else {
+                ctx.getGuild().getTextChannelById(channelId).
+                        sendMessage("> " + ctx.getMessage().getMember().getAsMention() + " **reached a new level!**")
+                        .addFile(graphic.toInputStream(background),
+                                ctx.getMessage().getAuthor().getName().toLowerCase() + "_level_up.png")
+                        .queue();
+            }
+        }
 // Leveling role
         new Database(ctx.getGuild()).getLeveling().checkForNewOnesOwO(newLevel, ctx.getMessage().getMember(), ctx.getGuild());
     }
