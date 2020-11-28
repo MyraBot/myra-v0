@@ -87,5 +87,11 @@ public class Buy implements Command {
         // Remove balance
         final int balance = member.getBalance();
         member.setBalance(balance - shopRole.getPrice());
+        // Send success message
+        EmbedBuilder success = new EmbedBuilder()
+                .setAuthor("buy", null, ctx.getAuthor().getEffectiveAvatarUrl())
+                .setColor(Utilities.getUtils().blue)
+                .setDescription("You successfully bought " + role.getAsMention());
+        ctx.getChannel().sendMessage(success.build()).queue();
     }
 }
