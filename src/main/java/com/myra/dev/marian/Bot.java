@@ -19,6 +19,11 @@ import java.io.InputStreamReader;
 public class Bot {
     public static ShardManager shardManager;
 
+    private final static String TOKEN = "NzE4NDQ0NzA5NDQ1NjMyMTIy.Xto9xg.54wX882Iz02KbhXUBLr39ef8cq0";
+    private final static String LOADING_STATUS = "loading bars fill";
+    private final static String ONLINE_INFO = ConsoleColours.GREEN + "Bot online" + ConsoleColours.RESET;
+    private final static String OFFLINE_INFO = ConsoleColours.RED + "Bot offline" + ConsoleColours.RESET;
+
     public final static String prefix = "~";
     public final static String marian = "639544573114187797";
     public final static String marianServer = "642809436515074053";
@@ -30,7 +35,7 @@ public class Bot {
     }
 
     private Bot() throws LoginException, RateLimitedException {
-        DefaultShardManagerBuilder jda = DefaultShardManagerBuilder.createDefault("NzE4NDQ0NzA5NDQ1NjMyMTIy.Xto9xg.ZID1OF7fwPAql6V8ov6QiAYQWTE")
+        DefaultShardManagerBuilder jda = DefaultShardManagerBuilder.createDefault(TOKEN)
                 .enableIntents(GatewayIntent.GUILD_PRESENCES) // Need GatewayIntent.GUILD_PRESENCES for CacheFlag.ACTIVITY
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)  // Need GatewayIntent.GUILD_MEMBERS for MemberCachePolicy.ALL
                 .enableCache(CacheFlag.ACTIVITY) // Need to get the activity of a member
@@ -39,15 +44,13 @@ public class Bot {
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
 
                 .setStatus(OnlineStatus.IDLE)
-                .setActivity(Activity.watching("loading bars fill"))
+                .setActivity(Activity.watching(LOADING_STATUS))
 
                 .addEventListeners(new Startup());
         // Build JDA
         shardManager = jda.build();
-        // Send ready information
-        System.out.println(ConsoleColours.GREEN + "Bot online" + ConsoleColours.RESET);
-        // Add console listener
-        consoleListener();
+        System.out.println(ONLINE_INFO); // Send success information
+        consoleListener(); // Add console listener
     }
 
     private void consoleListener() {
@@ -63,7 +66,7 @@ public class Bot {
                         shardManager.setStatus(OnlineStatus.OFFLINE);
                         // Stop shard manager
                         shardManager.shutdown();
-                        System.out.println(ConsoleColours.RED + "Bot offline" + ConsoleColours.RESET);
+                        System.out.println(OFFLINE_INFO);
                         // Stop jar file from running
                         System.exit(0);
                     }
