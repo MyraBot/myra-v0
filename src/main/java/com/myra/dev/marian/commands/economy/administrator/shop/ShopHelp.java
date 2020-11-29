@@ -19,7 +19,7 @@ public class ShopHelp implements Command {
                     .setAuthor("shop", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(Utilities.getUtils().gray)
                     .addField("`" + ctx.getPrefix() + "shop add <role> <price>`", "\u26FD │ Add roles to the shop", false)
-                    .addField("`" + ctx.getPrefix() + "shop remove <role>`", "\u26FD │ Remove a role from the shop", false);
+                    .addField("`" + ctx.getPrefix() + "shop remove <role>`", "\u274C │ Remove a role from the shop", false);
             ctx.getChannel().sendMessage(usage.build()).queue();
         }
     }

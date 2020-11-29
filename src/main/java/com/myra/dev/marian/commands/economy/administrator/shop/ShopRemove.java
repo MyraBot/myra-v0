@@ -21,7 +21,7 @@ public class ShopRemove implements Command {
             EmbedBuilder usage = new EmbedBuilder()
                     .setAuthor("shop remove", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(Utilities.getUtils().gray)
-                    .addField("`" + ctx.getPrefix() + "shop remove <role>`", "\u26FD │ Add roles to the shop", false);
+                    .addField("`" + ctx.getPrefix() + "shop remove <role>`", "\u274C │ Add roles to the shop", false);
             ctx.getChannel().sendMessage(usage.build()).queue();
             return;
         }
