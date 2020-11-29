@@ -1,13 +1,9 @@
 package com.myra.dev.marian;
 
-import com.myra.dev.marian.management.EventsManager;
-import com.myra.dev.marian.management.Manager;
 import com.myra.dev.marian.management.Startup;
 import com.myra.dev.marian.utilities.ConsoleColours;
-import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.exceptions.RateLimitedException;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
@@ -18,12 +14,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import javax.security.auth.login.LoginException;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class Bot {
     public static ShardManager shardManager;
