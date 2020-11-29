@@ -15,6 +15,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -75,22 +76,26 @@ public class Startup extends ListenerAdapter {
 
 
     private void online() {
+        // Set her status to online
+        Bot.shardManager.getShards().forEach(bot -> {
+            bot.getPresence().setActivity(Activity.listening("~help │ " + bot.getGuilds().size() + " servers")); // Change status
+        });
+        /// Get current time
+        final Calendar rightNow = Calendar.getInstance();
+        final int minute = rightNow.get(Calendar.MINUTE); // Get minutes passed
+        final int wait = 60 - minute; // Get minutes to wait
         // Get a random one
         Utilities.TIMER.scheduleAtFixedRate(() -> {
-            // Get random number
-            int random = new Random().nextInt(profilePictures.size());
+            final int random = new Random().nextInt(profilePictures.size()); // Get random number
             // Change profile
             Bot.shardManager.getShards().forEach(bot -> {
                 try {
-                    // Change status
-                    bot.getPresence().setActivity(Activity.listening("~help │ " + bot.getGuilds().size() + " servers"));
-                    // Change profile picture
-                    bot.getSelfUser().getManager().setAvatar(
-                            Icon.from(profilePictures.get(random))).queue();
+                    bot.getPresence().setActivity(Activity.listening("~help │ " + bot.getGuilds().size() + " servers")); // Change status
+                    bot.getSelfUser().getManager().setAvatar(Icon.from(profilePictures.get(random))).queue(); // Change profile picture
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             });
-        }, 0, 1, TimeUnit.HOURS);
+        }, wait, 60, TimeUnit.MINUTES);
     }
 }
