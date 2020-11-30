@@ -105,7 +105,7 @@ public class Twitch  {
                         game
                 )
                 .setThumbnail(thumbnail)
-                .setImage("https://static-cdn.jtvnw.net/previews-ttv/live_user_" + name + "-1280x720.jpg")
+                .setImage("https://static-cdn.jtvnw.net/previews-ttv/live_user_" + name + "-440x248.jpg")
                 .setFooter(startedAt);
         return twitch;
     }
