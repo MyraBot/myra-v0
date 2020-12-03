@@ -7,7 +7,8 @@ import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
 
 @CommandSubscribe(
-        name = "get invite"
+        name = "get invite",
+        requires = Permissions.MARIAN
 )
 public class GetInvite implements Command {
     @Override
