@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import okhttp3.OkHttpClient;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Utilities {
     public final static ScheduledExecutorService TIMER = Executors.newScheduledThreadPool(5);
+    public final static OkHttpClient HTTP_CLIENT = new OkHttpClient();
     private final static Utilities getUtils = new Utilities();
 
     public static Utilities getUtils() {

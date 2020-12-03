@@ -1,5 +1,6 @@
 package com.myra.dev.marian.APIs;
 
+import com.myra.dev.marian.utilities.Utilities;
 import okhttp3.*;
 import org.json.JSONObject;
 
@@ -7,7 +8,6 @@ public class Spotify {
     public String accessToken;
 
     public void authorizationToken() throws Exception {
-        OkHttpClient client = new OkHttpClient();
         //form parameters
         RequestBody body = new FormBody.Builder()
                 .add("grant_type", "client_credentials")
@@ -19,7 +19,7 @@ public class Spotify {
                 .post(body)
                 .build();
         //make request
-        try (Response response = client.newCall(request).execute()) {
+        try (Response response = Utilities.HTTP_CLIENT.newCall(request).execute()) {
             System.out.println(response);
             //return access token
             String output = response.body().string();

@@ -18,9 +18,6 @@ public class TopGG {
         return TOP_GG;
     }
 
-    // Create a OkHttpClient
-    private final OkHttpClient client = new OkHttpClient();
-
     /**
      * Get the amount of votes for Myra.
      *
@@ -35,7 +32,7 @@ public class TopGG {
                 .build();
         //execute call
         String channelOutput;
-        try (Response channelResponse = client.newCall(channel).execute()) {
+        try (Response channelResponse = Utilities.HTTP_CLIENT.newCall(channel).execute()) {
             channelOutput = channelResponse.body().string();
         }
         //create Json object
@@ -59,7 +56,7 @@ public class TopGG {
                 .build();
         //execute call
         String channelOutput;
-        try (Response channelResponse = client.newCall(channel).execute()) {
+        try (Response channelResponse = Utilities.HTTP_CLIENT.newCall(channel).execute()) {
             channelOutput = channelResponse.body().string();
         }
         //create Json object

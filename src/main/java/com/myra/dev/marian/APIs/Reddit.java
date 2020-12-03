@@ -12,7 +12,6 @@ import java.util.Random;
 
 public class Reddit {
     public EmbedBuilder getMeme(User author) throws Exception {
-        OkHttpClient client = new OkHttpClient();
         Random random = new Random();
         //subreddits
         String[] subreddits = {
@@ -29,7 +28,7 @@ public class Reddit {
                 .build();
         //execute call
         String channelOutput;
-        try (Response channelResponse = client.newCall(channel).execute()) {
+        try (Response channelResponse = Utilities.HTTP_CLIENT.newCall(channel).execute()) {
             channelOutput = channelResponse.body().string();
         }
         //create Json object

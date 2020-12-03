@@ -2,10 +2,7 @@ package com.myra.dev.marian.APIs;
 
 
 import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import okhttp3.*;
 import org.json.JSONObject;
@@ -15,12 +12,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 
-public class Twitch  {
+public class Twitch {
     public static String accessToken;
 
     //get access token
     public void jdaReady(ReadyEvent event) throws IOException {
-        OkHttpClient client = new OkHttpClient();
         //form parameters
         RequestBody body = new FormBody.Builder()
                 .add("scope", "channel_read")
@@ -34,7 +30,7 @@ public class Twitch  {
                 .post(body)
                 .build();
         //make request
-        try (Response response = client.newCall(request).execute()) {
+        try (Response response = Utilities.HTTP_CLIENT.newCall(request).execute()) {
             //return access token
             String output = response.body().string();
             JSONObject obj = new JSONObject(output);
@@ -45,7 +41,6 @@ public class Twitch  {
 
     //get game
     public String getGame(String gameId) throws IOException {
-        OkHttpClient client = new OkHttpClient();
         //search channel request
         Request game = new Request.Builder()
                 .addHeader("client-id", Utilities.getUtils().twitchClientId)
@@ -53,7 +48,7 @@ public class Twitch  {
                 .url("https://api.twitch.tv/helix/games?id=" + gameId)
                 .build();
         //make request
-        try (Response response = client.newCall(game).execute()) {
+        try (Response response = Utilities.HTTP_CLIENT.newCall(game).execute()) {
             //return access token
             String output = response.body().string();
             JSONObject obj = new JSONObject(output);
@@ -63,50 +58,22 @@ public class Twitch  {
     }
 
     //request stream
-    public static EmbedBuilder twitchRequest(String channelName, TextChannel textChannel, Guild guild, String avatar) throws IOException {
-        OkHttpClient client = new OkHttpClient();
-        //search channel request
+    public JSONObject getStream(String channelName) throws IOException {
+        // Create channel http get request
         Request channel = new Request.Builder()
                 .addHeader("client-id", Utilities.getUtils().twitchClientId)
                 .addHeader("Authorization", "Bearer " + accessToken)
                 .url("https://api.twitch.tv/helix/search/channels?query=" + channelName)
                 .build();
-        //execute call
+        // Execute request
         String channelOutput = null;
-        try (Response channelResponse = client.newCall(channel).execute()) {
+        try (Response channelResponse = Utilities.HTTP_CLIENT.newCall(channel).execute()) {
             channelOutput = channelResponse.body().string();
         }
-        //create Json object
-        JSONObject JsonChannel = new JSONObject(channelOutput);
-        //if no channel found
-        if (JsonChannel.getJSONArray("data").length() == 0) {
-            Utilities.getUtils().error(textChannel, "notification twitch", "\uD83D\uDD14", "No channel found", "**" + channelName + "** doesn't exist", avatar);
-        }
-        JSONObject channelData = JsonChannel.getJSONArray("data").getJSONObject(0);
-        // Return null if stream is offline
-        boolean live = channelData.getBoolean("is_live");
-        if (!live) return null;
-        //get values
-        String id = channelData.getString("id");
-        String name = channelData.getString("display_name");
-        String title = channelData.getString("title");
-        String thumbnail = channelData.getString("thumbnail_url");
-        String game = new Twitch().getGame(channelData.getString("game_id"));
-        //get stream start
-        DateTimeFormatter dtf =
-                DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
-        String strDate = channelData.getString("started_at").replace("Z", "");
-        String startedAt = dtf.format(LocalDateTime.parse(strDate));
-// Build embed
-        EmbedBuilder twitch = new EmbedBuilder()
-                .setAuthor(name, "https://www.twitch.tv/" + name, thumbnail)
-                .setColor(Utilities.getUtils().blue)
-                .setDescription(Utilities.getUtils().hyperlink(title, "https://www.twitch.tv/" + name) + "\n" +
-                        game
-                )
-                .setThumbnail(thumbnail)
-                .setImage("https://static-cdn.jtvnw.net/previews-ttv/live_user_" + name + "-440x248.jpg")
-                .setFooter(startedAt);
-        return twitch;
+
+        JSONObject stream = new JSONObject(channelOutput); // Create Json object
+
+        if (stream.getJSONArray("data").length() == 0) return null; // No channel found
+        return stream.getJSONArray("data").getJSONObject(0); // Return channel information
     }
 }
