@@ -27,7 +27,13 @@ public class MongoDbDocuments {
         // Leveling
         Document levelingDocument = new Document()
                 .append("boost", 1)
-                .append("roles", new Document());
+                .append("roles", new Document())
+                .append("channel", "not set");
+        // Notification
+        Document notificationsDocument = new Document()
+                .append("channel", "not set")
+                .append("twitch", new ArrayList<String>())
+                .append("youtube", new ArrayList<String>());
         //commands
         Document commands = new Document()
                 .append("calculate", true)
@@ -70,8 +76,6 @@ public class MongoDbDocuments {
                 .append("autorole", false)
                 //suggestions
                 .append("suggestions", false);
-        //streamers
-        JSONArray streamers = new JSONArray();
         //welcome
         Document welcome = new Document()
                 .append("welcomeChannel", "not set")
@@ -88,8 +92,7 @@ public class MongoDbDocuments {
                 .append("prefix", Bot.prefix)
                 .append("economy", economy)
                 .append("leveling", levelingDocument)
-                .append("notificationChannel", "not set")
-                .append("streamers", streamers)
+                .append("notifications", notificationsDocument)
                 .append("suggestionsChannel", "not set")
                 .append("logChannel", "not set")
                 .append("autoRole", "not set")

@@ -15,12 +15,14 @@ import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
 
 @CommandSubscribe(
-        name = "db.update"
+        name = "db.update",
+        requires = Permissions.MARIAN
 )
 public class MongoDbUpdate implements Command {
     //database
@@ -29,8 +31,7 @@ public class MongoDbUpdate implements Command {
     //update Database
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        //connect to database
-        if (ctx.getAuthor().getId().equals("639544573114187797")) {
+
             ctx.getChannel().sendMessage("> Updating database!").queue(); // Send info that it started updating the database
             // For each document
             for (Document doc : mongoDb.getCollection("guilds").find()) {
@@ -38,28 +39,31 @@ public class MongoDbUpdate implements Command {
                 mongoDb.getCollection("backup").insertOne(doc);
 
                 // Get variables
-                String guildId = doc.getString("guildId");
-                String guildName = doc.getString("guildName");
-                String prefix = doc.getString("prefix");
-                Document economy = (Document) doc.get("economy");
-                Document leveling = (Document) doc.get("leveling");
-                String notificationChannel = doc.getString("notificationChannel");
-                List<String> streamers = doc.getList("streamers", String.class);
-                String suggestionsChannel = doc.getString("suggestionsChannel");
-                String logChannel = doc.getString("logChannel");
-                String autoRole = doc.getString("autoRole");
-                String muteRole = doc.getString("muteRole");
-                Document welcome = (Document) doc.get("welcome");
-                Document commands = (Document) doc.get("commands");
-                Document listeners = (Document) doc.get("listeners");
+               final String guildId = doc.getString("guildId");
+                final String guildName = doc.getString("guildName");
+                final String prefix = doc.getString("prefix");
+                final Document economy = (Document) doc.get("economy");
+                final Document leveling = (Document) doc.get("leveling");
+                final Document notifications = (Document) doc.get("notifications");
+                final String suggestionsChannel = doc.getString("suggestionsChannel");
+                final String logChannel = doc.getString("logChannel");
+                final String autoRole = doc.getString("autoRole");
+                final String muteRole = doc.getString("muteRole");
+                final Document welcome = (Document) doc.get("welcome");
+                final Document commands = (Document) doc.get("commands");
+                final Document listeners = (Document) doc.get("listeners");
 
                 Document economyDocument = new Document()
                         .append("currency", economy.getString("currency"))
-                        .append("shop", new Document());
+                        .append("shop", economy.get("shop"));
                 Document levelingDocument = new Document()
                         .append("boost", 1)
                         .append("roles", leveling.get("roles"))
                         .append("channel", "not set");
+                Document notificationDocument = new Document()
+                        .append("channel", notifications.getString("channel"))
+                        .append("twitch", notifications.getList("twitch", String.class))
+                        .append("youtube", notifications.getList("youtube", String.class));
                 Document welcomeNested = new Document()
                         .append("welcomeChannel", "not set")
                         .append("welcomeColour", Utilities.getUtils().blue)
@@ -113,8 +117,7 @@ public class MongoDbUpdate implements Command {
                         .append("prefix", prefix)
                         .append("economy", economyDocument)
                         .append("leveling", levelingDocument)
-                        .append("notificationChannel", notificationChannel)
-                        .append("streamers", streamers)
+                        .append("notifications", notificationDocument)
                         .append("suggestionsChannel", suggestionsChannel)
                         .append("logChannel", logChannel)
                         .append("autoRole", autoRole)
@@ -130,7 +133,6 @@ public class MongoDbUpdate implements Command {
                 );
             }
             ctx.getChannel().sendMessage("> Updated database!").queue(); // Send info that database updated was successful
-        }
     }
 
     //add guild document
