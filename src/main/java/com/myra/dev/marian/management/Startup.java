@@ -4,14 +4,17 @@ import com.myra.dev.marian.APIs.Twitch;
 import com.myra.dev.marian.Bot;
 import com.myra.dev.marian.commands.general.Reminder;
 import com.myra.dev.marian.commands.moderation.mute.Tempmute;
+import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.MongoDbUpdate;
-import com.myra.dev.marian.listeners.notification.Notification;
+import com.myra.dev.marian.listeners.notification.TwitchNotification;
+import com.myra.dev.marian.listeners.notification.YouTubeNotification;
 import com.myra.dev.marian.marian.Roles;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.bson.Document;
 
 import java.io.InputStream;
 import java.util.Arrays;
@@ -58,7 +61,8 @@ public class Startup extends ListenerAdapter {
             //get access token for Twitch
             new Twitch().jdaReady(event);
             //load streamers
-            new Notification().jdaReady(event);
+            new TwitchNotification().jdaReady(event);
+            //new YouTubeNotification().start(event);
             // Marian's Discord role
             new Roles().jdaReady(event);
 
