@@ -238,6 +238,34 @@ public class Utilities {
     }
 
     /**
+     * Get member from message.
+     *
+     * @param event The GuildMessageReceivedEvent
+     * @param providedUser The String the user should be in
+     * @param command The command name
+     * @param commandEmoji The emoji of the command
+     * @return
+     */
+    public Member getMember(GuildMessageReceivedEvent event, String providedUser, String command, String commandEmoji) {
+        Member member = null;
+
+        // Role given by id or mention
+        if (providedUser.startsWith("<@") || providedUser.matches("\\d+")) {
+            member = event.getGuild().getMemberById(providedUser.replaceAll("[<@!>]", ""));
+        }
+        // Role given by name
+        if (!event.getGuild().getMembersByEffectiveName(providedUser, true).isEmpty()) {
+            member = event.getGuild().getMembersByEffectiveName(providedUser, true).get(0);
+        }
+        // No role given
+        if (member == null) {
+            error(event.getChannel(), command, commandEmoji, "No user given", "Please enter the id or mention the user", event.getAuthor().getEffectiveAvatarUrl());
+            return null;
+        }
+        return member;
+    }
+
+    /**
      * Get a user.
      *
      * @param event        The GuildMessageReceivedEvent.

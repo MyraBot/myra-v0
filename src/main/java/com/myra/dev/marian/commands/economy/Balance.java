@@ -1,15 +1,12 @@
 package com.myra.dev.marian.commands.economy;
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
-import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.User;
 
 @CommandSubscribe(
         name = "balance",
@@ -41,15 +38,8 @@ public class Balance implements Command {
         Member member = ctx.getMember();
         // Get given user
         if (ctx.getArguments().length == 1) {
-            User user = utilities.getUser(ctx.getEvent(), ctx.getArguments()[0], "balance", currency);
-            if (user == null) return;
-            // User isn't in the guild
-            if (ctx.getGuild().getMember(user) == null) {
-                utilities.error(ctx.getChannel(), "balance", currency, "No member found", "the given user isn't on this server", ctx.getAuthor().getEffectiveAvatarUrl());
-                return;
-            }
-            // Save user as member
-            member = ctx.getGuild().getMember(user);
+            member = Utilities.getUtils().getMember(ctx.getEvent(), ctx.getArguments()[0], "balance", currency);
+            if (member == null) return;
         }
         // Send balance
         EmbedBuilder balance = new EmbedBuilder()
