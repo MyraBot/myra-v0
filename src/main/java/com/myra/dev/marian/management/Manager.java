@@ -1,6 +1,5 @@
 package com.myra.dev.marian.management;
 
-import com.myra.dev.marian.SpotifyTest;
 import com.myra.dev.marian.commands.administrator.Prefix;
 import com.myra.dev.marian.commands.administrator.Say;
 import com.myra.dev.marian.commands.administrator.Toggle;
@@ -110,7 +109,6 @@ public class Manager {
     public void commandRegistry() {
         // Register commands
         COMMAND_SERVICE.register(
-                new SpotifyTest(),
                 // Marian
                 new MongoDbUpdate(),
                 new InformationChannel(),
