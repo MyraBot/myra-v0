@@ -1,6 +1,7 @@
 package com.myra.dev.marian.listeners.notifications;
 
 import com.myra.dev.marian.APIs.Twitch;
+import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.database.managers.NotificationsTwitchManager;
 import com.myra.dev.marian.utilities.Utilities;
@@ -10,10 +11,15 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.ReadyEvent;
+import org.bson.Document;
 import org.json.JSONObject;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalField;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -21,6 +27,8 @@ import java.util.concurrent.TimeUnit;
 public class TwitchNotification {
 
     public void jdaReady(ReadyEvent event) throws Exception {
+        final int start = LocalDateTime.now().getMinute() % 5 - 5;
+
         Utilities.TIMER.scheduleAtFixedRate(() -> {   // Loop
             try {
                 final Iterator<Guild> guilds = event.getJDA().getGuilds().iterator(); // Create an iterator for the guilds
@@ -55,21 +63,11 @@ public class TwitchNotification {
                         if (!stream.getBoolean("is_live")) continue;
 
                         //get stream start
-                        System.out.println(stream.getString("started_at"));
-                        final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
-                        final String strDate = stream.getString("started_at").replace("Z", "");
-                        final String startedAt = dtf.format(LocalDateTime.parse(strDate));
-                        System.out.println(startedAt);
+                        final ZonedDateTime date = ZonedDateTime.parse(stream.getString("started_at"));
+                        long publishedAtInMillis = date.toInstant().toEpochMilli(); // Get stream start in milliseconds
 
-                        boolean nextStreamer = true; // Create a variable to check if the stream notification was already send
-                        for (Message message : channel.getHistory().retrievePast(25).complete()) { // Check the 25 latest messages
-                            final List<MessageEmbed> embeds = message.getEmbeds(); // Get all embeds
-                            // Message has no embeds or has no footer
-                            if (embeds.isEmpty() || embeds.get(0).getFooter() == null) continue;
-                            // If embed with same footer was already sent
-                            if (embeds.get(0).getFooter().getText().equals(startedAt)) nextStreamer = false;
-                        }
-                        if (!nextStreamer) continue; // Skip streamer if stream notification was already sent
+                        // Last twitch check was already made when the video came out
+                        if (publishedAtInMillis < MongoDb.getInstance().getCollection("config").find().first().getLong("twitch refresh")) continue;
 
                         // Get all values
                         final String id = stream.getString("id");
@@ -83,7 +81,7 @@ public class TwitchNotification {
                                 .setDescription(Utilities.getUtils().hyperlink(title, "https://www.twitch.tv/" + name) + "\n")
                                 .setThumbnail(thumbnail)
                                 .setImage("https://static-cdn.jtvnw.net/previews-ttv/live_user_" + name + "-440x248.jpg")
-                                .setFooter(startedAt);
+                                .setTimestamp(date.toInstant());
                         // If streamer set a game
                         if (!stream.getString("game_id").equals("0")) {
                             notification.appendDescription(new Twitch().getGame(stream.getString("game_id"))); // Add game to notification
@@ -91,9 +89,15 @@ public class TwitchNotification {
                         channel.sendMessage(notification.build()).queue(); // Send stream notification
                     }
                 }
+
+                // Update last refresh in database
+                final Document updatedDocument = MongoDb.getInstance().getCollection("config").find().first(); // Get config document
+                updatedDocument.replace("twitch refresh", System.currentTimeMillis()); // Update last check
+                MongoDb.getInstance().getCollection("config").findOneAndReplace(MongoDb.getInstance().getCollection("config").find().first(), updatedDocument); // Update document
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }, 1, 5, TimeUnit.MINUTES);
+        }, start, 5, TimeUnit.MINUTES);
     }
 }
