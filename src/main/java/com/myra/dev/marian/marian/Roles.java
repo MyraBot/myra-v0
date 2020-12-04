@@ -42,7 +42,7 @@ public class Roles {
             Color colour = Color.getHSBColor(hue, saturation, brightness);
             // Update colour
             role.getManager().setColor(colour).queue();
-        }, 30, 30, TimeUnit.MINUTES);
+        }, 60, 60, TimeUnit.MINUTES);
     }
 
     /**
