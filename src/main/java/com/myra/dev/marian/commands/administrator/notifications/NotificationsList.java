@@ -21,7 +21,7 @@ import java.util.List;
         aliases = {"notifications list"},
         requires = Permissions.ADMINISTRATOR
 )
-public class NotificationList implements Command {
+public class NotificationsList implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         // Check for no arguments

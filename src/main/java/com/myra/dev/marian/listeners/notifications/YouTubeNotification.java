@@ -1,4 +1,4 @@
-package com.myra.dev.marian.listeners.notification;
+package com.myra.dev.marian.listeners.notifications;
 
 import com.myra.dev.marian.APIs.YouTube;
 import com.myra.dev.marian.database.MongoDb;
@@ -12,7 +12,6 @@ import net.dv8tion.jda.api.events.ReadyEvent;
 import org.bson.Document;
 import org.json.JSONObject;
 
-import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.Iterator;
 import java.util.List;
@@ -35,12 +34,12 @@ public class YouTubeNotification {
 
                     if (youtubers.isEmpty()) continue;  // No streamers are set
 
-                    // If no notification channel is set
+                    // If no notifications channel is set
                     if (channelRaw.equals("not set")) {
-                        Utilities.getUtils().error(guild.getDefaultChannel(), "notification", "\uD83D\uDD14", "No notification channel specified", "To set a notification channel type in `" + db.get("prefix") + "notification channel <channel>`", guild.getIconUrl());
+                        Utilities.getUtils().error(guild.getDefaultChannel(), "notifications", "\uD83D\uDD14", "No notification channel specified", "To set a notification channel type in `" + db.get("prefix") + "notification channel <channel>`", guild.getIconUrl());
                         continue;
                     }
-                    TextChannel channel = guild.getTextChannelById(channelRaw); // Get notification channel
+                    TextChannel channel = guild.getTextChannelById(channelRaw); // Get notifications channel
 
                     // For each youtuber
                     for (String channelId : youtubers) {
@@ -63,8 +62,7 @@ public class YouTubeNotification {
 
                             final String channelName = video.getString("channelTitle");
                             final String title = video.getString("title"); // Get video title
-                            final String thumbnail = video.getJSONObject("thumbnails").getJSONObject("standard").getString("url"); // Get thumbnail image
-                            System.out.println(video.getJSONObject("thumbnails"));
+                            final String thumbnail = video.getJSONObject("thumbnails").getJSONObject("medium").getString("url"); // Get thumbnail image
                             // Create embed
                             EmbedBuilder notification = new EmbedBuilder()
                                     .setAuthor(channelName, "https://www.youtube.com/watch?v=" + videoId, profilePicture)

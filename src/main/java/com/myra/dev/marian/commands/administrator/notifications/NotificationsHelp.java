@@ -1,4 +1,4 @@
-package com.myra.dev.marian.listeners.notification;
+package com.myra.dev.marian.commands.administrator.notifications;
 
 
 import com.myra.dev.marian.utilities.Utilities;
@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
         aliases = {"notifications"},
         requires = Permissions.ADMINISTRATOR
 )
-public class NotificationHelp implements Command {
+public class NotificationsHelp implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         // Check for no arguments

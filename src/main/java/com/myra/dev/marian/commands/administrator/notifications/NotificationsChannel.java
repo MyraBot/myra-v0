@@ -1,4 +1,4 @@
-package com.myra.dev.marian.listeners.notification;
+package com.myra.dev.marian.commands.administrator.notifications;
 
 import com.myra.dev.marian.database.allMethods.Database;
 
@@ -12,11 +12,11 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 @CommandSubscribe(
-        name = "notification channel",
-        aliases = {"notifications channel"},
+        name = "notifications channel",
+        aliases = {"notification channel"},
         requires = Permissions.ADMINISTRATOR
 )
-public class NotificationChannel implements Command {
+public class NotificationsChannel implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         // Missing permissions
@@ -40,7 +40,7 @@ public class NotificationChannel implements Command {
         TextChannel channel = utilities.getTextChannel(ctx.getEvent(), ctx.getArguments()[0], "notification channel", "\uD83D\uDD14");
         if (channel == null) return;
         //get current notification channel
-        String currentChannelId = db.getNotificationManager().getChannel();
+        String currentChannelId = (String) db.getNested("notifications").get("channel");
         //remove notification channel
         if (currentChannelId.equals(channel.getId())) {
             //remove channel id
