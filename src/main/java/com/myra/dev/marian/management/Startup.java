@@ -62,7 +62,7 @@ public class Startup extends ListenerAdapter {
             new Twitch().jdaReady(event);
             //load streamers
             new TwitchNotification().jdaReady(event);
-            //new YouTubeNotification().start(event);
+            new YouTubeNotification().start(event);
             // Marian's Discord role
             new Roles().jdaReady(event);
 
