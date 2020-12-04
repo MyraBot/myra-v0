@@ -81,4 +81,23 @@ public class MessageReaction  {
             return true;
         } else return false;
     }
+
+    public static boolean checkWithOutRemove(GuildMessageReactionAddEvent event, String command) {
+        // When author is a bot
+        if (event.getUser().isBot()) return false;
+        // When command isn't in the hashMap yet
+        if (hashMap.get(command) == null) return false;
+        // Return if emoji is emote
+        if (event.getReactionEmote().isEmote()) return false;
+        // Check for the right message
+        if (hashMap.get(command).containsKey(event.getMessageId())) {
+            // Get Document
+            Document reaction = hashMap.get(command).get(event.getMessageId());
+            // Check for right author
+            if (!reaction.getString("user").equals(event.getUserId())) return false;
+            // Check for right emoji
+            if (!reaction.getList("emojis", String.class).contains(event.getReactionEmote().getEmoji())) return false;
+            return true;
+        } else return false;
+    }
 }

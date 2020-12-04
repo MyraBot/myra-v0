@@ -50,11 +50,6 @@ public class Database {
         return new GetListenerManager(mongoDb, guild);
     }
 
-    //get notification manager
-    public GetNotificationManager getNotificationManager() {
-        return new GetNotificationManager(mongoDb, guild);
-    }
-
     // Get Leveling
     public GetLeveling getLeveling() {
         return new GetLeveling(mongoDb, guild);

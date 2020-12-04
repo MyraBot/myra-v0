@@ -1,5 +1,6 @@
 package com.myra.dev.marian.management;
 
+import com.myra.dev.marian.commands.administrator.notifications.NotificationsList;
 import com.myra.dev.marian.commands.economy.blackjack.BlackJack;
 import com.myra.dev.marian.commands.fun.TextFormatter;
 import com.myra.dev.marian.commands.general.information.InformationServer;
@@ -80,6 +81,9 @@ public class EventsManager extends ListenerAdapter {
             new MusicController().guildMessageReactionAddEvent(event);
 
             new WelcomeImageFont().guildMessageReactionAddEvent(event);
+
+            // Notification
+            new NotificationsList().switchList(event);
         } catch (Exception e) {
             e.printStackTrace();
         }

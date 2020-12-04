@@ -1,8 +1,10 @@
 package com.myra.dev.marian.management;
 
+import com.myra.dev.marian.SpotifyTest;
 import com.myra.dev.marian.commands.administrator.Prefix;
 import com.myra.dev.marian.commands.administrator.Say;
 import com.myra.dev.marian.commands.administrator.Toggle;
+import com.myra.dev.marian.commands.administrator.notifications.YouTuber;
 import com.myra.dev.marian.commands.economy.*;
 import com.myra.dev.marian.commands.economy.administrator.Currency;
 import com.myra.dev.marian.commands.economy.administrator.EconomySet;
@@ -49,10 +51,10 @@ import com.myra.dev.marian.listeners.autorole.AutoRoleSet;
 import com.myra.dev.marian.listeners.leveling.Leveling;
 import com.myra.dev.marian.listeners.leveling.LevelingListener;
 import com.myra.dev.marian.listeners.logging.LogChannel;
-import com.myra.dev.marian.listeners.notification.AddStreamer;
-import com.myra.dev.marian.listeners.notification.NotificationChannel;
-import com.myra.dev.marian.listeners.notification.NotificationHelp;
-import com.myra.dev.marian.listeners.notification.NotificationList;
+import com.myra.dev.marian.commands.administrator.notifications.Streamer;
+import com.myra.dev.marian.commands.administrator.notifications.NotificationsChannel;
+import com.myra.dev.marian.commands.administrator.notifications.NotificationsHelp;
+import com.myra.dev.marian.commands.administrator.notifications.NotificationsList;
 import com.myra.dev.marian.listeners.suggestions.SubmitSuggestion;
 import com.myra.dev.marian.listeners.suggestions.SuggestionsChannel;
 import com.myra.dev.marian.listeners.suggestions.SuggestionsHelp;
@@ -72,7 +74,6 @@ import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedHelp;
 import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedMessage;
 import com.myra.dev.marian.listeners.welcome.welcomeEmbed.WelcomeEmbedToggle;
 import com.myra.dev.marian.management.commands.Command;
-import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandService;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
 import com.myra.dev.marian.management.commands.DefaultCommandService;
@@ -109,6 +110,7 @@ public class Manager {
     public void commandRegistry() {
         // Register commands
         COMMAND_SERVICE.register(
+                new SpotifyTest(),
                 // Marian
                 new MongoDbUpdate(),
                 new InformationChannel(),
@@ -208,11 +210,12 @@ public class Manager {
                 // Autorole
                 new AutoRoleSet(),
                 // Notification
-                new NotificationHelp(),
+                new NotificationsHelp(),
+                new NotificationsChannel(),
+                new NotificationsList(),
 
-                new NotificationChannel(),
-                new AddStreamer(),
-                new NotificationList(),
+                new YouTuber(),
+                new Streamer(),
                 // Welcome
                 new WelcomeHelp(),
                 new WelcomePreview(),
