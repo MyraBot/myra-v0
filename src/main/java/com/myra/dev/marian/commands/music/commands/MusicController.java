@@ -1,19 +1,17 @@
 package com.myra.dev.marian.commands.music.commands;
 
-import com.myra.dev.marian.utilities.APIs.LavaPlayer.PlayerManager;
-import com.myra.dev.marian.utilities.APIs.LavaPlayer.TrackScheduler;
-import com.myra.dev.marian.utilities.MessageReaction;
-
-import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.APIs.LavaPlayer.PlayerManager;
+import com.myra.dev.marian.utilities.APIs.LavaPlayer.TrackScheduler;
+import com.myra.dev.marian.utilities.MessageReaction;
+import com.myra.dev.marian.utilities.Utilities;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -21,7 +19,7 @@ import java.util.TimerTask;
 @CommandSubscribe(
         name = "music controller"
 )
-public class MusicController  implements Command {
+public class MusicController implements Command {
 
     private static HashMap<Message, Boolean> cancelTimer = new HashMap<>();
 
@@ -73,7 +71,7 @@ public class MusicController  implements Command {
         message.addReaction("\u23ED\uFE0F").queue();
         message.addReaction("\u23F9\uFE0F").queue();
         //add message id to HashMap
-        MessageReaction.add("musicController", message.getId(), Arrays.asList("\u23EF\uFE0F", "\u23ED\uFE0F", "\u23F9\uFE0F"), ctx.getChannel(), ctx.getAuthor(), false);
+        MessageReaction.add(ctx.getGuild(), "musicController", message, false, "\u23EF\uFE0F", "\u23ED\uFE0F", "\u23F9\uFE0F");
 
         //cancel timer
         cancel.scheduleAtFixedRate(new TimerTask() {
@@ -111,7 +109,7 @@ public class MusicController  implements Command {
     //reactions
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) {
         //if reaction was added on the wrong message return
-        if (!MessageReaction.check(event, "musicController")) return;
+        if (!MessageReaction.check(event, "musicController", true)) return;
 
         AudioPlayer player = PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer;
         TrackScheduler scheduler = PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler;

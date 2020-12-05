@@ -1,11 +1,11 @@
 package com.myra.dev.marian.commands.music.commands;
 
 import com.google.api.services.youtube.model.SearchResult;
-import com.myra.dev.marian.utilities.APIs.LavaPlayer.PlayerManager;
-import com.myra.dev.marian.utilities.APIs.GoogleYouTube;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.APIs.GoogleYouTube;
+import com.myra.dev.marian.utilities.APIs.LavaPlayer.PlayerManager;
 import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -13,7 +13,6 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
 import java.net.URL;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -100,13 +99,13 @@ public class MusicPlay implements Command {
 
             message.addReaction("\uD83D\uDEAB").queue();
             // Add reaction to HashMap
-            MessageReaction.add("play", message.getId(), Arrays.asList("1\uFE0F\u20E3", "2\uFE0F\u20E3", "3\uFE0F\u20E3", "4\uFE0F\u20E3", "5\uFE0F\u20E3", "5\uFE0F\u20E3", "\uD83D\uDEAB"), ctx.getChannel(), ctx.getAuthor(), false);
+            MessageReaction.add(ctx.getGuild(), "play", message, true, "1\uFE0F\u20E3", "2\uFE0F\u20E3", "3\uFE0F\u20E3", "4\uFE0F\u20E3", "5\uFE0F\u20E3");
         }
     }
 
     //chose song
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) throws Exception {
-        if (!MessageReaction.check(event, "play")) return;
+        if (!MessageReaction.check(event, "play", true)) return;
         // Search canceled
         if (event.getReactionEmote().getEmoji().equals("\uD83D\uDEAB")) {
             // Clear reactions

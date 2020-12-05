@@ -1,103 +1,76 @@
 package com.myra.dev.marian.utilities;
 
 
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import org.bson.Document;
 
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class MessageReaction  {
+public class MessageReaction {
+    //                     Guild           Command      Message id   Information
+    private static HashMap<String, HashMap<String, HashMap<String, Document>>> reactions = new HashMap();
 
-    private static HashMap<String, HashMap<String, Document>> hashMap = new HashMap();
 
-    public static void add(String command, String messageId, List<String> emojis, TextChannel channel, User user, Boolean timeOut) {
-        //create new key
-        if (hashMap.get(command) == null) {
-            // Create HashMap
-            HashMap<String, Document> map = new HashMap<>();
-            // Create Document
-            Document reaction = new Document()
-                    .append("messageId", messageId)
-                    .append("user", user.getId())
-                    .append("emojis", emojis);
-            // Put the message id and the author in the HashMap
-            map.put(messageId, reaction);
-            // Add the command to the HashMap
-            hashMap.put(command, map);
+    public static void add(Guild guild, String command, Message message, boolean timeOut, String... emojis) {
+        // Get variables
+        final String guildId = guild.getId(); // Get guild id
+
+        // Guild isn't in the hashmap yet
+        if (!reactions.containsKey(guildId)) {
+            reactions.put(guildId, new HashMap<>()); // Add guild to reactions hashmap
         }
-        // Add to existing command
-        else {
-            // Create Document
-            Document reaction = new Document()
-                    .append("messageId", messageId)
-                    .append("user", user.getId())
-                    .append("emojis", emojis);
-            // Add the message id and the author to the hashmap
-            hashMap.get(command).put(messageId, reaction);
+
+        // Command isn't in the hashmap yet
+        if (!reactions.get(guildId).containsKey(command)) {
+            reactions.get(guildId).put(command, new HashMap<>()); // Add command to the hashmap of the guild
         }
-        // When the command has a time out
+
+        // Create new Document for command
+        Document document = new Document()
+                .append("messageId", message.getId())
+                .append("userId", message.getAuthor().getId())
+                .append("emojis", Arrays.stream(emojis).toArray());
+        reactions.get(guildId).get(command).put(message.getId(), document); // Add document to hashmap
+
+        // If there should be a time out
         if (timeOut) {
-            //remove id
+            // Delay
             Utilities.TIMER.schedule(() -> {
-                // Reaction already removed
-                if (hashMap.get(command).get(messageId) == null) return;
-                // Remove all reactions
-                channel.retrieveMessageById(messageId).complete().clearReactions().complete();
-                // Remove message id from hashmap
-                hashMap.get(command).remove(messageId);
-            }, 1, TimeUnit.MINUTES);
+                reactions.get(guildId).get(command).remove(message.getId()); // Remove command from the hashmap
+                message.clearReactions().queue(); // Clear all reaction emojis
+            }, 1, TimeUnit.MINUTES); // Time out will be after 1 minute
         }
+
+        System.out.println(document);
+    }
+
+    public static boolean check(GuildMessageReactionAddEvent event, String command, boolean delete) {
+        final String guildId = event.getGuild().getId();
+        final String messageId = event.getMessageId();
+
+        if (event.getUser().isBot()) return false; // Author is bot
+
+        if (!reactions.containsKey(guildId)) return false; // Guild isn't in the hashmap
+        if (!reactions.get(guildId).containsKey(command)) return false; // Command isn't in the hashmap
+        if (!reactions.get(guildId).get(command).containsKey(messageId)) return false; // Message isn't in the hashmap
+
+
+        final Document reaction = reactions.get(guildId).get(command).get(messageId); // Get reaction document
+        if (!event.getUser().getId().equals(reaction.getString("userId"))) return false; // Wrong user reacted
+        System.out.println(event.getReactionEmote().toString());
+        if (!reaction.getList("emojis", String.class).contains(event.getReactionEmote().toString()))
+            return false; // Wrong emoji
+
+        if (delete) reactions.get(command).remove(messageId); // Delete message from hashmap
+        return true; // Return true
     }
 
     public static void remove(String command, Message message) {
-        // Remove message id from HashMap
-        hashMap.get(command).remove(message.getId());
-        // Clear all reactions from the message
+        reactions.get(message.getGuild().getId()).get(command).remove(message.getId());
         message.clearReactions().queue();
-    }
-
-    public static boolean check(GuildMessageReactionAddEvent event, String command) {
-        // When author is a bot
-        if (event.getUser().isBot()) return false;
-        // When command isn't in the hashMap yet
-        if (hashMap.get(command) == null) return false;
-        // Return if emoji is emote
-        if (event.getReactionEmote().isEmote()) return false;
-        // Check for the right message
-        if (hashMap.get(command).containsKey(event.getMessageId())) {
-            // Get Document
-            Document reaction = hashMap.get(command).get(event.getMessageId());
-            // Check for right author
-            if (!reaction.getString("user").equals(event.getUserId())) return false;
-            // Check for right emoji
-            if (!reaction.getList("emojis", String.class).contains(event.getReactionEmote().getEmoji())) return false;
-            // Delete message from Hashmap
-            hashMap.get(command).remove(event.getMessageId());
-            return true;
-        } else return false;
-    }
-
-    public static boolean checkWithOutRemove(GuildMessageReactionAddEvent event, String command) {
-        // When author is a bot
-        if (event.getUser().isBot()) return false;
-        // When command isn't in the hashMap yet
-        if (hashMap.get(command) == null) return false;
-        // Return if emoji is emote
-        if (event.getReactionEmote().isEmote()) return false;
-        // Check for the right message
-        if (hashMap.get(command).containsKey(event.getMessageId())) {
-            // Get Document
-            Document reaction = hashMap.get(command).get(event.getMessageId());
-            // Check for right author
-            if (!reaction.getString("user").equals(event.getUserId())) return false;
-            // Check for right emoji
-            if (!reaction.getList("emojis", String.class).contains(event.getReactionEmote().getEmoji())) return false;
-            return true;
-        } else return false;
     }
 }

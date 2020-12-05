@@ -2,7 +2,6 @@ package com.myra.dev.marian.commands.fun;
 
 
 import com.myra.dev.marian.management.commands.Command;
-import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.MessageReaction;
@@ -11,7 +10,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -20,7 +18,7 @@ import java.util.concurrent.TimeUnit;
         name = "format",
         aliases = {"font"}
 )
-public class TextFormatter  implements Command {
+public class TextFormatter implements Command {
     private static HashMap<String, String> messages = new HashMap<>();
 
     /**
@@ -167,7 +165,7 @@ public class TextFormatter  implements Command {
         message.addReaction("\uD83D\uDD8B").queue();
         message.addReaction("\uD83C\uDF39").queue();
         //save message id
-        MessageReaction.add("format", message.getId(), Arrays.asList("\uD83C\uDDE9\uD83C\uDDEA", "\uD83D\uDD8B", "\uD83C\uDF39"), ctx.getChannel(), ctx.getAuthor(), true);
+        MessageReaction.add(ctx.getGuild(), "format", message, true, "\uD83C\uDDE9\uD83C\uDDEA", "\uD83D\uDD8B", "\uD83C\uDF39");
     }
 
     /**
@@ -175,7 +173,7 @@ public class TextFormatter  implements Command {
      */
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) {
         //check for right message
-        if (!MessageReaction.check(event, "format")) return;
+        if (!MessageReaction.check(event, "format", true)) return;
 
         //return old german font
         if (event.getReactionEmote().getEmoji().equals("\uD83C\uDDE9\uD83C\uDDEA") && !event.getMember().getUser().isBot()) {

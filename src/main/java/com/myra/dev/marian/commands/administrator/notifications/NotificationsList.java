@@ -1,11 +1,11 @@
 package com.myra.dev.marian.commands.administrator.notifications;
 
-import com.myra.dev.marian.utilities.APIs.GoogleYouTube;
 import com.myra.dev.marian.database.managers.NotificationsTwitchManager;
 import com.myra.dev.marian.database.managers.NotificationsYoutubeManager;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.APIs.GoogleYouTube;
 import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.utilities.Utilities;
@@ -13,7 +13,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
-import java.util.Arrays;
 import java.util.List;
 
 @CommandSubscribe(
@@ -49,11 +48,11 @@ public class NotificationsList implements Command {
         message.addReaction("\uD83D\uDCE1").queue(); // Twitch reaction
         message.addReaction("\uD83D\uDCFA").queue(); // Youtube reaction
 
-        MessageReaction.add("notification list", message.getId(), Arrays.asList("\uD83D\uDCE1", "\uD83D\uDCFA"), ctx.getChannel(), ctx.getAuthor(), true);
+        MessageReaction.add(ctx.getGuild(), "notification list", message, true, "\uD83D\uDCE1", "\uD83D\uDCFA");
     }
 
     public void switchList(GuildMessageReactionAddEvent event) throws Exception {
-        if (!MessageReaction.checkWithOutRemove(event, "notification list")) return;
+        if (!MessageReaction.check(event, "notification list", false)) return;
 
         // Twitch
         if (event.getReactionEmote().getEmoji().equals("\uD83D\uDCE1")) {

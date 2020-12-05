@@ -1,15 +1,12 @@
 package com.myra.dev.marian.commands.leveling;
 
 import com.myra.dev.marian.database.allMethods.Database;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.Graphic;
 import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.utilities.Utilities;
-
-import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.management.commands.Command;
-import com.myra.dev.marian.utilities.Permissions;
-import com.myra.dev.marian.management.commands.CommandContext;
-import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
@@ -18,12 +15,11 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Arrays;
 
 @CommandSubscribe(
         name = "edit rank"
 )
-public class Background  implements Command {
+public class Background implements Command {
 
     @Override
     public void execute(CommandContext ctx) throws Exception {
@@ -69,13 +65,13 @@ public class Background  implements Command {
         message.addReaction("\u2705").queue(); // Checkmark
         message.addReaction("\uD83D\uDEAB").queue(); // Barrier
 
-        MessageReaction.add("edit rank", message.getId(), Arrays.asList("\u2705", "\uD83D\uDEAB"), ctx.getChannel(), ctx.getAuthor(), true);
+        MessageReaction.add(ctx.getGuild(), "edit rank", message, true, "\u2705", "\uD83D\uDEAB");
     }
 
 
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) {
         // Check for right reaction
-        if (!MessageReaction.check(event, "edit rank")) return;
+        if (!MessageReaction.check(event, "edit rank", true)) return;
 
         // Reaction emoji: "Checkmark"
         if (event.getReactionEmote().getEmoji().equals("\u2705")) {

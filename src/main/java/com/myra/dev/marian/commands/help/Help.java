@@ -2,26 +2,21 @@ package com.myra.dev.marian.commands.help;
 
 import com.myra.dev.marian.Bot;
 import com.myra.dev.marian.database.allMethods.Database;
+import com.myra.dev.marian.management.commands.Command;
+import com.myra.dev.marian.management.commands.CommandContext;
+import com.myra.dev.marian.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.CommandEmbeds;
 import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.utilities.Utilities;
-
-import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.management.commands.Command;
-import com.myra.dev.marian.utilities.Permissions;
-import com.myra.dev.marian.management.commands.CommandContext;
-import com.myra.dev.marian.management.commands.CommandSubscribe;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
-
-import java.util.Arrays;
 
 @CommandSubscribe(
         name = "help",
         aliases = {"help me"}
 )
-public class Help  implements Command {
+public class Help implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         //check for no arguments
@@ -42,13 +37,13 @@ public class Help  implements Command {
         message.addReaction("\u2709\uFE0F").queue();
         message.addReaction("\u26A0\uFE0F").queue();
 
-        MessageReaction.add("help", message.getId(), Arrays.asList("\u2709\uFE0F", "\u26A0\uFE0F"), ctx.getChannel(), ctx.getAuthor(), true);
+        MessageReaction.add(ctx.getGuild(), "help", message, true, "\u2709\uFE0F", "\u26A0\uFE0F");
     }
 
     //reactions
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) throws Exception {
         // If reaction was added on the wrong message return
-        if (!MessageReaction.check(event, "help")) return;
+        if (!MessageReaction.check(event, "help", true)) return;
 
         CommandEmbeds embed = new CommandEmbeds(event.getGuild(), event.getJDA(), event.getUser(), new Database(event.getGuild()).get("prefix"));
         //invite bot

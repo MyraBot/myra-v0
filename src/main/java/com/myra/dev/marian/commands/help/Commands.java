@@ -1,23 +1,19 @@
 package com.myra.dev.marian.commands.help;
 
 import com.myra.dev.marian.database.allMethods.Database;
-import com.myra.dev.marian.utilities.CommandEmbeds;
-import com.myra.dev.marian.utilities.MessageReaction;
-
 import com.myra.dev.marian.management.commands.Command;
-import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.CommandEmbeds;
+import com.myra.dev.marian.utilities.MessageReaction;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
-
-import java.util.Arrays;
 
 @CommandSubscribe(
         name = "commands",
         aliases = {"command"}
 )
-public class Commands  implements Command {
+public class Commands implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         //menu
@@ -32,12 +28,12 @@ public class Commands  implements Command {
         message.addReaction("\uD83D\uDD28").queue(); // Moderation
         message.addReaction("\uD83D\uDD29").queue(); // Administrator
 
-        MessageReaction.add("commands", message.getId(), Arrays.asList("\uD83D\uDCD6", "\uD83C\uDF88", "\uD83D\uDD79", "\uD83C\uDFC6", "\uD83D\uDCB0", "\uD83D\uDCFB", "\uD83D\uDD28", "\uD83D\uDD29"), ctx.getChannel(), ctx.getAuthor(), true);
+        MessageReaction.add(ctx.getGuild(), "commands", message, true, "\uD83D\uDCD6", "\uD83C\uDF88", "\uD83D\uDD79", "\uD83C\uDFC6", "\uD83D\uDCB0", "\uD83D\uDCFB", "\uD83D\uDD28", "\uD83D\uDD29");
     }
 
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) throws Exception {
         //if reaction was added on the wrong message return
-        if (!MessageReaction.check(event, "commands")) return;
+        if (!MessageReaction.check(event, "commands", true)) return;
 
         // Get Prefix
         final String prefix = new Database(event.getGuild()).get("prefix");
