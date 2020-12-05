@@ -7,6 +7,7 @@ import com.myra.dev.marian.database.managers.NotificationsTwitchManager;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import org.bson.Document;
@@ -84,7 +85,9 @@ public class TwitchNotification {
                             notification.appendDescription(new Twitch().getGame(stream.getString("game_id"))); // Add game to notification
                         }
                         assert channel != null;
-                        channel.sendMessage(notification.build()).queue(); // Send stream notification
+                       final Message message = channel.sendMessage(notification.build()).complete();// Send stream notification
+                        channel.editMessageById(message.getId(), notification.setImage("https://static-cdn.jtvnw.net/previews-ttv/live_user_" + name + "-440x248.jpg").build()).queue(); // Edit the message to hopefully update the iamge
+                        // TODO ^
                     }
                 }
 
