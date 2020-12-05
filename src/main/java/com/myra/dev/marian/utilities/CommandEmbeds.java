@@ -141,7 +141,7 @@ public class CommandEmbeds {
                 .addField("`@someone`", "\uD83C\uDFB2 │ Replace in your message `@someone` with a random mention of a member", false)
                 .addField("`" + prefix + "autorole @role`", "\uD83D\uDCDD │ Give a new joined member automatic a certain role", false)
                 .addField("`" + prefix + "welcome`", "\uD83D\uDC4B │ Welcome new users", false)
-                .addField("`" + prefix + "notification`", "\uD83D\uDD14 │ set automatic notifications for you favorite streamers", false)
+                .addField("`" + prefix + "notifications`", "\uD83D\uDD14 │ set automatic notifications for you favorite streamers", false)
                 .addField("`" + prefix + "suggestions`", "\uD83D\uDDF3 │ Set up the suggestions", false)
                 .addField("`" + prefix + "leveling`", "\uD83C\uDFC6 │ Change some settings of leveling", false)
                 .addField("`" + prefix + "economy`", "\uD83D\uDCB0 │ Change some settings of economy", false);
