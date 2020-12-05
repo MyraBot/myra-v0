@@ -71,7 +71,7 @@ public class MusicController implements Command {
         message.addReaction("\u23ED\uFE0F").queue();
         message.addReaction("\u23F9\uFE0F").queue();
         //add message id to HashMap
-        MessageReaction.add(ctx.getGuild(), "musicController", message, false, "\u23EF\uFE0F", "\u23ED\uFE0F", "\u23F9\uFE0F");
+        MessageReaction.add(ctx.getGuild(), "musicController", message, ctx.getAuthor() ,false, "\u23EF\uFE0F", "\u23ED\uFE0F", "\u23F9\uFE0F");
 
         //cancel timer
         cancel.scheduleAtFixedRate(new TimerTask() {

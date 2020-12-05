@@ -1,5 +1,6 @@
 package com.myra.dev.marian.management;
 
+import com.myra.dev.marian.utilities.APIs.GoogleYouTube;
 import com.myra.dev.marian.utilities.APIs.Twitch;
 import com.myra.dev.marian.Bot;
 import com.myra.dev.marian.commands.general.Reminder;
@@ -60,7 +61,8 @@ public class Startup extends ListenerAdapter {
             new Twitch().jdaReady(event);
             //load streamers
             new TwitchNotification().jdaReady(event);
-            new YouTubeNotification().start(event);
+            //GoogleYouTube.getInstance().getChannelByNameTEST("PewDiePie");
+            //new YouTubeNotification().start(event);
             // Marian's Discord role
             new Roles().jdaReady(event);
 

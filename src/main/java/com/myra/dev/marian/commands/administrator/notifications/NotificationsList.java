@@ -48,7 +48,7 @@ public class NotificationsList implements Command {
         message.addReaction("\uD83D\uDCE1").queue(); // Twitch reaction
         message.addReaction("\uD83D\uDCFA").queue(); // Youtube reaction
 
-        MessageReaction.add(ctx.getGuild(), "notification list", message, true, "\uD83D\uDCE1", "\uD83D\uDCFA");
+        MessageReaction.add(ctx.getGuild(), "notification list", message, ctx.getAuthor(),true, "\uD83D\uDCE1", "\uD83D\uDCFA");
     }
 
     public void switchList(GuildMessageReactionAddEvent event) throws Exception {

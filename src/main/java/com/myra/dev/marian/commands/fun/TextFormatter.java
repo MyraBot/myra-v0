@@ -165,7 +165,7 @@ public class TextFormatter implements Command {
         message.addReaction("\uD83D\uDD8B").queue();
         message.addReaction("\uD83C\uDF39").queue();
         //save message id
-        MessageReaction.add(ctx.getGuild(), "format", message, true, "\uD83C\uDDE9\uD83C\uDDEA", "\uD83D\uDD8B", "\uD83C\uDF39");
+        MessageReaction.add(ctx.getGuild(), "format", message, ctx.getAuthor() ,true, "\uD83C\uDDE9\uD83C\uDDEA", "\uD83D\uDD8B", "\uD83C\uDF39");
     }
 
     /**

@@ -37,7 +37,7 @@ public class Help implements Command {
         message.addReaction("\u2709\uFE0F").queue();
         message.addReaction("\u26A0\uFE0F").queue();
 
-        MessageReaction.add(ctx.getGuild(), "help", message, true, "\u2709\uFE0F", "\u26A0\uFE0F");
+        MessageReaction.add(ctx.getGuild(), "help", message, ctx.getAuthor() ,true, "\u2709\uFE0F", "\u26A0\uFE0F");
     }
 
     //reactions

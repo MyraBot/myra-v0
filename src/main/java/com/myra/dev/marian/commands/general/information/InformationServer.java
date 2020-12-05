@@ -36,7 +36,7 @@ public class InformationServer implements Command {
         //reactions
         message.addReaction("\uD83D\uDCDC").queue();
 
-        MessageReaction.add(ctx.getGuild(), "informationServer", message, true, "\uD83D\uDCDC");
+        MessageReaction.add(ctx.getGuild(), "informationServer", message, ctx.getAuthor() ,true, "\uD83D\uDCDC");
     }
 
 

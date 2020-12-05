@@ -26,7 +26,7 @@ public class Shutdown implements Command {
         // Add reaction
         message.addReaction("\u2705").queue();
         // Add the message
-        MessageReaction.add(ctx.getGuild(), "shutdown", message, true, "\u2705");
+        MessageReaction.add(ctx.getGuild(), "shutdown", message, ctx.getAuthor() ,true, "\u2705");
     }
 
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) {

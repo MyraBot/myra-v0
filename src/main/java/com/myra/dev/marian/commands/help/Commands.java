@@ -28,7 +28,7 @@ public class Commands implements Command {
         message.addReaction("\uD83D\uDD28").queue(); // Moderation
         message.addReaction("\uD83D\uDD29").queue(); // Administrator
 
-        MessageReaction.add(ctx.getGuild(), "commands", message, true, "\uD83D\uDCD6", "\uD83C\uDF88", "\uD83D\uDD79", "\uD83C\uDFC6", "\uD83D\uDCB0", "\uD83D\uDCFB", "\uD83D\uDD28", "\uD83D\uDD29");
+        MessageReaction.add(ctx.getGuild(), "commands", message, ctx.getAuthor() ,true, "\uD83D\uDCD6", "\uD83C\uDF88", "\uD83D\uDD79", "\uD83C\uDFC6", "\uD83D\uDCB0", "\uD83D\uDCFB", "\uD83D\uDD28", "\uD83D\uDD29");
     }
 
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) throws Exception {
