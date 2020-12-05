@@ -19,7 +19,7 @@ import java.util.HashMap;
         aliases = {"bj"}
 )
 public class BlackJack implements Command {
-    private static HashMap<String, Game> games = new HashMap<>();
+    private static HashMap<String, HashMap<String, Game>> games = new HashMap<>();
 
     /**
      * Start game.
@@ -40,16 +40,14 @@ public class BlackJack implements Command {
         }
 // Errors
         // Search user in games
-        boolean isPlaying = false;
-        for (Game game : games.values()) {
-            for (Player player : game.getPlayers()) {
-                if (player.getPlayer().equals(ctx.getAuthor())) isPlaying = true;
+        if (games.containsKey(ctx.getGuild().getId())) { // Only check for user if guild is already in the hashmap
+            for (String messageId : games.get(ctx.getGuild().getId()).keySet()) {
+                if (games.get(ctx.getGuild().getId()).get(messageId).getPlayers().contains(ctx.getAuthor())) {
+                    // If user has already started a game
+                    Utilities.getUtils().error(ctx.getChannel(), "blackjack", "\uD83C\uDCCF", "You already started a game", "Please finish the game you started first", ctx.getAuthor().getEffectiveAvatarUrl());
+                    return;
+                }
             }
-        }
-        // If user has already started a game
-        if (isPlaying) {
-            Utilities.getUtils().error(ctx.getChannel(), "blackjack", "\uD83C\uDCCF", "You already started a game", "Please finish the game you started first", ctx.getAuthor().getEffectiveAvatarUrl());
-            return;
         }
         // Invalid amount of money
         if (!ctx.getArguments()[0].matches("\\d+")) {
@@ -91,55 +89,64 @@ public class BlackJack implements Command {
             // Add reactions
             message.addReaction("\u23CF").queue(); // Hit
             message.addReaction("\u23F8").queue(); // Stay
-            // Add game to 'games'
-            games.put(message.getId(), game);
+
+            // Guild isn't in the hashmap yet
+            if (!games.containsKey(ctx.getGuild())) {
+                games.put(ctx.getGuild().getId(), new HashMap<>()); // Add guild to hashmap
+            }
+            // Add game to hashmap
+            games.get(ctx.getGuild().getId()).put(message.getId(), game);
         }
     }
 
 
     public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) {
+        // Get variables
+        final String guildId = event.getGuild().getId(); // Get guild id
+        final String messageId = event.getMessageId(); // Get message id
+
         // Wrong reaction
-        if (games.get(event.getMessageId()) == null) return;
+        if (!games.containsKey(guildId)) return;
+        if (!games.get(guildId).containsKey(messageId)) return;
+
         // Wrong user reacted to the message
-        if (!games.get(event.getMessageId()).getPlayers().get(0).getPlayer().equals(event.getUser())) return;
+        if (!games.get(guildId).get(messageId).getPlayers().get(0).getPlayer().equals(event.getUser())) return;
+
         // Get game
-        final Game game = games.get(event.getMessageId());
+        final Game game = games.get(guildId).get(messageId);
         // Get players
         final Player player = game.getPlayers().get(0);
         final Player dealer = game.getPlayers().get(1);
 // Hit
         if (event.getReactionEmote().getEmoji().equals("\u23CF")) {
-            // Add a new card to player
-            player.add(game.getRandomCard());
+            player.add(game.getRandomCard()); // Add a new card to player
+
             // If player's value is more than 21
             if (player.getValue() > 21) {
-                // Switch ace value
-                player.switchAce();
+                player.switchAce(); // Switch ace value
             }
+
             // Update match message
             final Message message = event.getChannel().editMessageById(event.getMessageId(), getEmbed(player, dealer, game, event.getGuild()).build()).complete();
 
             // gamed continues
             if (message.getEmbeds().get(0).getFooter().getText().equals("Hit or stay?")) {
-                // Remove reaction
-                event.getReaction().removeReaction(event.getUser()).queue();
+                event.getReaction().removeReaction(event.getUser()).queue(); // Remove reaction
             }
             // Game ended
             else {
-                // Clear reaction
-                event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().complete();
-                // Remove game
-                games.remove(event.getMessageId());
+                event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().complete(); // Clear reaction
+                games.remove(event.getMessageId()); // Remove game
             }
 
         }
 //Stay
         if (event.getReactionEmote().getEmoji().equals("\u23F8")) {
-            // Get database
-            final GetMember dbMember = new Database(event.getGuild()).getMembers().getMember(event.getMember());
+            final GetMember dbMember = new Database(event.getGuild()).getMembers().getMember(event.getMember()); // Get database
+
             // Add cards to the dealer until his card value is at least 17
             while (dealer.getValue() <= 17) {
-                dealer.add(game.getRandomCard());
+                dealer.add(game.getRandomCard()); // Add a random card
             }
 
             String footer = "";
@@ -151,39 +158,29 @@ public class BlackJack implements Command {
 // Won
             // Player has higher value than dealer and player's value is not more than 21
             else if (player.getValue() > dealer.getValue() && player.getValue() <= 21) {
-                // Set footer
-                footer = "You won +" + game.getBetMoney() * 2 + "!";
-                // Add money
-                dbMember.setBalance(dbMember.getBalance() + game.getBetMoney());
+                footer = "You won +" + game.getBetMoney() * 2 + "!"; // Set footer
+                dbMember.setBalance(dbMember.getBalance() + game.getBetMoney()); // Add money
             }
             // Dealer's value is more than 21
             else if (dealer.getValue() > 21) {
-                // Set footer
-                footer = "You won +" + game.getBetMoney() * 2 + "!";
-                // Add money
-                dbMember.setBalance(dbMember.getBalance() + game.getBetMoney());
+                footer = "You won +" + game.getBetMoney() * 2 + "!"; // Set footer
+                dbMember.setBalance(dbMember.getBalance() + game.getBetMoney()); // Add money
             }
 // Lost
             // Dealer has higher value than player and dealer's value is not more than 21
             else if (dealer.getValue() > player.getValue() && dealer.getValue() <= 21) {
-                // Set footer
-                footer = "The dealer won!";
-                // Remove money
-                dbMember.setBalance(dbMember.getBalance() - game.getBetMoney());
+                footer = "The dealer won!"; // Set footer
+                dbMember.setBalance(dbMember.getBalance() - game.getBetMoney()); // Remove money
             }
             // If dealer and player have the same value
             else if (player.getValue() == dealer.getValue()) {
-                // Set footer
-                footer = "The dealer won!";
-                // Remove money
-                dbMember.setBalance(dbMember.getBalance() - game.getBetMoney());
+                footer = "The dealer won!"; // Set footer
+                dbMember.setBalance(dbMember.getBalance() - game.getBetMoney()); // Remove money
             }
             // Player's value is more than 21
             else if (player.getValue() > 21 && dealer.getValue() <= 21) {
-                // Set footer
-                footer = "The dealer won!";
-                // Remove money
-                dbMember.setBalance(dbMember.getBalance() - game.getBetMoney());
+                footer = "The dealer won!"; // Set footer
+                dbMember.setBalance(dbMember.getBalance() - game.getBetMoney()); // Remove money
             }
             // Create match message
             EmbedBuilder match = new EmbedBuilder()
