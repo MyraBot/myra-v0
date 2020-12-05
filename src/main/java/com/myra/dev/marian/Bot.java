@@ -19,7 +19,7 @@ import java.io.InputStreamReader;
 public class Bot {
     public static ShardManager shardManager;
 
-    private final static String TOKEN = "NzE4NDQ0NzA5NDQ1NjMyMTIy.Xto9xg.54wX882Iz02KbhXUBLr39ef8cq0";
+    private final static String TOKEN = "NzE4NDQ0NzA5NDQ1NjMyMTIy.Xto9xg.JcLjYVCFcXMjvJmvvnBKuqUljao";
     private final static String LOADING_STATUS = "loading bars fill";
     private final static String ONLINE_INFO = ConsoleColours.GREEN + "Bot online" + ConsoleColours.RESET;
     private final static String OFFLINE_INFO = ConsoleColours.RED + "Bot offline" + ConsoleColours.RESET;
