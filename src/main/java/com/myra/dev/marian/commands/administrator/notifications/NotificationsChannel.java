@@ -1,13 +1,12 @@
 package com.myra.dev.marian.commands.administrator.notifications;
 
 import com.myra.dev.marian.database.allMethods.Database;
-
-import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.management.Manager;
 import com.myra.dev.marian.management.commands.Command;
-import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Permissions;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -44,13 +43,13 @@ public class NotificationsChannel implements Command {
         //remove notification channel
         if (currentChannelId.equals(channel.getId())) {
             //remove channel id
-            db.set("notificationChannel", "not set");
+            db.getNested("notifications").set("channel", "not set", Manager.type.STRING);
             //success
             utilities.success(ctx.getChannel(), "notification channel", "\uD83D\uDD14", "Notification channel removed", "Notifications are no longer send in " + channel.getAsMention(), ctx.getAuthor().getEffectiveAvatarUrl(), false, null);
             return;
         }
         //change notification channel
-        db.set("notificationChannel", channel.getId());
+        db.getNested("notifications").set("channel", channel.getId(), Manager.type.STRING);
         //success
         utilities.success(ctx.getChannel(), "notification channel", "\uD83D\uDD14", "Notification channel changed", "Notifications are now send in " + channel.getAsMention(), ctx.getAuthor().getEffectiveAvatarUrl(), false, null);
         EmbedBuilder success = new EmbedBuilder()
