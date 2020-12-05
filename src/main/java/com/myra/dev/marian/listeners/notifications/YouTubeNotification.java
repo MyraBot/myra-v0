@@ -1,6 +1,8 @@
 package com.myra.dev.marian.listeners.notifications;
 
-import com.myra.dev.marian.APIs.YouTube;
+import com.google.api.services.youtube.model.SearchResult;
+import com.google.api.services.youtube.model.SearchResultSnippet;
+import com.myra.dev.marian.APIs.GoogleYouTube;
 import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.database.managers.NotificationsYoutubeManager;
@@ -10,8 +12,8 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import org.bson.Document;
-import org.json.JSONObject;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Iterator;
 import java.util.List;
@@ -21,6 +23,8 @@ public class YouTubeNotification {
     private final MongoDb mongoDb = MongoDb.getInstance(); // Get database
 
     public void start(ReadyEvent event) throws Exception {
+        final int start = 10 - LocalDateTime.now().getMinute() % 10;
+
         Utilities.TIMER.scheduleAtFixedRate(() -> {   // Loop
             try {
                 final Iterator<Guild> guilds = event.getJDA().getGuilds().iterator(); // Create an iterator for the guilds
@@ -43,26 +47,28 @@ public class YouTubeNotification {
 
                     // For each youtuber
                     for (String channelId : youtubers) {
-                        List<String> latestVideos = YouTube.getInstance().getLatestVideos(channelId); // Get the latest videos
+                        List<SearchResult> latestVideos = GoogleYouTube.getInstance().getLatestVideos(channelId); // Get the latest videos
                         // For every video
-                        for (String videoId : latestVideos) {
+                        for (SearchResult videoInformation : latestVideos) {
 
-                            final JSONObject video = YouTube.getInstance().getVideoById(videoId); // Get video information
+                            final SearchResultSnippet video = videoInformation.getSnippet(); // Get video information
+                            final String videoId = videoInformation.getId().getVideoId(); // Get video id
 
                             // Get upload time
-                            final ZonedDateTime date = ZonedDateTime.parse(video.getString("publishedAt"));
+                            final ZonedDateTime date = ZonedDateTime.parse(video.getPublishedAt().toString());
                             long publishedAtInMillis = date.toInstant().toEpochMilli(); // Get upload time in milliseconds
 
                             // Last youtube check was already made when the video came out
-                            if (publishedAtInMillis < mongoDb.getCollection("config").find().first().getLong("youtube refresh")) continue;
+                            if (publishedAtInMillis < mongoDb.getCollection("config").find().first().getLong("youtube refresh"))
+                                continue;
 
                             // Get all values
-                            final JSONObject channelInformation = YouTube.getInstance().getChannelById(video.getString("channelId")); // Get the channel information
-                            final String profilePicture = channelInformation.getJSONObject("thumbnails").getJSONObject("medium").getString("url"); // Get profile picture
+                            final SearchResultSnippet channelInformation = GoogleYouTube.getInstance().getChannelById(video.getChannelId()); // Get the channel information
+                            final String profilePicture = channelInformation.getThumbnails().getMedium().getUrl(); // Get profile picture
 
-                            final String channelName = video.getString("channelTitle");
-                            final String title = video.getString("title"); // Get video title
-                            final String thumbnail = video.getJSONObject("thumbnails").getJSONObject("medium").getString("url"); // Get thumbnail image
+                            final String channelName = video.getChannelTitle();
+                            final String title = video.getTitle(); // Get video title
+                            final String thumbnail = video.getThumbnails().getMedium().getUrl(); // Get thumbnail image
                             // Create embed
                             EmbedBuilder notification = new EmbedBuilder()
                                     .setAuthor(channelName, "https://www.youtube.com/watch?v=" + videoId, profilePicture)
@@ -83,6 +89,6 @@ public class YouTubeNotification {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }, 1, 5, TimeUnit.MINUTES);
+        }, start, 10, TimeUnit.MINUTES);
     }
 }

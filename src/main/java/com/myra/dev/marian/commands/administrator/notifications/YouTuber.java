@@ -1,6 +1,7 @@
 package com.myra.dev.marian.commands.administrator.notifications;
 
-import com.myra.dev.marian.APIs.YouTube;
+import com.google.api.services.youtube.model.SearchResultSnippet;
+import com.myra.dev.marian.APIs.GoogleYouTube;
 import com.myra.dev.marian.database.managers.NotificationsYoutubeManager;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
@@ -30,20 +31,20 @@ public class YouTuber implements Command {
 
         final String channel = Utilities.getUtils().getString(ctx.getArguments()); // Get the arguments as one string
 
-        JSONObject channelInformation;
+        SearchResultSnippet channelInformation;
         // Get channel by url
         try {
             new URL(channel); // Try making a url out of it
-            channelInformation = YouTube.getInstance().getChannelByUrl(channel); // Get channel information
+            channelInformation = GoogleYouTube.getInstance().getChannelByUrl(channel); // Get channel information
         }
         // Get channel by name
         catch (Exception e) {
-            channelInformation = YouTube.getInstance().getChannelByName(channel); // Get channel information
+            channelInformation = GoogleYouTube.getInstance().getChannelByName(channel); // Get channel information
         }
 
-        final String channelId = channelInformation.getString("channelId"); // get channel id
-        final String channelName = channelInformation.getString("title"); // Get youtube channel name
-        final String profilePicture = channelInformation.getJSONObject("thumbnails").getJSONObject("medium").getString("url"); // Get profile picture
+        final String channelId = channelInformation.getChannelId(); // get channel id
+        final String channelName = channelInformation.getTitle(); // Get youtube channel name
+        final String profilePicture = channelInformation.getThumbnails().getMedium().getUrl(); // Get profile picture
 
         // Remove youtuber
         if (NotificationsYoutubeManager.getInstance().getYoutubers(ctx.getGuild()).contains(channelId)) {

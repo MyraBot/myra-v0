@@ -1,16 +1,14 @@
 package com.myra.dev.marian.APIs;
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.YouTubeRequestInitializer;
 import com.google.api.services.youtube.model.SearchResult;
+import com.google.api.services.youtube.model.SearchResultSnippet;
 import com.myra.dev.marian.utilities.Utilities;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -18,26 +16,35 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class YouTube {
-    private final static YouTube YOU_TUBE = new YouTube();
-    private final static OkHttpClient client = new OkHttpClient();
+public class GoogleYouTube {
+    private final static GoogleYouTube YOU_TUBE = new GoogleYouTube();
 
-    public static YouTube getInstance() {
+    public static GoogleYouTube getInstance() {
         return YOU_TUBE;
     }
 
-    public List<SearchResult> search(String video) throws IOException, GeneralSecurityException {
-        // Connect to YouTube
-        final com.google.api.services.youtube.YouTube youTube = new com.google.api.services.youtube.YouTube.Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance(),
-                new HttpRequestInitializer() {
-                    public void initialize(HttpRequest request) throws IOException {
-                    }
-                })
-                .setApplicationName("CloudStudios bot")
-                .setYouTubeRequestInitializer(new YouTubeRequestInitializer(Utilities.getUtils().youTubeKey))
-                .build();
+    private YouTube youtube;
 
-        com.google.api.services.youtube.YouTube.Search.List search = youTube.search().list("id,snippet")
+    private YouTube getYouTube() {
+        if (youtube == null) {
+            try {
+                youtube = new com.google.api.services.youtube.YouTube.Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance(),
+                        request -> {
+                        })
+                        .setApplicationName("Myra")
+                        .setYouTubeRequestInitializer(new YouTubeRequestInitializer(Utilities.getUtils().youTubeKey))
+                        .build();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return youtube;
+    }
+
+    public List<SearchResult> search(String video) throws IOException, GeneralSecurityException {
+        com.google.api.services.youtube.YouTube.Search.List search = getYouTube().search()
+                .list("id,snippet")
                 //Search for keyword
                 .setQ(video)
                 // Return only videos
@@ -50,7 +57,71 @@ public class YouTube {
     }
 
 
-    public JSONObject getChannelByName(String name) throws IOException {
+    public SearchResultSnippet getChannelByName(String name) throws IOException {
+        // Create a request
+        com.google.api.services.youtube.YouTube.Search.List searchedChannel = getYouTube().search()
+                .list("snippet")
+                .setType("channel")
+                .setQ(name)
+                .setMaxResults(1L);
+        return searchedChannel.execute().getItems().get(0).getSnippet(); // Return the information of the first result
+    }
+
+    public SearchResultSnippet getChannelByUrl(String url) throws IOException {
+        // Channel has no custom url
+        if (url.startsWith("https://www.youtube.com/channel/")) {
+            url = url.replace("?view_as=subscriber", ""); // Remove 'view_as=subscriber' tag
+            final String id = url.split("/")[4]; // Get channel id
+            // Create a request
+            com.google.api.services.youtube.YouTube.Search.List searchedChannel = getYouTube().search()
+                    .list("snippet")
+                    .setType("channel")
+                    .setChannelId(id)
+                    .setMaxResults(1L);
+            return searchedChannel.execute().getItems().get(0).getSnippet(); // Return the information of the first result
+        }
+
+        // Channel has custom url
+        if (url.startsWith("https://www.youtube.com/user/")) {
+            final String name = url.split("/")[4]; // Get channel id
+            // Create a request
+            YouTube.Search.List searchedChannel = getYouTube().search()
+                    .list("snippet")
+                    .setType("channel")
+                    .setQ(name)
+                    .setMaxResults(1L);
+            return searchedChannel.execute().getItems().get(0).getSnippet(); // Return the information of the first result
+        }
+
+        return null; // Error
+    }
+
+    public SearchResultSnippet getChannelById(String id) throws IOException {
+        // Create a request
+        YouTube.Search.List searchedChannel = getYouTube().search()
+                .list("snippet")
+                .setType("channel")
+                .setChannelId(id)
+                .setMaxResults(1L);
+        return searchedChannel.execute().getItems().get(0).getSnippet(); // Return the information of the first result
+    }
+
+    public List<SearchResult> getLatestVideos(String channelId) throws IOException {
+        // Create a request
+        YouTube.Search.List search = getYouTube().search() // Will return by default 5 videos
+                .list("snippet")
+                .setType("video")
+                .setChannelId(channelId)
+                .setOrder("date");
+
+        return search.execute().getItems(); // Return the information of the last videos
+    }
+    // OkHttpRequest methods
+    /*
+        private final static OkHttpClient client = Utilities.getUtils().HTTP_CLIENT;
+        private final Request.Builder builder = new Request.Builder();
+
+        public JSONObject getChannelByName(String name) throws IOException {
         // Create channel get request
         Request request = new Request.Builder()
                 .url("https://www.googleapis.com/youtube/v3/search?" +
@@ -204,4 +275,6 @@ public class YouTube {
 
         return video; // Return video information
     }
+}
+     */
 }

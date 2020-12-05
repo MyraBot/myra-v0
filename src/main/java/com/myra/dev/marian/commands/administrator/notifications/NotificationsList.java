@@ -1,6 +1,6 @@
 package com.myra.dev.marian.commands.administrator.notifications;
 
-import com.myra.dev.marian.APIs.YouTube;
+import com.myra.dev.marian.APIs.GoogleYouTube;
 import com.myra.dev.marian.database.managers.NotificationsTwitchManager;
 import com.myra.dev.marian.database.managers.NotificationsYoutubeManager;
 import com.myra.dev.marian.management.commands.Command;
@@ -94,7 +94,7 @@ public class NotificationsList implements Command {
             else {
                 String youtubers = "";
                 for (String youtuberId : NotificationsYoutubeManager.getInstance().getYoutubers(event.getGuild())) {
-                    final String channelName = YouTube.getInstance().getChannelById(youtuberId).getString("title"); // Get youtube channel name
+                    final String channelName = GoogleYouTube.getInstance().getChannelById(youtuberId).getTitle(); // Get youtube channel name
                     youtubers += "• " + channelName + "\n";
                 }
                 list.addField("\uD83D\uDCFA │ YouTubers:", youtubers, false);
