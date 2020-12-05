@@ -23,6 +23,7 @@ public class NotificationsHelp implements Command {
                 .setAuthor("notification", null, ctx.getAuthor().getEffectiveAvatarUrl())
                 .setColor(Utilities.getUtils().gray)
                 .addField("`" + ctx.getPrefix() + "notifications twitch <streamer>`", "\uD83D\uDCE1 │ Add and remove auto notifications for a twitch streamer", false)
+                .addField("`" + ctx.getPrefix() + "notifications youtube <youtube channel>`", "\uD83D\uDCFA │ Add and remove auto notifications for YouTube", false)
                 .addField("`" + ctx.getPrefix() + "notifications list`", "\uD83D\uDD14 │ Displays all users you get notification from", false)
                 .addField("`" + ctx.getPrefix() + "notifications channel <channel>`", "\uD83D\uDCC1 │ Set the channel, the notifications will go", false);
         ctx.getChannel().sendMessage(notificationUsage.build()).queue();
