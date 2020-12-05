@@ -7,19 +7,13 @@ import com.myra.dev.marian.database.managers.NotificationsTwitchManager;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import org.bson.Document;
 import org.json.JSONObject;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalField;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -27,9 +21,11 @@ import java.util.concurrent.TimeUnit;
 public class TwitchNotification {
 
     public void jdaReady(ReadyEvent event) throws Exception {
-        final int start = LocalDateTime.now().getMinute() % 5 - 5;
+        final int start = 5 - LocalDateTime.now().getMinute() % 5;
 
         Utilities.TIMER.scheduleAtFixedRate(() -> {   // Loop
+            System.out.println(Thread.activeCount());
+
             try {
                 final Iterator<Guild> guilds = event.getJDA().getGuilds().iterator(); // Create an iterator for the guilds
                 while (guilds.hasNext()) { // Loop through every guild
@@ -67,7 +63,8 @@ public class TwitchNotification {
                         long publishedAtInMillis = date.toInstant().toEpochMilli(); // Get stream start in milliseconds
 
                         // Last twitch check was already made when the video came out
-                        if (publishedAtInMillis < MongoDb.getInstance().getCollection("config").find().first().getLong("twitch refresh")) continue;
+                        if (publishedAtInMillis < MongoDb.getInstance().getCollection("config").find().first().getLong("twitch refresh"))
+                            continue;
 
                         // Get all values
                         final String id = stream.getString("id");
@@ -86,6 +83,7 @@ public class TwitchNotification {
                         if (!stream.getString("game_id").equals("0")) {
                             notification.appendDescription(new Twitch().getGame(stream.getString("game_id"))); // Add game to notification
                         }
+                        assert channel != null;
                         channel.sendMessage(notification.build()).queue(); // Send stream notification
                     }
                 }
