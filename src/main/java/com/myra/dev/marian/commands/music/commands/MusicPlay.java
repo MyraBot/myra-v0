@@ -2,9 +2,8 @@ package com.myra.dev.marian.commands.music.commands;
 
 import com.google.api.services.youtube.model.SearchResult;
 import com.myra.dev.marian.APIs.LavaPlayer.PlayerManager;
-import com.myra.dev.marian.APIs.YouTube;
+import com.myra.dev.marian.APIs.GoogleYouTube;
 import com.myra.dev.marian.management.commands.Command;
-import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.MessageReaction;
@@ -69,7 +68,7 @@ public class MusicPlay implements Command {
         // If song is given by name
         catch (Exception e) {
             // Search on YouTube for song name
-            List<SearchResult> searchResults = YouTube.getInstance().search(song);
+            List<SearchResult> searchResults = GoogleYouTube.getInstance().search(song);
             // Nothing found
             if (results == null) {
                 utilities.error(
