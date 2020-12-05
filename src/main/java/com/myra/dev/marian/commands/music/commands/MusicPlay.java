@@ -1,8 +1,8 @@
 package com.myra.dev.marian.commands.music.commands;
 
 import com.google.api.services.youtube.model.SearchResult;
-import com.myra.dev.marian.APIs.LavaPlayer.PlayerManager;
-import com.myra.dev.marian.APIs.GoogleYouTube;
+import com.myra.dev.marian.utilities.APIs.LavaPlayer.PlayerManager;
+import com.myra.dev.marian.utilities.APIs.GoogleYouTube;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;

@@ -1,7 +1,6 @@
 package com.myra.dev.marian.commands.administrator.notifications;
 
-import com.myra.dev.marian.APIs.Twitch;
-import com.myra.dev.marian.database.allMethods.Database;
+import com.myra.dev.marian.utilities.APIs.Twitch;
 import com.myra.dev.marian.database.managers.NotificationsTwitchManager;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;

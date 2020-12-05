@@ -1,9 +1,8 @@
-package com.myra.dev.marian.APIs;
+package com.myra.dev.marian.utilities.APIs;
 
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONObject;

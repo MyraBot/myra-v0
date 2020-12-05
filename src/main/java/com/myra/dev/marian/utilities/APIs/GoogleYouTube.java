@@ -1,4 +1,4 @@
-package com.myra.dev.marian.APIs;
+package com.myra.dev.marian.utilities.APIs;
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -7,13 +7,9 @@ import com.google.api.services.youtube.YouTubeRequestInitializer;
 import com.google.api.services.youtube.model.SearchResult;
 import com.google.api.services.youtube.model.SearchResultSnippet;
 import com.myra.dev.marian.utilities.Utilities;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class GoogleYouTube {

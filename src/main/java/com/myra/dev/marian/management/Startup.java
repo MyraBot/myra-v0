@@ -1,6 +1,6 @@
 package com.myra.dev.marian.management;
 
-import com.myra.dev.marian.APIs.Twitch;
+import com.myra.dev.marian.utilities.APIs.Twitch;
 import com.myra.dev.marian.Bot;
 import com.myra.dev.marian.commands.general.Reminder;
 import com.myra.dev.marian.commands.moderation.mute.Tempmute;

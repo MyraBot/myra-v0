@@ -2,7 +2,7 @@ package com.myra.dev.marian.listeners.notifications;
 
 import com.google.api.services.youtube.model.SearchResult;
 import com.google.api.services.youtube.model.SearchResultSnippet;
-import com.myra.dev.marian.APIs.GoogleYouTube;
+import com.myra.dev.marian.utilities.APIs.GoogleYouTube;
 import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.database.managers.NotificationsYoutubeManager;

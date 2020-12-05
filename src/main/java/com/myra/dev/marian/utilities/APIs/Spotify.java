@@ -1,4 +1,4 @@
-package com.myra.dev.marian.APIs;
+package com.myra.dev.marian.utilities.APIs;
 
 import com.myra.dev.marian.utilities.Utilities;
 import okhttp3.*;

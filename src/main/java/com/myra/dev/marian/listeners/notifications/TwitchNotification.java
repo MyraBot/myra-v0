@@ -1,6 +1,6 @@
 package com.myra.dev.marian.listeners.notifications;
 
-import com.myra.dev.marian.APIs.Twitch;
+import com.myra.dev.marian.utilities.APIs.Twitch;
 import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.database.managers.NotificationsTwitchManager;

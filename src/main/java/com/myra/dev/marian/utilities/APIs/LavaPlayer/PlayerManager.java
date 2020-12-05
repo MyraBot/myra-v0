@@ -1,4 +1,4 @@
-package com.myra.dev.marian.APIs.LavaPlayer;
+package com.myra.dev.marian.utilities.APIs.LavaPlayer;
 
 import com.myra.dev.marian.utilities.Utilities;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
