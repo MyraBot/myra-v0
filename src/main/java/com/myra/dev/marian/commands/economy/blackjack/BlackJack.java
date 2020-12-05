@@ -3,7 +3,6 @@ package com.myra.dev.marian.commands.economy.blackjack;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.database.allMethods.GetMember;
 import com.myra.dev.marian.management.commands.Command;
-import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.Utilities;
@@ -144,9 +143,14 @@ public class BlackJack implements Command {
             }
 
             String footer = "";
+// Return credits
+            // Player and dealer have the same value and they aren't over 21
+            if (player.getValue() == dealer.getValue() && player.getValue() <= 21) {
+                footer = "Returned " + game.getBetMoney(); // Set footer
+            }
 // Won
             // Player has higher value than dealer and player's value is not more than 21
-            if (player.getValue() > dealer.getValue() && player.getValue() <= 21) {
+            else if (player.getValue() > dealer.getValue() && player.getValue() <= 21) {
                 // Set footer
                 footer = "You won +" + game.getBetMoney() * 2 + "!";
                 // Add money
@@ -161,7 +165,7 @@ public class BlackJack implements Command {
             }
 // Lost
             // Dealer has higher value than player and dealer's value is not more than 21
-            if (dealer.getValue() > player.getValue() && dealer.getValue() <= 21) {
+            else if (dealer.getValue() > player.getValue() && dealer.getValue() <= 21) {
                 // Set footer
                 footer = "The dealer won!";
                 // Remove money
