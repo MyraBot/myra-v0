@@ -37,7 +37,7 @@ public class WelcomeImageFont implements Command {
         message.addReaction("2\uFE0F\u20E3").queue();
         message.addReaction("3\uFE0F\u20E3").queue();
 
-        MessageReaction.add(ctx.getGuild(), "welcomeImageFont", message, ctx.getAuthor() ,true, "1\uFE0F\u20E3", "2\uFE0F\u20E3", "3\uFE0F\u20E3");
+        MessageReaction.add(ctx.getGuild(), "welcomeImageFont", message, true, "1\uFE0F\u20E3", "2\uFE0F\u20E3", "3\uFE0F\u20E3");
     }
 
     //reaction

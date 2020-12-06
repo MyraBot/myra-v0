@@ -99,7 +99,7 @@ public class MusicPlay implements Command {
 
             message.addReaction("\uD83D\uDEAB").queue();
             // Add reaction to HashMap
-            MessageReaction.add(ctx.getGuild(), "play", message, ctx.getAuthor() ,true, "1\uFE0F\u20E3", "2\uFE0F\u20E3", "3\uFE0F\u20E3", "4\uFE0F\u20E3", "5\uFE0F\u20E3");
+            MessageReaction.add(ctx.getGuild(), "play", message, true, "1\uFE0F\u20E3", "2\uFE0F\u20E3", "3\uFE0F\u20E3", "4\uFE0F\u20E3", "5\uFE0F\u20E3");
         }
     }
 

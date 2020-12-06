@@ -65,7 +65,7 @@ public class Background implements Command {
         message.addReaction("\u2705").queue(); // Checkmark
         message.addReaction("\uD83D\uDEAB").queue(); // Barrier
 
-        MessageReaction.add(ctx.getGuild(), "edit rank", message, ctx.getAuthor() ,true, "\u2705", "\uD83D\uDEAB");
+        MessageReaction.add(ctx.getGuild(), "edit rank", message, true, "\u2705", "\uD83D\uDEAB");
     }
 
 

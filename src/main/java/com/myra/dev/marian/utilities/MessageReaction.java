@@ -3,13 +3,11 @@ package com.myra.dev.marian.utilities;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import org.bson.Document;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class MessageReaction {
@@ -17,7 +15,7 @@ public class MessageReaction {
     private static HashMap<String, HashMap<String, HashMap<String, Document>>> reactions = new HashMap();
 
 
-    public static void add(Guild guild, String command, Message message, User user, boolean timeOut, String... emojis) {
+    public static void add(Guild guild, String command, Message message, boolean timeOut, String... emojis) {
         // Get variables
         final String guildId = guild.getId(); // Get guild id
 
@@ -34,8 +32,8 @@ public class MessageReaction {
         // Create new Document for command
         Document document = new Document()
                 .append("messageId", message.getId())
-                .append("userId", user.getId())
-                .append("emojis", Arrays.asList(emojis.clone()));
+                .append("userId", message.getAuthor().getId())
+                .append("emojis", Arrays.stream(emojis).toArray());
         reactions.get(guildId).get(command).put(message.getId(), document); // Add document to hashmap
 
         // If there should be a time out
@@ -46,6 +44,8 @@ public class MessageReaction {
                 message.clearReactions().queue(); // Clear all reaction emojis
             }, 1, TimeUnit.MINUTES); // Time out will be after 1 minute
         }
+
+        System.out.println(document);
     }
 
     public static boolean check(GuildMessageReactionAddEvent event, String command, boolean delete) {
@@ -58,14 +58,14 @@ public class MessageReaction {
         if (!reactions.get(guildId).containsKey(command)) return false; // Command isn't in the hashmap
         if (!reactions.get(guildId).get(command).containsKey(messageId)) return false; // Message isn't in the hashmap
 
+
         final Document reaction = reactions.get(guildId).get(command).get(messageId); // Get reaction document
-
         if (!event.getUser().getId().equals(reaction.getString("userId"))) return false; // Wrong user reacted
+        System.out.println(event.getReactionEmote().toString());
+        if (!reaction.getList("emojis", String.class).contains(event.getReactionEmote().toString()))
+            return false; // Wrong emoji
 
-        final List<String> emojis = reaction.getList("emojis", String.class); // Get emojis for the reaction
-        if (!emojis.contains(event.getReactionEmote().getEmoji())) return false; // Wrong emoji
-
-        if (delete) reactions.get(guildId).get(command).remove(messageId); // Delete message from hashmap
+        if (delete) reactions.get(command).remove(messageId); // Delete message from hashmap
         return true; // Return true
     }
 
