@@ -8,7 +8,8 @@ import com.myra.dev.marian.management.commands.CommandSubscribe;
 import java.io.File;
 
 @CommandSubscribe(
-        name = "MDinformation"
+        name = "MDinformation",
+        requires = Permissions.MARIAN
 )
 public class InformationChannel implements Command {
 

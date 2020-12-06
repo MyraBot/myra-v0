@@ -9,7 +9,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 
 @CommandSubscribe(
         name = "dashboard",
-        aliases = {"dash"}
+        aliases = {"dash"},
+        requires = Permissions.MARIAN
 )
 public class Dashboard implements Command {
     @Override
