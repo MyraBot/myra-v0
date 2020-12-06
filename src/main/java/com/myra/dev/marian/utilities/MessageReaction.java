@@ -3,19 +3,21 @@ package com.myra.dev.marian.utilities;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import org.bson.Document;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class MessageReaction {
     //                     Guild           Command      Message id   Information
     private static HashMap<String, HashMap<String, HashMap<String, Document>>> reactions = new HashMap();
 
-
-    public static void add(Guild guild, String command, Message message, boolean timeOut, String... emojis) {
+    public static void add(Guild guild, String command, Message message, User author, boolean timeOut, String... emojis) {
         // Get variables
         final String guildId = guild.getId(); // Get guild id
 
@@ -29,11 +31,12 @@ public class MessageReaction {
             reactions.get(guildId).put(command, new HashMap<>()); // Add command to the hashmap of the guild
         }
 
+        List<String> emojiList = new ArrayList<>(Arrays.asList(emojis));
         // Create new Document for command
         Document document = new Document()
                 .append("messageId", message.getId())
-                .append("userId", message.getAuthor().getId())
-                .append("emojis", Arrays.stream(emojis).toArray());
+                .append("userId", author.getId())
+                .append("emojis", emojiList);
         reactions.get(guildId).get(command).put(message.getId(), document); // Add document to hashmap
 
         // If there should be a time out
@@ -61,11 +64,20 @@ public class MessageReaction {
 
         final Document reaction = reactions.get(guildId).get(command).get(messageId); // Get reaction document
         if (!event.getUser().getId().equals(reaction.getString("userId"))) return false; // Wrong user reacted
-        System.out.println(event.getReactionEmote().toString());
-        if (!reaction.getList("emojis", String.class).contains(event.getReactionEmote().toString()))
-            return false; // Wrong emoji
 
-        if (delete) reactions.get(command).remove(messageId); // Delete message from hashmap
+        // Reaction is emoji
+        if (event.getReactionEmote().isEmoji()) {
+            if (!reaction.getList("emojis", String.class).contains(event.getReactionEmote().getEmoji()))
+                return false; // Wrong emoji
+        }
+        // Reaction is custom emote
+        if (event.getReactionEmote().isEmote()) {
+            System.out.println(event.getReactionEmote().getEmote());
+            if (!reaction.getList("emojis", String.class).contains(event.getReactionEmote().getEmote().getId()))
+                return false; // Wrong emoji
+        }
+
+        if (delete) reactions.get(guildId).get(command).remove(messageId); // Delete message from hashmap
         return true; // Return true
     }
 
