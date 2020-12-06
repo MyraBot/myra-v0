@@ -47,8 +47,6 @@ public class MessageReaction {
                 message.clearReactions().queue(); // Clear all reaction emojis
             }, 1, TimeUnit.MINUTES); // Time out will be after 1 minute
         }
-
-        System.out.println(document);
     }
 
     public static boolean check(GuildMessageReactionAddEvent event, String command, boolean delete) {
@@ -72,7 +70,6 @@ public class MessageReaction {
         }
         // Reaction is custom emote
         if (event.getReactionEmote().isEmote()) {
-            System.out.println(event.getReactionEmote().getEmote());
             if (!reaction.getList("emojis", String.class).contains(event.getReactionEmote().getEmote().getId()))
                 return false; // Wrong emoji
         }
