@@ -9,7 +9,7 @@ import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
 import java.util.HashMap;
@@ -82,25 +82,26 @@ public class BlackJack implements Command {
             dealer.switchAce();
         }
         // Send match message
-        final Message message = ctx.getChannel().sendMessage(getEmbed(player, dealer, game, ctx.getGuild()).build()).complete();
+        ctx.getChannel().sendMessage(getEmbed(player, dealer, game, ctx.getGuild()).build()).queue(message -> {
+            final MessageEmbed embed = message.getEmbeds().get(0); // Get send embed
 
-        // Game continues
-        if (message.getEmbeds().get(0).getFooter().getText().equals("Hit or stay?")) {
-            // Add reactions
-            message.addReaction("\u23CF").queue(); // Hit
-            message.addReaction("\u23F8").queue(); // Stay
+            // Game continues
+            if (embed.getFooter().getText().equals("Hit or stay?")) {
+                // Add reactions
+                message.addReaction("\u23CF").queue(); // Hit
+                message.addReaction("\u23F8").queue(); // Stay
 
-            // Guild isn't in the hashmap yet
-            if (!games.containsKey(ctx.getGuild())) {
-                games.put(ctx.getGuild().getId(), new HashMap<>()); // Add guild to hashmap
+                // Guild isn't in the hashmap yet
+                if (!games.containsKey(ctx.getGuild().getId())) {
+                    games.put(ctx.getGuild().getId(), new HashMap<>()); // Add guild to hashmap
+                }
+                games.get(ctx.getGuild().getId()).put(message.getId(), game); // Add game to hashmap
             }
-            // Add game to hashmap
-            games.get(ctx.getGuild().getId()).put(message.getId(), game);
-        }
+        });
     }
 
 
-    public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) {
+    public void reaction(GuildMessageReactionAddEvent event) {
         // Get variables
         final String guildId = event.getGuild().getId(); // Get guild id
         final String messageId = event.getMessageId(); // Get message id
@@ -109,94 +110,104 @@ public class BlackJack implements Command {
         if (!games.containsKey(guildId)) return;
         if (!games.get(guildId).containsKey(messageId)) return;
 
+        final Game game = games.get(guildId).get(messageId); // Get game
+
         // Wrong user reacted to the message
-        if (!games.get(guildId).get(messageId).getPlayers().get(0).getPlayer().equals(event.getUser())) return;
-
-        // Get game
-        final Game game = games.get(guildId).get(messageId);
-        // Get players
-        final Player player = game.getPlayers().get(0);
-        final Player dealer = game.getPlayers().get(1);
+        if (game.getPlayers().get(0).getPlayer().equals(event.getUser()) || game.getPlayers().get(1).getPlayer().equals(event.getUser())) {
+            // Get players
+            final Player player = game.getPlayers().get(0);
+            final Player dealer = game.getPlayers().get(1);
 // Hit
-        if (event.getReactionEmote().getEmoji().equals("\u23CF")) {
-            player.add(game.getRandomCard()); // Add a new card to player
+            if (event.getReactionEmote().getEmoji().equals("\u23CF")) {
+                player.add(game.getRandomCard()); // Add a new card to player
 
-            // If player's value is more than 21
-            if (player.getValue() > 21) {
-                player.switchAce(); // Switch ace value
+                // If player's value is more than 21
+                if (player.getValue() > 21) {
+                    player.switchAce(); // Switch ace value
+                }
+
+                // Update match message
+                event.retrieveMessage().queue(message -> { // Get message
+                    message.editMessage(getEmbed(player, dealer, game, event.getGuild()).build()).queue(updateMessage -> {// Update message
+                        final MessageEmbed embed = message.getEmbeds().get(0); // Get embed
+
+                        // gamed continues
+                        if (embed.getFooter().getText().equals("Hit or stay?")) {
+                            event.getReaction().removeReaction(event.getUser()).queue(); // Remove reaction
+                        }
+
+                        // Game ended
+                        else {
+                            message.clearReactions().queue(); // Clear reactions
+                            games.remove(event.getMessageId()); // Remove game
+                        }
+                    });
+                });
             }
-
-            // Update match message
-            final Message message = event.getChannel().editMessageById(event.getMessageId(), getEmbed(player, dealer, game, event.getGuild()).build()).complete();
-
-            // gamed continues
-            if (message.getEmbeds().get(0).getFooter().getText().equals("Hit or stay?")) {
-                event.getReaction().removeReaction(event.getUser()).queue(); // Remove reaction
-            }
-            // Game ended
-            else {
-                event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().complete(); // Clear reaction
-                games.remove(event.getMessageId()); // Remove game
-            }
-
-        }
 //Stay
-        if (event.getReactionEmote().getEmoji().equals("\u23F8")) {
-            final GetMember dbMember = new Database(event.getGuild()).getMembers().getMember(event.getMember()); // Get database
+            else if (event.getReactionEmote().getEmoji().equals("\u23F8")) {
+                final GetMember dbMember = new Database(event.getGuild()).getMembers().getMember(event.getMember()); // Get database
 
-            // Add cards to the dealer until his card value is at least 17
-            while (dealer.getValue() <= 17) {
-                dealer.add(game.getRandomCard()); // Add a random card
-            }
+                // Add cards to the dealer until his card value is at least 17
+                while (dealer.getValue() <= 17) {
+                    dealer.add(game.getRandomCard()); // Add a random card
+                }
 
-            String footer = "";
+                String footer = "";
+                final int playerValue = player.getValue(); // Get value of player
+                final int dealerValue = dealer.getValue(); // Get value of dealer
 // Return credits
-            // Player and dealer have the same value and they aren't over 21
-            if (player.getValue() == dealer.getValue() && player.getValue() <= 21) {
-                footer = "Returned " + game.getBetMoney(); // Set footer
-            }
+                // Player and dealer have the same value and they aren't over 21
+                if (playerValue == dealerValue && playerValue <= 21) {
+                    footer = "Returned " + game.getBetMoney(); // Set footer
+                }
 // Won
-            // Player has higher value than dealer and player's value is not more than 21
-            else if (player.getValue() > dealer.getValue() && player.getValue() <= 21) {
-                footer = "You won +" + game.getBetMoney() * 2 + "!"; // Set footer
-                dbMember.setBalance(dbMember.getBalance() + game.getBetMoney()); // Add money
-            }
-            // Dealer's value is more than 21
-            else if (dealer.getValue() > 21) {
-                footer = "You won +" + game.getBetMoney() * 2 + "!"; // Set footer
-                dbMember.setBalance(dbMember.getBalance() + game.getBetMoney()); // Add money
-            }
+                // Player has higher value than dealer and player's value is not more than 21
+                else if (playerValue > dealerValue && playerValue <= 21) {
+                    footer = "You won +" + game.getBetMoney() * 2 + "!"; // Set footer
+                    dbMember.setBalance(dbMember.getBalance() + game.getBetMoney()); // Add money
+                }
+                // Dealer's value is more than 21
+                else if (dealerValue > 21) {
+                    footer = "You won +" + game.getBetMoney() * 2 + "!"; // Set footer
+                    dbMember.setBalance(dbMember.getBalance() + game.getBetMoney()); // Add money
+                }
 // Lost
-            // Dealer has higher value than player and dealer's value is not more than 21
-            else if (dealer.getValue() > player.getValue() && dealer.getValue() <= 21) {
-                footer = "The dealer won!"; // Set footer
-                dbMember.setBalance(dbMember.getBalance() - game.getBetMoney()); // Remove money
+                // Dealer has higher value than player and dealer's value is not more than 21
+                else if (dealerValue > player.getValue() && dealerValue <= 21) {
+                    footer = "The dealer won!"; // Set footer
+                    dbMember.setBalance(dbMember.getBalance() - game.getBetMoney()); // Remove money
+                }
+                // If dealer and player have the same value
+                else if (playerValue == dealerValue) {
+                    footer = "The dealer won!"; // Set footer
+                    dbMember.setBalance(dbMember.getBalance() - game.getBetMoney()); // Remove money
+                }
+                // Player's value is more than 21
+                else if (playerValue > 21 && dealerValue <= 21) {
+                    footer = "The dealer won!"; // Set footer
+                    dbMember.setBalance(dbMember.getBalance() - game.getBetMoney()); // Remove money
+                }
+                // Create match message
+                EmbedBuilder match = new EmbedBuilder()
+                        .setAuthor("blackjack", null, player.getPlayer().getEffectiveAvatarUrl())
+                        .setColor(Utilities.getUtils().getMemberRoleColour(event.getMember()))
+                        // Player cards
+                        .addField("Your cards: " + playerValue, getPlayerCards(player, event.getJDA()), false)
+                        // Dealer cards
+                        .addField("Dealer cards: " + dealerValue, getDealerCards(dealer, event.getJDA(), true), false)
+                        .setFooter(footer);
+                // Update message
+                event.getChannel().editMessageById(event.getMessageId(), match.build()).queue();
+                event.getChannel().editMessageById(event.getMessageId(), match.build()).queue();
+
+                // Clear reaction
+                event.retrieveMessage().queue(message -> { // Retrieve message
+                    message.clearReactions().queue(); // Clear reactions
+                });
+                // Remove game
+                games.remove(event.getMessageId());
             }
-            // If dealer and player have the same value
-            else if (player.getValue() == dealer.getValue()) {
-                footer = "The dealer won!"; // Set footer
-                dbMember.setBalance(dbMember.getBalance() - game.getBetMoney()); // Remove money
-            }
-            // Player's value is more than 21
-            else if (player.getValue() > 21 && dealer.getValue() <= 21) {
-                footer = "The dealer won!"; // Set footer
-                dbMember.setBalance(dbMember.getBalance() - game.getBetMoney()); // Remove money
-            }
-            // Create match message
-            EmbedBuilder match = new EmbedBuilder()
-                    .setAuthor("blackjack", null, player.getPlayer().getEffectiveAvatarUrl())
-                    .setColor(Utilities.getUtils().getMemberRoleColour(event.getMember()))
-                    // Player cards
-                    .addField("Your cards: " + player.getValue(), getPlayerCards(player, event.getJDA()), false)
-                    // Dealer cards
-                    .addField("Dealer cards: " + dealer.getValue(), getDealerCards(dealer, event.getJDA(), true), false)
-                    .setFooter(footer);
-            // Update message
-            event.getChannel().editMessageById(event.getMessageId(), match.build()).queue();
-            // Clear reaction
-            event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().complete();
-            // Remove game
-            games.remove(event.getMessageId());
         }
     }
 

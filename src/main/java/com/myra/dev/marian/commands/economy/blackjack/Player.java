@@ -33,17 +33,17 @@ public class Player {
      * Switch the value of the ace card.
      */
     public void switchAce() {
-        Iterator<Card> iterator = playersCards.iterator();
-        // Search cards for an ace
-        while (iterator.hasNext()) {
-            Card card = iterator.next();
+        Iterator<Card> iterator = playersCards.iterator(); // Create iterator
+        // As long as the value of the player is more than 21 or all cards have been checked
+        while (getValue() > 21) {
+            final Card card = iterator.next(); // Get next card
+            if (!iterator.hasNext()) break; // Stop loop if all cards were checked
 
+            // If card is an ace
             if (card.getValue() == 11) {
-                // Remove old card
-                playersCards.remove(card);
-                // Add new one
-                playersCards.add(Card.setValueToOne(card));
-                return; // Return, so only 1 ace changes their value
+                playersCards.remove(card); // Remove old card
+                playersCards.add(Card.setValueToOne(card)); // Add new one
+                break; // Return, so only 1 ace changes their value
             }
         }
     }
@@ -55,6 +55,7 @@ public class Player {
         int value = 0;
         for (Card card : playersCards) {
             value += card.getValue();
+            System.out.println(card.getValue());
         }
         return value;
     }
