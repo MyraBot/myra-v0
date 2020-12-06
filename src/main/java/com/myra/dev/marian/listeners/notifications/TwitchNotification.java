@@ -25,7 +25,6 @@ public class TwitchNotification {
         final int start = 5 - LocalDateTime.now().getMinute() % 5;
 
         Utilities.TIMER.scheduleAtFixedRate(() -> {   // Loop
-            System.out.println(Thread.activeCount());
 
             try {
                 final Iterator<Guild> guilds = event.getJDA().getGuilds().iterator(); // Create an iterator for the guilds
