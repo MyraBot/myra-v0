@@ -23,7 +23,7 @@ import com.myra.dev.marian.commands.general.information.InformationServer;
 import com.myra.dev.marian.commands.general.information.InformationUser;
 import com.myra.dev.marian.commands.help.*;
 import com.myra.dev.marian.commands.leveling.Background;
-import com.myra.dev.marian.commands.leveling.Leaderboard;
+import com.myra.dev.marian.commands.Leaderboard;
 import com.myra.dev.marian.commands.leveling.Rank;
 import com.myra.dev.marian.commands.leveling.administrator.LevelingChannel;
 import com.myra.dev.marian.commands.leveling.administrator.LevelingHelp;
