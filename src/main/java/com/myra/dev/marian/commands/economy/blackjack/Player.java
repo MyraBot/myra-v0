@@ -55,7 +55,6 @@ public class Player {
         int value = 0;
         for (Card card : playersCards) {
             value += card.getValue();
-            System.out.println(card.getValue());
         }
         return value;
     }
