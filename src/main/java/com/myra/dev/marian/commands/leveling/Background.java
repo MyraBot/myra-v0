@@ -69,7 +69,7 @@ public class Background implements Command {
     }
 
 
-    public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) {
+    public void confirm(GuildMessageReactionAddEvent event) {
         // Check for right reaction
         if (!MessageReaction.check(event, "edit rank", true)) return;
 
