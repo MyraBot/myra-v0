@@ -29,7 +29,7 @@ public class Shutdown implements Command {
         MessageReaction.add(ctx.getGuild(), "shutdown", message, true, "\u2705");
     }
 
-    public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) {
+    public void exitProgram(GuildMessageReactionAddEvent event) {
         // Check for right message
         if (!MessageReaction.check(event, "shutdown", true)) return;
         // Clear all reactions
