@@ -240,9 +240,9 @@ public class Utilities {
     /**
      * Get member from message.
      *
-     * @param event The GuildMessageReceivedEvent
+     * @param event        The GuildMessageReceivedEvent
      * @param providedUser The String the user should be in
-     * @param command The command name
+     * @param command      The command name
      * @param commandEmoji The emoji of the command
      * @return
      */
