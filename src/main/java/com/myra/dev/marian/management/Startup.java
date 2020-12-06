@@ -37,8 +37,6 @@ public class Startup extends ListenerAdapter {
 
     public void onReady(ReadyEvent event) {
         try {
-            Utilities.getUtils().loadEmotes(event.getJDA()); // Load emotes
-
             // Update database
             new MongoDbUpdate().updateDatabase(event);
 

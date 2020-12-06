@@ -8,7 +8,7 @@ public class MemberDocument {
 
     private int level;
     private int xp;
-    private int invites;
+    private int balance;
 
     public MemberDocument(Document memberDocument, Guild guild) {
         this.id = memberDocument.getString("userId");
@@ -16,6 +16,7 @@ public class MemberDocument {
         final Document guildMemberDocument = (Document) memberDocument.get(guild.getId()); // Get document of guild
         this.level = guildMemberDocument.getInteger("level");
         this.xp = guildMemberDocument.getInteger("xp");
+        this.balance = guildMemberDocument.getInteger("balance");
     }
 
     public String getId() {
@@ -28,5 +29,9 @@ public class MemberDocument {
 
     public int getXp() {
         return xp;
+    }
+
+    public int getBalance() {
+        return balance;
     }
 }

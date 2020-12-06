@@ -1,14 +1,13 @@
 package com.myra.dev.marian.database;
 
 import com.myra.dev.marian.Bot;
+import com.myra.dev.marian.utilities.CustomEmote;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import org.bson.Document;
-import org.json.JSONArray;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -22,7 +21,7 @@ public class MongoDbDocuments {
             return; // In database is already a guild document
         // Economy
         Document economy = new Document()
-                .append("currency", Utilities.getUtils().coin)
+                .append("currency", Utilities.getUtils().getEmote(guild.getJDA(), CustomEmote.coin))
                 .append("shop", new Document());
         // Leveling
         Document levelingDocument = new Document()

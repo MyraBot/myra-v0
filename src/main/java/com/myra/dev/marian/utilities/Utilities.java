@@ -4,10 +4,7 @@ import com.myra.dev.marian.Bot;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import okhttp3.OkHttpClient;
 
@@ -27,29 +24,6 @@ public class Utilities {
         return getUtils;
     }
 
-    public void loadEmotes(JDA JDA) {
-        final JDA jda = JDA;
-        // Emotes
-        this.offline = getEmote(jda, "Offline");
-        this.idle = getEmote(jda, "Idle");
-        this.doNotDisturb = getEmote(jda, "DoNotDisturb");
-        this.online = getEmote(jda, "Online");
-
-        this.nitroBoost = getEmote(jda, "NitroBoost");
-        this.coin = getEmote(jda, "Coin");
-        // Badges
-        this.bugHunter = getEmote(jda, "BugHunter");
-        this.bugHunterLvl2 = getEmote(jda, "BugHunterLvl2");
-
-        this.bravery = getEmote(jda, "Bravery");
-        this.brilliance = getEmote(jda, "Brilliance");
-        this.balance = getEmote(jda, "Balance");
-
-        this.partner = getEmote(jda, "Partner");
-        this.verifiedDeveloper = getEmote(jda, "VerifiedDeveloper");
-        this.staff = getEmote(jda, "Staff");
-    }
-
     //colours
     public final int red = 0xFF0055;
     public final int blue = 0xccd9f0;
@@ -65,33 +39,14 @@ public class Utilities {
     public final String spotifyClientId = "f19bf0a7cb204c098dbdaaeedf47f842";
     public final String spotifyClientSecret = "d4d48b2e4b474d098fa440a6d01ece42";
     public final String topGgKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxODQ0NDcwOTQ0NTYzMjEyMiIsImJvdCI6dHJ1ZSwiaWF0IjoxNjA0MzMwMTg3fQ.-zX8YHLdiH9w6pmDceN0fHDjTAJd9FbDiNXM2sftoA4";
-    //emotes
-    public String offline;
-    public String idle;
-    public String doNotDisturb;
-    public String online;
-
-    public String nitroBoost;
-    public String coin;
-    // Badges
-    public String bugHunter;
-    public String bugHunterLvl2;
-
-    public String bravery;
-    public String brilliance;
-    public String balance;
-
-    public String partner;
-    public String verifiedDeveloper;
-    public String staff;
 
     /**
-     * @param name The name of the emote.
+     * @param emote The name of the emote.
      * @return Returns an emote from Myra's Server.
      */
-    public String getEmote(JDA jda, String name) {
-        if (jda.getGuildById(Bot.myraServer).getEmotesByName(name, true).isEmpty()) return null;
-        return jda.getGuildById(Bot.myraServer).getEmotesByName(name, true).get(0).getAsMention();
+    public Emote getEmote(JDA jda, CustomEmote emote) {
+        if (jda.getGuildById(Bot.myraServer).getEmotesByName(emote.name(), true).isEmpty()) return null;
+        return jda.getGuildById(Bot.myraServer).getEmotesByName(emote.name(), true).get(0);
     }
 
     /**
