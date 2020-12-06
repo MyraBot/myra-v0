@@ -41,7 +41,7 @@ public class WelcomeImageFont implements Command {
     }
 
     //reaction
-    public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) {
+    public void chooseFont(GuildMessageReactionAddEvent event) {
         //missing permissions
         if (!event.getMember().hasPermission(Permission.ADMINISTRATOR)) return;
         //if reaction was added on the wrong message return
