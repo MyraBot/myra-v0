@@ -23,7 +23,7 @@ public class YouTubeNotification {
     private final MongoDb mongoDb = MongoDb.getInstance(); // Get database
 
     public void start(ReadyEvent event) throws Exception {
-        final int start = 10 - LocalDateTime.now().getMinute() % 10;
+        final int start = 60 - LocalDateTime.now().getMinute() % 60;
 
         Utilities.TIMER.scheduleAtFixedRate(() -> {   // Loop
             try {
@@ -89,6 +89,6 @@ public class YouTubeNotification {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }, start, 10, TimeUnit.MINUTES);
+        }, start, 60, TimeUnit.MINUTES);
     }
 }
