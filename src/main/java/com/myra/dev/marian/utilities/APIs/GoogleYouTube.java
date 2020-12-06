@@ -9,6 +9,8 @@ import com.google.api.services.youtube.model.SearchResultSnippet;
 import com.myra.dev.marian.utilities.Utilities;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class GoogleYouTube {
                 youtube = new com.google.api.services.youtube.YouTube.Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance(),
                         request -> {
                         })
-                        .setApplicationName("Myra")
+                        .setApplicationName("Myra bot")
                         .setYouTubeRequestInitializer(new YouTubeRequestInitializer(Utilities.getUtils().youTubeKey))
                         .build();
 
@@ -112,6 +114,25 @@ public class GoogleYouTube {
 
         return search.execute().getItems(); // Return the information of the last videos
     }
+
+
+    public void getChannelByNameTEST(String name) throws IOException {
+        final URL url = new URL("https://www.googleapis.com/youtube/v3/search?" +
+                "part=snippet" +
+                "&type=channel" +
+                "&q=" + name +
+                "&maxResults=1" +
+                "&key=" + Utilities.getUtils().youTubeKey
+        );
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Connection", "keep-alive");
+
+        String s = connection.getInputStream().toString();
+        System.out.println(s);
+    }
+
+
     // OkHttpRequest methods
     /*
         private final static OkHttpClient client = Utilities.getUtils().HTTP_CLIENT;
