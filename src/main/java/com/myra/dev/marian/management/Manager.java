@@ -80,7 +80,7 @@ import com.myra.dev.marian.management.listeners.DefaultListenerService;
 import com.myra.dev.marian.management.listeners.ListenerService;
 import com.myra.dev.marian.marian.Dashboard;
 import com.myra.dev.marian.marian.GetInvite;
-import com.myra.dev.marian.marian.InformationChannel;
+import com.myra.dev.marian.marian.MariansDiscordEmbeds;
 import com.myra.dev.marian.marian.Shutdown;
 
 import java.util.Map;
@@ -111,7 +111,7 @@ public class Manager {
         COMMAND_SERVICE.register(
                 // Marian
                 new MongoDbUpdate(),
-                new InformationChannel(),
+                new MariansDiscordEmbeds(),
                 new GetInvite(),
                 new Dashboard(),
                 new Shutdown(),
