@@ -8,8 +8,8 @@ import com.myra.dev.marian.commands.help.Commands;
 import com.myra.dev.marian.commands.help.Help;
 import com.myra.dev.marian.commands.help.InviteThanks;
 import com.myra.dev.marian.commands.leveling.Background;
+import com.myra.dev.marian.commands.Leaderboard;
 import com.myra.dev.marian.commands.moderation.mute.MutePermissions;
-import com.myra.dev.marian.commands.music.MusicTimeout;
 import com.myra.dev.marian.commands.music.commands.MusicController;
 import com.myra.dev.marian.commands.music.commands.MusicPlay;
 import com.myra.dev.marian.database.MongoDbUpdate;
@@ -43,7 +43,8 @@ public class EventsManager extends ListenerAdapter {
      */
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         try {
-            if (event.getMessage().getFlags().contains(Message.MessageFlag.IS_CROSSPOST)) return; // Message is a server announcement
+            if (event.getMessage().getFlags().contains(Message.MessageFlag.IS_CROSSPOST))
+                return; // Message is a server announcement
             if (event.getMessage().isWebhookMessage()) return; // Message is a WebHook
             if (event.getAuthor().isBot()) return; // Message is from another bot
 
@@ -52,7 +53,8 @@ public class EventsManager extends ListenerAdapter {
             commandService.processCommandExecution(event);
             listenerService.processCommandExecution(event);
         } catch (Exception e) {
-            if (e.toString().startsWith("net.dv8tion.jda.api.exceptions.InsufficientPermissionException: Cannot perform action due to a lack of Permission. Missing permission: MESSAGE_WRITE")) return;
+            if (e.toString().startsWith("net.dv8tion.jda.api.exceptions.InsufficientPermissionException: Cannot perform action due to a lack of Permission. Missing permission: MESSAGE_WRITE"))
+                return;
             event.getChannel().sendMessage("Error: Please report this to my developer!");
             e.printStackTrace();
         }
@@ -61,29 +63,36 @@ public class EventsManager extends ListenerAdapter {
     /**
      * reactions
      */
+    private final Shutdown shutdown = new Shutdown();
+    private final WelcomeImageFont welcomeImageFont = new WelcomeImageFont();
+    private final Background background = new Background();
+    private final BlackJack blackJack = new BlackJack();
+    private final Leaderboard leaderboard = new Leaderboard();
+
     public void onGuildMessageReactionAdd(GuildMessageReactionAddEvent event) {
         try {
-            // Shutdown
-            new Shutdown().guildMessageReactionAddEvent(event);
-            // Commands
+            if (event.getUser().isBot()) return; // Don't react to bots
+
+            // Marian
+            shutdown.exitProgram(event); // Shutdown
+            // Administrator
+            welcomeImageFont.chooseFont(event); // Change welcome image font
+            new NotificationsList().switchList(event); // List notification
+            // Help
             new Commands().guildMessageReactionAddEvent(event);
             new Help().guildMessageReactionAddEvent(event);
-
+            // Commands
             new InformationServer().guildMessageReactionAddEvent(event);
-            // Change rank background
-            new Background().guildMessageReactionAddEvent(event);
-            // Text formatter
-            new TextFormatter().guildMessageReactionAddEvent(event);
-            // Blackjack
-            new BlackJack().guildMessageReactionAddEvent(event);
+            // Fun
+            new TextFormatter().guildMessageReactionAddEvent(event); // Text formatter
+            // Leveling
+            leaderboard.switchLeaderboard(event); // Switch what leaderboard shows
+            // Economy
+            background.confirm(event);
+            blackJack.reaction(event); // Blackjack
             // Music
             new MusicPlay().guildMessageReactionAddEvent(event);
             new MusicController().guildMessageReactionAddEvent(event);
-
-            new WelcomeImageFont().guildMessageReactionAddEvent(event);
-
-            // Notification
-            new NotificationsList().switchList(event);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -129,7 +138,6 @@ public class EventsManager extends ListenerAdapter {
      */
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
         try {
-            new MusicTimeout().voiceChannelLeave(event);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -137,7 +145,6 @@ public class EventsManager extends ListenerAdapter {
 
     public void onGuildVoiceMove(GuildVoiceMoveEvent event) {
         try {
-            new MusicTimeout().voiceChannelMove(event);
         } catch (Exception e) {
             e.printStackTrace();
         }
