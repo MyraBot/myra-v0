@@ -32,21 +32,17 @@ public class GetMember {
         this.guild = guild;
         this.member = member;
         // Member hasn't a document
-        if (mongoDb.getCollection("users").find(eq("userId", member.getId())).first() == null) { Document userDocument = new Document(); // Create document for user
-            userDocument.put("userId", member.getId()); // Add user id
-
-            Document guildMemberDocument = MongoDbDocuments.createGuildMemberDocument(member); // Create document for guild
-            userDocument.put(guild.getId(), guildMemberDocument); // Add document for guild to user document
-
-            mongoDb.getCollection("users").insertOne(userDocument);
+        if (mongoDb.getCollection("users").find(eq("userId", member.getId())).first() == null) {
+            final Document userDocument = MongoDbDocuments.createUserDocument(member.getUser()); // Create document for user
+            mongoDb.getCollection("users").insertOne(userDocument); // Insert document
         }
         this.userDocument = mongoDb.getCollection("users").find(eq("userId", member.getId())).first(); // Get user document
         // Member hasn't a guild document
         if (userDocument.get(guild.getId()) == null) {
             // Creating new guild document
-            Document guildMemberDocument = MongoDbDocuments.createGuildMemberDocument(member); // Create document for guild
+            final Document guildMemberDocument = MongoDbDocuments.createGuildMemberDocument(member); // Create document for guild
             userDocument.put(guild.getId(), guildMemberDocument); // Add document for guild to user document
-            mongoDb.getCollection("users").findOneAndReplace(mongoDb.getCollection("users").find(eq("userId", member.getId())).first(), userDocument); // Update database
+            mongoDb.getCollection("users").findOneAndReplace(eq("userId", member.getId()), userDocument); // Update database
         }
         this.memberDocument = (Document) userDocument.get(guild.getId()); // Get the guild document of the member
     }
