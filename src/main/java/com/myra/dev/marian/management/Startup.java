@@ -1,6 +1,5 @@
 package com.myra.dev.marian.management;
 
-import com.myra.dev.marian.utilities.APIs.Twitch;
 import com.myra.dev.marian.Bot;
 import com.myra.dev.marian.commands.general.Reminder;
 import com.myra.dev.marian.commands.moderation.mute.Tempmute;
@@ -8,6 +7,7 @@ import com.myra.dev.marian.database.MongoDbUpdate;
 import com.myra.dev.marian.listeners.notifications.TwitchNotification;
 import com.myra.dev.marian.listeners.notifications.YouTubeNotification;
 import com.myra.dev.marian.marian.Roles;
+import com.myra.dev.marian.utilities.APIs.Twitch;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Icon;

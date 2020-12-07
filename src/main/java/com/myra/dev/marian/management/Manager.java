@@ -78,10 +78,7 @@ import com.myra.dev.marian.management.commands.CommandSubscribe;
 import com.myra.dev.marian.management.commands.DefaultCommandService;
 import com.myra.dev.marian.management.listeners.DefaultListenerService;
 import com.myra.dev.marian.management.listeners.ListenerService;
-import com.myra.dev.marian.marian.Dashboard;
-import com.myra.dev.marian.marian.GetInvite;
-import com.myra.dev.marian.marian.MariansDiscordEmbeds;
-import com.myra.dev.marian.marian.Shutdown;
+import com.myra.dev.marian.marian.*;
 
 import java.util.Map;
 
@@ -110,7 +107,7 @@ public class Manager {
         // Register commands
         COMMAND_SERVICE.register(
                 // Marian
-                new MongoDbUpdate(),
+                new SetGuildPremium(),
                 new MariansDiscordEmbeds(),
                 new GetInvite(),
                 new Dashboard(),
