@@ -5,6 +5,7 @@ import com.myra.dev.marian.utilities.CustomEmote;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 import org.bson.Document;
 
 import java.util.ArrayList;
@@ -89,6 +90,7 @@ public class MongoDbDocuments {
         Document guildDoc = new Document("guildId", guild.getId())
                 .append("guildName", guild.getName())
                 .append("prefix", Bot.prefix)
+                .append("premium", false)
                 .append("economy", economy)
                 .append("leveling", levelingDocument)
                 .append("notifications", notificationsDocument)
@@ -100,6 +102,13 @@ public class MongoDbDocuments {
                 .append("commands", commands)
                 .append("listeners", listeners);
         mongoDb.getCollection("guilds").insertOne(guildDoc);
+    }
+
+    public static Document createUserDocument(User user) {
+        return new Document()
+                .append("userId", user.getId())
+                .append("birthday", "not set")
+                .append("achievements", new Document());
     }
 
     public static Document createGuildMemberDocument(Member member) {
