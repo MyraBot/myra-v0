@@ -2,6 +2,7 @@ package com.myra.dev.marian.database.allMethods;
 
 import com.mongodb.Cursor;
 import com.mongodb.client.MongoCursor;
+import com.myra.dev.marian.commands.Leaderboard;
 import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.documents.MemberDocument;
 import net.dv8tion.jda.api.entities.Guild;
@@ -36,7 +37,7 @@ public class GetMembers {
     }
 
     //get sorted members
-    public List<MemberDocument> getLeaderboard() {
+    public List<MemberDocument> getLeaderboard(LeaderboardType type) {
         //create leaderboard
         List<MemberDocument> leaderboard = new ArrayList<>();
 
@@ -47,7 +48,14 @@ public class GetMembers {
         }
         iterator.close(); // Close iterator
 
-        Collections.sort(leaderboard, Comparator.comparing(MemberDocument::getXp).reversed()); // Sort list
+        // Sort leaderboard
+        if (type.equals(LeaderboardType.LEVEL)) { // Sort by level
+            Collections.sort(leaderboard, Comparator.comparing(MemberDocument::getXp).reversed()); // Sort list
+        }
+        else if (type.equals(LeaderboardType.LEVEL)) { // Sort list by balance
+            Collections.sort(leaderboard, Comparator.comparing(MemberDocument::getXp).reversed()); // Sort list
+        }
+
         return leaderboard; // Return leaderboard
     }
 }

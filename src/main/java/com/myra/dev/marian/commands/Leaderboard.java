@@ -1,6 +1,7 @@
 package com.myra.dev.marian.commands;
 
 import com.myra.dev.marian.database.allMethods.Database;
+import com.myra.dev.marian.database.allMethods.LeaderboardType;
 import com.myra.dev.marian.database.documents.MemberDocument;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
@@ -13,6 +14,8 @@ import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @CommandSubscribe(
@@ -78,30 +81,29 @@ public class Leaderboard implements Command {
     }
 
     private String balanceLeaderboard(Guild guild) {
-        //get leaderboard
-        List<MemberDocument> leaderboardList = new Database(guild).getMembers().getLeaderboard();
+        List<MemberDocument> leaderboard = new Database(guild).getMembers().getLeaderboard(LeaderboardType.BALANCE); //get leaderboard
         // Create leaderboard
         StringBuilder top10 = new StringBuilder();
         // Add first 10 members
-        for (int i = 0; i < leaderboardList.size(); i++) {
+        for (int i = 0; i < leaderboard.size(); i++) {
             if (i > 10) break; // Show only the first 10 members
-            if (guild.getMemberById(leaderboardList.get(i).getId()) == null) continue;
-            top10.append(i + 1 + " \uD83C\uDF97 `" + leaderboardList.get(i).getBalance() + "` **" + guild.getMemberById(leaderboardList.get(i).getId()).getUser().getName() + "**\n");
+            if (guild.getMemberById(leaderboard.get(i).getId()) == null) continue;
+            top10.append(i + 1 + " \uD83C\uDF97 `" + leaderboard.get(i).getBalance() + "` **" + guild.getMemberById(leaderboard.get(i).getId()).getUser().getName() + "**\n");
         }
         return top10.toString(); // Return the leaderboard as a string
     }
 
     private String levelLeaderboard(Guild guild) {
-        //get leaderboard
-        List<MemberDocument> leaderboardList = new Database(guild).getMembers().getLeaderboard();
+        List<MemberDocument> leaderboard = new Database(guild).getMembers().getLeaderboard(LeaderboardType.LEVEL); //get leaderboard
         // Create leaderboard
         StringBuilder top10 = new StringBuilder();
         // Add first 10 members
-        for (int i = 0; i < leaderboardList.size(); i++) {
+        for (int i = 0; i < leaderboard.size(); i++) {
             if (i > 10) break; // Show only the first 10 members
-            if (guild.getMemberById(leaderboardList.get(i).getId()) == null) continue;
-            top10.append(i + 1 + " \uD83C\uDF97 `" + leaderboardList.get(i).getLevel() + "` **" + guild.getMemberById(leaderboardList.get(i).getId()).getUser().getName() + "**\n");
+            if (guild.getMemberById(leaderboard.get(i).getId()) == null) continue;
+            top10.append(i + 1 + " \uD83C\uDF97 `" + leaderboard.get(i).getLevel() + "` **" + guild.getMemberById(leaderboard.get(i).getId()).getUser().getName() + "**\n");
         }
+
         /*        String top10 =
                         "1 \uD83D\uDC51 `" + leaderboardList.get(0).getLevel() + "` **" + leaderboardList.get(0).getName() + "**\n" +
                                 "2 \uD83D\uDD31 `" + leaderboardList.get(1).getLevel() + "` **" + leaderboardList.get(1).getName() + "**\n" +
@@ -113,6 +115,7 @@ public class Leaderboard implements Command {
                                 "8 \uD83C\uDF97 `" + leaderboardList.get(7).getLevel() + "` **" + leaderboardList.get(7).getName() + "**\n" +
                                 "9 \uD83C\uDF97 `" + leaderboardList.get(8).getLevel() + "` **" + leaderboardList.get(8).getName() + "**\n" +
                                 "10 \uD83C\uDF97 `" + leaderboardList.get(9).getLevel() + "` **" + leaderboardList.get(9).getName() + "**\n";*/
+
         return top10.toString(); // Return the leaderboard as a string
     }
 }
