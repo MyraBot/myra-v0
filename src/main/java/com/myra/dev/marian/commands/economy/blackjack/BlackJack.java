@@ -149,7 +149,7 @@ public class BlackJack implements Command {
                 final GetMember dbMember = new Database(event.getGuild()).getMembers().getMember(event.getMember()); // Get database
 
                 // Add cards to the dealer until his card value is at least 17
-                while (dealer.getValue() <= 17) {
+                while (dealer.getValue() < 17) {
                     dealer.add(game.getRandomCard()); // Add a random card
                 }
 
