@@ -43,8 +43,11 @@ public class MessageReaction {
         if (timeOut) {
             // Delay
             Utilities.TIMER.schedule(() -> {
-                reactions.get(guildId).get(command).remove(message.getId()); // Remove command from the hashmap
-                message.clearReactions().queue(); // Clear all reaction emojis
+                // Only run if message isn't removed yet
+                if (reactions.get(guildId).get(command).get(message.getId()) != null) {
+                    reactions.get(guildId).get(command).remove(message.getId()); // Remove command from the hashmap
+                    message.clearReactions().queue(); // Clear all reaction emojis
+                }
             }, 1, TimeUnit.MINUTES); // Time out will be after 1 minute
         }
     }
