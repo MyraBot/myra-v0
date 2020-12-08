@@ -94,20 +94,23 @@ public class WelcomeImageRender {
                 graphic.textCenter(Graphic.axis.Y, "welcome", font, background) + background.getHeight() / 6
         );
 // Draw user name
+        final String name = "Dieser name ist zu lang für diese Bild haha"; // Get username
         FontRenderContext fontRenderContext = new FontRenderContext(new AffineTransform(), true, true);
         float size = background.getWidth() / 7.5f; // Set default font size
+        font = font.deriveFont(size); // Set font size
+
         // Make font smile smaller if text is to big
-        while (Math.round(font.getStringBounds(user.getName(), fontRenderContext).getWidth()) > background.getWidth()) {
+        while (Math.round(font.getStringBounds(name, fontRenderContext).getWidth()) > background.getWidth()) {
             size = size - 1.0F; // Make font size smaller
+            font = font.deriveFont(size); // Update font
         }
-        font = font.deriveFont(size);
 
         //set font
         graphics.setFont(font);
         //draw user name
-        graphics.drawString(user.getName(),
-                graphic.textCenter(Graphic.axis.X, user.getName(), font, background),
-                (int) (graphic.textCenter(Graphic.axis.Y, user.getName(), font, background) + background.getHeight() / 2.25)
+        graphics.drawString(name,
+                graphic.textCenter(Graphic.axis.X, name, font, background),
+                (int) (graphic.textCenter(Graphic.axis.Y, name, font, background) + background.getHeight() / 2.25)
         );
     }
 
@@ -145,20 +148,23 @@ public class WelcomeImageRender {
                 graphic.textCenter(Graphic.axis.Y, "welcome", font, background) + background.getHeight() / 6
         );
 // Draw user name
+        final String name = user.getName(); // Get username
         FontRenderContext fontRenderContext = new FontRenderContext(new AffineTransform(), true, true);
         float size = background.getWidth() / 4f; // Set default font size
+        font = font.deriveFont(size); // Set font size
+
         // Make font smile smaller if text is to big
-        while (Math.round(font.getStringBounds(user.getName(), fontRenderContext).getWidth()) > background.getWidth()) {
+        while (Math.round(font.getStringBounds(name, fontRenderContext).getWidth()) > background.getWidth()) {
             size = size - 1.0F; // Make font size smaller
+            font = font.deriveFont(size); // Update font
         }
-        font = font.deriveFont(size);
 
         //set font
         graphics.setFont(font);
         //draw user name
-        graphics.drawString(user.getName(),
-                graphic.textCenter(Graphic.axis.X, user.getName(), font, background),
-                 (graphic.textCenter(Graphic.axis.Y, user.getName(), font, background) + background.getHeight() / 3 )
+        graphics.drawString(name,
+                graphic.textCenter(Graphic.axis.X, name, font, background),
+                (graphic.textCenter(Graphic.axis.Y, name, font, background) + background.getHeight() / 3)
         );
     }
 }
