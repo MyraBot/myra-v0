@@ -67,9 +67,9 @@ public class MusicPlay implements Command {
         // If song is given by name
         catch (Exception e) {
             // Search on YouTube for song name
-            List<JSONObject> searchResults = GoogleYouTube.getInstance().getVideos(song);
+            final List<JSONObject> videos = GoogleYouTube.getInstance().searchForVideo(song);
             // Nothing found
-            if (results == null) {
+            if (videos.isEmpty()) {
                 utilities.error(
                         ctx.getChannel(),
                         "play", "\uD83D\uDCBF",
@@ -82,14 +82,14 @@ public class MusicPlay implements Command {
             EmbedBuilder songs = new EmbedBuilder()
                     .setAuthor("choose a song", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(utilities.blue)
-                    .addField("\uD83D\uDD0D │ track 1\uFE0F\u20E3", searchResults.get(0).getString("title"), false)
-                    .addField("\uD83D\uDD0D │ track 2\uFE0F\u20E3", searchResults.get(1).getString("title"), false)
-                    .addField("\uD83D\uDD0D │ track 3\uFE0F\u20E3", searchResults.get(2).getString("title"), false)
-                    .addField("\uD83D\uDD0D │ track 4\uFE0F\u20E3", searchResults.get(3).getString("title"), false)
-                    .addField("\uD83D\uDD0D │ track 5\uFE0F\u20E3", searchResults.get(4).getString("title"), false);
+                    .addField("\uD83D\uDD0D │ track 1\uFE0F\u20E3", videos.get(0).getJSONObject("snippet").getString("title"), false)
+                    .addField("\uD83D\uDD0D │ track 2\uFE0F\u20E3", videos.get(1).getJSONObject("snippet").getString("title"), false)
+                    .addField("\uD83D\uDD0D │ track 3\uFE0F\u20E3", videos.get(2).getJSONObject("snippet").getString("title"), false)
+                    .addField("\uD83D\uDD0D │ track 4\uFE0F\u20E3", videos.get(3).getJSONObject("snippet").getString("title"), false)
+                    .addField("\uD83D\uDD0D │ track 5\uFE0F\u20E3", videos.get(4).getJSONObject("snippet").getString("title"), false);
             Message message = ctx.getChannel().sendMessage(songs.build()).complete();
             // Save results in HashMap
-            results.put(message.getId(), searchResults);
+            results.put(message.getId(), videos);
             //add reactions
             message.addReaction("1\uFE0F\u20E3").queue();
             message.addReaction("2\uFE0F\u20E3").queue();
@@ -115,7 +115,6 @@ public class MusicPlay implements Command {
         else {
             JSONObject song = results.get(event.getMessageId()).get(Integer.parseInt(event.getReactionEmote().getEmoji().replace("1️⃣", "0").replace("2️⃣", "1").replace("3️⃣", "2").replace("4️⃣", "3").replace("5️⃣", "4")));
             if (song == null) return;
-
             //get video url
             String videoUrl = "https://www.youtube.com/watch?v=" + song.getJSONObject("id").getString("videoId");
             //play song
