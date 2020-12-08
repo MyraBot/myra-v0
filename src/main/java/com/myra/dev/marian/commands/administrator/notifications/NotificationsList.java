@@ -93,7 +93,7 @@ public class NotificationsList implements Command {
             else {
                 String youtubers = "";
                 for (String youtuberId : NotificationsYoutubeManager.getInstance().getYoutubers(event.getGuild())) {
-                    final String channelName = GoogleYouTube.getInstance().getChannelById(youtuberId).getTitle(); // Get youtube channel name
+                    final String channelName = GoogleYouTube.getInstance().getChannelById(youtuberId).getString("title"); // Get youtube channel name
                     youtubers += "• " + channelName + "\n";
                 }
                 list.addField("\uD83D\uDCFA │ YouTubers:", youtubers, false);

@@ -1,6 +1,5 @@
 package com.myra.dev.marian.commands.music.commands;
 
-import com.google.api.services.youtube.model.SearchResult;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
@@ -11,6 +10,7 @@ import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import org.json.JSONObject;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -22,7 +22,7 @@ import java.util.List;
         name = "play"
 )
 public class MusicPlay implements Command {
-    private static HashMap<String, List<SearchResult>> results = new HashMap<>();
+    private static HashMap<String, List<JSONObject>> results = new HashMap<>();
 
     @Override
     public void execute(CommandContext ctx) throws Exception {
@@ -67,7 +67,7 @@ public class MusicPlay implements Command {
         // If song is given by name
         catch (Exception e) {
             // Search on YouTube for song name
-            List<SearchResult> searchResults = GoogleYouTube.getInstance().search(song);
+            List<JSONObject> searchResults = GoogleYouTube.getInstance().getVideos(song);
             // Nothing found
             if (results == null) {
                 utilities.error(
@@ -82,11 +82,11 @@ public class MusicPlay implements Command {
             EmbedBuilder songs = new EmbedBuilder()
                     .setAuthor("choose a song", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(utilities.blue)
-                    .addField("\uD83D\uDD0D │ track 1\uFE0F\u20E3", searchResults.get(0).getSnippet().getTitle(), false)
-                    .addField("\uD83D\uDD0D │ track 2\uFE0F\u20E3", searchResults.get(1).getSnippet().getTitle(), false)
-                    .addField("\uD83D\uDD0D │ track 3\uFE0F\u20E3", searchResults.get(2).getSnippet().getTitle(), false)
-                    .addField("\uD83D\uDD0D │ track 4\uFE0F\u20E3", searchResults.get(3).getSnippet().getTitle(), false)
-                    .addField("\uD83D\uDD0D │ track 5\uFE0F\u20E3", searchResults.get(4).getSnippet().getTitle(), false);
+                    .addField("\uD83D\uDD0D │ track 1\uFE0F\u20E3", searchResults.get(0).getString("title"), false)
+                    .addField("\uD83D\uDD0D │ track 2\uFE0F\u20E3", searchResults.get(1).getString("title"), false)
+                    .addField("\uD83D\uDD0D │ track 3\uFE0F\u20E3", searchResults.get(2).getString("title"), false)
+                    .addField("\uD83D\uDD0D │ track 4\uFE0F\u20E3", searchResults.get(3).getString("title"), false)
+                    .addField("\uD83D\uDD0D │ track 5\uFE0F\u20E3", searchResults.get(4).getString("title"), false);
             Message message = ctx.getChannel().sendMessage(songs.build()).complete();
             // Save results in HashMap
             results.put(message.getId(), searchResults);
@@ -99,7 +99,7 @@ public class MusicPlay implements Command {
 
             message.addReaction("\uD83D\uDEAB").queue();
             // Add reaction to HashMap
-            MessageReaction.add(ctx.getGuild(), "play", message, ctx.getAuthor(),true, "1\uFE0F\u20E3", "2\uFE0F\u20E3", "3\uFE0F\u20E3", "4\uFE0F\u20E3", "5\uFE0F\u20E3");
+            MessageReaction.add(ctx.getGuild(), "play", message, ctx.getAuthor(), true, "1\uFE0F\u20E3", "2\uFE0F\u20E3", "3\uFE0F\u20E3", "4\uFE0F\u20E3", "5\uFE0F\u20E3");
         }
     }
 
@@ -113,13 +113,13 @@ public class MusicPlay implements Command {
         }
         // Get chosen song
         else {
-            SearchResult song = results.get(event.getMessageId()).get(Integer.parseInt(event.getReactionEmote().getEmoji().replace("1️⃣", "0").replace("2️⃣", "1").replace("3️⃣", "2").replace("4️⃣", "3").replace("5️⃣", "4")));
+            JSONObject song = results.get(event.getMessageId()).get(Integer.parseInt(event.getReactionEmote().getEmoji().replace("1️⃣", "0").replace("2️⃣", "1").replace("3️⃣", "2").replace("4️⃣", "3").replace("5️⃣", "4")));
             if (song == null) return;
 
             //get video url
-            String videoUrl = "https://www.youtube.com/watch?v=" + song.getId().getVideoId();
+            String videoUrl = "https://www.youtube.com/watch?v=" + song.getJSONObject("id").getString("videoId");
             //play song
-            PlayerManager.getInstance().loadAndPlay(event.getChannel(), videoUrl, event.getUser().getEffectiveAvatarUrl(), "https://img.youtube.com/vi/" + song.getId().getVideoId() + "/maxresdefault.jpg");
+            PlayerManager.getInstance().loadAndPlay(event.getChannel(), videoUrl, event.getUser().getEffectiveAvatarUrl(), "https://img.youtube.com/vi/" + song.getJSONObject("id").getString("videoId") + "/maxresdefault.jpg");
             //delete track selector
             event.getChannel().deleteMessageById(event.getMessageId()).queue();
         }

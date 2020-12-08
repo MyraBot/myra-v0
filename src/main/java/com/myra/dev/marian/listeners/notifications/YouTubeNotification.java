@@ -1,17 +1,16 @@
 package com.myra.dev.marian.listeners.notifications;
 
-import com.google.api.services.youtube.model.SearchResult;
-import com.google.api.services.youtube.model.SearchResultSnippet;
-import com.myra.dev.marian.utilities.APIs.GoogleYouTube;
 import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.database.managers.NotificationsYoutubeManager;
+import com.myra.dev.marian.utilities.APIs.GoogleYouTube;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import org.bson.Document;
+import org.json.JSONObject;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -47,15 +46,15 @@ public class YouTubeNotification {
 
                     // For each youtuber
                     for (String channelId : youtubers) {
-                        List<SearchResult> latestVideos = GoogleYouTube.getInstance().getLatestVideos(channelId); // Get the latest videos
+                        List<JSONObject> latestVideos = GoogleYouTube.getInstance().getLatestVideos(channelId); // Get the latest videos
                         // For every video
-                        for (SearchResult videoInformation : latestVideos) {
+                        for (JSONObject videoInformation : latestVideos) {
 
-                            final SearchResultSnippet video = videoInformation.getSnippet(); // Get video information
-                            final String videoId = videoInformation.getId().getVideoId(); // Get video id
+                            final JSONObject video = videoInformation.getJSONObject("snippet"); // Get video information
+                            final String videoId = videoInformation.getJSONObject("id").getString("videoId"); // Get video id
 
                             // Get upload time
-                            final ZonedDateTime date = ZonedDateTime.parse(video.getPublishedAt().toString());
+                            final ZonedDateTime date = ZonedDateTime.parse(video.getString("publishedAt").toString());
                             long publishedAtInMillis = date.toInstant().toEpochMilli(); // Get upload time in milliseconds
 
                             // Last youtube check was already made when the video came out
@@ -63,12 +62,12 @@ public class YouTubeNotification {
                                 continue;
 
                             // Get all values
-                            final SearchResultSnippet channelInformation = GoogleYouTube.getInstance().getChannelById(video.getChannelId()); // Get the channel information
-                            final String profilePicture = channelInformation.getThumbnails().getMedium().getUrl(); // Get profile picture
+                            final JSONObject channelInformation = GoogleYouTube.getInstance().getChannelById(video.getString("channelId")); // Get the channel information
+                            final String profilePicture = channelInformation.getJSONObject("thumbnails").getJSONObject("medium").getString("url"); // Get profile picture
 
-                            final String channelName = video.getChannelTitle();
-                            final String title = video.getTitle(); // Get video title
-                            final String thumbnail = video.getThumbnails().getMedium().getUrl(); // Get thumbnail image
+                            final String channelName = video.getString("channelTitle");
+                            final String title = video.getString("title"); // Get video title
+                            final String thumbnail = video.getJSONObject("thumbnails").getJSONObject("medium").getString("url"); // Get thumbnail image
                             // Create embed
                             EmbedBuilder notification = new EmbedBuilder()
                                     .setAuthor(channelName, "https://www.youtube.com/watch?v=" + videoId, profilePicture)

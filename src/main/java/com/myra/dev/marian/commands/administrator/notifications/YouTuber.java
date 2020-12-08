@@ -9,6 +9,7 @@ import com.myra.dev.marian.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
+import org.json.JSONObject;
 
 import java.net.URL;
 
@@ -32,7 +33,7 @@ public class YouTuber implements Command {
 
         final String channel = Utilities.getUtils().getString(ctx.getArguments()); // Get the arguments as one string
 
-        SearchResultSnippet channelInformation;
+        JSONObject channelInformation;
         // Get channel by url
         try {
             new URL(channel); // Try making a url out of it
@@ -43,9 +44,9 @@ public class YouTuber implements Command {
             channelInformation = GoogleYouTube.getInstance().getChannelByName(channel); // Get channel information
         }
 
-        final String channelId = channelInformation.getChannelId(); // get channel id
-        final String channelName = channelInformation.getTitle(); // Get youtube channel name
-        final String profilePicture = channelInformation.getThumbnails().getMedium().getUrl(); // Get profile picture
+        final String channelId = channelInformation.getString("channelId"); // get channel id
+        final String channelName = channelInformation.getString("title"); // Get youtube channel name
+        final String profilePicture = channelInformation.getJSONObject("thumnails").getJSONObject("medium").getString("url"); // Get profile picture
 
         // Remove youtuber
         if (NotificationsYoutubeManager.getInstance().getYoutubers(ctx.getGuild()).contains(channelId)) {
