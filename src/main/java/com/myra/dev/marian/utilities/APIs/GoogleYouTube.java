@@ -23,22 +23,30 @@ public class GoogleYouTube {
 
     private final static OkHttpClient client = Utilities.getUtils().HTTP_CLIENT;
 
-    public List<JSONObject> getVideos(String video) throws IOException {
+    public List<JSONObject> searchForVideo(String search) throws IOException {
         // Create request
         Request request = new Request.Builder()
                 .url("https://www.googleapis.com/youtube/v3/search?" +
-                        "part=snippet,id" +
-                        "&type=video" +
-                        "&q=" + video +
-                        "&key=" + Utilities.getUtils().youTubeKey
+                        "&part=id" +
+                        "&part=snippet" +
+                        "&type=video" + // Only search for videos
+                        "&q=" + search + // Search for the given keyword
+                        "&key=" + Utilities.getUtils().youTubeKey // Provide my youtube key
                 )
                 .build();
         //Execute call
         String channelOutput = client.newCall(request).execute().body().string();
 
+        final List<JSONObject> videos = new ArrayList<>(); // Create list
         final JSONArray items = new JSONObject(channelOutput).getJSONArray("items"); // Create Json object
-        System.out.println(items);
-        return null;
+
+        // Add all videos to the list
+        for (Object videoInfo : items) {
+            final JSONObject video = (JSONObject) videoInfo; // Parse Object to JSONObject
+            videos.add(video); // Add video to list
+        }
+
+        return videos;
     }
 
     public JSONObject getChannelByName(String name) throws IOException {
