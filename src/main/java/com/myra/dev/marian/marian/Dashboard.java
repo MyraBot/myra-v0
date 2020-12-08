@@ -21,6 +21,7 @@ public class Dashboard implements Command {
                 .setAuthor("dashboard", null, ctx.getAuthor().getEffectiveAvatarUrl())
                 .addField("CPU usage", resources.getCpuLoad(), false)
                 .addField("RAM usage", resources.getRAMUsage() + "mb", false)
+                .addField("Current running threads", resources.getRunningThreads(), false)
                 .addField("Shards", String.valueOf(ctx.getEvent().getJDA().getShardManager().getShardsTotal()), false)
                 .addField("Guilds", String.valueOf(ctx.getEvent().getJDA().getGuilds().size()), false);
         ctx.getChannel().sendMessage(dashboard.build()).queue();

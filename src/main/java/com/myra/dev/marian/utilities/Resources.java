@@ -5,7 +5,6 @@ import javax.management.AttributeList;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import java.lang.management.ManagementFactory;
-import java.text.NumberFormat;
 
 public class Resources {
     public String getCpuLoad() throws Exception {
@@ -33,5 +32,10 @@ public class Resources {
         } catch (Exception e) {
             return "There was an error while attempting to collect ram usage!";
         }
+    }
+
+
+    public String getRunningThreads() {
+        return String.valueOf(Thread.activeCount());
     }
 }
