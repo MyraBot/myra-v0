@@ -127,11 +127,11 @@ public class MongoDbUpdate {
                     mongoDb.getCollection("guilds").find(eq("guildId", guildDoc.getString("guildId"))).first(),
                     guildDoc
             );
-        }*/
+        }
         // Member update
         final MongoCursor<Document> iterator = mongoDb.getCollection("user").find().iterator();
 
-        /*while (iterator.hasNext()) {
+        while (iterator.hasNext()) {
             final Document document = iterator.next(); // Get next document
 
             Document userDocument = new Document();
