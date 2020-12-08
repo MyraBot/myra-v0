@@ -190,7 +190,7 @@ public class Manager {
                 new Kick(),
                 new Nick(),
                 // Music
-                new MusicHelp(),
+                /*new MusicHelp(),
                 new MusicJoin(),
                 new MusicLeave(),
                 new MusicPlay(),
@@ -201,7 +201,7 @@ public class Manager {
                 new MusicQueue(),
                 new MusicSkip(),
                 new MusicClearQueue(),
-                new MusicController(),
+                new MusicController(),*/
                 // Autorole
                 new AutoRoleSet(),
                 // Notification
