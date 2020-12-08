@@ -52,8 +52,8 @@ public class GetMembers {
         if (type.equals(LeaderboardType.LEVEL)) { // Sort by level
             Collections.sort(leaderboard, Comparator.comparing(MemberDocument::getXp).reversed()); // Sort list
         }
-        else if (type.equals(LeaderboardType.LEVEL)) { // Sort list by balance
-            Collections.sort(leaderboard, Comparator.comparing(MemberDocument::getXp).reversed()); // Sort list
+        else if (type.equals(LeaderboardType.BALANCE)) { // Sort list by balance
+            Collections.sort(leaderboard, Comparator.comparing(MemberDocument::getBalance).reversed()); // Sort list
         }
 
         return leaderboard; // Return leaderboard
