@@ -35,7 +35,7 @@ public class Buy implements Command {
 
             // Add roles
             for (ShopRolesDocument role : roles) {
-                shop.appendDescription("• " + ctx.getGuild().getRoleById(role.getId()).getAsMention() + " - " + role.getPrice() + "\n");
+                shop.appendDescription("• " + ctx.getGuild().getRoleById(role.getId()).getAsMention() + " - " + Utilities.getUtils().formatNumber(role.getPrice()) + "\n");
             }
             shop.appendDescription("\nTo buy a role use `.buy <role>`");
 
