@@ -88,7 +88,7 @@ public class Leaderboard implements Command {
         for (int i = 0; i < leaderboard.size(); i++) {
             if (i > 10) break; // Show only the first 10 members
             if (guild.getMemberById(leaderboard.get(i).getId()) == null) continue;
-            top10.append(i + 1 + " \uD83C\uDF97 `" + leaderboard.get(i).getBalance() + "` **" + guild.getMemberById(leaderboard.get(i).getId()).getUser().getName() + "**\n");
+            top10.append(i + 1 + " \uD83C\uDF97 `" + Utilities.getUtils().formatNumber(leaderboard.get(i).getBalance()) + "` **" + guild.getMemberById(leaderboard.get(i).getId()).getUser().getName() + "**\n");
         }
         return top10.toString(); // Return the leaderboard as a string
     }
