@@ -46,7 +46,7 @@ public class Balance implements Command {
         // Send balance
         EmbedBuilder balance = new EmbedBuilder()
                 .setAuthor("balance", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                .setColor(utilities.getMemberRoleColour(ctx.getEvent().getMember()))
+                .setColor(utilities.getMemberRoleColour(member))
                 .setDescription(member.getAsMention() + "'s balance is `" + userBalance + "` " + currency);
         ctx.getChannel().sendMessage(balance.build()).queue();
     }
