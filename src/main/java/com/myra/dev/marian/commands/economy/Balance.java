@@ -41,11 +41,13 @@ public class Balance implements Command {
             member = Utilities.getUtils().getMember(ctx.getEvent(), ctx.getArguments()[0], "balance", currency);
             if (member == null) return;
         }
+
+        final String userBalance = utilities.formatNumber(db.getMembers().getMember(member).getBalance()); // Make number looks nicer
         // Send balance
         EmbedBuilder balance = new EmbedBuilder()
                 .setAuthor("balance", null, ctx.getAuthor().getEffectiveAvatarUrl())
                 .setColor(utilities.getMemberRoleColour(ctx.getEvent().getMember()))
-                .setDescription(member.getAsMention() + "'s balance is `" + db.getMembers().getMember(member).getBalance() + "` " + currency);
+                .setDescription(member.getAsMention() + "'s balance is `" + userBalance + "` " + currency);
         ctx.getChannel().sendMessage(balance.build()).queue();
     }
 }
