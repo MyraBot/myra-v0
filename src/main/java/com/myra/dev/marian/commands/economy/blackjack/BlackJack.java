@@ -42,10 +42,14 @@ public class BlackJack implements Command {
         // Search user in games
         if (games.containsKey(ctx.getGuild().getId())) { // Only check for user if guild is already in the hashmap
             for (String messageId : games.get(ctx.getGuild().getId()).keySet()) {
-                if (games.get(ctx.getGuild().getId()).get(messageId).getPlayers().contains(ctx.getAuthor())) {
-                    // If user has already started a game
-                    Utilities.getUtils().error(ctx.getChannel(), "blackjack", "\uD83C\uDCCF", "You already started a game", "Please finish the game you started first", ctx.getAuthor().getEffectiveAvatarUrl());
-                    return;
+                for (Player player : games.get(ctx.getGuild().getId()).get(messageId).getPlayers()) {
+                    if (player.getPlayer().equals(ctx.getAuthor())) {
+                        ctx.getChannel().retrieveMessageById(messageId).queue(message -> {
+                            // If user has already started a game
+                            Utilities.getUtils().error(ctx.getChannel(), "blackjack", "\uD83C\uDCCF", "You already started a game", "Please finish the " + Utilities.getUtils().hyperlink("game", message.getJumpUrl())+" you started first", ctx.getAuthor().getEffectiveAvatarUrl());
+                        });
+                        return;
+                    }
                 }
             }
         }
