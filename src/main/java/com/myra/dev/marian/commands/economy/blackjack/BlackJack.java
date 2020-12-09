@@ -129,13 +129,12 @@ public class BlackJack implements Command {
                 // Update match message
                 event.retrieveMessage().queue(message -> { // Get message
                     message.editMessage(getEmbed(player, dealer, game, event.getGuild()).build()).queue(updateMessage -> {// Update message
-                        final MessageEmbed embed = message.getEmbeds().get(0); // Get embed
+                        final MessageEmbed embed = updateMessage.getEmbeds().get(0); // Get embed
 
                         // gamed continues
                         if (embed.getFooter().getText().equals("Hit or stay?")) {
                             event.getReaction().removeReaction(event.getUser()).queue(); // Remove reaction
                         }
-
                         // Game ended
                         else {
                             message.clearReactions().queue(); // Clear reactions
