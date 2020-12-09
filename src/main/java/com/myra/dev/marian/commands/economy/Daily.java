@@ -60,7 +60,11 @@ public class Daily implements Command {
             // New reward
             else member.setDailyStreak(member.getDailyStreak() + 1); // Update daily streak
 
-            final int streakReward = member.getDailyStreak() * 100; // Get streak reward
+            // Get streak bonus
+            int streakReward;
+            if (member.getDailyStreak() > 14) streakReward = 14 * 100; // You can't get a higher streak than 14
+            else streakReward = member.getDailyStreak() * 100; // Get streak reward
+
             member.setBalance(member.getBalance() + streakReward + voteBonus); // Update members balance
             member.updateClaimedReward(); // Update last claimed reward time
 
