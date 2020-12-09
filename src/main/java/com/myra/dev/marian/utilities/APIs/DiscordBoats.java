@@ -21,6 +21,8 @@ public class DiscordBoats {
                 .url("https://discord.boats/api/bot/" + Bot.myra + "/voted?id=" + user.getId())
                 .build();
         final String response = Utilities.HTTP_CLIENT.newCall(request).execute().body().string(); // Get response
+        if (new JSONObject(response).getString("message").equals("User wasn't found"))
+            return false; // User hasn't logged in in discord.boats yet
         return new JSONObject(response).getBoolean("voted"); // Return voted state
     }
 }
