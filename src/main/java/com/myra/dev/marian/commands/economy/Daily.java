@@ -1,11 +1,12 @@
 package com.myra.dev.marian.commands.economy;
 
-import com.myra.dev.marian.utilities.APIs.TopGG;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.database.allMethods.GetMember;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.APIs.DiscordBoats;
+import com.myra.dev.marian.utilities.APIs.TopGG;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -17,64 +18,60 @@ import java.util.concurrent.TimeUnit;
 public class Daily implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        // Check for no arguments
-        if (ctx.getArguments().length != 0) return;
-        // Get member from database
-        GetMember member = new Database(ctx.getGuild()).getMembers().getMember(ctx.getEvent().getMember());
-        // Get last claimed reward
-        long lastClaim = member.getLastClaim();
-        // Get duration, which passed (in milliseconds)
-        long passedTime = System.currentTimeMillis() - lastClaim;
-        int streak = 0; // Create daily streak variable
-        int dailyReward = 0; // Create reward variable
+        if (ctx.getArguments().length != 0) return; // Check for no arguments
+
+        final GetMember member = new Database(ctx.getGuild()).getMembers().getMember(ctx.getEvent().getMember()); // Get member from database
+        long lastClaim = member.getLastClaim(); // Get last claimed reward
+
+
+        long passedTime = System.currentTimeMillis() - lastClaim; // Get duration, which passed (in milliseconds)
         final String currency = new Database(ctx.getGuild()).getNested("economy").get("currency").toString(); // Get currency
+
         // Create embed
         EmbedBuilder daily = new EmbedBuilder()
                 .setAuthor("daily", null, ctx.getAuthor().getEffectiveAvatarUrl())
                 .setColor(Utilities.getUtils().getMemberRoleColour(ctx.getEvent().getMember()));
 
-        // Too early
+        // 12 didn't pass
         if (TimeUnit.MILLISECONDS.toHours(passedTime) < 12) {
-            long nextBonusAt = lastClaim + TimeUnit.HOURS.toMillis(12);
-            String nextBonusIn = Utilities.getUtils().formatTime(nextBonusAt - System.currentTimeMillis());
+            final long nextBonusAt = lastClaim + TimeUnit.HOURS.toMillis(12); // Get duration until you can claim your reward
+            String nextBonusIn = Utilities.getUtils().formatTime(nextBonusAt - System.currentTimeMillis()); // Make time look nicer
 
-
-            daily.setDescription("You need to wait more " + nextBonusIn);
-            ctx.getChannel().sendMessage(daily.build()).queue();
+            daily.setDescription("You need to wait more " + nextBonusIn); // Set description
+            ctx.getChannel().sendMessage(daily.build()).queue(); // Send message
             return;
         }
 
         // Claim reward
         if (TimeUnit.MILLISECONDS.toHours(passedTime) >= 12) {
-            // Didn't miss reward
-            if (TimeUnit.MILLISECONDS.toHours(passedTime) <= 24) {
-                streak = member.getDailyStreak() + 1; // Update streak
+
+            int voteBonus = 0; // Create vote bonus
+            if (TopGG.getInstance().hasVoted(ctx.getAuthor())) { // Check if user voted bot on top.gg
+                voteBonus += 100; // Add 100 money to the vote bonus
             }
+            if (DiscordBoats.getInstance().hasVoted(ctx.getAuthor())) { // Check if user voted bot on discord.boats
+                voteBonus += 100; // Add 100 money to the vote bonus
+            }
+
             // Missed reward
-            if (TimeUnit.MILLISECONDS.toHours(passedTime) > 24) {
-                streak = 1; // Reset streak
+            if (TimeUnit.MILLISECONDS.toHours(passedTime) > 36) {
+                member.setDailyStreak(1); // Reset daily streak
             }
+            // New reward
+            else member.setDailyStreak(member.getDailyStreak() + 1); // Update daily streak
 
+            final int streakReward = member.getDailyStreak() * 100; // Get streak reward
+            member.setBalance(member.getBalance() + streakReward + voteBonus); // Update members balance
+            member.updateClaimedReward(); // Update last claimed reward time
 
-            dailyReward += streak * 100; // Get daily reward
-            // Get vote bonus
-            if (TopGG.getInstance().hasVoted(ctx.getAuthor())) {
-                daily.setDescription("Thanks for voting **+ 500**\n");
-                dailyReward =+ 500;
+            daily.setDescription("**+" + streakReward + "** " + currency + "! Now you have `" + member.getBalance() + "` " + currency + "\n"); // Show streak reward
+            // User voted
+            if (voteBonus != 0) {
+                daily.appendDescription("Thank you for voting! Your vote bonus: **+" + voteBonus + "**"); // Show vote bonus
             }
-            dailyReward += streak * 100;
-            int newBalance = member.getBalance() + dailyReward; // Get new balance
+            daily.setFooter("streak: " + member.getDailyStreak() + "/14"); // Show streak
 
-            member.setBalance(newBalance); // Update balance
-            member.updateClaimedReward(); // Update last claim
-            member.setDailyStreak(streak); // Update streak
-
-            // Show reward
-            daily.appendDescription("**+" + dailyReward + "** " + currency + "! Now you have `" + newBalance + "` " + currency);
-            // Show streak
-            daily.setFooter("streak: " + streak + "/14");
-            // Send daily reward
-            ctx.getChannel().sendMessage(daily.build()).queue();
+            ctx.getChannel().sendMessage(daily.build()).queue(); // Send daily reward
         }
     }
 }
