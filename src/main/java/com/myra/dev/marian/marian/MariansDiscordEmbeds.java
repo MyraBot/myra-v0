@@ -6,29 +6,29 @@ import com.myra.dev.marian.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 @CommandSubscribe(
-        name = "MDinformation",
+        name = "update embeds",
         requires = Permissions.MARIAN
 )
 public class MariansDiscordEmbeds implements Command {
 
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        final TextChannel information = ctx.getGuild().getTextChannelById("726130459079213138");
+        final TextChannel information = ctx.getGuild().getTextChannelById("717655383451107339");
 
         // Welcome
-        information.editMessageById("726130459079213138",
-                new EmbedBuilder()
-                        .setTitle("welcome to " + ctx.getGuild().getName())
-                        .setThumbnail(ctx.getGuild().getIconUrl())
-                        .setColor(0x00FFFF)
-                        .addField("", ctx.getGuild().getName() + " is a server dedicated to have fun and write with other people", false)
-                        .addField("", "Underneath you can find all information you will need to get you started in our server! If you still have questions after reading this, just contact one of our staff members! Also check out <#696420618995761192> in case something changes.", false)
-                        .addField("", "**\uD83D\uDD17 invite link : https://discord.gg/nG4uKuB**", false)
-                        .build()
-        ).queue();
+        MessageEmbed welcome = new EmbedBuilder()
+                .setTitle("Welcome to " + ctx.getGuild().getName())
+                .setThumbnail(ctx.getGuild().getIconUrl())
+                .setColor(0x00FFFF)
+                .addField("", ctx.getGuild().getName() + " is a server dedicated to have fun and write with other people", false)
+                .addField("", "Underneath you can find all information you will need to get you started in our server! If you still have questions after reading this, just contact one of our staff members! Also check out <#696420618995761192> in case something changes.", false)
+                .addField("", "**\uD83D\uDD17 invite link : https://discord.gg/nG4uKuB**", false)
+                .build();
+        information.editMessageById("726130459079213138", welcome).queue();
 
         // Buyable roles
         information.editMessageById("726130523998781513",
