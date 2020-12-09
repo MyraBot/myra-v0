@@ -1,6 +1,5 @@
 package com.myra.dev.marian.commands.administrator.notifications;
 
-import com.google.api.services.youtube.model.SearchResultSnippet;
 import com.myra.dev.marian.utilities.APIs.GoogleYouTube;
 import com.myra.dev.marian.database.managers.NotificationsYoutubeManager;
 import com.myra.dev.marian.management.commands.Command;
