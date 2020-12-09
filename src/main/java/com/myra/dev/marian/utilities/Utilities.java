@@ -269,7 +269,7 @@ public class Utilities {
 
         // Role given by id or mention
         if (providedUser.startsWith("<@") || providedUser.matches("\\d+")) {
-            member = event.getGuild().getMemberById(providedUser.replaceAll("[<@>]", ""));
+            member = event.getGuild().getMemberById(providedUser.replaceAll("[<!@>]", ""));
         }
         // Role given by name
         else if (!event.getGuild().getMembersByEffectiveName(providedUser, true).isEmpty()) {
