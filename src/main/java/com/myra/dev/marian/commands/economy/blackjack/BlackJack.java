@@ -46,7 +46,7 @@ public class BlackJack implements Command {
                     if (player.getPlayer().equals(ctx.getAuthor())) {
                         ctx.getChannel().retrieveMessageById(messageId).queue(message -> {
                             // If user has already started a game
-                            Utilities.getUtils().error(ctx.getChannel(), "blackjack", "\uD83C\uDCCF", "You already started a game", "Please finish the " + Utilities.getUtils().hyperlink("game", message.getJumpUrl())+" you started first", ctx.getAuthor().getEffectiveAvatarUrl());
+                            Utilities.getUtils().error(ctx.getChannel(), "blackjack", "\uD83C\uDCCF", "You already started a game", "Please finish the " + Utilities.getUtils().hyperlink("game", message.getJumpUrl()) + " you started first", ctx.getAuthor().getEffectiveAvatarUrl());
                         });
                         return;
                     }
@@ -142,7 +142,7 @@ public class BlackJack implements Command {
                         // Game ended
                         else {
                             message.clearReactions().queue(); // Clear reactions
-                            games.remove(event.getMessageId()); // Remove game
+                            games.get(guildId).remove(event.getMessageId()); // Remove game
                         }
                     });
                 });
@@ -209,7 +209,7 @@ public class BlackJack implements Command {
                     message.clearReactions().queue(); // Clear reactions
                 });
                 // Remove game
-                games.remove(event.getMessageId());
+                games.get(guildId).remove(event.getMessageId());
             }
         }
     }
