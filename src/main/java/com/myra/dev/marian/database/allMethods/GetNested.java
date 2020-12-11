@@ -20,9 +20,15 @@ public class GetNested {
         this.nested = nested;
     }
 
-
-    public <T> T get(Object key, Class<T> clazz) {
-        return mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first().get(nested, Document.class).get(key, clazz);
+    /**
+     *
+     * @param key The key to search.
+     * @param type Class type to return.
+     * @param <T> The generic.
+     * @return Returns a value as the specified class type.
+     */
+    public <T> T get(String key, Class<T> type) {
+        return mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first().get(nested, Document.class).get(key, type);
     }
 
     /**
