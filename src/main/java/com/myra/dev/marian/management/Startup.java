@@ -15,9 +15,10 @@ import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -76,26 +77,22 @@ public class Startup extends ListenerAdapter {
 
 
     private void online() {
+        final int start = 60 - LocalDateTime.now().getMinute() % 60; // Get time to start changing the profile picutre
         // Set her status to online
         Bot.shardManager.getShards().forEach(bot -> {
             bot.getPresence().setActivity(Activity.listening("~help │ " + bot.getGuilds().size() + " servers")); // Change status
         });
-        /// Get current time
-        final Calendar rightNow = Calendar.getInstance();
-        final int minute = rightNow.get(Calendar.MINUTE); // Get minutes passed
-        final int wait = 60 - minute; // Get minutes to wait
         // Get a random one
         Utilities.TIMER.scheduleAtFixedRate(() -> {
-            final int random = new Random().nextInt(profilePictures.size()); // Get random number
             // Change profile
             Bot.shardManager.getShards().forEach(bot -> {
                 try {
                     bot.getPresence().setActivity(Activity.listening("~help │ " + bot.getGuilds().size() + " servers")); // Change status
-                    bot.getSelfUser().getManager().setAvatar(Icon.from(profilePictures.get(random))).queue(); // Change profile picture
+                    bot.getSelfUser().getManager().setAvatar(Icon.from(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("profilePicture" + new Random().nextInt(9) + ".png")))).queue(); // Change profile picture
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             });
-        }, wait, 60, TimeUnit.MINUTES);
+        }, start, 60, TimeUnit.MINUTES);
     }
 }
