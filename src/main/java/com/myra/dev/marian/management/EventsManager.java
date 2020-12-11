@@ -1,5 +1,6 @@
 package com.myra.dev.marian.management;
 
+import com.myra.dev.marian.commands.Leaderboard;
 import com.myra.dev.marian.commands.administrator.notifications.NotificationsList;
 import com.myra.dev.marian.commands.economy.blackjack.BlackJack;
 import com.myra.dev.marian.commands.fun.TextFormatter;
@@ -8,7 +9,6 @@ import com.myra.dev.marian.commands.help.Commands;
 import com.myra.dev.marian.commands.help.Help;
 import com.myra.dev.marian.commands.help.InviteThanks;
 import com.myra.dev.marian.commands.leveling.Background;
-import com.myra.dev.marian.commands.Leaderboard;
 import com.myra.dev.marian.commands.moderation.mute.MutePermissions;
 import com.myra.dev.marian.commands.music.commands.MusicController;
 import com.myra.dev.marian.commands.music.commands.MusicPlay;
@@ -65,6 +65,11 @@ public class EventsManager extends ListenerAdapter {
      */
     private final Shutdown shutdown = new Shutdown();
     private final WelcomeImageFont welcomeImageFont = new WelcomeImageFont();
+    private final NotificationsList notificationsList = new NotificationsList();
+    private final Commands commands = new Commands();
+    private final Help help = new Help();
+    private final InformationServer informationServer = new InformationServer();
+    private final TextFormatter textFormatter = new TextFormatter();
     private final Background background = new Background();
     private final BlackJack blackJack = new BlackJack();
     private final Leaderboard leaderboard = new Leaderboard();
@@ -77,14 +82,14 @@ public class EventsManager extends ListenerAdapter {
             shutdown.exitProgram(event); // Shutdown
             // Administrator
             welcomeImageFont.chooseFont(event); // Change welcome image font
-            new NotificationsList().switchList(event); // List notification
+            notificationsList.switchList(event); // List notification
             // Help
-            new Commands().guildMessageReactionAddEvent(event);
-            new Help().guildMessageReactionAddEvent(event);
+            commands.guildMessageReactionAddEvent(event);
+            help.guildMessageReactionAddEvent(event);
             // Commands
-            new InformationServer().guildMessageReactionAddEvent(event);
+            informationServer.guildMessageReactionAddEvent(event);
             // Fun
-            new TextFormatter().guildMessageReactionAddEvent(event); // Text formatter
+            textFormatter.guildMessageReactionAddEvent(event); // Text formatter
             // Leveling
             leaderboard.switchLeaderboard(event); // Switch what leaderboard shows
             // Economy
