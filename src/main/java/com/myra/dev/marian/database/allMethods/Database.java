@@ -22,8 +22,12 @@ public class Database {
      * methods
      */
     //get String
-    public String get(String key) {
-        return mongoDb.getCollection("guilds").find(and(eq("guildId", guild.getId()), exists("prefix"))).first().getString(key);
+    public String getString(String key) {
+        return mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first().getString(key);
+    }
+    //get boolean
+    public boolean getBoolean(String key) {
+        return mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first().getBoolean(key);
     }
 
     //replace String

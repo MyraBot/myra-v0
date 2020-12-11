@@ -10,7 +10,7 @@ public class AutoroleAssign  {
         try {
             Database db = new Database(event.getGuild());
             //get role
-            String autoRole = db.get("autoRole");
+            String autoRole = db.getString("autoRole");
             // Check if no role is set
             if (autoRole.equals("not set")) return;
             //assign role

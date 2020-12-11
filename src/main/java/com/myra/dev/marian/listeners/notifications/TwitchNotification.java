@@ -1,9 +1,9 @@
 package com.myra.dev.marian.listeners.notifications;
 
-import com.myra.dev.marian.utilities.APIs.Twitch;
 import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.database.managers.NotificationsTwitchManager;
+import com.myra.dev.marian.utilities.APIs.Twitch;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.events.ReadyEvent;
 import org.bson.Document;
 import org.json.JSONObject;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Iterator;
@@ -40,7 +41,7 @@ public class TwitchNotification {
 
                     // If no notifications channel is set
                     if (channelRaw.equals("not set")) {
-                        Utilities.getUtils().error(guild.getDefaultChannel(), "notifications", "\uD83D\uDD14", "No notifications channel specified", "To set a notifications channel type in `" + db.get("prefix") + "notification channel <channel>`", guild.getIconUrl());
+                        Utilities.getUtils().error(guild.getDefaultChannel(), "notifications", "\uD83D\uDD14", "No notifications channel specified", "To set a notifications channel type in `" + db.getString("prefix") + "notification channel <channel>`", guild.getIconUrl());
                         continue;
                     }
                     TextChannel channel = guild.getTextChannelById(channelRaw); // Get notifications channel
@@ -71,22 +72,21 @@ public class TwitchNotification {
                         final String name = stream.getString("display_name"); // Get user name of streamer
                         final String title = stream.getString("title"); // Get stream title
                         final String thumbnail = stream.getString("thumbnail_url"); // Get profile picture
+                        final String preview = new URL("https://static-cdn.jtvnw.net/previews-ttv/live_user_" + name + "-440x248.jpg").openConnection().getURL().toString();
                         // Create embed
                         EmbedBuilder notification = new EmbedBuilder()
                                 .setAuthor(name, "https://www.twitch.tv/" + name, thumbnail)
                                 .setColor(Utilities.getUtils().blue)
                                 .setDescription(Utilities.getUtils().hyperlink(title, "https://www.twitch.tv/" + name) + "\n")
                                 .setThumbnail(thumbnail)
-                                .setImage("https://static-cdn.jtvnw.net/previews-ttv/live_user_" + name + "-440x248.jpg")
+                                .setImage(preview)
                                 .setTimestamp(date.toInstant());
                         // If streamer set a game
                         if (!stream.getString("game_id").equals("0")) {
                             notification.appendDescription(new Twitch().getGame(stream.getString("game_id"))); // Add game to notification
                         }
                         assert channel != null;
-                       final Message message = channel.sendMessage(notification.build()).complete();// Send stream notification
-                        channel.editMessageById(message.getId(), notification.setImage("https://static-cdn.jtvnw.net/previews-ttv/live_user_" + name + "-440x248.jpg").build()).queue(); // Edit the message to hopefully update the iamge
-                        // TODO ^
+                        channel.sendMessage(notification.build()).queue(); // Send stream notification
                     }
                 }
 

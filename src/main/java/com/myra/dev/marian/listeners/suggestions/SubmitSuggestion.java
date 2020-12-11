@@ -37,7 +37,7 @@ public class SubmitSuggestion implements Command {
          * Submit suggestion
          */
         //if no channel is set
-        if (db.get("suggestionsChannel").equals("not set")) {
+        if (db.getString("suggestionsChannel").equals("not set")) {
             utilities.error(ctx.getChannel(), "suggestions", "\uD83D\uDCA1", "No suggestion channel specified", "To set a suggestion channel type in `" + ctx.getPrefix() + "suggestions channel <channel>`", ctx.getGuild().getIconUrl());
             return;
         }
@@ -49,7 +49,7 @@ public class SubmitSuggestion implements Command {
         //remove last space
         suggestion = suggestion.substring(0, suggestion.length() - 1);
         //send suggestion
-        ctx.getGuild().getTextChannelById(db.get("suggestionsChannel")).sendMessage(
+        ctx.getGuild().getTextChannelById(db.getString("suggestionsChannel")).sendMessage(
                 new EmbedBuilder()
                         .setAuthor("suggestion by " + ctx.getAuthor().getAsTag(), ctx.getEvent().getMessage().getJumpUrl(), ctx.getGuild().getIconUrl())
                         .setColor(utilities.getMemberRoleColour(ctx.getEvent().getMember()))

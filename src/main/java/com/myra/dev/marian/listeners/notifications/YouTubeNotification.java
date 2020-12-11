@@ -39,7 +39,7 @@ public class YouTubeNotification {
 
                     // If no notifications channel is set
                     if (channelRaw.equals("not set")) {
-                        Utilities.getUtils().error(guild.getDefaultChannel(), "notifications", "\uD83D\uDD14", "No notification channel specified", "To set a notification channel type in `" + db.get("prefix") + "notification channel <channel>`", guild.getIconUrl());
+                        Utilities.getUtils().error(guild.getDefaultChannel(), "notifications", "\uD83D\uDD14", "No notification channel specified", "To set a notification channel type in `" + db.getString("prefix") + "notification channel <channel>`", guild.getIconUrl());
                         continue;
                     }
                     TextChannel channel = guild.getTextChannelById(channelRaw); // Get notifications channel

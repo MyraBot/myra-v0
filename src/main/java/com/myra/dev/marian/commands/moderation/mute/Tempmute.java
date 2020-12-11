@@ -58,7 +58,7 @@ public class Tempmute  implements Command {
         User user = utilities.getModifiedUser(ctx.getEvent(), ctx.getArguments()[0], "tempmute", "\uD83D\uDD07");
         if (user == null) return;
         //get mute role id
-        String muteRoleId = new Database(ctx.getGuild()).get("muteRole");
+        String muteRoleId = new Database(ctx.getGuild()).getString("muteRole");
         //no mute role set
         if (muteRoleId.equals("not set")) {
             utilities.error(ctx.getChannel(), "tempmute", "\uD83D\uDD07", "You didn't specify a mute role", "To indicate a mute role, type in `" + ctx.getPrefix() + "mute role <role>`", ctx.getAuthor().getEffectiveAvatarUrl());
@@ -158,12 +158,12 @@ public class Tempmute  implements Command {
             channel.sendMessage(directMessage.build()).queue();
         });
         //if no channel is set
-        if (db.get("logChannel").equals("not set")) {
-            Utilities.getUtils().error(guild.getDefaultChannel(), "tempban", "\u23F1\uFE0F", "No log channel specified", "To set a log channel type in `" + db.get("prefix") + "log channel <channel>`", author.getEffectiveAvatarUrl());
+        if (db.getString("logChannel").equals("not set")) {
+            Utilities.getUtils().error(guild.getDefaultChannel(), "tempban", "\u23F1\uFE0F", "No log channel specified", "To set a log channel type in `" + db.getString("prefix") + "log channel <channel>`", author.getEffectiveAvatarUrl());
             return;
         }
         //get log channel
-        TextChannel textChannel = guild.getTextChannelById(db.get("logChannel"));
+        TextChannel textChannel = guild.getTextChannelById(db.getString("logChannel"));
         //guild message unmute
         EmbedBuilder guildMessage = new EmbedBuilder()
                 .setAuthor(user.getAsTag() + " got unmuted", null, user.getEffectiveAvatarUrl())
@@ -191,18 +191,18 @@ public class Tempmute  implements Command {
                     mongoDb.getCollection("unmutes").deleteOne(doc);
                 }
                 // No mute role set
-                if (new Database(guild).get("muteRole").equals("not set")) {
+                if (new Database(guild).getString("muteRole").equals("not set")) {
                     // No logging channel set
-                    if (new Database(guild).get("logChannel").equals("not set")) {
-                        Utilities.getUtils().error(guild.getDefaultChannel(), "tempmute", "\u23F1\uFE0F", "No log channel specified", "To set a log channel type in `" + new Database(guild).get("prefix") + "log channel <channel>`", guild.getIconUrl());
-                        Utilities.getUtils().error(guild.getDefaultChannel(), "tempmute", "\uD83D\uDD07", "You didn't specify a mute role", "To indicate a mute role, type in `" + new Database(guild).get("prefix") + "mute role <role>`", guild.getIconUrl());
+                    if (new Database(guild).getString("logChannel").equals("not set")) {
+                        Utilities.getUtils().error(guild.getDefaultChannel(), "tempmute", "\u23F1\uFE0F", "No log channel specified", "To set a log channel type in `" + new Database(guild).getString("prefix") + "log channel <channel>`", guild.getIconUrl());
+                        Utilities.getUtils().error(guild.getDefaultChannel(), "tempmute", "\uD83D\uDD07", "You didn't specify a mute role", "To indicate a mute role, type in `" + new Database(guild).getString("prefix") + "mute role <role>`", guild.getIconUrl());
                         return;
                     }
-                    TextChannel logChannel = guild.getTextChannelById((new Database(guild).get("muteRole")));
-                    Utilities.getUtils().error(logChannel, "tempmute", "\uD83D\uDD07", "You didn't specify a mute role", "To indicate a mute role, type in `" + new Database(guild).get("prefix") + "mute role <role>`", guild.getIconUrl());
+                    TextChannel logChannel = guild.getTextChannelById((new Database(guild).getString("muteRole")));
+                    Utilities.getUtils().error(logChannel, "tempmute", "\uD83D\uDD07", "You didn't specify a mute role", "To indicate a mute role, type in `" + new Database(guild).getString("prefix") + "mute role <role>`", guild.getIconUrl());
                 }
                 //remove role
-                guild.removeRoleFromMember(doc.getString("userId"), guild.getRoleById(new Database(guild).get("muteRole"))).queue();
+                guild.removeRoleFromMember(doc.getString("userId"), guild.getRoleById(new Database(guild).getString("muteRole"))).queue();
                 //send unmute message
                 unmuteMessage(event.getJDA().getUserById(doc.getString("userId")), guild, event.getJDA().getUserById(doc.getString("moderatorId")));
                 //delete document
@@ -222,7 +222,7 @@ public class Tempmute  implements Command {
                         mongoDb.getCollection("unmutes").deleteOne(doc);
                     }
                     //unmute
-                    guild.removeRoleFromMember(doc.getString("userId"), guild.getRoleById(new Database(guild).get("muteRole"))).queue();
+                    guild.removeRoleFromMember(doc.getString("userId"), guild.getRoleById(new Database(guild).getString("muteRole"))).queue();
                     //send unmute message
                     unmuteMessage(event.getJDA().getUserById(doc.getString("userId")), guild, event.getJDA().getUserById(doc.getString("moderatorId")));
                     //delete document

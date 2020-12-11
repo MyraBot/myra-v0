@@ -11,7 +11,7 @@ import java.util.EnumSet;
 public class MutePermissions  {
 
     public void textChannelCreateEvent(TextChannelCreateEvent event) {
-        String id = new Database(event.getGuild()).get("muteRole");
+        String id = new Database(event.getGuild()).getString("muteRole");
         if (id.equals("not set")) return;
         Role muteRole = event.getGuild().getRoleById(id);
         if (muteRole == null) return;

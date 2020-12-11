@@ -45,7 +45,7 @@ public class Help implements Command {
         // If reaction was added on the wrong message return
         if (!MessageReaction.check(event, "help", true)) return;
 
-        CommandEmbeds embed = new CommandEmbeds(event.getGuild(), event.getJDA(), event.getUser(), new Database(event.getGuild()).get("prefix"));
+        CommandEmbeds embed = new CommandEmbeds(event.getGuild(), event.getJDA(), event.getUser(), new Database(event.getGuild()).getString("prefix"));
         //invite bot
         if (event.getReactionEmote().getEmoji().equals("\u2709\uFE0F") && !event.getMember().getUser().isBot()) {
             event.getChannel().editMessageById(event.getMessageId(), embed.inviteJda().build()).queue();

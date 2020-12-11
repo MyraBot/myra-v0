@@ -38,12 +38,12 @@ public class SuggestionsChannel implements Command {
         TextChannel channel = utilities.getTextChannel(ctx.getEvent(), ctx.getArguments()[0], "suggestions", "\uD83D\uDDF3");
         if (channel == null) return;
         //remove suggestions channel
-        if (db.get("suggestionsChannel").equals(channel.getId())) {
+        if (db.getString("suggestionsChannel").equals(channel.getId())) {
             // Success
             utilities.success(ctx.getChannel(),
                     "suggestions", "\uD83D\uDDF3",
                     "removed suggestions channel",
-                    "Suggestions are no longer sent in " + ctx.getGuild().getTextChannelById(db.get("suggestionsChannel")).getAsMention(),
+                    "Suggestions are no longer sent in " + ctx.getGuild().getTextChannelById(db.getString("suggestionsChannel")).getAsMention(),
                     ctx.getAuthor().getEffectiveAvatarUrl(),
                     false, null);
             // Update database

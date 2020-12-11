@@ -36,7 +36,7 @@ public class Commands implements Command {
         if (!MessageReaction.check(event, "commands", true)) return;
 
         // Get Prefix
-        final String prefix = new Database(event.getGuild()).get("prefix");
+        final String prefix = new Database(event.getGuild()).getString("prefix");
         // Get Embeds
         CommandEmbeds embed = new CommandEmbeds(event.getGuild(), event.getJDA(), event.getUser(), prefix);
 

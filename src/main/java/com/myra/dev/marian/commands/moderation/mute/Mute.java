@@ -43,7 +43,7 @@ public class Mute implements Command {
             //get user
             user = Utilities.getUtils().getModifiedUser(ctx.getEvent(), sentMessage[1], "mute", "\uD83D\uDD08");
             //get mute role id
-            muteRoleId = new Database(ctx.getGuild()).get("muteRole");
+            muteRoleId = new Database(ctx.getGuild()).getString("muteRole");
             //no mute role set
             if (muteRoleId.equals("not set")) {
                 Utilities.getUtils().error(ctx.getChannel(), "mute", "\uD83D\uDD07 ", "You didn't specify a mute role", "To indicate a mute role, type in `" + ctx.getPrefix() + "mute role <role>`", ctx.getAuthor().getEffectiveAvatarUrl());

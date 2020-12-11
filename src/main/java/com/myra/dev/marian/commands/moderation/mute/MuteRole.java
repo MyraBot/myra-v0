@@ -39,7 +39,7 @@ public class MuteRole implements Command {
         Role role = utilities.getRole(ctx.getEvent(), ctx.getArguments()[0], "mute role", "\uD83D\uDD07");
         if (role == null) return;
         //get mute role id
-        String muteRoleId = db.get("muteRole");
+        String muteRoleId = db.getString("muteRole");
         //remove mute role
         if (role.getId().equals(muteRoleId)) {
             //success

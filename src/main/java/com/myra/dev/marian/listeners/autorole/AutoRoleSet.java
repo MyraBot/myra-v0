@@ -37,9 +37,9 @@ public class AutoRoleSet implements Command {
         // Get database
         Database db = new Database(ctx.getGuild());
         //remove autorole
-        if (db.get("autoRole").equals(role.getId())) {
+        if (db.getString("autoRole").equals(role.getId())) {
             //error
-            utilities.success(ctx.getChannel(), "auto role", "\uD83D\uDCDD", "Removed auto role", "New members no longer get the " + ctx.getGuild().getRoleById(db.get("autoRole")).getAsMention() + " role", ctx.getAuthor().getEffectiveAvatarUrl(), false, null);
+            utilities.success(ctx.getChannel(), "auto role", "\uD83D\uDCDD", "Removed auto role", "New members no longer get the " + ctx.getGuild().getRoleById(db.getString("autoRole")).getAsMention() + " role", ctx.getAuthor().getEffectiveAvatarUrl(), false, null);
             //database
             db.set("autoRole", "not set");
             return;

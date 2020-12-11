@@ -40,7 +40,7 @@ public class LogChannel implements Command {
         // Get database
         Database db = new Database(ctx.getGuild());
         // Remove logs channel
-        if (channel.getId().equals(db.get("logChannel"))) {
+        if (channel.getId().equals(db.getString("logChannel"))) {
             // Update database
             db.set("logChannel", "not set");
             // Send success message

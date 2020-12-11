@@ -21,7 +21,7 @@ public class LevelingListener implements Listener {
     @Override
     public void execute(ListenerContext ctx) throws Exception {
         // Return if message is a command
-        if (ctx.getMessage().getContentRaw().startsWith(new Database(ctx.getGuild()).get("prefix"))) return;
+        if (ctx.getMessage().getContentRaw().startsWith(new Database(ctx.getGuild()).getString("prefix"))) return;
         if (!cooldown(ctx)) return;
         //check if member is bot
         if (ctx.getEvent().getAuthor().isBot()) return;

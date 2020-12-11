@@ -220,12 +220,12 @@ public class Tempban  implements Command {
             channel.sendMessage(directMessage.build()).queue();
         });
         //if no channel is set
-        if (db.get("logChannel").equals("not set")) {
-            Utilities.getUtils().error(guild.getDefaultChannel(), "tempban", "\u23F1\uFE0F", "No log channel specified", "To set a log channel type in `" + new Database(guild).get("prefix") + "log channel <channel>`", author.getEffectiveAvatarUrl());
+        if (db.getString("logChannel").equals("not set")) {
+            Utilities.getUtils().error(guild.getDefaultChannel(), "tempban", "\u23F1\uFE0F", "No log channel specified", "To set a log channel type in `" + new Database(guild).getString("prefix") + "log channel <channel>`", author.getEffectiveAvatarUrl());
             return;
         }
         //get log channel
-        TextChannel textChannel = guild.getTextChannelById(db.get("logChannel"));
+        TextChannel textChannel = guild.getTextChannelById(db.getString("logChannel"));
         //guild message
         EmbedBuilder guildMessage = new EmbedBuilder()
                 .setAuthor("│ " + user.getAsTag() + " got unbanned", null, user.getEffectiveAvatarUrl())

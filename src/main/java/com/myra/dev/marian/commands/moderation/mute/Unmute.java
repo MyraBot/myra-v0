@@ -36,7 +36,7 @@ public class Unmute implements Command {
         User user = utilities.getModifiedUser(ctx.getEvent(), ctx.getArguments()[0], "Unmute", "\uD83D\uDD08");
         if (user == null) return;
         //get mute role id
-        String muteRoleId = new Database(ctx.getGuild()).get("muteRole");
+        String muteRoleId = new Database(ctx.getGuild()).getString("muteRole");
         //no mute role set
         if (muteRoleId.equals("not set")) {
             Utilities.getUtils().error(ctx.getChannel(), "unmute", "\uD83D\uDD08", "You didn't specify a mute role", "To indicate a mute role, type in `" + ctx.getPrefix() + "mute role <role>`", ctx.getAuthor().getEffectiveAvatarUrl());
