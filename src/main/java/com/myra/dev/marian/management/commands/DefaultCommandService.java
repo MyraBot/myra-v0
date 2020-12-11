@@ -2,6 +2,7 @@ package com.myra.dev.marian.management.commands;
 
 import com.myra.dev.marian.Bot;
 import com.myra.dev.marian.database.MongoDb;
+import com.myra.dev.marian.database.MongoDbDocuments;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.Permissions;
 import net.dv8tion.jda.api.Permission;
@@ -75,7 +76,8 @@ public class DefaultCommandService implements CommandService {
     @Override
     public void processCommandExecution(GuildMessageReceivedEvent event) throws Exception {
         //get prefix
-        final String prefix = new Database(event.getGuild()).get("prefix");
+        if (new Database(event.getGuild()).getString("prefix") == null) MongoDbDocuments.guild(event.getGuild());
+        final String prefix = new Database(event.getGuild()).getString("prefix");
         // If message doesn't start with prefix
         if (!event.getMessage().getContentRaw().startsWith(prefix)) return;
         // Get message without prefix
