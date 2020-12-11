@@ -21,7 +21,7 @@ public class Streamer implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
         // Usage
-        if (ctx.getArguments().length == 0) {
+        if (ctx.getArguments().length != 1) {
             EmbedBuilder notificationUsage = new EmbedBuilder()
                     .setAuthor("notification Twitch", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(Utilities.getUtils().gray)
@@ -30,8 +30,7 @@ public class Streamer implements Command {
             return;
         }
 // Add or remove streamer
-        final String input = Utilities.getUtils().getString(ctx.getArguments()); // Get channel name
-        final JSONObject channelInformation = new Twitch().getChannel(input); // Get channel information
+        final JSONObject channelInformation = new Twitch().getChannel(ctx.getArguments()[0]); // Get channel information
         // Create embed
         EmbedBuilder streamer = new EmbedBuilder()
                 .setAuthor("streamers", null, ctx.getAuthor().getEffectiveAvatarUrl())
@@ -58,7 +57,7 @@ public class Streamer implements Command {
             NotificationsTwitchManager.getInstance().addStreamer(ctx.getGuild(), channelName); // Remove streamer from the database
             // Complete embed
             streamer
-                    .addField("\uD83D\uDD15 │ Added streamer", "Added **" + channelName + "**", false)
+                    .addField("\uD83D\uDD14 │ Added streamer", "Added **" + channelName + "**", false)
                     .setThumbnail(channelInformation.getString("profilePicture"));
         }
 
