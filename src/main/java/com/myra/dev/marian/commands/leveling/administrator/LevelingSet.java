@@ -1,13 +1,12 @@
 package com.myra.dev.marian.commands.leveling.administrator;
 
 import com.myra.dev.marian.database.allMethods.Database;
-
-import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.Utilities;
+import com.myra.dev.marian.listeners.leveling.Leveling;
 import com.myra.dev.marian.management.commands.Command;
-import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Permissions;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 
@@ -16,6 +15,8 @@ import net.dv8tion.jda.api.entities.User;
         requires = Permissions.ADMINISTRATOR
 )
 public class LevelingSet implements Command {
+    private final Leveling leveling = new Leveling();
+
     @Override
     public void execute(CommandContext ctx) throws Exception {
         // Get utilities
@@ -39,9 +40,14 @@ public class LevelingSet implements Command {
             Utilities.getUtils().error(ctx.getChannel(), "leveling set", "\uD83C\uDFC6", user.getName() + " is a bot", "Bots aren't allowed to participate in the ranking competition", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
-        //replace level in database
-        db.getMembers().getMember(ctx.getGuild().getMember(user)).setLevel(Integer.parseInt(ctx.getArguments()[1]));
+
+        // Update database
+        db.getMembers().getMember(ctx.getGuild().getMember(user)).setInteger("level", Integer.parseInt(ctx.getArguments()[1])); // Update level
+        db.getMembers().getMember(ctx.getGuild().getMember(user)).setInteger("xp", leveling.xpFromLevel(Integer.parseInt(ctx.getArguments()[1]))); // Update xp
+
         //send success message
         Utilities.getUtils().success(ctx.getChannel(), "leveling set", "\uD83C\uDFC6", user.getName() + "'s level changed", user.getAsMention() + " is now level `" + ctx.getArguments()[1] + "`", ctx.getAuthor().getEffectiveAvatarUrl(), false, null);
+        // CHeck for leveling roles
+        leveling.levelingRoles(ctx.getGuild(), ctx.getGuild().getMember(user), new Database(ctx.getGuild()).getMembers().getMember(ctx.getGuild().getMember(user)));
     }
 }
