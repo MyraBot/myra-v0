@@ -82,7 +82,7 @@ public class DefaultCommandService implements CommandService {
         //get prefix
         final String prefix = new Database(event.getGuild()).getString("prefix");
         // If message doesn't start with prefix
-        if (event.getMessage().getContentRaw().startsWith(prefix)) return;
+        if (!event.getMessage().getContentRaw().startsWith(prefix)) return;
         // Get message without prefix
         String rawMessage = event.getMessage().getContentRaw().substring(prefix.length());
         // Split rawMessage
