@@ -53,10 +53,11 @@ public class EventsManager extends ListenerAdapter {
             commandService.processCommandExecution(event);
             listenerService.processCommandExecution(event);
         } catch (Exception e) {
-            if (e.toString().startsWith("net.dv8tion.jda.api.exceptions.InsufficientPermissionException: Cannot perform action due to a lack of Permission. Missing permission: MESSAGE_WRITE"))
-                return;
-            event.getChannel().sendMessage("Error: Please report this to my developer!");
-            e.printStackTrace();
+            if (e.toString().startsWith("net.dv8tion.jda.api.exceptions.InsufficientPermissionException: Cannot perform action due to a lack of Permission. Missing permission: MESSAGE_WRITE")) {
+            } else {
+                event.getChannel().sendMessage("Error: Please report this to my developer!");
+                e.printStackTrace();
+            }
         }
     }
 
