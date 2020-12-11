@@ -13,8 +13,8 @@ public class WelcomeDirectMessageRender {
     public MessageEmbed render(Guild guild, User user) {
         Database db = new Database(guild); // Get database
         // Get variables
-        String welcomeColour = db.getNested("welcome").get("welcomeColour").toString();
-        String welcomeDirectMessage = db.getNested("welcome").get("welcomeDirectMessage").toString();
+        String welcomeColour = db.getNested("welcome").getString("welcomeColour");
+        String welcomeDirectMessage = db.getNested("welcome").getString("welcomeDirectMessage");
         // Return message embed
         return new EmbedBuilder()
                 .setAuthor("welcome", null, guild.getIconUrl())

@@ -33,7 +33,7 @@ public class EventWaiter {
             EmbedBuilder sell = new EmbedBuilder()
                     .setAuthor("buy", null, event.getAuthor().getEffectiveAvatarUrl())
                     .setColor(Utilities.getUtils().blue)
-                    .setDescription("Sold " + event.getGuild().getRoleById(role.getId()).getAsMention() + " for " + role.getPrice() / 2 + new Database(event.getGuild()).getNested("economy").get("currency"));
+                    .setDescription("Sold " + event.getGuild().getRoleById(role.getId()).getAsMention() + " for " + role.getPrice() / 2 + new Database(event.getGuild()).getNested("economy").getString("currency"));
             event.getChannel().sendMessage(sell.build()).queue();
             // Add money
             GetMember memberDb = new Database(event.getGuild()).getMembers().getMember(event.getMember()); // Get member in database

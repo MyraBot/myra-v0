@@ -26,7 +26,7 @@ public class Currency implements Command {
             EmbedBuilder usage = new EmbedBuilder()
                     .setAuthor("leveling currency", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(utilities.gray)
-                    .addField("`" + ctx.getPrefix() + "economy currency <emoji>`", db.getNested("economy").get("currency") + " │ Set a custom currency", false);
+                    .addField("`" + ctx.getPrefix() + "economy currency <emoji>`", db.getNested("economy").getString("currency") + " │ Set a custom currency", false);
             ctx.getChannel().sendMessage(usage.build()).queue();
             return;
         }

@@ -40,7 +40,7 @@ public class ShopAdd implements Command {
         EmbedBuilder roleAdd = new EmbedBuilder()
                 .setAuthor("shop add", null, ctx.getAuthor().getEffectiveAvatarUrl())
                 .setColor(Utilities.getUtils().blue)
-                .setDescription("Added " + role.getAsMention() + " to the shop for " + ctx.getArguments()[1] + " " + new Database(ctx.getGuild()).getNested("economy").get("currency"));
+                .setDescription("Added " + role.getAsMention() + " to the shop for " + ctx.getArguments()[1] + " " + new Database(ctx.getGuild()).getNested("economy").getString("currency"));
         ctx.getChannel().sendMessage(roleAdd.build()).queue();
     }
 }

@@ -73,6 +73,6 @@ public class EconomySet implements Command {
         // Change balance in database
         db.getMembers().getMember(member).setBalance(updatedBalance);
         // Success
-        utilities.success(ctx.getChannel(), "economy set", "\uD83D\uDC5B", "Updated balance", member.getAsMention() + "has now `" + updatedBalance + "` " + db.getNested("economy").get("currency"), ctx.getAuthor().getEffectiveAvatarUrl(), false, null);
+        utilities.success(ctx.getChannel(), "economy set", "\uD83D\uDC5B", "Updated balance", member.getAsMention() + "has now `" + updatedBalance + "` " + db.getNested("economy").getString("currency"), ctx.getAuthor().getEffectiveAvatarUrl(), false, null);
     }
 }

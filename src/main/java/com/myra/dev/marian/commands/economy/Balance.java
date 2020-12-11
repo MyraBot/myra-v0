@@ -20,7 +20,7 @@ public class Balance implements Command {
         // Get database
         Database db = new Database(ctx.getGuild());
         // Get currency
-        String currency = db.getNested("economy").get("currency").toString();
+        String currency = db.getNested("economy").getString("currency").toString();
         // Usage
         if (ctx.getArguments().length > 1) {
             // When 'EconomySet' class is meant

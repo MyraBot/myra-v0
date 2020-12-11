@@ -65,7 +65,7 @@ public class Buy implements Command {
             EmbedBuilder removeRole = new EmbedBuilder()
                     .setAuthor("buy", null, ctx.getAuthor().getEffectiveAvatarUrl())
                     .setColor(Utilities.getUtils().blue)
-                    .setDescription("You already own this role. Do you want to sell this role for " + shopRole.getPrice() / 2 + " " + new Database(ctx.getGuild()).getNested("economy").get("currency"));
+                    .setDescription("You already own this role. Do you want to sell this role for " + shopRole.getPrice() / 2 + " " + new Database(ctx.getGuild()).getNested("economy").getString("currency"));
             ctx.getChannel().sendMessage(removeRole.build()).queue();
             return;
         }

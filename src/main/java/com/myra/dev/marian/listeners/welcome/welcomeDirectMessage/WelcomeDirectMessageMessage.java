@@ -38,7 +38,7 @@ public class WelcomeDirectMessageMessage implements Command {
         //change value in database
         db.getNested("welcome").set("welcomeDirectMessage", message, Manager.type.STRING);
         //success
-        String welcomeMessage = db.getNested("welcome").get("welcomeDirectMessage").toString();
+        String welcomeMessage = db.getNested("welcome").getString("welcomeDirectMessage");
         Utilities.getUtils().success(ctx.getChannel(), "welcome direct message", "\u2709\uFE0F", "Welcome message changed",
                 welcomeMessage
                         .replace("{user}", ctx.getAuthor().getAsMention())

@@ -2,7 +2,6 @@ package com.myra.dev.marian.database.allMethods;
 
 import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.management.Manager;
-import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.entities.Guild;
 import org.bson.Document;
 
@@ -21,12 +20,17 @@ public class GetNested {
         this.nested = nested;
     }
 
-    // Get String
-    public Object get(String key) {
-        //get nested object
-        Document nestedDocument = (Document) mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first().get(nested);
-        //return String
-        return nestedDocument.get(key);
+
+    public <T> T get(Object key, Class<T> clazz) {
+        return mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first().get(nested, Document.class).get(key, clazz);
+    }
+
+    /**
+     * @param key The key to search.
+     * @return Returns a value from the given key.
+     */
+    public String getString(String key) {
+        return mongoDb.getCollection("guilds").find(eq("guildId", guild.getId())).first().get(nested, Document.class).getString(key); // Return value
     }
 
     // Set Object

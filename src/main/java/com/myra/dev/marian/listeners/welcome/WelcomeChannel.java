@@ -42,7 +42,7 @@ public class WelcomeChannel implements Command {
         // Get database
         Database db = new Database(ctx.getGuild());
         // Get current welcome channel
-        String currentChannelId = db.getNested("welcome").get("welcomeChannel").toString();
+        String currentChannelId = db.getNested("welcome").getString("welcomeChannel").toString();
         //remove welcome channel
         if (currentChannelId.equals(channel.getId())) {
             //remove channel id

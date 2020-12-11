@@ -87,7 +87,7 @@ public class CommandEmbeds {
                 .setAuthor("economy", null, author.getEffectiveAvatarUrl())
                 .setColor(Utilities.getUtils().gray)
                 .addField("`" + prefix + "leaderboard`", "\uD83E\uDD47 │ Shows the leaderboard", false)
-                .addField("`" + prefix + "balance <user>`", new Database(guild).getNested("economy").get("currency") + " │ Shows how many " + new Database(guild).getNested("economy").get("currency") + " you have.", false)
+                .addField("`" + prefix + "balance <user>`", new Database(guild).getNested("economy").getString("currency") + " │ Shows how many " + new Database(guild).getNested("economy").getString("currency") + " you have.", false)
                 .addField("`" + prefix + "daily`", "\uD83E\uDD47 │ Claim your daily reward", false)
                 .addField("`" + prefix + "fish`", "\uD83C\uDFA3 │ Try to catch a fish", false)
                 .addField("`" + prefix + "blackjack <bet>`", "\uD83C\uDCCF │ Play blackjack against " + jda.getSelfUser().getName(), false)

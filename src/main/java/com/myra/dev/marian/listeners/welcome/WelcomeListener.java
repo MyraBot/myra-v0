@@ -16,8 +16,8 @@ public class WelcomeListener {
         Database db = new Database(event.getGuild()); // Get database
 
         // Get welcome channel
-        if (db.getNested("welcome").get("welcomeChannel").toString().equals("not set")) return; // Return if no welcome channel is set
-        final TextChannel channel = event.getGuild().getTextChannelById((String) db.getNested("welcome").get("welcomeChannel"));
+        if (db.getNested("welcome").getString("welcomeChannel").equals("not set")) return; // Return if no welcome channel is set
+        final TextChannel channel = event.getGuild().getTextChannelById(db.getNested("welcome").getString("welcomeChannel"));
 
         // Welcome direct message is enabled
         if (db.getListenerManager().check("welcomeDirectMessage")) {

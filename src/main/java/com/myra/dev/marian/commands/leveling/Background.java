@@ -38,7 +38,7 @@ public class Background implements Command {
         Database db = new Database(ctx.getGuild());
         // Check if you have enough money
         if (db.getMembers().getMember(ctx.getMember()).getBalance() < 10000) {
-            utilities.error(ctx.getChannel(), "edit rank", "\uD83D\uDDBC", "Not enough money", "You need 10 000" + db.getNested("economy").get("currency"), ctx.getAuthor().getEffectiveAvatarUrl());
+            utilities.error(ctx.getChannel(), "edit rank", "\uD83D\uDDBC", "Not enough money", "You need 10 000" + db.getNested("economy").getString("currency"), ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         // Check if argument is an image
@@ -58,7 +58,7 @@ public class Background implements Command {
         EmbedBuilder success = new EmbedBuilder()
                 .setAuthor("edit rank", null, ctx.getAuthor().getEffectiveAvatarUrl())
                 .setColor(utilities.blue)
-                .addField("\uD83C\uDFC1 │ New rank background", "Do you want to buy this background for 10000" + db.getNested("economy").get("currency"), false)
+                .addField("\uD83C\uDFC1 │ New rank background", "Do you want to buy this background for 10000" + db.getNested("economy").getString("currency"), false)
                 .setImage("attachment://background.png");
         Message message = ctx.getChannel().sendFile(backgroundFile, "background.png").embed(success.build()).complete();
         // Add reactions to message

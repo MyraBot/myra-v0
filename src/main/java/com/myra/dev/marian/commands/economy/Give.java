@@ -55,7 +55,7 @@ public class Give implements Command {
         EmbedBuilder success = new EmbedBuilder()
                 .setAuthor("give", null, ctx.getAuthor().getEffectiveAvatarUrl())
                 .setColor(utilities.blue)
-                .setDescription(ctx.getAuthor().getAsMention() + " gave you `" + ctx.getArguments()[1] + "` " + new Database(ctx.getGuild()).getNested("economy").get("currency"));
+                .setDescription(ctx.getAuthor().getAsMention() + " gave you `" + ctx.getArguments()[1] + "` " + new Database(ctx.getGuild()).getNested("economy").getString("currency"));
         ctx.getChannel().sendMessage(member.getAsMention()).queue();
         ctx.getChannel().sendMessage(success.build()).queue();
     }

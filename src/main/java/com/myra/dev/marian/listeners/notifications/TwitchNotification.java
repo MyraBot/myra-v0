@@ -35,7 +35,7 @@ public class TwitchNotification {
 
                     // Get variables
                     List<String> streamers = NotificationsTwitchManager.getInstance().getStreamers(guild); // Get all streamers
-                    String channelRaw = (String) db.getNested("notifications").get("channel");
+                    String channelRaw = db.getNested("notifications").getString("channel");
 
                     if (streamers.isEmpty()) continue;  // No streamers are set
 

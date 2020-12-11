@@ -22,7 +22,7 @@ public class EconomyHelp implements Command {
                 .setAuthor("economy", null, ctx.getAuthor().getEffectiveAvatarUrl())
                 .setColor(Utilities.getUtils().gray)
                 .addField("`" + ctx.getPrefix() + "economy set <user> <balance>`", "\uD83D\uDC5B │ Change a users balance", false)
-                .addField("`" + ctx.getPrefix() + "economy currency <currency>`", new Database(ctx.getGuild()).getNested("economy").get("currency") + " │ Set a custom currency", false);
+                .addField("`" + ctx.getPrefix() + "economy currency <currency>`", new Database(ctx.getGuild()).getNested("economy").getString("currency") + " │ Set a custom currency", false);
         ctx.getChannel().sendMessage(usage.build()).queue();
         return;
     }

@@ -35,7 +35,7 @@ public class LevelingChannel implements Command {
             return;
         final TextChannel channel = utils.getTextChannel(ctx.getEvent(), ctx.getArguments()[0], "leveling channel", "\uD83E\uDDFE");
 
-        final String channelId = (String) db.getNested("leveling").get("channel"); // Get leveling channel id
+        final String channelId = db.getNested("leveling").getString("channel"); // Get leveling channel id
 
         // Remove leveling channel
         if (channelId.equals(channel.getId())) {

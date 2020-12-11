@@ -33,7 +33,7 @@ public class YouTubeNotification {
 
                     // Get variables
                     List<String> youtubers = NotificationsYoutubeManager.getInstance().getYoutubers(guild); // Get all streamers
-                    String channelRaw = (String) db.getNested("notifications").get("channel");
+                    String channelRaw = db.getNested("notifications").getString("channel");
 
                     if (youtubers.isEmpty()) continue;  // No streamers are set
 

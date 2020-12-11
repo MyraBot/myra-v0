@@ -26,14 +26,14 @@ public class WelcomeImageRender {
         //get welcome image background
         BufferedImage background;
         //if no background is set
-        if (db.getNested("welcome").get("welcomeImageBackground").equals("not set")) {
+        if (db.getNested("welcome").getString("welcomeImageBackground").equals("not set")) {
             background = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("welcomeImage.png"));
         }
         //if guild has a custom background
         else {
             // Url is available
             try {
-                background = ImageIO.read(new URL(db.getNested("welcome").get("welcomeImageBackground").toString()));
+                background = ImageIO.read(new URL(db.getNested("welcome").getString("welcomeImageBackground").toString()));
             }
             // Invalid link
             catch (IOException e) {
@@ -41,7 +41,7 @@ public class WelcomeImageRender {
             }
         }
         // Get font
-        final String fontName = db.getNested("welcome").get("welcomeImageFont").toString();
+        final String fontName = db.getNested("welcome").getString("welcomeImageFont").toString();
         final InputStream font = this.getClass().getClassLoader().getResourceAsStream(fontName + ".ttf"); // Get as input stream
         // Get graphics
         final Graphic graphic = Graphic.getInstance();

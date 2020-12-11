@@ -25,7 +25,7 @@ public class Daily implements Command {
 
 
         long passedTime = System.currentTimeMillis() - lastClaim; // Get duration, which passed (in milliseconds)
-        final String currency = new Database(ctx.getGuild()).getNested("economy").get("currency").toString(); // Get currency
+        final String currency = new Database(ctx.getGuild()).getNested("economy").getString("currency").toString(); // Get currency
 
         // Create embed
         EmbedBuilder daily = new EmbedBuilder()

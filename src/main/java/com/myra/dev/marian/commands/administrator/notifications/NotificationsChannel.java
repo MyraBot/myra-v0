@@ -39,7 +39,7 @@ public class NotificationsChannel implements Command {
         TextChannel channel = utilities.getTextChannel(ctx.getEvent(), ctx.getArguments()[0], "notification channel", "\uD83D\uDD14");
         if (channel == null) return;
         //get current notification channel
-        String currentChannelId = (String) db.getNested("notifications").get("channel");
+        String currentChannelId = db.getNested("notifications").getString("channel");
         //remove notification channel
         if (currentChannelId.equals(channel.getId())) {
             //remove channel id
