@@ -1,9 +1,7 @@
 package com.myra.dev.marian.database;
 
 
-import com.mongodb.client.MongoCursor;
 import com.myra.dev.marian.management.Startup;
-import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
@@ -128,13 +126,41 @@ public class MongoDbUpdate {
                     guildDoc
             );
         }
+
+
+
         // Member update
-        final MongoCursor<Document> iterator = mongoDb.getCollection("user").find().iterator();
+        final MongoCursor<Document> iterator = mongoDb.getCollection("users").find().iterator();
 
         while (iterator.hasNext()) {
             final Document document = iterator.next(); // Get next document
 
-            Document userDocument = new Document();
+            Document updatedUserDocument = new Document() // Get user document
+                    .append("userId", document.getString("userId"))
+                    .append("birthday", document.getString("birthday"))
+                    .append("achievements", document.get("achievements", Document.class));
+
+            System.out.println(document.getString("userId"));
+            for (String key : document.keySet()) {
+                if (key.equals("_id")) continue;
+                if (key.equals("userId")) continue;
+                if (key.equals("birthday")) continue;
+                if (key.equals("achievements")) continue;
+
+                final Document guildDocument = document.get(key, Document.class);
+
+                final Document updatedGuildDocument = new Document()
+                        .append("level", guildDocument.getInteger("level"))
+                        .append("xp", guildDocument.getInteger("xp"))
+                        .append("messages", 0)
+                        .append("balance", guildDocument.getInteger("balance"))
+                        .append("dailyStreak", guildDocument.getInteger("dailyStreak"))
+                        .append("lastClaim", guildDocument.getLong("lastClaim"))
+                        .append("rankBackground", guildDocument.getString("rankBackground"));
+
+                updatedUserDocument.append(key, updatedGuildDocument);
+            }
+            mongoDb.getCollection("users").insertOne(updatedUserDocument);
         }*/
     }
 
