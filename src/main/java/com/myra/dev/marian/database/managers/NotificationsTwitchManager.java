@@ -22,15 +22,15 @@ public class NotificationsTwitchManager {
         final Document notifications = (Document) document.get("notifications"); // Get notifications document
         final List<String> streamers = notifications.getList("twitch", String.class); // Get all streamers in a list
 
-        return streamers; // Return the list of youtubers
+        return streamers; // Return the list of streamers
     }
 
     public void addStreamer(Guild guild, String name) {
         final Document document = db.getCollection("guilds").find(eq("guildId", guild.getId())).first(); // Get guild document
         final Document notifications = (Document) document.get("notifications"); // Get notifications document
-        final List<String> youtuber = notifications.getList("youtube", String.class); // Get all streamers in a list
+        final List<String> streamer = notifications.getList("twitch", String.class); // Get all streamers in a list
 
-        youtuber.add(name); // Add streamer to list
+        streamer.add(name); // Add streamer to list
 
         db.getCollection("guilds").findOneAndReplace(db.getCollection("guilds").find(eq("guildId", guild.getId())).first(), document); //Update guild document
     }
@@ -38,9 +38,9 @@ public class NotificationsTwitchManager {
     public void removeStreamer(Guild guild, String name) {
         final Document document = db.getCollection("guilds").find(eq("guildId", guild.getId())).first(); // Get guild document
         final Document notifications = (Document) document.get("notifications"); // Get notifications document
-        final List<String> youtuber = notifications.getList("youtube", String.class); // Get all streamer in a list
+        final List<String> streamer = notifications.getList("twitch", String.class); // Get all streamer in a list
 
-        youtuber.remove(name); // Remove streamer from list
+        streamer.remove(name); // Remove streamer from list
 
         db.getCollection("guilds").findOneAndReplace(db.getCollection("guilds").find(eq("guildId", guild.getId())).first(), document); //Update guild document
     }
