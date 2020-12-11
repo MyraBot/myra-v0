@@ -78,10 +78,6 @@ public class Utilities {
         return string.toString();
     }
 
-    public String formatNumber(int number) {
-       return NumberFormat.getInstance().format(number);
-    }
-
     /**
      * Get the colour of a member.
      *
@@ -150,7 +146,20 @@ public class Utilities {
         return time;
     }
 
+    /**
+     * Add '.' separators to show the number more nicely.
+     * @param number The number to format.
+     * @return Returns the formatted number as a String.
+     */
+    public String formatNumber(int number) {
+        return NumberFormat.getInstance().format(number);
+    }
 
+    /**
+     * Format milliseconds to hh:mm:ss.
+     * @param timeInMillis The milliseconds to format.
+     * @return Returns the formatted milliseconds as a String in the pattern hh:mm:ss.
+     */
     public String formatTime(long timeInMillis) {
         return String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(timeInMillis),
                 TimeUnit.MILLISECONDS.toMinutes(timeInMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timeInMillis)),
