@@ -8,6 +8,8 @@ import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
+import org.bson.Document;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -19,45 +21,40 @@ import java.util.Random;
 
 public class Leveling {
 
-    public void levelUp(ListenerContext ctx) throws Exception {
-        //connect to database
-        GetMember getMember = new Database(ctx.getGuild()).getMembers().getMember(ctx.getMessage().getMember());
-        //get new level
-        int newLevel = level(getMember.getXp() + xp(ctx.getMessage()));
-        //if current level is equal to new one
-        if (getMember.getLevel() == newLevel) return;
-        //update level in database
-        getMember.setLevel(newLevel);
-        /**
-         * level up image
-         */
-        Graphic graphic = Graphic.getInstance();
+    public void levelUp(ListenerContext ctx, GetMember db) throws Exception {
+        int newLevel = level(db.getInteger("xp") + getXpFromMessage(ctx.getMessage())); // Get new level
+        // Current level is equal to new one
+        if (db.getInteger("level") == newLevel) return;
+// Level up
+        db.setInteger("level", newLevel); // Update level in database
+// Level up image
+        Graphic graphic = Graphic.getInstance(); // Get graphics
+        final BufferedImage background = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("levelUp.png")); // Get level up image background
+        BufferedImage avatar = graphic.getAvatar(ctx.getMessage().getAuthor().getEffectiveAvatarUrl()); // Get avatar as a BufferedImage
 
-        BufferedImage background = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("levelUp.png"));
-        BufferedImage avatar = graphic.getAvatar(ctx.getMessage().getAuthor().getEffectiveAvatarUrl());
-        //resize avatar
-        avatar = graphic.resizeSquaredImage(avatar, 0.75f);
-        //graphics
-        Graphics graphics = background.getGraphics();
-        Graphics2D graphics2D = (Graphics2D) graphics;
-        //enable anti aliasing
-        graphic.enableAntiAliasing(graphics);
-        //load font
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("default.ttf");
-        Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-        font = font.deriveFont(45f);
-        graphics.setFont(font);
-        //draw avatar
+        avatar = graphic.resizeImage(avatar, 85, 85); // Resize avatar
+        // Graphics
+        Graphics graphics = background.getGraphics(); // Create graphics object from background
+        Graphics2D graphics2D = (Graphics2D) graphics; // Create graphics2D object from background
+
+        graphic.enableAntiAliasing(graphics); //Enable anti aliasing
+        // Load font
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("default.ttf"); // Get font as InputStream
+        Font font = Font.createFont(Font.TRUETYPE_FONT, inputStream); // Create font
+        font = font.deriveFont(45f); // Set font size
+        graphics.setFont(font); // Set font
+
+        // Draw avatar
         graphics2D.drawImage(
                 avatar,
                 graphic.imageCenter(Graphic.axis.X, avatar, background) - 200,
                 graphic.imageCenter(Graphic.axis.Y, avatar, background),
                 null);
 
-        //draw circle around avatar
-        graphics2D.setColor(Color.white);
+        // Draw circle around avatar
+        graphics2D.setColor(Color.white); // Set circle colour
         graphics2D.setStroke(new BasicStroke(
-                2.5f,
+                2.5f, // Set stroke width
                 BasicStroke.CAP_ROUND,
                 BasicStroke.JOIN_ROUND
         ));
@@ -66,41 +63,79 @@ public class Leveling {
                 graphic.imageCenter(Graphic.axis.Y, avatar, background),
                 avatar.getWidth(), avatar.getHeight()
         );
-        //draw 'level'
+
+        // Draw 'level'
         graphics.drawString("level " + newLevel,
                 graphic.textCenter(Graphic.axis.X, "level " + newLevel, font, background) - 55,
                 graphic.textCenter(Graphic.axis.Y, "level " + newLevel, font, background) + 40
         );
+
 // Send level up message
+
         // If no level-up message channel is set
-        if (new Database(ctx.getGuild()).getNested("leveling").get("channel").equals("not set")) {
+        if (new Database(ctx.getGuild()).getNested("leveling").getString("channel").equals("not set")) {
             ctx.getChannel().
-                    sendMessage("> " + ctx.getMessage().getMember().getAsMention() + " **reached a new level!**")
-                    .addFile(graphic.toInputStream(background),
-                            ctx.getMessage().getAuthor().getName().toLowerCase() + "_level_up.png")
+                    sendMessage("> **" + ctx.getMessage().getMember().getAsMention() + " reached a new level!**")
+                    .addFile(graphic.toInputStream(background), ctx.getMessage().getAuthor().getName().toLowerCase() + "_level_up.png")
                     .queue();
         }
         // Custom channel
         else {
-            final String channelId = (String) new Database(ctx.getGuild()).getNested("leveling").get("channel"); // Get channel id
+            final String channelId = new Database(ctx.getGuild()).getNested("leveling").getString("channel"); // Get channel id
             // Channel is invalid
             if (ctx.getGuild().getTextChannelById(channelId) == null) {
                 Utilities.getUtils().error(ctx.getChannel(), "rank up", "\uD83C\uDF96", "Couldn't send your rank-up image", "The leveling channel is invalid", ctx.getGuild().getIconUrl());
-                return;
-            } else {
+            }
+            // Channel is valid
+            else {
                 ctx.getGuild().getTextChannelById(channelId).
-                        sendMessage("> " + ctx.getMessage().getMember().getAsMention() + " **reached a new level!**")
-                        .addFile(graphic.toInputStream(background),
-                                ctx.getMessage().getAuthor().getName().toLowerCase() + "_level_up.png")
+                        sendMessage("> **" + ctx.getMessage().getMember().getAsMention() + " reached a new level!**")
+                        .addFile(graphic.toInputStream(background), ctx.getMessage().getAuthor().getName().toLowerCase() + "_level_up.png")
                         .queue();
             }
         }
 // Leveling role
-        new Database(ctx.getGuild()).getLeveling().checkForNewOnesOwO(newLevel, ctx.getMessage().getMember(), ctx.getGuild());
+        levelingRoles(ctx.getGuild(), ctx.getEvent().getMember(), db); // Check for leveling roles
+    }
+
+
+    public void levelingRoles(Guild guild, Member member, GetMember dbMember) {
+        final Document levelingRoles = new Database(guild).getNested("leveling").get("roles", Document.class); // Get leveling roles
+
+        // For each role
+        for (String key : levelingRoles.keySet()) {
+            final Document levelingRole = levelingRoles.get(key, Document.class); // Get leveling role
+
+            final Role role = guild.getRoleById(levelingRole.getString("role")); // Get leveling role to add
+            final String removeRaw = levelingRole.getString("remove"); // Get role to remove
+
+            // Member's level is too low
+            if (levelingRole.getInteger("level") > dbMember.getInteger("level")) {
+                // Member has this role
+                if (member.getRoles().contains(role)) {
+                    guild.removeRoleFromMember(member, role).queue(); // Remove role from member
+                }
+                // Role to remove is set
+                if (!removeRaw.equals("not set")) {
+                    final Role remove = guild.getRoleById(removeRaw); // Get role to remove
+                    guild.addRoleToMember(member, remove).queue(); // Add role to member
+                }
+            }
+            // Member get the roles
+            else {
+                guild.addRoleToMember(member, role).queue(); // Add role to member
+
+                // Leveling role to remove
+                if (!levelingRole.getString("remove").equals("not set")) { // Check if role is set
+                    final Role remove = guild.getRoleById(levelingRole.getString("remove")); // Get role
+                    guild.removeRoleFromMember(member, remove).queue(); // Remove role from member
+                }
+            }
+        }
     }
 
     //return xp
-    public int xp(Message rawMessage) {
+    public int getXpFromMessage(Message rawMessage) {
         //return 0 if the author is a bot
         if (rawMessage.getAuthor().isBot()) return 0;
         //define variable
@@ -140,6 +175,14 @@ public class Leveling {
         double exactLevel = Math.sqrt(dividedNumber);
         //round
         return (int) Math.round(exactLevel);
+    }
+
+    public Integer xpFromLevel(int level) {
+        //parabola
+        double squaredNumber = Math.pow(level, 2);
+        double exactXp = squaredNumber * 5;
+        //round
+        return (int) Math.round(exactXp);
     }
 
     //return missing xp
