@@ -1,13 +1,13 @@
 package com.myra.dev.marian.listeners.leveling;
 
 import com.myra.dev.marian.database.allMethods.Database;
+import com.myra.dev.marian.database.allMethods.GetMember;
 import com.myra.dev.marian.management.listeners.Listener;
 import com.myra.dev.marian.management.listeners.ListenerContext;
 import com.myra.dev.marian.management.listeners.ListenerSubscribe;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -16,22 +16,23 @@ import java.util.HashMap;
         name = "leveling"
 )
 public class LevelingListener implements Listener {
-    private final static Leveling LEVELING = new Leveling();
+    private final Leveling LEVELING = new Leveling();
 
     @Override
     public void execute(ListenerContext ctx) throws Exception {
-        // Return if message is a command
-        if (ctx.getMessage().getContentRaw().startsWith(new Database(ctx.getGuild()).getString("prefix"))) return;
-        if (!cooldown(ctx)) return;
-        //check if member is bot
-        if (ctx.getEvent().getAuthor().isBot()) return;
-        //check for new level
-        LEVELING.levelUp(ctx);
-        //save new xp
-        new Database(
-                ctx.getGuild()).getMembers().getMember(ctx.getMessage().getMember()).addXp(
-                LEVELING.xp(ctx.getMessage())
-        );
+        if (ctx.getEvent().getAuthor().isBot()) return; // Check if member is a bot
+
+        final GetMember db = new Database(ctx.getGuild()).getMembers().getMember(ctx.getEvent().getMember()); // Get member from database
+
+        // Update message count
+        final Integer messages = db.getInteger("messages"); // Get current messages
+        db.setInteger("messages", messages + 1); // Add 1 message
+
+        if (ctx.getMessage().getContentRaw().startsWith(new Database(ctx.getGuild()).getString("prefix"))) return; // Message is a command
+        if (!cooldown(ctx)) return; // Cooldown
+
+        LEVELING.levelUp(ctx, db); // Check for new level
+        db.setInteger("xp", db.getInteger("xp") + LEVELING.getXpFromMessage(ctx.getMessage())); // Update xp
     }
 
     private static HashMap<Guild, HashMap<Member, Message>> cooldown = new HashMap<Guild, HashMap<Member, Message>>();
