@@ -5,13 +5,17 @@ import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.MongoDbDocuments;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.Permissions;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.bson.Document;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -76,10 +80,9 @@ public class DefaultCommandService implements CommandService {
     @Override
     public void processCommandExecution(GuildMessageReceivedEvent event) throws Exception {
         //get prefix
-        if (new Database(event.getGuild()).getString("prefix") == null) MongoDbDocuments.guild(event.getGuild());
         final String prefix = new Database(event.getGuild()).getString("prefix");
         // If message doesn't start with prefix
-        if (!event.getMessage().getContentRaw().startsWith(prefix)) return;
+        if (event.getMessage().getContentRaw().startsWith(prefix)) return;
         // Get message without prefix
         String rawMessage = event.getMessage().getContentRaw().substring(prefix.length());
         // Split rawMessage
@@ -121,12 +124,14 @@ public class DefaultCommandService implements CommandService {
                 // Continue if not every argument matches the executor
                 if (Continue) continue;
 // Run command
-                // Check if command is disabled
-                if (isDisabled(entry.getValue().command(), event.getGuild())) return;
-                // Check for required permissions
-                if (!hasPermissions(event.getMember(), entry.getValue().requires())) return;
+                if (!hasPermissions(event.getMember(), entry.getValue().requires())) return; // Check for required permissions
+                if (isDisabled(entry.getValue().command(), event.getGuild())) return; // Check if command is disabled
                 //filter arguments
-                String[] commandArguments = Arrays.copyOfRange(splitMessage, executor.length, splitMessage.length);
+                // String[] commandArguments = Arrays.copyOfRange(splitMessage, executor.length, splitMessage.length);
+                String commandArguments = rawMessage.substring(Utilities.getUtils().getString(executor).length()); // Remove command name and 1 more character, which is a space
+                if (commandArguments.startsWith(" ")) {
+                    commandArguments = commandArguments.substring(1);
+                }
                 //run command
                 entry.getKey().execute(new CommandContext(prefix, event, commandArguments));
             }

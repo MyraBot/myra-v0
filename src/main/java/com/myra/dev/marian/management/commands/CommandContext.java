@@ -11,12 +11,15 @@ public class CommandContext {
     private final String prefix;
     private final GuildMessageReceivedEvent event;
     private final String[] arguments;
+    private final String argumentsRaw;
 
     // Constructor
-    public CommandContext(String prefix, GuildMessageReceivedEvent event, String[] arguments) {
+    public CommandContext(String prefix, GuildMessageReceivedEvent event, String arguments) {
         this.prefix = prefix;
         this.event = event;
-        this.arguments = arguments;
+        if (arguments.equals("")) this.arguments = new String[0];
+        else this.arguments = arguments.split("\\s+");
+        this.argumentsRaw = arguments;
     }
 
     // Get prefix
@@ -52,5 +55,10 @@ public class CommandContext {
     // Get arguments
     public String[] getArguments() {
         return arguments;
+    }
+
+    // Get argumentsRaw
+    public String getArgumentsRaw() {
+        return argumentsRaw;
     }
 }
