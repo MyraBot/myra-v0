@@ -87,7 +87,7 @@ public class Background implements Command {
                     event.getUser().getEffectiveAvatarUrl(), false, event.getChannel().retrieveMessageById(event.getMessageId()).complete().getEmbeds().get(0).getImage().getUrl()
             );
             // Save new image in database
-            db.getMembers().getMember(event.getMember()).setRankBackground(event.getChannel().retrieveMessageById(event.getMessageId()).complete().getEmbeds().get(0).getImage().getUrl());
+            db.getMembers().getMember(event.getMember()).setString("rankBackground", event.getChannel().retrieveMessageById(event.getMessageId()).complete().getEmbeds().get(0).getImage().getUrl());
         }
         // Reaction emoji: "Barrier"
         else if (event.getReactionEmote().getEmoji().equals("\uD83D\uDEAB")) {

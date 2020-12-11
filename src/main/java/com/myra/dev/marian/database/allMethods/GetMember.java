@@ -137,11 +137,6 @@ public class GetMember {
         mongoDb.getCollection("users").findOneAndReplace(mongoDb.getCollection("users").find(eq("userId", member.getId())).first(), userDocument); // Update database
     }
 
-    // Get daily reward streak
-    public int getDailyStreak() {
-        return memberDocument.getInteger("dailyStreak");
-    }
-
     // Update last claimed reward
     public void setDailyStreak(int newStreak) {
         // Replace 'dailyStreak' with new value
@@ -150,16 +145,21 @@ public class GetMember {
         mongoDb.getCollection("users").findOneAndReplace(mongoDb.getCollection("users").find(eq("userId", member.getId())).first(), userDocument); // Update database
     }
 
-    // Get rank background
-    public String getRankBackground() {
-        return memberDocument.getString("rankBackground");
+    public String getString(String key) {
+        return memberDocument.getString(key);
     }
 
-    // Get rank background
-    public void setRankBackground(String backgroundUrl) {
-        //replace balance
-        memberDocument.replace("rankBackground", backgroundUrl);
-        //update Document
-        mongoDb.getCollection("users").findOneAndReplace(mongoDb.getCollection("users").find(eq("userId", member.getId())).first(), userDocument); // Update database
+    public void setString(String key, String value) {
+        memberDocument.replace(key, value); // Replace value
+        mongoDb.getCollection("users").findOneAndReplace(eq("userId", member.getId()), userDocument); // Update database
+    }
+
+    public Integer getInteger(String key) {
+        return memberDocument.getInteger(key);
+    }
+
+    public void setInteger(String key, Integer value) {
+        memberDocument.replace(key, value); // Replace value
+        mongoDb.getCollection("users").findOneAndReplace(eq("userId", member.getId()), userDocument); // Update database
     }
 }

@@ -58,12 +58,12 @@ public class Daily implements Command {
                 member.setDailyStreak(1); // Reset daily streak
             }
             // New reward
-            else member.setDailyStreak(member.getDailyStreak() + 1); // Update daily streak
+            else member.setDailyStreak(member.getInteger("dailyStreak") + 1); // Update daily streak
 
             // Get streak bonus
             int streakReward;
-            if (member.getDailyStreak() > 14) streakReward = 14 * 100; // You can't get a higher streak than 14
-            else streakReward = member.getDailyStreak() * 100; // Get streak reward
+            if (member.getInteger("dailyStreak") > 14) streakReward = 14 * 100; // You can't get a higher streak than 14
+            else streakReward = member.getInteger("dailyStreak") * 100; // Get streak reward
 
             member.setBalance(member.getBalance() + streakReward + voteBonus); // Update members balance
             member.updateClaimedReward(); // Update last claimed reward time
@@ -73,7 +73,7 @@ public class Daily implements Command {
             if (voteBonus != 0) {
                 daily.appendDescription("Thank you for voting! Your vote bonus: **+" + voteBonus + "**"); // Show vote bonus
             }
-            daily.setFooter("streak: " + member.getDailyStreak() + "/14"); // Show streak
+            daily.setFooter("streak: " + member.getInteger("dailyStreak") + "/14"); // Show streak
 
             ctx.getChannel().sendMessage(daily.build()).queue(); // Send daily reward
         }

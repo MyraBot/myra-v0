@@ -66,7 +66,7 @@ public class Rank implements Command {
         int rank = getMember.getRank();
         // Get rank background
         BufferedImage background;
-        String backgroundUrl = getMember.getRankBackground();
+        String backgroundUrl = getMember.getString("rankBackground");
         // No background set
         if (backgroundUrl.equals("default")) {
             background = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("defaultRank.png"));
