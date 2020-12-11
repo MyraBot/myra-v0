@@ -7,11 +7,10 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import okhttp3.OkHttpClient;
+import org.json.JSONObject;
 
 import java.awt.*;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -108,7 +107,7 @@ public class Utilities {
      * @param providedInformation The String with all information.
      * @return Returns a String List, which contains the given duration, the duration in milliseconds and the Time Unit.
      */
-    public List<String> getDuration(String providedInformation) {
+    public JSONObject getDuration(String providedInformation) {
         //get time unit
         TimeUnit timeUnit = null;
         switch (providedInformation.replaceAll("\\d+", "")) {
@@ -138,16 +137,17 @@ public class Utilities {
         //get duration
         long duration = Long.parseLong(providedInformation.replaceAll("[^\\d.]", ""));
         long durationInMilliseconds = timeUnit.toMillis(duration);
-        //return as a list
-        List time = new ArrayList();
-        time.add(duration);
-        time.add(durationInMilliseconds);
-        time.add(timeUnit);
+        // Create the JSONObject
+        JSONObject time = new JSONObject();
+        time.put("duration", duration);
+        time.put("durationInMilliseconds", durationInMilliseconds);
+        time.put("timeUnit", timeUnit);
         return time;
     }
 
     /**
      * Add '.' separators to show the number more nicely.
+     *
      * @param number The number to format.
      * @return Returns the formatted number as a String.
      */
@@ -157,6 +157,7 @@ public class Utilities {
 
     /**
      * Format milliseconds to hh:mm:ss.
+     *
      * @param timeInMillis The milliseconds to format.
      * @return Returns the formatted milliseconds as a String in the pattern hh:mm:ss.
      */
