@@ -2,9 +2,7 @@ package com.myra.dev.marian.commands.general;
 
 import com.mongodb.client.MongoCollection;
 import com.myra.dev.marian.database.MongoDb;
-
 import com.myra.dev.marian.management.commands.Command;
-import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.Utilities;
@@ -12,15 +10,15 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import org.bson.Document;
+import org.json.JSONObject;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @CommandSubscribe(
         name = "reminder",
         aliases = {"remind"}
 )
-public class Reminder  implements Command {
+public class Reminder implements Command {
     //database
     private final MongoDb mongoDb = MongoDb.getInstance();
 
@@ -37,97 +35,80 @@ public class Reminder  implements Command {
             return;
         }
 // Set reminder
-        //get arguments
-        String durationRaw = ctx.getArguments()[0];
-        StringBuilder reason = new StringBuilder();
-        for (int i = 1; i < ctx.getArguments().length; i++) {
-            reason.append(ctx.getArguments()[i]).append(" ");
-        }
-        //remove last space
-        reason = new StringBuilder(reason.substring(0, reason.length() - 1));
-        //if the string is not (NumberLetters)
+        String reason = ctx.getArgumentsRaw().split("\\s+", 2)[1]; // Get remind reason
+        String durationRaw = ctx.getArguments()[0]; // Get duration
+        //if the duration is not (NumberLetters)
         if (!durationRaw.matches("[0-9]+[a-zA-z]+")) {
             Utilities.getUtils().error(ctx.getChannel(), "reminder", "\u23F0", "Invalid time", "please note: `<time><time unit>`", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
-        //return duration as a list
-        List<String> durationList = Utilities.getUtils().getDuration(durationRaw);
-        String duration = durationList.get(0);
-        long durationInMilliseconds = Long.parseLong(durationList.get(1));
-        TimeUnit timeUnit = TimeUnit.valueOf(durationList.get(2));
-        //reminder info
+        // Get duration
+        JSONObject durationList = Utilities.getUtils().getDuration(durationRaw); // Split duration in time and time unit
+        String duration = String.valueOf(durationList.getLong("duration")); // Get duration
+        long durationInMilliseconds = durationList.getLong("durationInMilliseconds"); // Get duration in milliseconds
+        TimeUnit timeUnit = (TimeUnit) durationList.get("timeUnit"); // Get the time unit
+        // Reminder info
         EmbedBuilder reminderInfo = new EmbedBuilder()
                 .setAuthor("reminder", null, ctx.getAuthor().getEffectiveAvatarUrl())
                 .setColor(Utilities.getUtils().blue)
                 .setDescription("Im gonna remind you in " + duration + " " + timeUnit.toString().toLowerCase() + "!");
         ctx.getChannel().sendMessage(reminderInfo.build()).queue();
-        //create reminder document
-        Document document = createReminder(ctx.getAuthor().getId(), durationInMilliseconds + System.currentTimeMillis(), reason.toString(), timeUnit);
-        //delay
-        String finalReason = reason.toString();
-        Utilities.TIMER.schedule(new Runnable() {
-            @Override
-            public void run() {
-                //send reminder
-                remind(ctx.getAuthor(), finalReason);
-                //delete document
-                mongoDb.getCollection("reminders").deleteOne(document);
-            }
+        // Create reminder document
+        Document document = createReminder(ctx.getAuthor().getId(), durationInMilliseconds + System.currentTimeMillis(), reason, timeUnit);
+        // Delay
+        Utilities.TIMER.schedule(() -> {
+            remindMessage(ctx.getAuthor(), reason); //send reminder
+            mongoDb.getCollection("reminders").deleteOne(document); // Delete document
         }, durationInMilliseconds, TimeUnit.MILLISECONDS);
     }
 
     //create document
-    private Document createReminder(String userId, Long remindTime, String description, TimeUnit timeUnit) {
-        MongoCollection<Document> reminder = mongoDb.getCollection("reminders");
-        //create Document
+    private Document createReminder(String userId, Long timeInMillis, String description, TimeUnit timeUnit) {
+        final MongoCollection<Document> reminders = mongoDb.getCollection("reminders"); // Get collection
+        // Create Document
         Document docToInsert = new Document()
                 .append("userId", userId)
-                .append("remindTime", remindTime)
+                .append("remindTime", timeInMillis)
                 .append("timeUnit", timeUnit.toString())
                 .append("description", description);
-        reminder.insertOne(docToInsert);
-        return docToInsert;
+        reminders.insertOne(docToInsert); // Insert document in database
+        return docToInsert; // Return document
     }
 
     //reminder message
-    public void remind(User author, String description) {
+    public void remindMessage(User author, String description) {
+        // Create embed
         EmbedBuilder reminder = new EmbedBuilder()
-                .setAuthor(author.getName(), null, author.getEffectiveAvatarUrl())
+                .setAuthor("reminder", null, author.getEffectiveAvatarUrl())
                 .setColor(Utilities.getUtils().blue)
                 .addField("\u23F0 │ reminder", description, false);
-        author.openPrivateChannel().queue((channel ->
-                channel.sendMessage(reminder.build()).queue()));
+        // Send direct message
+        author.openPrivateChannel().queue(channel -> {
+            channel.sendMessage(reminder.build()).queue();
+        });
     }
 
     public void onReady(ReadyEvent event) {
         //for each document
         for (Document doc : mongoDb.getCollection("reminders").find()) {
-            //get remind time
-            Long remindTime = doc.getLong("remindTime");
-            //get user
-            User user = event.getJDA().retrieveUserById(doc.getString("userId")).complete();
-            //if no user can be found
-            if (user == null) return;
-            //if remind time is already reached
-            if (remindTime < System.currentTimeMillis()) {
-                //send reminder
-                remind(user, doc.getString("description"));
-                //delete document
-                mongoDb.getCollection("reminders").deleteOne(doc);
-                continue;
-            }
+            Long timeInMillis = doc.getLong("remindTime"); // Get remind time in milliseconds
+            event.getJDA().retrieveUserById(doc.getString("userId")).queue(user -> { // Get user
+                if (user == null) return; // No user found
 
-            //delay
-            Utilities.TIMER.schedule(new Runnable() {
-                @Override
-                public void run() {
-                    //send reminder
-                    remind(user, doc.getString("description"));
-                    //delete document
-
-                    mongoDb.getCollection("reminders").deleteOne(doc);
+                // Remind time already reached
+                if (timeInMillis < System.currentTimeMillis()) {
+                    remindMessage(user, doc.getString("description")); // Send reminder
+                    mongoDb.getCollection("reminders").deleteOne(doc); // Delete document
                 }
-            }, doc.getLong("remindTime") - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+                // Remind time isn't reached yet
+                else {
+                    // Delay
+                    Utilities.TIMER.schedule(() -> {
+                        remindMessage(user, doc.getString("description")); // Send reminder
+                        mongoDb.getCollection("reminders").deleteOne(doc); // Delete document
+                    }, timeInMillis - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+                }
+            });
         }
     }
 }
