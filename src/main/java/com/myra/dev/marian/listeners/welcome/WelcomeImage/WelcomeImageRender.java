@@ -41,7 +41,7 @@ public class WelcomeImageRender {
             }
         }
         // Get font
-        final String fontName = db.getNested("welcome").getString("welcomeImageFont").toString();
+        final String fontName = db.getNested("welcome").getString("welcomeImageFont");
         final InputStream font = this.getClass().getClassLoader().getResourceAsStream(fontName + ".ttf"); // Get as input stream
         // Get graphics
         final Graphic graphic = Graphic.getInstance();
@@ -94,7 +94,7 @@ public class WelcomeImageRender {
                 graphic.textCenter(Graphic.axis.Y, "welcome", font, background) + background.getHeight() / 6
         );
 // Draw user name
-        final String name = "Dieser name ist zu lang für diese Bild haha"; // Get username
+        final String name = user.getName(); // Get username
         FontRenderContext fontRenderContext = new FontRenderContext(new AffineTransform(), true, true);
         float size = background.getWidth() / 7.5f; // Set default font size
         font = font.deriveFont(size); // Set font size
