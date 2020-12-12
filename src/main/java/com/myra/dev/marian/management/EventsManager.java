@@ -32,7 +32,9 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.ErrorResponse;
 
 public class EventsManager extends ListenerAdapter {
     private final CommandService commandService = Manager.COMMAND_SERVICE;
@@ -49,15 +51,14 @@ public class EventsManager extends ListenerAdapter {
             if (event.getAuthor().isBot()) return; // Message is from another bot
 
             new EventWaiter().buy(event);
-
             commandService.processCommandExecution(event);
             listenerService.processCommandExecution(event);
         } catch (Exception e) {
-            if (e.toString().startsWith("net.dv8tion.jda.api.exceptions.InsufficientPermissionException: Cannot perform action due to a lack of Permission. Missing permission: MESSAGE_WRITE")) {
-            } else {
-                event.getChannel().sendMessage("Error: Please report this to my developer!");
+            try {
+                event.getChannel().sendMessage("Error: Please report this to my developer!").queue(null, ErrorResponseException.ignore(ErrorResponse.MISSING_PERMISSIONS));
                 e.printStackTrace();
-            }
+            } catch (Exception e1) {
+            } //can't send msg
         }
     }
 
