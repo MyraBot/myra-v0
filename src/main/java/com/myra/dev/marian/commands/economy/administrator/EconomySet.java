@@ -1,16 +1,14 @@
 package com.myra.dev.marian.commands.economy.administrator;
 
 import com.myra.dev.marian.database.allMethods.Database;
-
-import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
-import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Config;
+import com.myra.dev.marian.utilities.Permissions;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.User;
 
 @CommandSubscribe(
         name = "economy set",
@@ -33,46 +31,37 @@ public class EconomySet implements Command {
             return;
         }
 // Change balance
-        // Get User
-        Member member = ctx.getEvent().getMember();
-        // Get given user
-        if (ctx.getArguments().length == 2) {
-            User user = utilities.getUser(ctx.getEvent(), ctx.getArguments()[0], "economy set", "\uD83D\uDC5B");
-            if (user == null) return;
-            // User isn't in the guild
-            if (ctx.getGuild().getMember(user) == null) {
-                utilities.error(ctx.getChannel(), "economy set", "\uD83D\uDC5B", "No member found", "the given user isn't on this server", ctx.getAuthor().getEffectiveAvatarUrl());
-                return;
-            }
-            // Save user as member
-            member = ctx.getGuild().getMember(user);
-        }
-        // Get database
-        Database db = new Database(ctx.getGuild());
-        // Get old balance
-        int oldBalance = db.getMembers().getMember(member).getBalance();
-        // Get new balance
-        int updatedBalance;
+        final Member member = utilities.getMember(ctx.getEvent(), ctx.getArguments()[0], "economy set", "\uD83D\uDC5B");
+        if (member == null) return;
+
+        final Database db = new Database(ctx.getGuild()); // Get database
+        int updatedBalance = db.getMembers().getMember(member).getBalance(); // Get old balance
+
         // Add balance
         if (ctx.getArguments()[1].matches("[+]\\d+")) {
-            updatedBalance = oldBalance + Integer.parseInt(ctx.getArguments()[1].substring(1));
+            updatedBalance += Integer.parseInt(ctx.getArguments()[1].substring(1)); // Add balance
         }
         // Subtract balance
         else if (ctx.getArguments()[1].matches("[-]\\d+")) {
-            updatedBalance = oldBalance - Integer.parseInt(ctx.getArguments()[1].substring(1));
+            updatedBalance -= Integer.parseInt(ctx.getArguments()[1].substring(1)); // Subtract balance
         }
         // Set balance
         else if (ctx.getArguments()[1].matches("\\d+")) {
-            updatedBalance = Integer.parseInt(ctx.getArguments()[1]);
+            updatedBalance = Integer.parseInt(ctx.getArguments()[1]); // Set new balance
         }
         // Error
         else {
             utilities.error(ctx.getChannel(), "economy set", "\uD83D\uDC5B", "Invalid operator", "Please use `+` to add money, `-` to subtract money or leave the operators out to set an exact amount of money", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
+        // Balance limit would be reached
+        if (updatedBalance > Config.ECONOMY_MAX) {
+            utilities.error(ctx.getChannel(), "economy set", "\uD83D\uDC5B", "lol", "The user you want to give the money would be too rich...", ctx.getAuthor().getEffectiveAvatarUrl());
+            return;
+        }
         // Change balance in database
         db.getMembers().getMember(member).setBalance(updatedBalance);
         // Success
-        utilities.success(ctx.getChannel(), "economy set", "\uD83D\uDC5B", "Updated balance", member.getAsMention() + "has now `" + updatedBalance + "` " + db.getNested("economy").getString("currency"), ctx.getAuthor().getEffectiveAvatarUrl(), false, null);
+        utilities.success(ctx.getChannel(), "economy set", "\uD83D\uDC5B", "Updated balance", member.getAsMention() + "has now `" + utilities.formatNumber(updatedBalance) + "` " + db.getNested("economy").getString("currency"), ctx.getAuthor().getEffectiveAvatarUrl(), false, null);
     }
 }

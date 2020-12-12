@@ -5,6 +5,7 @@ import com.myra.dev.marian.database.allMethods.GetMember;
 import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Config;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -56,6 +57,11 @@ public class BlackJack implements Command {
         // Invalid amount of money
         if (!ctx.getArguments()[0].matches("\\d+")) {
             Utilities.getUtils().error(ctx.getChannel(), "blackjack", "\uD83C\uDCCF", "Invalid number", "Make sure you only use digits", ctx.getAuthor().getEffectiveAvatarUrl());
+            return;
+        }
+        // Balance limit would be reached
+        if (new Database(ctx.getGuild()).getMembers().getMember(ctx.getMember()).getInteger("balance") + Integer.parseInt(ctx.getArguments()[0]) > Config.ECONOMY_MAX) {
+            Utilities.getUtils().error(ctx.getChannel(), "blackjack", "\uD83C\uDCCF", "lol", "If you play you would have to much money...", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         // Not enough money

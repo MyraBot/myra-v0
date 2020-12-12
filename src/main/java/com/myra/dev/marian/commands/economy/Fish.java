@@ -2,12 +2,12 @@ package com.myra.dev.marian.commands.economy;
 
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.database.allMethods.GetMember;
-import com.myra.dev.marian.utilities.CommandCooldown;
-import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
-import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.CommandCooldown;
+import com.myra.dev.marian.utilities.Config;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.util.Arrays;
@@ -27,6 +27,15 @@ public class Fish implements Command {
         if (!CommandCooldown.getInstance().addCommand(ctx, "fish", 5)) return;
         // Get randomizer
         Random random = new Random();
+
+        final GetMember db = new Database(ctx.getGuild()).getMembers().getMember(ctx.getMember()); // Get Member in database
+
+        // Balance limit would be reached
+        if (db.getInteger("balance") + 7 > Config.ECONOMY_MAX) {
+            Utilities.getUtils().error(ctx.getChannel(), "fish", "\uD83C\uDFA3", "lol", "If you fish a fish you would have to much money...", ctx.getAuthor().getEffectiveAvatarUrl());
+            return;
+        }
+
         // Caught a fish
         if (random.nextInt(25) <= 20) {
             // Get win message
@@ -40,8 +49,6 @@ public class Fish implements Command {
                     .setDescription("\uD83C\uDFA3 │ " + message + " **+ " + reward + "**")
                     .build()
             ).queue();
-            // Get Member in database
-            final GetMember db = new Database(ctx.getGuild()).getMembers().getMember(ctx.getMember());
             // Get current balance
             final int balance = db.getBalance();
             // Update balance
@@ -60,8 +67,6 @@ public class Fish implements Command {
                     .setDescription("\uD83C\uDFA3 │ " + message + " **- " + lostMoney + "**")
                     .build()
             ).queue();
-            // Get Member in database
-            final GetMember db = new Database(ctx.getGuild()).getMembers().getMember(ctx.getMember());
             // Get current balance
             final int balance = db.getBalance();
             // Update balance
