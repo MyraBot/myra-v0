@@ -59,10 +59,13 @@ public class BlackJack implements Command {
             Utilities.getUtils().error(ctx.getChannel(), "blackjack", "\uD83C\uDCCF", "Invalid number", "Make sure you only use digits", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
-        // Balance limit would be reached
-        if (new Database(ctx.getGuild()).getMembers().getMember(ctx.getMember()).getInteger("balance") + Integer.parseInt(ctx.getArguments()[0]) > Config.ECONOMY_MAX) {
-            Utilities.getUtils().error(ctx.getChannel(), "blackjack", "\uD83C\uDCCF", "lol", "If you play you would have to much money...", ctx.getAuthor().getEffectiveAvatarUrl());
-            return;
+        // If game isn't a test match
+        if (!ctx.getArguments()[0].equals("0")) {
+            // Balance limit would be reached
+            if (new Database(ctx.getGuild()).getMembers().getMember(ctx.getMember()).getInteger("balance") + Integer.parseInt(ctx.getArguments()[0]) > Config.ECONOMY_MAX) {
+                Utilities.getUtils().error(ctx.getChannel(), "blackjack", "\uD83C\uDCCF", "lol", "If you play you would have to much money...", ctx.getAuthor().getEffectiveAvatarUrl());
+                return;
+            }
         }
         // Not enough money
         if (new Database(ctx.getGuild()).getMembers().getMember(ctx.getMember()).getBalance() < Integer.parseInt(ctx.getArguments()[0])) {
