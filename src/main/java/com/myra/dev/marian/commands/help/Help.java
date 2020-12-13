@@ -9,7 +9,6 @@ import com.myra.dev.marian.utilities.CommandEmbeds;
 import com.myra.dev.marian.utilities.MessageReaction;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
 @CommandSubscribe(
@@ -32,12 +31,13 @@ public class Help implements Command {
                         "A moderator role must have `View Audit Log` permission to use the moderation commands. To see all available commands type in `" + ctx.getPrefix() + "commands`")
                 .addField("**\u2709\uFE0F │ invite**", utilities.hyperlink("Invite ", "https://discord.gg/nG4uKuB") + ctx.getEvent().getJDA().getSelfUser().getName() + " to your server", true)
                 .addField("**\u26A0\uFE0F │ support**", utilities.hyperlink("Report ", "https://discord.gg/nG4uKuB") + " bugs and get " + utilities.hyperlink("help ", "https://discord.gg/nG4uKuB"), true);
-        Message message = ctx.getChannel().sendMessage(help.build()).complete();
-        // Add reactions
-        message.addReaction("\u2709\uFE0F").queue();
-        message.addReaction("\u26A0\uFE0F").queue();
+        ctx.getChannel().sendMessage(help.build()).queue(message -> {
+            // Add reactions
+            message.addReaction("\u2709\uFE0F").queue();
+            message.addReaction("\u26A0\uFE0F").queue();
 
-        MessageReaction.add(ctx.getGuild(), "help", message, ctx.getAuthor(),true, "\u2709\uFE0F", "\u26A0\uFE0F");
+            MessageReaction.add(ctx.getGuild(), "help", message, ctx.getAuthor(), true, "\u2709\uFE0F", "\u26A0\uFE0F");
+        });
     }
 
     //reactions
