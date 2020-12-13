@@ -1,17 +1,12 @@
 package com.myra.dev.marian.commands.moderation;
 
 
-import com.myra.dev.marian.Bot;
-import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
-import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Permissions;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Message;
-
-import java.util.List;
 
 @CommandSubscribe(
         name = "clear",
@@ -38,9 +33,9 @@ public class Clear implements Command {
         // Delete messages
         try {
             // Retrieve messages
-            List<Message> messages = ctx.getChannel().getHistory().retrievePast(Integer.parseInt(ctx.getArguments()[0]) + 1).complete();
-            // Delete messages
-            ctx.getChannel().deleteMessages(messages).queue();
+            ctx.getChannel().getHistory().retrievePast(Integer.parseInt(ctx.getArguments()[0]) + 1).queue(messages -> {
+                ctx.getChannel().deleteMessages(messages).queue(); // Delete messages
+            });
             // Success information
             utilities.success(ctx.getChannel(), "clear", "\uD83D\uDDD1", "the message were deleted successfully", "`" + ctx.getArguments()[0] + "` messages have been deleted", ctx.getEvent().getJDA().getSelfUser().getEffectiveAvatarUrl(), true, null);
         }
