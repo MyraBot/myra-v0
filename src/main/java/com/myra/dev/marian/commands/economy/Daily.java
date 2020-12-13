@@ -7,6 +7,7 @@ import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.APIs.DiscordBoats;
 import com.myra.dev.marian.utilities.APIs.TopGG;
+import com.myra.dev.marian.utilities.Config;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -65,14 +66,27 @@ public class Daily implements Command {
             if (member.getInteger("dailyStreak") > 14) streakReward = 14 * 100; // You can't get a higher streak than 14
             else streakReward = member.getInteger("dailyStreak") * 100; // Get streak reward
 
-            member.setBalance(member.getBalance() + streakReward + voteBonus); // Update members balance
-            member.updateClaimedReward(); // Update last claimed reward time
+            final int dailyReward = streakReward + voteBonus; // Get daily reward
 
-            daily.setDescription("**+" + streakReward + "** " + currency + "! Now you have `" + member.getBalance() + "` " + currency + "\n"); // Show streak reward
-            // User voted
-            if (voteBonus != 0) {
-                daily.appendDescription("Thank you for voting! Your vote bonus: **+" + voteBonus + "**"); // Show vote bonus
+            // Maximum amount of balance reached
+            if (member.getInteger("balance") + dailyReward > Config.ECONOMY_MAX) {
+                member.setInteger("balance", Config.ECONOMY_MAX); // Set members balance to the maximum
+                daily.setDescription("You reached the limit! Now you have `"  + Config.ECONOMY_MAX + "` " + currency + "\n"); // Show streak reward
+                // User voted
+                if (voteBonus != 0) {
+                    daily.appendDescription("Thank you for voting!"); // Show vote bonus
+                }
             }
+            // Maximum isn't reached yet
+            else {
+                member.setBalance(member.getBalance() + streakReward + voteBonus); // Update members balance
+                daily.setDescription("**+" + streakReward + "** " + currency + "! Now you have `" + member.getBalance() + "` " + currency + "\n"); // Show streak reward
+                // User voted
+                if (voteBonus != 0) {
+                    daily.appendDescription("Thank you for voting! Your vote bonus: **+" + voteBonus + "**"); // Show vote bonus
+                }
+            }
+            member.updateClaimedReward(); // Update last claimed reward time
             daily.setFooter("streak: " + member.getInteger("dailyStreak") + "/14"); // Show streak
 
             ctx.getChannel().sendMessage(daily.build()).queue(); // Send daily reward
