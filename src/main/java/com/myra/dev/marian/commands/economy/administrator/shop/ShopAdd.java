@@ -2,9 +2,10 @@ package com.myra.dev.marian.commands.economy.administrator.shop;
 
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.management.commands.Command;
-import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Config;
+import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Role;
@@ -27,11 +28,17 @@ public class ShopAdd implements Command {
             return;
         }
         // Get role
-        if (Utilities.getUtils().getRole(ctx.getEvent(), ctx.getArguments()[0], "shop add", "\u26FD") == null) return; // Check for role
+        if (Utilities.getUtils().getRole(ctx.getEvent(), ctx.getArguments()[0], "shop add", "\u26FD") == null)
+            return; // Check for role
         final Role role = Utilities.getUtils().getRole(ctx.getEvent(), ctx.getArguments()[0], "shop add", "\u26FD"); // Store role
         // Price isn't a number
         if (!ctx.getArguments()[1].matches("\\d+")) {
             Utilities.getUtils().error(ctx.getChannel(), "shop add", "\u26FD", "Invalid number", "Please provide a valid number", ctx.getAuthor().getEffectiveAvatarUrl());
+            return;
+        }
+        // Price is more than the maximum amount of money
+        if (Integer.parseInt(ctx.getArguments()[1]) > Config.ECONOMY_MAX) {
+            Utilities.getUtils().error(ctx.getChannel(), "shop add", "\u26FD", "Invalid number", "You can't set a price higher than the maximum", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
         // Add new Role
