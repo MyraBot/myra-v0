@@ -35,6 +35,11 @@ public class Buy implements Command {
 
             // Add roles
             for (ShopRolesDocument role : roles) {
+                // Role is invalid
+                if (ctx.getGuild().getRoleById(role.getId()) == null) {
+                   ShopRolesManager.getInstance().removeRole(ctx.getGuild(), role.getId()); // Remove role
+                    continue;
+                }
                 shop.appendDescription("• " + ctx.getGuild().getRoleById(role.getId()).getAsMention() + " - " + Utilities.getUtils().formatNumber(role.getPrice()) + "\n");
             }
             shop.appendDescription("\nTo buy a role use `.buy <role>`");
