@@ -159,6 +159,7 @@ public class Manager {
 
                 new Balance(),
                 new Daily(),
+                new Streak(),
                 new Fish(),
                 new BlackJack(),
                 new Give(),

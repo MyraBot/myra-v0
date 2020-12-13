@@ -89,6 +89,7 @@ public class CommandEmbeds {
                 .addField("`" + prefix + "leaderboard`", "\uD83E\uDD47 │ Shows the leaderboard", false)
                 .addField("`" + prefix + "balance <user>`", new Database(guild).getNested("economy").getString("currency") + " │ Shows how many " + new Database(guild).getNested("economy").getString("currency") + " you have.", false)
                 .addField("`" + prefix + "daily`", "\uD83E\uDD47 │ Claim your daily reward", false)
+                .addField("`" + prefix + "streak`", "\uD83D\uDCCA │ Shows your current daily streak", false)
                 .addField("`" + prefix + "fish`", "\uD83C\uDFA3 │ Try to catch a fish", false)
                 .addField("`" + prefix + "blackjack <bet>`", "\uD83C\uDCCF │ Play blackjack against " + jda.getSelfUser().getName(), false)
                 .addField("`" + prefix + "give <user> <balance>`", "\uD83D\uDCB8 │ Give credits to other users", false)
