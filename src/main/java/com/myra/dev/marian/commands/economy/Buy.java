@@ -5,9 +5,9 @@ import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.database.allMethods.GetMember;
 import com.myra.dev.marian.database.documents.ShopRolesDocument;
 import com.myra.dev.marian.management.commands.Command;
-import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Config;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Role;
@@ -61,12 +61,27 @@ public class Buy implements Command {
         }
         // Member already owns this role
         if (ctx.getMember().getRoles().contains(ctx.getGuild().getRoleById(shopRole.getId()))) {
-            eventWaiter.put(ctx.getMember().getId(), shopRole); // Add message
-            EmbedBuilder removeRole = new EmbedBuilder()
-                    .setAuthor("buy", null, ctx.getAuthor().getEffectiveAvatarUrl())
-                    .setColor(Utilities.getUtils().blue)
-                    .setDescription("You already own this role. Do you want to sell this role for " + shopRole.getPrice() / 2 + " " + new Database(ctx.getGuild()).getNested("economy").getString("currency"));
-            ctx.getChannel().sendMessage(removeRole.build()).queue();
+            eventWaiter.put(ctx.getMember().getId(), shopRole); // Add message to event waiter
+            final int balance = new Database(ctx.getGuild()).getMembers().getMember(ctx.getMember()).getInteger("balance"); // Get members balance
+
+            // Maximum amount of money would be reached
+            if (balance + shopRole.getPrice() / 2 > Config.ECONOMY_MAX) {
+                final int sellingPrice = Config.ECONOMY_MAX - balance; // Get price to sell the role
+
+                EmbedBuilder removeRole = new EmbedBuilder()
+                        .setAuthor("buy", null, ctx.getAuthor().getEffectiveAvatarUrl())
+                        .setColor(Utilities.getUtils().blue)
+                        .setDescription("You already own this role. You can't get the full amount of money, because you would be too richt. Do you want to sell this role for `" + sellingPrice + "` " + new Database(ctx.getGuild()).getNested("economy").getString("currency"));
+                ctx.getChannel().sendMessage(removeRole.build()).queue();
+            }
+            // Maximum amount of money wouldn't be reached
+            else {
+                EmbedBuilder removeRole = new EmbedBuilder()
+                        .setAuthor("buy", null, ctx.getAuthor().getEffectiveAvatarUrl())
+                        .setColor(Utilities.getUtils().blue)
+                        .setDescription("You already own this role. Do you want to sell this role for " + shopRole.getPrice() / 2 + " " + new Database(ctx.getGuild()).getNested("economy").getString("currency"));
+                ctx.getChannel().sendMessage(removeRole.build()).queue();
+            }
             return;
         }
         final GetMember member = new Database(ctx.getGuild()).getMembers().getMember(ctx.getMember()); // Get member in database
