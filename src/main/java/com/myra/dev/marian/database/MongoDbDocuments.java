@@ -113,8 +113,9 @@ public class MongoDbDocuments {
 
     public static Document createGuildMemberDocument(Member member) {
         return new Document()
-                .append("xp", 0)
                 .append("level", 0)
+                .append("xp", 0)
+                .append("message", 0)
                 .append("balance", 0)
                 .append("dailyStreak", 0)
                 .append("lastClaim", System.currentTimeMillis())
