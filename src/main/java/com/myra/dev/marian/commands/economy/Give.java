@@ -43,7 +43,7 @@ public class Give implements Command {
         final int amount = Integer.parseInt(ctx.getArguments()[1]); // Money to transfer
 
         // Don't have enough money
-        if (dbMember.getInteger("balance") < amount) {
+        if (dbAuthor.getInteger("balance") < amount) {
             utilities.error(ctx.getChannel(), "give", "\uD83D\uDCB8", "Nope", "You don't have enough money", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
