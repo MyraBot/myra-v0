@@ -33,7 +33,7 @@ public class Nick implements Command {
         }
 // Change nickname
         //get user
-        User user = utilities.getModifiedUser(ctx.getEvent(), ctx.getArguments()[0], "nick", "\uD83D\uDD75");
+        User user = utilities.getModifiedMember(ctx.getEvent(), ctx.getArguments()[0], "nick", "\uD83D\uDD75");
         if (user == null) return;
         // Get nickname
         String nickname = "";

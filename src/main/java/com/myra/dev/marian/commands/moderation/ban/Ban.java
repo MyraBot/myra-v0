@@ -46,7 +46,7 @@ public class Ban implements Command {
             reason = reason.substring(0, reason.length() - 1);
         }
         //get user
-        User user = utilities.getUser(ctx.getEvent(), ctx.getArguments()[0], "ban", "\uD83D\uDD12");
+        User user = utilities.getModifiedMember(ctx.getEvent(), ctx.getArguments()[0], "ban", "\uD83D\uDD12");
         if (user == null) return;
         //if member isn't in the guild
         if (ctx.getGuild().getMember(user) == null) {

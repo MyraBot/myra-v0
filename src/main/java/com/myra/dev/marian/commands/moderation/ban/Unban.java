@@ -36,7 +36,7 @@ public class Unban implements Command {
         //get utilities
         Utilities utilities = Utilities.getUtils();
         //get user
-        User user = utilities.getUser(ctx.getEvent(), ctx.getArguments()[0], "unban", "\uD83D\uDD13");
+        User user = utilities.getModifiedMember(ctx.getEvent(), ctx.getArguments()[0], "unban", "\uD83D\uDD13");
         if (user == null) return;
         //user isn't banned
         if (ctx.getGuild().getMember(user) != null) {

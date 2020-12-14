@@ -33,7 +33,7 @@ public class Unmute implements Command {
         }
 // Unmute
         //get user
-        User user = utilities.getModifiedUser(ctx.getEvent(), ctx.getArguments()[0], "Unmute", "\uD83D\uDD08");
+        User user = utilities.getModifiedMember(ctx.getEvent(), ctx.getArguments()[0], "Unmute", "\uD83D\uDD08");
         if (user == null) return;
         //get mute role id
         String muteRoleId = new Database(ctx.getGuild()).getString("muteRole");

@@ -44,7 +44,7 @@ public class Kick implements Command {
             reason = reason.substring(0, reason.length() - 1);
         }
         //get user
-        User user = utilities.getModifiedUser(ctx.getEvent(), ctx.getArguments()[0], "kick", "\uD83D\uDCE4");
+        User user = utilities.getModifiedMember(ctx.getEvent(), ctx.getArguments()[0], "kick", "\uD83D\uDCE4");
         if (user == null) return;
         //guild message
         EmbedBuilder guildMessage = new EmbedBuilder()

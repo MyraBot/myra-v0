@@ -41,7 +41,7 @@ public class Mute implements Command {
             //if I used the mute role command
             if (sentMessage[1].equalsIgnoreCase("role")) return;
             //get user
-            user = Utilities.getUtils().getModifiedUser(ctx.getEvent(), sentMessage[1], "mute", "\uD83D\uDD08");
+            user = Utilities.getUtils().getModifiedMember(ctx.getEvent(), sentMessage[1], "mute", "\uD83D\uDD08");
             //get mute role id
             muteRoleId = new Database(ctx.getGuild()).getString("muteRole");
             //no mute role set

@@ -3,11 +3,10 @@ package com.myra.dev.marian.commands.moderation.mute;
 import com.mongodb.client.MongoCollection;
 import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.allMethods.Database;
-
 import com.myra.dev.marian.management.commands.Command;
-import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -15,23 +14,23 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import org.bson.Document;
+import org.json.JSONObject;
 
 import java.time.Instant;
-import java.util.List;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 @CommandSubscribe(
         name = "tempmute",
         requires = Permissions.MODERATOR
 )
-public class Tempmute  implements Command {
+public class Tempmute implements Command {
     //Get database
     private final MongoDb mongoDb = MongoDb.getInstance();
 
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        // Get utilities
-        Utilities utilities = Utilities.getUtils();
+        Utilities utilities = Utilities.getUtils(); // Get utilities
         //command usage
         if (ctx.getArguments().length == 0) {
             EmbedBuilder usage = new EmbedBuilder()
@@ -42,20 +41,11 @@ public class Tempmute  implements Command {
             ctx.getChannel().sendMessage(usage.build()).queue();
             return;
         }
-        /**
-         * tempmute
-         */
+// Tempmute
         //get reason
-        String reason = "";
-        if (ctx.getArguments().length > 2) {
-            for (int i = 2; i < ctx.getArguments().length; i++) {
-                reason += ctx.getArguments()[i] + " ";
-            }
-            //remove last space
-            reason = reason.substring(0, reason.length() - 1);
-        }
+        String reason = Arrays.toString(ctx.getArgumentsRaw().split("\\s+", 3));
         //get user
-        User user = utilities.getModifiedUser(ctx.getEvent(), ctx.getArguments()[0], "tempmute", "\uD83D\uDD07");
+        User user = utilities.getModifiedMember(ctx.getEvent(), ctx.getArguments()[0], "tempmute", "\uD83D\uDD07");
         if (user == null) return;
         //get mute role id
         String muteRoleId = new Database(ctx.getGuild()).getString("muteRole");
@@ -70,10 +60,10 @@ public class Tempmute  implements Command {
             return;
         }
         //return duration as a list
-        List durationList = utilities.getDuration(ctx.getArguments()[1]);
-        String duration = durationList.get(0).toString();
-        long durationInMilliseconds = Long.parseLong(durationList.get(1).toString());
-        TimeUnit timeUnit = TimeUnit.valueOf(durationList.get(2).toString());
+        JSONObject durationRaw = utilities.getDuration(ctx.getArguments()[1]); // Separate time unit from duration
+        long duration = durationRaw.getLong("duration");
+        long durationInMilliseconds = durationRaw.getLong("durationInMilliseconds");
+        TimeUnit timeUnit = TimeUnit.valueOf(durationRaw.getString("TimeUnit"));
         //guild message mute
         EmbedBuilder muteGuild = new EmbedBuilder()
                 .setAuthor(user.getName() + " got tempmuted", null, user.getEffectiveAvatarUrl())

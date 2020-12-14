@@ -3,11 +3,10 @@ package com.myra.dev.marian.commands.moderation.ban;
 import com.mongodb.client.MongoCollection;
 import com.myra.dev.marian.database.MongoDb;
 import com.myra.dev.marian.database.allMethods.Database;
-
 import com.myra.dev.marian.management.commands.Command;
-import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -15,6 +14,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import org.bson.Document;
+import org.json.JSONObject;
 
 import java.time.Instant;
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
         aliases = {"temp ban", "tempbean", "temp bean"},
         requires = Permissions.MODERATOR
 )
-public class Tempban  implements Command {
+public class Tempban implements Command {
     //database
     private static MongoDb mongoDb;
 
@@ -67,13 +67,13 @@ public class Tempban  implements Command {
             return;
         }
         //get user
-        User user = utilities.getModifiedUser(ctx.getEvent(), ctx.getArguments()[0], "tempban", "\u23F1\uFE0F");
+        User user = utilities.getModifiedMember(ctx.getEvent(), ctx.getArguments()[0], "tempban", "\u23F1\uFE0F");
         if (user == null) return;
         //return duration as a list
-        List durationList = Utilities.getUtils().getDuration(durationRaw);
-        String duration = durationList.get(0).toString();
-        long durationInMilliseconds = Long.parseLong(durationList.get(1).toString());
-        TimeUnit timeUnit = TimeUnit.valueOf(durationList.get(2).toString());
+        JSONObject durationList = Utilities.getUtils().getDuration(durationRaw);
+        String duration = String.valueOf(durationList.getLong("duration"));
+        long durationInMilliseconds = durationList.getLong("durationInMilliseconds");
+        TimeUnit timeUnit = TimeUnit.valueOf(durationList.getString("timeUnit"));
         //guild message ban
         EmbedBuilder guildMessageBan = new EmbedBuilder()
                 .setAuthor(user.getAsTag() + " got temporary banned", null, user.getEffectiveAvatarUrl())
