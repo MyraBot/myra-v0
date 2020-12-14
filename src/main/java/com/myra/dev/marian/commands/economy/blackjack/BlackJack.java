@@ -61,8 +61,9 @@ public class BlackJack implements Command {
         }
         // If game isn't a test match
         if (!ctx.getArguments()[0].equals("0")) {
+            final int win = new Database(ctx.getGuild()).getMembers().getMember(ctx.getMember()).getInteger("balance") + Integer.parseInt(ctx.getArguments()[0]); // Get amount of money you would ge if you win
             // Balance limit would be reached
-            if (new Database(ctx.getGuild()).getMembers().getMember(ctx.getMember()).getInteger("balance") + Integer.parseInt(ctx.getArguments()[0]) > Config.ECONOMY_MAX) {
+            if (win > Config.ECONOMY_MAX) {
                 Utilities.getUtils().error(ctx.getChannel(), "blackjack", "\uD83C\uDCCF", "lol", "If you play you would have to much money...", ctx.getAuthor().getEffectiveAvatarUrl());
                 return;
             }
