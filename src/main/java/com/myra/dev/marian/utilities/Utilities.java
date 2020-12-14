@@ -177,6 +177,10 @@ public class Utilities {
         return jda.getInviteUrl(Permission.ADMINISTRATOR);
     }
 
+    public String marianUrl() {
+        return "https://discord.com/users/639544573114187797";
+    }
+
     //error message
     public void error(TextChannel textChannel, String command, String commandEmoji, String errorHeader, String error, String authorAvatar) {
         textChannel.sendMessage(new EmbedBuilder()
@@ -274,7 +278,7 @@ public class Utilities {
      * @param commandEmoji The Emoji of the command.
      * @return Returns the user as a User object.
      */
-    public User getModifiedUser(GuildMessageReceivedEvent event, String providedUser, String command, String commandEmoji) {
+    public User getModifiedMember(GuildMessageReceivedEvent event, String providedUser, String command, String commandEmoji) {
         Member member;
 
         // Role given by id or mention
