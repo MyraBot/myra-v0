@@ -48,13 +48,17 @@ public class Help implements Command {
         CommandEmbeds embed = new CommandEmbeds(event.getGuild(), event.getJDA(), event.getUser(), new Database(event.getGuild()).getString("prefix"));
         //invite bot
         if (event.getReactionEmote().getEmoji().equals("\u2709\uFE0F") && !event.getMember().getUser().isBot()) {
-            event.getChannel().editMessageById(event.getMessageId(), embed.inviteJda().build()).queue();
-            event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().complete();
+            event.retrieveMessage().queue(message -> {
+                message.editMessage(embed.inviteJda().build()).queue(); // Edit message
+                message.clearReactions().queue(); // Clear reactions
+            });
         }
         //support server
         if (event.getReactionEmote().getEmoji().equals("\u26A0\uFE0F") && !event.getMember().getUser().isBot()) {
-            event.getChannel().editMessageById(event.getMessageId(), embed.supportServer().build()).queue();
-            event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().complete();
+            event.retrieveMessage().queue(message -> {
+                message.editMessage(embed.supportServer().build()).queue(); // Edit message
+                message.clearReactions().queue(); // Clear reactions
+            });
         }
     }
 }
