@@ -21,6 +21,8 @@ import com.myra.dev.marian.management.listeners.ListenerService;
 import com.myra.dev.marian.marian.Roles;
 import com.myra.dev.marian.marian.ServerTracking;
 import com.myra.dev.marian.marian.Shutdown;
+import com.myra.dev.marian.utilities.Utilities;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.channel.text.TextChannelCreateEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
@@ -32,17 +34,17 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.requests.ErrorResponse;
 
 public class EventsManager extends ListenerAdapter {
     private final CommandService commandService = Manager.COMMAND_SERVICE;
     private final ListenerService listenerService = Manager.LISTENER_SERVICE;
 
-    /**
-     * run commands
-     */
+    // Errors
+    private final String missingPermsMESSAGE_WRITE = "Cannot perform action due to a lack of Permission. Missing permission: MESSAGE_WRITE";
+    private final String missingPermsVIEW_CHANNEL = "Cannot perform action due to a lack of Permission. Missing permission: VIEW_CHANNEL";
+
+    //  Run actions
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         try {
             if (event.getMessage().getFlags().contains(Message.MessageFlag.IS_CROSSPOST))
@@ -53,13 +55,37 @@ public class EventsManager extends ListenerAdapter {
             new EventWaiter().buy(event);
             commandService.processCommandExecution(event);
             listenerService.processCommandExecution(event);
-        } catch (Exception e) {
-            try {
-                event.getChannel().sendMessage("Error: Please report this to my developer!").queue(null, ErrorResponseException.ignore(ErrorResponse.MISSING_PERMISSIONS));
-                e.printStackTrace();
-            } catch (Exception e1) {
-            } //can't send msg
+        } catch (Exception exception) {
+            final String error = exception.getMessage(); // Get error
+            if (exception.getMessage() == null) {
+                exception.printStackTrace();
+                return;
+            }
+            // Missing permissions: MESSAGE_WRITE
+            if (error.startsWith(missingPermsMESSAGE_WRITE)) {
+                return;
+            }
+            // Missing permissions: VIEW_CHANNEL
+            else if (error.equals(missingPermsVIEW_CHANNEL)) {
+                error(event, "I'm not able to see the channel."); // Send error}
+            }
+            // Other error
+            else {
+                error(event, "An error accrued, please contact " + Utilities.getUtils().hyperlink("my developer", Utilities.getUtils().marianUrl()));
+                exception.printStackTrace();
+            }
         }
+    }
+
+    private void error(GuildMessageReceivedEvent event, String error) {
+        final Utilities utils = Utilities.getUtils(); // Get utilities
+
+        event.getChannel().sendMessage(new EmbedBuilder()
+                .setAuthor("error", "https://discord.gg/nG4uKuB", event.getJDA().getSelfUser().getEffectiveAvatarUrl())
+                .setColor(utils.red)
+                .setDescription(error + "\n" + utils.hyperlink("If you need more help please join the support server", "https://discord.gg/nG4uKuB"))
+                .build()
+        ).queue();
     }
 
     /**
