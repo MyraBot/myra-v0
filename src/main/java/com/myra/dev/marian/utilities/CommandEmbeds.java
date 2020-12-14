@@ -58,6 +58,7 @@ public class CommandEmbeds {
                 .addField("`" + prefix + "calculate <number 1 <operator> <number 2>`", "\uD83E\uDDEE │ Let me calculate something for you", false)
                 .addField("`" + prefix + "avatar @user`", "\uD83D\uDDBC │ Gives you profile pictures of other people", false)
                 .addField("`" + prefix + "information`", "\uD83D\uDDD2 │ Gives you information", false)
+                .addField("`" + prefix + "~reminder <duration><time unit> <description>`" ,"\u23F0 │ Let " + jda.getSelfUser().getName() + " remind you of something", false)
                 .addField("`" + prefix + "suggest`", "\uD83D\uDDF3 │ Suggest something", false);
     }
 
