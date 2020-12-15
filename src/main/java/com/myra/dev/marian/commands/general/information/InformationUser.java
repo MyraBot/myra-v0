@@ -55,10 +55,10 @@ public class InformationUser implements Command {
         //users status
         OnlineStatus status = user.getOnlineStatus();
         String StringStatus = status.toString()
-                .replace("OFFLINE", utilities.getEmote(ctx.getEvent().getJDA(), CustomEmote.offline) + " │ offline")
-                .replace("IDLE", utilities.getEmote(ctx.getEvent().getJDA(), CustomEmote.idle) + " │ idle")
-                .replace("DO_NOT_DISTURB", utilities.getEmote(ctx.getEvent().getJDA(), CustomEmote.doNotDisturb) + " │ do not distrub")
-                .replace("ONLINE", utilities.getEmote(ctx.getEvent().getJDA(), CustomEmote.online) + " │ online");
+                .replace("OFFLINE", utilities.getEmote(ctx.getEvent().getJDA(), CustomEmote.offline).getAsMention() + " │ offline")
+                .replace("IDLE", utilities.getEmote(ctx.getEvent().getJDA(), CustomEmote.idle).getAsMention() + " │ idle")
+                .replace("DO_NOT_DISTURB", utilities.getEmote(ctx.getEvent().getJDA(), CustomEmote.doNotDisturb).getAsMention() + " │ do not distrub")
+                .replace("ONLINE", utilities.getEmote(ctx.getEvent().getJDA(), CustomEmote.online).getAsMention() + " │ online");
         //badges
         String badges = getBadges(user, utilities);
         /**
@@ -102,26 +102,28 @@ public class InformationUser implements Command {
         String badges = "";
         //bug hunter
         if (user.getUser().getFlags().toString().contains("BUG_HUNTER_LEVEL_1"))
-            badges += utils.getEmote(jda, CustomEmote.bugHunter) + " ";
+            badges += utils.getEmote(jda, CustomEmote.bugHunter).getAsMention() + " ";
         //bug hunter level 2
         if (user.getUser().getFlags().toString().contains("BUG_HUNTER_LEVEL_2"))
-            badges += utils.getEmote(jda, CustomEmote.bugHunterLvl2) + " ";
+            badges += utils.getEmote(jda, CustomEmote.bugHunterLvl2).getAsMention() + " ";
         if (user.getUser().getFlags().toString().contains("EARLY_SUPPORTER")) {
         }
         if (user.getUser().getFlags().toString().contains("HYPESQUAD")) {
         }
         //hypeSquad balance
-        if (user.getUser().getFlags().toString().contains("HYPESQUAD_BALANCE")) badges += utils.getEmote(jda, CustomEmote.balance) + " ";
+        if (user.getUser().getFlags().toString().contains("HYPESQUAD_BALANCE"))
+            badges += utils.getEmote(jda, CustomEmote.balance).getAsMention() + " ";
         //hypeSquad bravery
-        if (user.getUser().getFlags().toString().contains("HYPESQUAD_BRAVERY")) badges += utils.getEmote(jda, CustomEmote.bravery) + " ";
+        if (user.getUser().getFlags().toString().contains("HYPESQUAD_BRAVERY"))
+            badges += utils.getEmote(jda, CustomEmote.bravery).getAsMention() + " ";
         //hypeSquad brilliance
         if (user.getUser().getFlags().toString().contains("HYPESQUAD_BRILLIANCE"))
-            badges += utils.getEmote(jda, CustomEmote.brilliance) + " ";
+            badges += utils.getEmote(jda, CustomEmote.brilliance).getAsMention() + " ";
         if (user.getUser().getFlags().toString().contains("PARTNER")) {
-            badges += utils.getEmote(jda, CustomEmote.partner) + " ";
+            badges += utils.getEmote(jda, CustomEmote.partner).getAsMention() + " ";
         }
         if (user.getUser().getFlags().toString().contains("STAFF")) {
-            badges += utils.getEmote(jda, CustomEmote.staff) + " ";
+            badges += utils.getEmote(jda, CustomEmote.staff).getAsMention() + " ";
         }
         if (user.getUser().getFlags().toString().contains("SYSTEM")) {
         }
@@ -130,7 +132,7 @@ public class InformationUser implements Command {
         if (user.getUser().getFlags().toString().contains("VERIFIED_BOT")) {
         }
         if (user.getUser().getFlags().toString().contains("VERIFIED_DEVELOPER")) {
-            badges += utils.getEmote(jda, CustomEmote.verifiedDeveloper) + " ";
+            badges += utils.getEmote(jda, CustomEmote.verifiedDeveloper).getAsMention() + " ";
         }
         return badges;
     }
