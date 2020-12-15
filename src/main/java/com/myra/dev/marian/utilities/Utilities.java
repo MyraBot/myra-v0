@@ -278,7 +278,7 @@ public class Utilities {
      * @param commandEmoji The Emoji of the command.
      * @return Returns the user as a User object.
      */
-    public User getModifiedMember(GuildMessageReceivedEvent event, String providedUser, String command, String commandEmoji) {
+    public Member getModifiedMember(GuildMessageReceivedEvent event, String providedUser, String command, String commandEmoji) {
         Member member;
 
         // Role given by id or mention
@@ -312,7 +312,7 @@ public class Utilities {
                 return null;
             }
         }
-        return member.getUser();
+        return member;
     }
 
     /**
