@@ -2,6 +2,7 @@ package com.myra.dev.marian.management;
 
 import com.myra.dev.marian.Bot;
 import com.myra.dev.marian.commands.general.Reminder;
+import com.myra.dev.marian.commands.moderation.ban.Tempban;
 import com.myra.dev.marian.commands.moderation.mute.Tempmute;
 import com.myra.dev.marian.database.MongoDbUpdate;
 import com.myra.dev.marian.listeners.notifications.TwitchNotification;
@@ -50,10 +51,9 @@ public class Startup extends ListenerAdapter {
             }
             //load reminders
             new Reminder().onReady(event);
-            //load bans
-//            new Tempban().onReady(event);
-            //load mutes
-            new Tempmute().onReady(event);
+
+            new Tempban().loadUnbans(event); //load bans
+            new Tempmute().onReady(event); //load mutes
 
             //get access token for Twitch
             new Twitch().jdaReady(event);

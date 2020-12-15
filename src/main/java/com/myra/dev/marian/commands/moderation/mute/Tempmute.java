@@ -10,6 +10,7 @@ import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -42,87 +43,84 @@ public class Tempmute implements Command {
             return;
         }
 // Tempmute
-        //get reason
-        String reason = Arrays.toString(ctx.getArgumentsRaw().split("\\s+", 3));
-        //get user
-        User user = utilities.getModifiedMember(ctx.getEvent(), ctx.getArguments()[0], "tempmute", "\uD83D\uDD07");
-        if (user == null) return;
-        //get mute role id
-        String muteRoleId = new Database(ctx.getGuild()).getString("muteRole");
-        //no mute role set
-        if (muteRoleId.equals("not set")) {
+        final String reason = Arrays.toString(ctx.getArgumentsRaw().split("\\s+", 3)); // Get reason
+        final Member member = utilities.getModifiedMember(ctx.getEvent(), ctx.getArguments()[0], "tempmute", "\uD83D\uDD07"); // Get member
+        if (member == null) return;
+
+
+        String muteRoleId = new Database(ctx.getGuild()).getString("muteRole"); //Get mute role id
+        if (muteRoleId.equals("not set")) { // No mute role set
             utilities.error(ctx.getChannel(), "tempmute", "\uD83D\uDD07", "You didn't specify a mute role", "To indicate a mute role, type in `" + ctx.getPrefix() + "mute role <role>`", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
-        //if the string is not [NumberLetters]
+        // String is not [NumberLetters]
         if (!ctx.getArguments()[1].matches("[0-9]+[a-zA-z]+")) {
             utilities.error(ctx.getChannel(), "tempmute", "\uD83D\uDD07", "Invalid time", "please note: `<time><time unit>`", ctx.getAuthor().getEffectiveAvatarUrl());
             return;
         }
-        //return duration as a list
+
+        // Return duration
         JSONObject durationRaw = utilities.getDuration(ctx.getArguments()[1]); // Separate time unit from duration
-        long duration = durationRaw.getLong("duration");
-        long durationInMilliseconds = durationRaw.getLong("durationInMilliseconds");
-        TimeUnit timeUnit = TimeUnit.valueOf(durationRaw.getString("TimeUnit"));
-        //guild message mute
-        EmbedBuilder muteGuild = new EmbedBuilder()
+        long duration = durationRaw.getLong("duration"); // Given duration
+        long durationInMilliseconds = durationRaw.getLong("durationInMilliseconds"); // Duration in milliseconds
+        TimeUnit timeUnit = TimeUnit.valueOf(durationRaw.getString("TimeUnit")); // Time unit
+
+        final User user = member.getUser(); // Get member as user
+        // Guild message mute
+        final EmbedBuilder muteGuild = new EmbedBuilder()
                 .setAuthor(user.getName() + " got tempmuted", null, user.getEffectiveAvatarUrl())
                 .setColor(utilities.red)
                 .setDescription("\u23F1\uFE0F │ " + user.getAsMention() + " got muted for **" + duration + " " + timeUnit.toString().toLowerCase() + "**")
                 .setFooter("requested by " + ctx.getAuthor().getAsTag(), ctx.getAuthor().getEffectiveAvatarUrl())
                 .setTimestamp(Instant.now());
-        //direct message mute
-        EmbedBuilder muteDirectMessage = new EmbedBuilder()
+        // Direct message mute
+        final EmbedBuilder muteDirectMessage = new EmbedBuilder()
                 .setAuthor("You got tempmuted on " + ctx.getGuild().getName(), null, ctx.getGuild().getIconUrl())
                 .setColor(utilities.red)
                 .setDescription("\u23F1\uFE0F │ You got muted on " + ctx.getGuild().getName() + " for **" + duration + " " + timeUnit.toString().toLowerCase() + "**")
                 .setFooter("requested by " + ctx.getEvent().getMember().getUser().getName(), ctx.getAuthor().getEffectiveAvatarUrl())
                 .setTimestamp(Instant.now());
-        //with reason
+
+        // With reason
         if (ctx.getArguments().length > 2) {
-            muteGuild.addField("\uD83D\uDCC4 │ reason:", reason, false);
-            muteDirectMessage.addField("\uD83D\uDCC4 │ reason:", reason, false);
+            muteGuild.addField("\uD83D\uDCC4 │ reason:", reason, false); // Add reason
+            muteDirectMessage.addField("\uD83D\uDCC4 │ reason:", reason, false); // Add reason
         }
-        //without reason
+        // Without reason
         else {
-            muteGuild.addField("\uD83D\uDCC4 │ no reason", "there was no reason given", false);
-            muteDirectMessage.addField("\uD83D\uDCC4 │ no reason", "there was no reason given", false);
+            muteGuild.addField("\uD83D\uDCC4 │ no reason", "there was no reason given", false); // Set reason to none
+            muteDirectMessage.addField("\uD83D\uDCC4 │ no reason", "there was no reason given", false); // Set reason to none
         }
-        //send message
-        ctx.getChannel().sendMessage(muteGuild.build()).queue();
-        user.openPrivateChannel().queue((channel) -> {
+
+        // Send messages
+        ctx.getChannel().sendMessage(muteGuild.build()).queue(); // Send guild message
+        user.openPrivateChannel().queue((channel) -> { // Send direct message
             channel.sendMessage(muteDirectMessage.build()).queue();
         });
-        //mute
-        ctx.getGuild().addRoleToMember(ctx.getGuild().getMember(user), ctx.getGuild().getRoleById(muteRoleId)).queue();
-        //create unmute Document
-        Document document = createUnmute(user.getId(), ctx.getGuild().getId(), durationInMilliseconds, ctx.getAuthor().getId());
+
+        ctx.getGuild().addRoleToMember(ctx.getGuild().getMember(user), ctx.getGuild().getRoleById(muteRoleId)).queue(); // Mute
+        Document document = createUnmute(user.getId(), ctx.getGuild().getId(), durationInMilliseconds, ctx.getAuthor().getId()); // Create unmute Document
 // Unmute
         // Delay
         Utilities.TIMER.schedule(new Runnable() {
             @Override
             public void run() {
-                //if member left the server
+                // Member left the server
                 if (ctx.getGuild().getMemberById(document.getString("userId")) == null) {
-                    //delete document
-                    mongoDb.getCollection("unmutes").deleteOne(document);
+                    mongoDb.getCollection("unmutes").deleteOne(document); // Delete document
                 }
-                //remove role
-                ctx.getGuild().removeRoleFromMember(document.getString("userId"), ctx.getGuild().getRoleById(muteRoleId)).queue();
-                //send unmute message
-                unmuteMessage(user, ctx.getGuild(), ctx.getAuthor());
-                //delete document
-                mongoDb.getCollection("unmutes").deleteOne(document);
+                ctx.getGuild().removeRoleFromMember(document.getString("userId"), ctx.getGuild().getRoleById(muteRoleId)).queue(); // Remove role
+                unmuteMessage(user, ctx.getGuild(), ctx.getAuthor()); // Send unmute message
+                mongoDb.getCollection("unmutes").deleteOne(document); // Delete unmute document
             }
         }, durationInMilliseconds, TimeUnit.MILLISECONDS);
     }
 
 
-    //create unmute document
+    // Create unmute document
     public Document createUnmute(String userId, String guildId, Long durationInMilliseconds, String moderatorId) {
-
         MongoCollection<Document> guilds = mongoDb.getCollection("unmutes");
-        //create Document
+        // Create Document
         Document docToInsert = new Document()
                 .append("userId", userId)
                 .append("guildId", guildId)
@@ -135,7 +133,6 @@ public class Tempmute implements Command {
 
     //unmute message
     private void unmuteMessage(User user, Guild guild, User author) {
-        //database
         Database db = new Database(guild);
         //direct message unmute
         EmbedBuilder directMessage = new EmbedBuilder()

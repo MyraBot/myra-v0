@@ -1,14 +1,13 @@
 package com.myra.dev.marian.commands.moderation.ban;
 
 
-
-import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
-import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Permissions;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 
 import java.time.Instant;
@@ -21,9 +20,8 @@ import java.time.Instant;
 public class Ban implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        // Get Utilities
-        Utilities utilities = Utilities.getUtils();
-        //command usage
+        Utilities utilities = Utilities.getUtils(); // Get utilities
+        // Command usage
         if (ctx.getArguments().length == 0) {
             EmbedBuilder usage = new EmbedBuilder()
                     .setAuthor("ban", null, ctx.getAuthor().getEffectiveAvatarUrl())
@@ -33,60 +31,46 @@ public class Ban implements Command {
             ctx.getChannel().sendMessage(usage.build()).queue();
             return;
         }
-        /**
-         * Ban user
-         */
-        // Get reason
-        String reason = "";
-        if (ctx.getArguments().length > 1) {
-            for (int i = 1; i < ctx.getArguments().length; i++) {
-                reason += ctx.getArguments()[i] + " ";
-            }
-            //remove last space
-            reason = reason.substring(0, reason.length() - 1);
-        }
-        //get user
-        User user = utilities.getModifiedMember(ctx.getEvent(), ctx.getArguments()[0], "ban", "\uD83D\uDD12");
-        if (user == null) return;
-        //if member isn't in the guild
-        if (ctx.getGuild().getMember(user) == null) {
-            utilities.error(ctx.getChannel(), "ban", "\uD83D\uDD12", "No user found", "The user you mentioned isn't on this server", ctx.getAuthor().getEffectiveAvatarUrl());
-            return;
-        }
-        //guild message
+// Ban user
+        final Member member = utilities.getModifiedMember(ctx.getEvent(), ctx.getArguments()[0], "ban", "\uD83D\uDD12"); // Get member
+        if (member == null) return;
+
+        final String reason = ctx.getArgumentsRaw().split("\\s+", 2)[1]; // Get reason
+
+        final User user = member.getUser(); // Get member as user
+        // Guild message
         EmbedBuilder guildMessageBan = new EmbedBuilder()
                 .setAuthor(user.getAsTag() + " got banned", null, user.getEffectiveAvatarUrl())
                 .setColor(utilities.red)
                 .setDescription("\uD83D\uDD12 │ " + user.getAsMention() + " got banned on `" + ctx.getGuild().getName() + "`")
                 .setFooter("requested by " + ctx.getAuthor().getAsTag(), ctx.getAuthor().getEffectiveAvatarUrl())
                 .setTimestamp(Instant.now());
-        //direct message
+        // Direct message
         EmbedBuilder directMessageBan = new EmbedBuilder()
                 .setAuthor("You got banned", null, ctx.getGuild().getIconUrl())
                 .setColor(utilities.red)
                 .setDescription("\uD83D\uDD12 │ You got banned from `" + ctx.getGuild().getName() + "`")
                 .setFooter("requested by " + ctx.getAuthor().getAsTag(), ctx.getAuthor().getEffectiveAvatarUrl())
                 .setTimestamp(Instant.now());
-        //without reason
+        // No reason is given
         if (ctx.getArguments().length == 1) {
-            guildMessageBan.addField("\uD83D\uDCC4 │ no reason", "there was no reason given", false);
-            directMessageBan.addField("\uD83D\uDCC4 │ no reason", "there was no reason given", false);
+            guildMessageBan.addField("\uD83D\uDCC4 │ no reason", "there was no reason given", false); // Set reason to none
+            directMessageBan.addField("\uD83D\uDCC4 │ no reason", "there was no reason given", false); // Set reason to none
         }
         //with reason
         else {
-            guildMessageBan.addField("\uD83D\uDCC4 │ reason:", reason, false);
-            directMessageBan.addField("\uD83D\uDCC4 │ reason:", reason, false);
+            guildMessageBan.addField("\uD83D\uDCC4 │ reason:", reason, false); // Add reason
+            directMessageBan.addField("\uD83D\uDCC4 │ reason:", reason, false); // Add reason
         }
-        //send messages
-        ctx.getChannel().sendMessage(guildMessageBan.build()).queue();
-        user.openPrivateChannel().queue((channel) -> {
+
+        // Send messages
+        ctx.getChannel().sendMessage(guildMessageBan.build()).queue(); // Guild message
+        user.openPrivateChannel().queue((channel) -> { // Direct message
             channel.sendMessage(directMessageBan.build()).queue();
         });
-        //ban
-        if (ctx.getArguments().length == 1) {
-            ctx.getGuild().getMember(user).ban(7).queue();
-        } else {
-            ctx.getGuild().getMember(user).ban(7, reason).queue();
-        }
+
+        // Ban
+        if (ctx.getArguments().length == 1) member.ban(7).queue(); // Without reason
+        else ctx.getGuild().getMember(user).ban(7, reason).queue(); // With reason
     }
 }

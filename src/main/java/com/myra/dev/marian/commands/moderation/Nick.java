@@ -1,13 +1,13 @@
 package com.myra.dev.marian.commands.moderation;
 
 
-import com.myra.dev.marian.utilities.Utilities;
-import com.myra.dev.marian.utilities.Utilities;
 import com.myra.dev.marian.management.commands.Command;
-import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
+import com.myra.dev.marian.utilities.Permissions;
+import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 
 import java.time.Instant;
@@ -20,8 +20,7 @@ import java.time.Instant;
 public class Nick implements Command {
     @Override
     public void execute(CommandContext ctx) throws Exception {
-        // Get utilities
-        Utilities utilities = Utilities.getUtils();
+        Utilities utilities = Utilities.getUtils(); // Get utilities
         //command usage
         if (ctx.getArguments().length == 0) {
             EmbedBuilder usage = new EmbedBuilder()
@@ -32,24 +31,20 @@ public class Nick implements Command {
             return;
         }
 // Change nickname
-        //get user
-        User user = utilities.getModifiedMember(ctx.getEvent(), ctx.getArguments()[0], "nick", "\uD83D\uDD75");
-        if (user == null) return;
-        // Get nickname
-        String nickname = "";
-        for (int i = 1; i < ctx.getArguments().length; i++) {
-            nickname += ctx.getArguments()[i] + " ";
-        }
-        //remove last space
-        nickname = nickname.substring(0, nickname.length() - 1);
-        //success
+        final Member member = utilities.getModifiedMember(ctx.getEvent(), ctx.getArguments()[0], "nick", "\uD83D\uDD75"); // Get member
+        if (member == null) return;
+
+        final String nickname = ctx.getArgumentsRaw().split("\\s+", 2)[1]; // Get new nickname
+
+        final User user = member.getUser(); // Get member as user
+        // Success
         EmbedBuilder success = new EmbedBuilder()
                 .setAuthor("nickname changed", null, user.getEffectiveAvatarUrl())
                 .setColor(utilities.green)
                 .addField("\uD83D\uDCC4 │ nickname changed of " + user.getName(), "`" + ctx.getGuild().getMember(user).getEffectiveName() + "` **→** `" + nickname + "`", true)
                 .setFooter("requested by " + ctx.getAuthor().getAsTag(), ctx.getAuthor().getEffectiveAvatarUrl())
                 .setTimestamp(Instant.now());
-        ctx.getChannel().sendMessage(success.build()).queue();
-        ctx.getGuild().getMember(user).modifyNickname(nickname).queue();
+        ctx.getChannel().sendMessage(success.build()).queue(); // Send success message
+        member.modifyNickname(nickname).queue(); // Change nickname
     }
 }
