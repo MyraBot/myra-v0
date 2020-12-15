@@ -20,7 +20,9 @@ public class Resources {
         // usually takes a couple of seconds before we get real values
         if (value == -1.0) return String.valueOf(Double.NaN);
         // returns a percentage value with 1 decimal point precision
-        return (value * 1000) / 10.0 + "%";
+        double v = (value * 1000) / 10.0;
+        long round = Math.round(v);
+        return round + "%";
     }
 
     public String getRAMUsage() {
