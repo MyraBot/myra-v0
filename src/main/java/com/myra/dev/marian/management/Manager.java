@@ -1,9 +1,11 @@
 package com.myra.dev.marian.management;
 
+import com.myra.dev.marian.commands.Leaderboard;
 import com.myra.dev.marian.commands.administrator.Prefix;
 import com.myra.dev.marian.commands.administrator.Say;
 import com.myra.dev.marian.commands.administrator.Toggle;
-import com.myra.dev.marian.commands.administrator.notifications.YouTuber;
+import com.myra.dev.marian.commands.administrator.notifications.*;
+import com.myra.dev.marian.commands.administrator.reactionRoles.ReactionRolesAdd;
 import com.myra.dev.marian.commands.economy.*;
 import com.myra.dev.marian.commands.economy.administrator.Currency;
 import com.myra.dev.marian.commands.economy.administrator.EconomySet;
@@ -23,7 +25,6 @@ import com.myra.dev.marian.commands.general.information.InformationServer;
 import com.myra.dev.marian.commands.general.information.InformationUser;
 import com.myra.dev.marian.commands.help.*;
 import com.myra.dev.marian.commands.leveling.Background;
-import com.myra.dev.marian.commands.Leaderboard;
 import com.myra.dev.marian.commands.leveling.Rank;
 import com.myra.dev.marian.commands.leveling.administrator.LevelingChannel;
 import com.myra.dev.marian.commands.leveling.administrator.LevelingHelp;
@@ -43,17 +44,11 @@ import com.myra.dev.marian.commands.moderation.mute.Mute;
 import com.myra.dev.marian.commands.moderation.mute.MuteRole;
 import com.myra.dev.marian.commands.moderation.mute.Tempmute;
 import com.myra.dev.marian.commands.moderation.mute.Unmute;
-import com.myra.dev.marian.commands.music.commands.*;
-import com.myra.dev.marian.database.MongoDbUpdate;
 import com.myra.dev.marian.listeners.Someone;
 import com.myra.dev.marian.listeners.autorole.AutoRoleSet;
 import com.myra.dev.marian.listeners.leveling.Leveling;
 import com.myra.dev.marian.listeners.leveling.LevelingListener;
 import com.myra.dev.marian.listeners.logging.LogChannel;
-import com.myra.dev.marian.commands.administrator.notifications.Streamer;
-import com.myra.dev.marian.commands.administrator.notifications.NotificationsChannel;
-import com.myra.dev.marian.commands.administrator.notifications.NotificationsHelp;
-import com.myra.dev.marian.commands.administrator.notifications.NotificationsList;
 import com.myra.dev.marian.listeners.suggestions.SubmitSuggestion;
 import com.myra.dev.marian.listeners.suggestions.SuggestionsChannel;
 import com.myra.dev.marian.listeners.suggestions.SuggestionsHelp;
@@ -78,6 +73,7 @@ import com.myra.dev.marian.management.commands.CommandSubscribe;
 import com.myra.dev.marian.management.commands.DefaultCommandService;
 import com.myra.dev.marian.management.listeners.DefaultListenerService;
 import com.myra.dev.marian.management.listeners.ListenerService;
+import com.myra.dev.marian.marian.Shutdown;
 import com.myra.dev.marian.marian.*;
 
 import java.util.Map;
@@ -116,6 +112,8 @@ public class Manager {
                 new Prefix(),
                 new Say(),
                 new Toggle(),
+
+                new ReactionRolesAdd(),
                 //
                 new LogChannel(),
                 // Help
@@ -124,6 +122,8 @@ public class Manager {
                 new Invite(),
                 new Ping(),
                 new Support(),
+                new Feature(),
+                new Report(),
                 new Vote(),
                 // General
                 new InformationHelp(),

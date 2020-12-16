@@ -2,6 +2,7 @@ package com.myra.dev.marian.management;
 
 import com.myra.dev.marian.commands.Leaderboard;
 import com.myra.dev.marian.commands.administrator.notifications.NotificationsList;
+import com.myra.dev.marian.commands.administrator.reactionRoles.ReactionRolesAdd;
 import com.myra.dev.marian.commands.economy.blackjack.BlackJack;
 import com.myra.dev.marian.commands.fun.TextFormatter;
 import com.myra.dev.marian.commands.general.information.InformationServer;
@@ -13,6 +14,7 @@ import com.myra.dev.marian.commands.moderation.mute.MutePermissions;
 import com.myra.dev.marian.commands.music.commands.MusicController;
 import com.myra.dev.marian.commands.music.commands.MusicPlay;
 import com.myra.dev.marian.database.MongoDbUpdate;
+import com.myra.dev.marian.listeners.ReactionRoles;
 import com.myra.dev.marian.listeners.autorole.AutoroleAssign;
 import com.myra.dev.marian.listeners.welcome.WelcomeImage.WelcomeImageFont;
 import com.myra.dev.marian.listeners.welcome.WelcomeListener;
@@ -34,6 +36,7 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class EventsManager extends ListenerAdapter {
@@ -94,6 +97,8 @@ public class EventsManager extends ListenerAdapter {
     private final Shutdown shutdown = new Shutdown();
     private final WelcomeImageFont welcomeImageFont = new WelcomeImageFont();
     private final NotificationsList notificationsList = new NotificationsList();
+    private final ReactionRolesAdd reactionRolesAdd = new ReactionRolesAdd();
+    private final ReactionRoles reactionRoles = new ReactionRoles();
     private final Commands commands = new Commands();
     private final Help help = new Help();
     private final InformationServer informationServer = new InformationServer();
@@ -111,6 +116,10 @@ public class EventsManager extends ListenerAdapter {
             // Administrator
             welcomeImageFont.chooseFont(event); // Change welcome image font
             notificationsList.switchList(event); // List notification
+            reactionRolesAdd.typeSelection(event); // Choose the reaction role type
+            reactionRolesAdd.messageSelection(event); // Choose a message for the reaction role
+
+            reactionRoles.reactionRoleAssign(event); // Reaction roles add listener
             // Help
             commands.guildMessageReactionAddEvent(event);
             help.guildMessageReactionAddEvent(event);
@@ -126,6 +135,14 @@ public class EventsManager extends ListenerAdapter {
             // Music
             new MusicPlay().guildMessageReactionAddEvent(event);
             new MusicController().guildMessageReactionAddEvent(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onGuildMessageReactionRemove(GuildMessageReactionRemoveEvent event) {
+        try {
+            reactionRoles.reactionRoleRemove(event); // Reaction roles remove listener
         } catch (Exception e) {
             e.printStackTrace();
         }
