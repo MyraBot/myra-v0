@@ -80,7 +80,7 @@ public class Daily implements Command {
             // Maximum isn't reached yet
             else {
                 member.setBalance(member.getBalance() + streakReward + voteBonus); // Update members balance
-                daily.setDescription("**+" + streakReward + "** " + currency + "! Now you have `" + member.getBalance() + "` " + currency + "\n"); // Show streak reward
+                daily.setDescription("**+" + streakReward + "** " + currency + "! Now you have `" + Utilities.getUtils().formatNumber(member.getBalance()) + "` " + currency + "\n"); // Show streak reward
                 // User voted
                 if (voteBonus != 0) {
                     daily.appendDescription("Thank you for voting! Your vote bonus: **+" + voteBonus + "**"); // Show vote bonus
