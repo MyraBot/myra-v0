@@ -22,7 +22,7 @@ public class MongoDbDocuments {
             return; // In database is already a guild document
         // Economy
         Document economy = new Document()
-                .append("currency", Utilities.getUtils().getEmote(guild.getJDA(), CustomEmote.coin))
+                .append("currency", Utilities.getUtils().getEmote(guild.getJDA(), CustomEmote.coin).getAsMention())
                 .append("shop", new Document());
         // Leveling
         Document levelingDocument = new Document()
@@ -96,6 +96,7 @@ public class MongoDbDocuments {
                 .append("notifications", notificationsDocument)
                 .append("suggestionsChannel", "not set")
                 .append("logChannel", "not set")
+                .append("reactionRoles", new ArrayList<>())
                 .append("autoRole", "not set")
                 .append("muteRole", "not set")
                 .append("welcome", welcome)
@@ -115,7 +116,7 @@ public class MongoDbDocuments {
         return new Document()
                 .append("level", 0)
                 .append("xp", 0)
-                .append("message", 0)
+                .append("messages", 0)
                 .append("balance", 0)
                 .append("dailyStreak", 0)
                 .append("lastClaim", System.currentTimeMillis())
