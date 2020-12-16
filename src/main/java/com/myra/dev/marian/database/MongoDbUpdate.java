@@ -1,7 +1,6 @@
 package com.myra.dev.marian.database;
 
 
-import com.mongodb.client.MongoCursor;
 import com.myra.dev.marian.management.Startup;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -22,12 +21,13 @@ public class MongoDbUpdate {
 
     //update Database
     public void update(ReadyEvent event) throws Exception {
+/*
         List<String> guildIds = new ArrayList<>();
         for (Guild guild : event.getJDA().getGuilds()) {
             guildIds.add(guild.getId());
         }
 
-/*        // Guild update
+        // Guild update
         for (Document doc : mongoDb.getCollection("guilds").find()) {
             // Make backup
             mongoDb.getCollection("backup").insertOne(doc);
@@ -53,16 +53,16 @@ public class MongoDbUpdate {
             Document levelingDocument = new Document()
                     .append("boost", 1)
                     .append("roles", leveling.get("roles"))
-                    .append("channel", "not set");
+                    .append("channel", leveling.getString("channel"));
             Document notificationDocument = new Document()
                     .append("channel", notifications.getString("channel"))
                     .append("twitch", notifications.getList("twitch", String.class))
                     .append("youtube", notifications.getList("youtube", String.class));
             Document welcomeNested = new Document()
-                    .append("welcomeChannel",welcome.getString("welcomeChannel"))
+                    .append("welcomeChannel", welcome.getString("welcomeChannel"))
                     .append("welcomeColour", welcome.getString("welcomeColour"))
                     .append("welcomeImageBackground", welcome.getString("welcomeImageBackground"))
-                    .append("welcomeImageFont",  welcome.getString("welcomeImageFont"))
+                    .append("welcomeImageFont", welcome.getString("welcomeImageFont"))
                     .append("welcomeEmbedMessage", welcome.getString("welcomeEmbedMessage"))
                     .append("welcomeDirectMessage", welcome.getString("welcomeDirectMessage"));
             Document commandsNested = new Document()
@@ -97,29 +97,30 @@ public class MongoDbUpdate {
                     .append("ban", commands.getBoolean("ban"))
                     .append("unban", commands.getBoolean("unban"));
             Document listenersNested = new Document()
-                    .append("welcomeImage", false)
-                    .append("welcomeEmbed", false)
-                    .append("welcomeDirectMessage", false)
+                    .append("welcomeImage", listeners.getBoolean("welcomeImage"))
+                    .append("welcomeEmbed", listeners.getBoolean("welcomeEmbed"))
+                    .append("welcomeDirectMessage", listeners.getBoolean("welcomeDirectMessage"))
 
-                    .append("suggestions", false)
+                    .append("suggestions", listeners.getBoolean("suggestions"))
 
-                    .append("autorole", false);
+                    .append("autorole", listeners.getBoolean("autorole"));
 
             //create Document
             Document guildDoc = new Document("guildId", guildId)
                     .append("guildName", guildName)
                     .append("prefix", prefix)
-                    .append("premium", false)
+                    .append("premium", doc.getBoolean("premium"))
                     .append("economy", economyDocument)
                     .append("leveling", levelingDocument)
                     .append("notifications", notificationDocument)
                     .append("suggestionsChannel", suggestionsChannel)
+                    .append("reactionRoles", doc.getList("reactionRoles", Document.class))
                     .append("logChannel", logChannel)
                     .append("autoRole", autoRole)
                     .append("muteRole", muteRole)
                     .append("welcome", welcome)
                     .append("commands", commands)
-                    .append("listeners", listeners);
+                    .append("listeners", listenersNested);
 
             //replace old one
             mongoDb.getCollection("guilds").findOneAndReplace(
@@ -129,7 +130,7 @@ public class MongoDbUpdate {
         }
 
         // Member update
-        final MongoCursor<Document> iterator = mongoDb.getCollection("usersBackup").find().iterator();
+        final MongoCursor<Document> iterator = mongoDb.getCollection("users").find().iterator();
 
         while (iterator.hasNext()) {
             final Document document = iterator.next(); // Get next document
@@ -147,13 +148,12 @@ public class MongoDbUpdate {
                 if (key.equals("achievements")) continue;
 
                 final Document guildDocument = document.get(key, Document.class);
-                int messages = 0;
-                if (guildDocument.getInteger("messages") != null) messages = guildDocument.getInteger("messages");
+
 
                 final Document updatedGuildDocument = new Document()
                         .append("level", guildDocument.getInteger("level"))
                         .append("xp", guildDocument.getInteger("xp"))
-                        .append("messages", messages)
+                        .append("messages", guildDocument.getInteger("messages"))
                         .append("balance", guildDocument.getInteger("balance"))
                         .append("dailyStreak", guildDocument.getInteger("dailyStreak"))
                         .append("lastClaim", guildDocument.getLong("lastClaim"))
@@ -161,8 +161,9 @@ public class MongoDbUpdate {
 
                 updatedUserDocument.append(key, updatedGuildDocument);
             }
-            mongoDb.getCollection("users").insertOne(updatedUserDocument);
-        } */
+            mongoDb.getCollection("users").findOneAndReplace(document, updatedUserDocument);
+        }
+         */
     }
 
     //add guild document
