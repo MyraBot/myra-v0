@@ -15,6 +15,7 @@ import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -84,11 +85,15 @@ public class Startup extends ListenerAdapter {
         });
         // Get a random one
         Utilities.TIMER.scheduleAtFixedRate(() -> {
+            final InputStream profilePicture = null; // Create variable for new profile picture
+            while (profilePicture == null) { // If profile picture is still null
+                this.getClass().getClassLoader().getResourceAsStream("profilePicture" + new Random().nextInt(9) + ".png");
+            }
             // Change profile
             Bot.shardManager.getShards().forEach(bot -> {
                 try {
                     bot.getPresence().setActivity(Activity.listening("~help │ " + bot.getGuilds().size() + " servers")); // Change status
-                    bot.getSelfUser().getManager().setAvatar(Icon.from(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("profilePicture" + new Random().nextInt(9) + ".png")))).queue(); // Change profile picture
+                    bot.getSelfUser().getManager().setAvatar(Icon.from(profilePicture)).queue(); // Change profile picture
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
