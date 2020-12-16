@@ -46,6 +46,8 @@ public class CommandEmbeds {
                 .addField("`" + prefix + "invite`", "\u2709\uFE0F │ Invite me to your server", false)
                 .addField("`" + prefix + "support`", "\u26A0\uFE0F │ Join the support server to get help and report bugs", false)
                 .addField("`" + prefix + "ping`", "\uD83C\uDFD3 │ Check my latency", false)
+                .addField("`" + prefix + "report <bug>`", "\uD83D\uDC1B │ Report a bug you found", false)
+                .addField("`" + prefix + "feature <feature description>`", "\uD83D\uDCCC │ Submit a feature", false)
                 .addField("`" + prefix + "vote`", "\uD83D\uDDF3 │ Vote for me on " + Utilities.getUtils().hyperlink("top.gg", "https://top.gg/bot/718444709445632122"), false);
     }
 
