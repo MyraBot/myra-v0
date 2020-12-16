@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MessageReaction {
     //                     Guild           Command      Message id   Information
-    private static HashMap<String, HashMap<String, HashMap<String, Document>>> reactions = new HashMap();
+    public static HashMap<String, HashMap<String, HashMap<String, Document>>> reactions = new HashMap();
 
     public static void add(Guild guild, String command, Message message, User author, boolean timeOut, String... emojis) {
         // Get variables
