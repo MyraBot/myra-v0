@@ -35,8 +35,6 @@ public class Ban implements Command {
         final Member member = utilities.getModifiedMember(ctx.getEvent(), ctx.getArguments()[0], "ban", "\uD83D\uDD12"); // Get member
         if (member == null) return;
 
-        final String reason = ctx.getArgumentsRaw().split("\\s+", 2)[1]; // Get reason
-
         final User user = member.getUser(); // Get member as user
         // Guild message
         EmbedBuilder guildMessageBan = new EmbedBuilder()
@@ -56,11 +54,17 @@ public class Ban implements Command {
         if (ctx.getArguments().length == 1) {
             guildMessageBan.addField("\uD83D\uDCC4 │ no reason", "there was no reason given", false); // Set reason to none
             directMessageBan.addField("\uD83D\uDCC4 │ no reason", "there was no reason given", false); // Set reason to none
+
+            member.ban(7).queue(); // ban
         }
         //with reason
         else {
+            final String reason = ctx.getArgumentsRaw().split("\\s+", 2)[1]; // Get reason
+
             guildMessageBan.addField("\uD83D\uDCC4 │ reason:", reason, false); // Add reason
             directMessageBan.addField("\uD83D\uDCC4 │ reason:", reason, false); // Add reason
+
+            ctx.getGuild().getMember(user).ban(7, reason).queue(); // ban
         }
 
         // Send messages
@@ -68,9 +72,5 @@ public class Ban implements Command {
         user.openPrivateChannel().queue((channel) -> { // Direct message
             channel.sendMessage(directMessageBan.build()).queue();
         });
-
-        // Ban
-        if (ctx.getArguments().length == 1) member.ban(7).queue(); // Without reason
-        else ctx.getGuild().getMember(user).ban(7, reason).queue(); // With reason
     }
 }
