@@ -110,6 +110,7 @@ public class ReactionRoles {
 
         final Role role = event.getGuild().getRoleById(reactionRole.getString("role")); // Get role
         final Member member = event.getMember(); // Get member
+        if (member == null) return;
         final Guild guild = event.getGuild(); // Get guild
 
         switch (reactionRole.getString("type")) {
