@@ -1,6 +1,7 @@
 package com.myra.dev.marian.database;
 
 
+import com.mongodb.client.MongoCursor;
 import com.myra.dev.marian.management.Startup;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.ReadyEvent;
@@ -10,9 +11,6 @@ import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.mongodb.client.model.Filters.eq;
 
 public class MongoDbUpdate {
@@ -21,8 +19,7 @@ public class MongoDbUpdate {
 
     //update Database
     public void update(ReadyEvent event) throws Exception {
-/*
-        List<String> guildIds = new ArrayList<>();
+/*        List<String> guildIds = new ArrayList<>();
         for (Guild guild : event.getJDA().getGuilds()) {
             guildIds.add(guild.getId());
         }
@@ -127,15 +124,15 @@ public class MongoDbUpdate {
                     mongoDb.getCollection("guilds").find(eq("guildId", guildDoc.getString("guildId"))).first(),
                     guildDoc
             );
-        }
-
-        // Member update
-        final MongoCursor<Document> iterator = mongoDb.getCollection("users").find().iterator();
+        }*/
+/*        // Member update
+        final MongoCursor<Document> iterator = mongoDb.getCollection("usersBackup").find().iterator();
 
         while (iterator.hasNext()) {
             final Document document = iterator.next(); // Get next document
+            mongoDb.getCollection("usersBackup").insertOne(document); // Make a backup
 
-            Document updatedUserDocument = new Document() // Get user document
+            Document updatedUserDocument = new Document() // Create a new user document
                     .append("userId", document.getString("userId"))
                     .append("birthday", document.getString("birthday"))
                     .append("achievements", document.get("achievements", Document.class));
@@ -147,13 +144,13 @@ public class MongoDbUpdate {
                 if (key.equals("birthday")) continue;
                 if (key.equals("achievements")) continue;
 
-                final Document guildDocument = document.get(key, Document.class);
+                final Document guildDocument = document.get(key, Document.class); // Get guild document
 
-
-                final Document updatedGuildDocument = new Document()
+                final Document updatedGuildDocument = new Document() // Create a new guild document
                         .append("level", guildDocument.getInteger("level"))
                         .append("xp", guildDocument.getInteger("xp"))
                         .append("messages", guildDocument.getInteger("messages"))
+                        .append("voiceCallTime", Long.valueOf(0))
                         .append("balance", guildDocument.getInteger("balance"))
                         .append("dailyStreak", guildDocument.getInteger("dailyStreak"))
                         .append("lastClaim", guildDocument.getLong("lastClaim"))
@@ -161,9 +158,8 @@ public class MongoDbUpdate {
 
                 updatedUserDocument.append(key, updatedGuildDocument);
             }
-            mongoDb.getCollection("users").findOneAndReplace(document, updatedUserDocument);
-        }
-         */
+            mongoDb.getCollection("users").insertOne(updatedUserDocument);
+        }*/
     }
 
     //add guild document

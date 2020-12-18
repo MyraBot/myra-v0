@@ -117,6 +117,7 @@ public class MongoDbDocuments {
                 .append("level", 0)
                 .append("xp", 0)
                 .append("messages", 0)
+                .append("voiceCallTime", Long.valueOf(0))
                 .append("balance", 0)
                 .append("dailyStreak", 0)
                 .append("lastClaim", System.currentTimeMillis())

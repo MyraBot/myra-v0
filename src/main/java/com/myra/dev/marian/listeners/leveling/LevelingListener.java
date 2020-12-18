@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.entities.Message;
 
 import java.time.Duration;
 import java.util.HashMap;
+import java.util.Random;
 
 @ListenerSubscribe(
         name = "leveling"
@@ -28,11 +29,12 @@ public class LevelingListener implements Listener {
         final Integer messages = db.getInteger("messages"); // Get current messages
         db.setInteger("messages", messages + 1); // Add 1 message
 
-        if (ctx.getMessage().getContentRaw().startsWith(new Database(ctx.getGuild()).getString("prefix"))) return; // Message is a command
+        if (ctx.getMessage().getContentRaw().startsWith(new Database(ctx.getGuild()).getString("prefix")))
+            return; // Message is a command
         if (!cooldown(ctx)) return; // Cooldown
 
-        LEVELING.levelUp(ctx, db); // Check for new level
-        db.setInteger("xp", db.getInteger("xp") + LEVELING.getXpFromMessage(ctx.getMessage())); // Update xp
+        LEVELING.levelUp(ctx.getEvent().getMember(), ctx.getChannel(), db, getXpFromMessage(ctx.getMessage())); // Check for new level
+        db.setInteger("xp", db.getInteger("xp") + getXpFromMessage(ctx.getMessage())); // Update xp
     }
 
     private static HashMap<Guild, HashMap<Member, Message>> cooldown = new HashMap<Guild, HashMap<Member, Message>>();
@@ -59,5 +61,39 @@ public class LevelingListener implements Listener {
             }
         }
         return returnedValue;
+    }
+
+    //return xp
+    public int getXpFromMessage(Message rawMessage) {
+        //return 0 if the author is a bot
+        if (rawMessage.getAuthor().isBot()) return 0;
+        //define variable
+        String stringMessage = rawMessage.getContentDisplay();
+        //return '1' or '2' random
+        Random random = new Random();
+        int oneOrTwo = random.nextInt(3 - 1) + 1;
+        //remove quoted message
+        if (stringMessage.startsWith("> ") && stringMessage.contains("\n")) {
+            //split message into paragraphs
+            String[] paragraphs = stringMessage.split("\n");
+            //remove all paragraphs, which aren't quotes
+            for (String paragraph : paragraphs) {
+                if (paragraph.startsWith("> ")) {
+                    stringMessage = stringMessage.replace(paragraph, "");
+                }
+            }
+        }
+        //if contains link
+        String[] eachWord = rawMessage.getContentRaw().split("\\s+");
+        for (String word : eachWord) {
+            //remove all links
+            if (word.startsWith("http") || word.startsWith("www")) {
+                stringMessage = stringMessage.replace(word, "");
+            }
+        }
+        //convert message to character array
+        char[] msg = stringMessage.toCharArray();
+        //calculate the xp for the message
+        return msg.length / 20 + oneOrTwo;
     }
 }
