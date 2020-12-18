@@ -37,9 +37,15 @@ public class EconomySet implements Command {
         final Database db = new Database(ctx.getGuild()); // Get database
         int updatedBalance = db.getMembers().getMember(member).getBalance(); // Get old balance
 
+        long amount = Long.parseLong(ctx.getArguments()[1]); // Get amount of money to set/add/remove
+        if (amount > Config.ECONOMY_MAX || amount < -Config.ECONOMY_MAX) { // Limit would be reached
+            utilities.error(ctx.getChannel(), "economy set", "\uD83D\uDC5B", "Invalid amount", "You can have an amount of money between +" + Config.ECONOMY_MAX + " and -" + Config.ECONOMY_MAX, ctx.getAuthor().getEffectiveAvatarUrl());
+            return;
+        }
+
         // Add balance
-        if (ctx.getArguments()[1].matches("[+]\\d+")) {
-            updatedBalance += Integer.parseInt(ctx.getArguments()[1].substring(1)); // Add balance
+        if (ctx.getArguments()[1].matches("[+]\\d+")) { // Amount of money is too much
+                    updatedBalance += Integer.parseInt(ctx.getArguments()[1].substring(1)); // Add balance
         }
         // Subtract balance
         else if (ctx.getArguments()[1].matches("[-]\\d+")) {
