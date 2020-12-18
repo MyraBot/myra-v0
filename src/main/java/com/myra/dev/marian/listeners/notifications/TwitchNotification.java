@@ -7,13 +7,11 @@ import com.myra.dev.marian.utilities.APIs.Twitch;
 import com.myra.dev.marian.utilities.Utilities;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import org.bson.Document;
 import org.json.JSONObject;
 
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Iterator;
@@ -72,7 +70,7 @@ public class TwitchNotification {
                         final String name = stream.getString("display_name"); // Get user name of streamer
                         final String title = stream.getString("title"); // Get stream title
                         final String thumbnail = stream.getString("thumbnail_url"); // Get profile picture
-                        final String preview = new URL("https://static-cdn.jtvnw.net/previews-ttv/live_user_" + name + "-440x248.jpg").openConnection().getURL().toString();
+                        final String preview = "https://static-cdn.jtvnw.net/previews-ttv/live_user_" + name + "-440x248.jpg";
                         // Create embed
                         EmbedBuilder notification = new EmbedBuilder()
                                 .setAuthor(name, "https://www.twitch.tv/" + name, thumbnail)
