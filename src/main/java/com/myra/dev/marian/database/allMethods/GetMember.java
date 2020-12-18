@@ -162,4 +162,13 @@ public class GetMember {
         memberDocument.replace(key, value); // Replace value
         mongoDb.getCollection("users").findOneAndReplace(eq("userId", member.getId()), userDocument); // Update database
     }
+
+    public Long getLong(String key) {
+        return memberDocument.getLong(key);
+    }
+
+    public void setLong(String key, Long value) {
+        memberDocument.replace(key, value); // Replace value
+        mongoDb.getCollection("users").findOneAndReplace(eq("userId", member.getId()), userDocument); // Update database
+    }
 }
