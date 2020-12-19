@@ -16,6 +16,15 @@
             <artifactId>JDA</artifactId>
             <version>4.2.0_214</version>
         </dependency>
+        <!--JDA UTILITIES -->
+        <!-- https://github.com/JDA-Applications/JDA-Utilities -->
+        <dependency>
+            <groupId>com.jagrosh</groupId>
+            <artifactId>jda-utilities</artifactId>
+            <version>3.0.5</version>
+            <scope>compile</scope>
+            <type>pom</type>
+        </dependency>
         <!--JSON -->
         <!-- https://mvnrepository.com/artifact/org.json/json -->
         <dependency>
@@ -55,6 +64,12 @@
     </dependencies>
 
     <repositories>
+        <!-- JDA UTILITIES -->
+        <repository>
+            <id>central</id>
+            <name>bintray</name>
+            <url>http://jcenter.bintray.com</url>
+        </repository>
         <!-- LAVA PLAYER -->
         <repository>
             <id>jcenter</id>
