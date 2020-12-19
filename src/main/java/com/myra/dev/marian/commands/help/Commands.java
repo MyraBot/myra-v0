@@ -5,80 +5,77 @@ import com.myra.dev.marian.management.commands.Command;
 import com.myra.dev.marian.management.commands.CommandContext;
 import com.myra.dev.marian.management.commands.CommandSubscribe;
 import com.myra.dev.marian.utilities.CommandEmbeds;
-import com.myra.dev.marian.utilities.MessageReaction;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+
+import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 @CommandSubscribe(
         name = "commands",
         aliases = {"command"}
 )
 public class Commands implements Command {
+    private final String[] emojis = new String[]{
+            "\uD83D\uDCD6", // Help
+            "\uD83C\uDF88", // General
+            "\uD83D\uDD79", // Fun
+            "\uD83C\uDFC6", // Leveling
+            "\uD83D\uDCB0", // Economy
+            "\uD83D\uDCFB", // Music
+            "\uD83D\uDD28", // Moderation
+            "\uD83D\uDD29" // Administrator
+    };
+
     @Override
     public void execute(CommandContext ctx) throws Exception {
         //menu
-        Message message = ctx.getChannel().sendMessage(new CommandEmbeds(ctx.getGuild(), ctx.getEvent().getJDA(), ctx.getAuthor(), ctx.getPrefix()).commands().build()).complete();
-        //add reactions
-        message.addReaction("\uD83D\uDCD6").queue(); // Help
-        message.addReaction("\uD83C\uDF88").queue(); // General
-        message.addReaction("\uD83D\uDD79").queue(); // Fun
-        message.addReaction("\uD83C\uDFC6").queue(); // Leveling
-        message.addReaction("\uD83D\uDCB0").queue(); // Economy
-        message.addReaction("\uD83D\uDCFB").queue(); // Music
-        message.addReaction("\uD83D\uDD28").queue(); // Moderation
-        message.addReaction("\uD83D\uDD29").queue(); // Administrator
+        ctx.getChannel().sendMessage(new CommandEmbeds(ctx.getGuild(), ctx.getEvent().getJDA(), ctx.getAuthor(), ctx.getPrefix()).commands().build()).queue(message -> {
+            // Add reactions
+            message.addReaction(emojis[0]).queue(); // Help
+            message.addReaction(emojis[1]).queue(); // General
+            message.addReaction(emojis[2]).queue(); // Fun
+            message.addReaction(emojis[3]).queue(); // Leveling
+            message.addReaction(emojis[4]).queue(); // Economy
+            message.addReaction(emojis[5]).queue(); // Music
+            message.addReaction(emojis[6]).queue(); // Moderation
+            message.addReaction(emojis[7]).queue(); // Administrator
 
-        MessageReaction.add(ctx.getGuild(), "commands", message,ctx.getAuthor(), true, "\uD83D\uDCD6", "\uD83C\uDF88", "\uD83D\uDD79", "\uD83C\uDFC6", "\uD83D\uDCB0", "\uD83D\uDCFB", "\uD83D\uDD28", "\uD83D\uDD29");
-    }
+            // Event waiter
+            ctx.waiter().waitForEvent(
+                    GuildMessageReactionAddEvent.class, // Event to wait
+                    e -> // Requirements
+                            !e.getUser().isBot() // No bot
+                                    && e.getMessageId().equals(message.getId()) // Same message
+                                    && e.getUser() == ctx.getAuthor() // Same author
+                                    && Arrays.stream(emojis).anyMatch(e.getReactionEmote().getEmoji()::equals), // matching emoji
 
-    public void guildMessageReactionAddEvent(GuildMessageReactionAddEvent event) throws Exception {
-        //if reaction was added on the wrong message return
-        if (!MessageReaction.check(event, "commands", true)) return;
+                    e -> { // on event
+                        final String prefix = new Database(e.getGuild()).getString("prefix"); // Get Prefix
+                        final CommandEmbeds embed = new CommandEmbeds(e.getGuild(), e.getJDA(), e.getUser(), prefix); // Get Embeds
+                        final String reaction = e.getReactionEmote().getEmoji(); // Get reacted emoji
 
-        // Get Prefix
-        final String prefix = new Database(event.getGuild()).getString("prefix");
-        // Get Embeds
-        CommandEmbeds embed = new CommandEmbeds(event.getGuild(), event.getJDA(), event.getUser(), prefix);
+                        // Help commands
+                        if (reaction.equals(emojis[0])) message.editMessage(embed.help().build()).queue();
+                        // General commands
+                        if (reaction.equals(emojis[1])) message.editMessage(embed.general().build()).queue();
+                        // Fun commands
+                        if (reaction.equals(emojis[2])) message.editMessage(embed.fun().build()).queue();
+                        // Leveling commands
+                        if (reaction.equals(emojis[3])) message.editMessage(embed.leveling().build()).queue();
+                        // Economy commands
+                        if (reaction.equals(emojis[4])) message.editMessage(embed.economy().build()).queue();
+                        // Music commands
+                        if (reaction.equals(emojis[5])) message.editMessage(embed.music().build()).queue();
+                        // Moderation commands
+                        if (reaction.equals(emojis[6])) message.editMessage(embed.moderation().build()).queue();
+                        // Administrator commands
+                        if (reaction.equals(emojis[7])) message.editMessage(embed.administrator().build()).queue();
 
-        // Help commands
-        if (event.getReactionEmote().getEmoji().equals("\uD83D\uDCD6") && !event.getMember().getUser().isBot()) {
-            event.getChannel().editMessageById(event.getMessageId(), embed.help().build()).queue();
-            event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().complete();
-        }
-        // General commands
-        else if (event.getReactionEmote().getEmoji().equals("\uD83C\uDF88") && !event.getMember().getUser().isBot()) {
-            event.getChannel().editMessageById(event.getMessageId(), embed.general().build()).queue();
-            event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().complete();
-        }
-        // Fun commands
-        else if (event.getReactionEmote().getEmoji().equals("\uD83D\uDD79") && !event.getMember().getUser().isBot()) {
-            event.getChannel().editMessageById(event.getMessageId(), embed.fun().build()).queue();
-            event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().complete();
-        }
-        // Leveling commands
-        else if (event.getReactionEmote().getEmoji().equals("\uD83C\uDFC6") && !event.getMember().getUser().isBot()) {
-            event.getChannel().editMessageById(event.getMessageId(), embed.leveling().build()).queue();
-            event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().complete();
-        }
-        // Economy commands
-        else if (event.getReactionEmote().getEmoji().equals("\uD83D\uDCB0") && !event.getMember().getUser().isBot()) {
-            event.getChannel().editMessageById(event.getMessageId(), embed.economy().build()).queue();
-            event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().complete();
-        }
-        // Music commands
-        else if (event.getReactionEmote().getEmoji().equals("\uD83D\uDCFB") && !event.getMember().getUser().isBot()) {
-            event.getChannel().editMessageById(event.getMessageId(), embed.music().build()).queue();
-            event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().complete();
-        }
-        // Moderation commands
-        else if (event.getReactionEmote().getEmoji().equals("\uD83D\uDD28") && !event.getMember().getUser().isBot()) {
-            event.getChannel().editMessageById(event.getMessageId(), embed.moderation().build()).queue();
-            event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().complete();
-        }
-        // Administrator commands
-        else if (event.getReactionEmote().getEmoji().equals("\uD83D\uDD29") && !event.getMember().getUser().isBot()) {
-            event.getChannel().editMessageById(event.getMessageId(), embed.administrator().build()).queue();
-            event.getChannel().retrieveMessageById(event.getMessageId()).complete().clearReactions().complete();
-        }
+                        message.clearReactions().queue(); // Clear reactions
+                    },
+                    30L, TimeUnit.SECONDS, // Timeout
+                    () -> message.clearReactions().queue()
+            );
+        });
     }
 }

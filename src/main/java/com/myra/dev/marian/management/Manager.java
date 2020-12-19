@@ -1,5 +1,6 @@
 package com.myra.dev.marian.management;
 
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.myra.dev.marian.commands.Leaderboard;
 import com.myra.dev.marian.commands.administrator.Prefix;
 import com.myra.dev.marian.commands.administrator.Say;
@@ -94,12 +95,7 @@ public class Manager {
         return LEVELING;
     }
 
-    public void registerFeatures() {
-        commandRegistry();
-        listenerRegistry();
-    }
-
-    public void commandRegistry() {
+    public void commandRegistry(EventWaiter waiter) {
         // Register commands
         COMMAND_SERVICE.register(
                 // Marian
@@ -231,9 +227,7 @@ public class Manager {
                 new WelcomeEmbedToggle(),
                 new WelcomeEmbedMessage()
         );
-    }
 
-    private void listenerRegistry() {
         // Register listeners
         LISTENER_SERVICE.register(
                 new LevelingListener(),

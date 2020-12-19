@@ -1,5 +1,6 @@
 package com.myra.dev.marian;
 
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.myra.dev.marian.management.Startup;
 import com.myra.dev.marian.utilities.ConsoleColours;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -30,11 +31,12 @@ public class Bot {
     public final static String marianServer = "642809436515074053";
     public final static String myraServer = "774269364244971571";
 
+    private final EventWaiter waiter = new EventWaiter();
+
     // Main method
     public static void main(String[] args) throws LoginException, RateLimitedException {
         new Bot();
     }
-
     private Bot() throws LoginException, RateLimitedException {
         DefaultShardManagerBuilder jda = DefaultShardManagerBuilder.createDefault(TOKEN)
                 .enableIntents(GatewayIntent.GUILD_PRESENCES) // Need GatewayIntent.GUILD_PRESENCES for CacheFlag.ACTIVITY
@@ -47,7 +49,7 @@ public class Bot {
                 .setStatus(OnlineStatus.IDLE)
                 .setActivity(Activity.watching(LOADING_STATUS))
 
-                .addEventListeners(new Startup());
+                .addEventListeners(waiter, new Startup(waiter));
         // Build JDA
         shardManager = jda.build();
         System.out.println(ONLINE_INFO); // Send success information

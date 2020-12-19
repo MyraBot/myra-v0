@@ -1,5 +1,6 @@
 package com.myra.dev.marian.management.commands;
 
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.Map;
@@ -47,5 +48,5 @@ public interface CommandService {
      *
      * @param event The event method.
      */
-    void processCommandExecution(GuildMessageReceivedEvent event) throws Exception;
+    void processCommandExecution(GuildMessageReceivedEvent event, EventWaiter waiter) throws Exception;
 }

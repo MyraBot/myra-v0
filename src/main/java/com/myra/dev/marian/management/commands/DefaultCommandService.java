@@ -1,8 +1,8 @@
 package com.myra.dev.marian.management.commands;
 
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.myra.dev.marian.Bot;
 import com.myra.dev.marian.database.MongoDb;
-import com.myra.dev.marian.database.MongoDbDocuments;
 import com.myra.dev.marian.database.allMethods.Database;
 import com.myra.dev.marian.utilities.Permissions;
 import com.myra.dev.marian.utilities.Utilities;
@@ -78,7 +78,7 @@ public class DefaultCommandService implements CommandService {
      * {@inheritDoc}
      */
     @Override
-    public void processCommandExecution(GuildMessageReceivedEvent event) throws Exception {
+    public void processCommandExecution(GuildMessageReceivedEvent event, EventWaiter waiter) throws Exception {
         //get prefix
         final String prefix = new Database(event.getGuild()).getString("prefix");
         // If message doesn't start with prefix
@@ -124,7 +124,8 @@ public class DefaultCommandService implements CommandService {
                 // Continue if not every argument matches the executor
                 if (Continue) continue;
 // Run command
-                if (!hasPermissions(event.getMember(), entry.getValue().requires())) return; // Check for required permissions
+                if (!hasPermissions(event.getMember(), entry.getValue().requires()))
+                    return; // Check for required permissions
                 if (isDisabled(entry.getValue().command(), event.getGuild())) return; // Check if command is disabled
                 //filter arguments
                 // String[] commandArguments = Arrays.copyOfRange(splitMessage, executor.length, splitMessage.length);
@@ -133,7 +134,7 @@ public class DefaultCommandService implements CommandService {
                     commandArguments = commandArguments.substring(1);
                 }
                 //run command
-                entry.getKey().execute(new CommandContext(prefix, event, commandArguments));
+                entry.getKey().execute(new CommandContext(prefix, event, commandArguments, waiter));
             }
         }
     }

@@ -1,12 +1,12 @@
 package com.myra.dev.marian.management;
 
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.myra.dev.marian.commands.Leaderboard;
 import com.myra.dev.marian.commands.administrator.notifications.NotificationsList;
 import com.myra.dev.marian.commands.administrator.reactionRoles.ReactionRolesAdd;
 import com.myra.dev.marian.commands.economy.blackjack.BlackJack;
 import com.myra.dev.marian.commands.fun.TextFormatter;
 import com.myra.dev.marian.commands.general.information.InformationServer;
-import com.myra.dev.marian.commands.help.Commands;
 import com.myra.dev.marian.commands.help.Help;
 import com.myra.dev.marian.commands.help.InviteThanks;
 import com.myra.dev.marian.commands.leveling.Background;
@@ -16,6 +16,7 @@ import com.myra.dev.marian.commands.music.commands.MusicPlay;
 import com.myra.dev.marian.database.MongoDbUpdate;
 import com.myra.dev.marian.listeners.ReactionRoles;
 import com.myra.dev.marian.listeners.autorole.AutoroleAssign;
+import com.myra.dev.marian.listeners.leveling.VoiceCall;
 import com.myra.dev.marian.listeners.welcome.WelcomeImage.WelcomeImageFont;
 import com.myra.dev.marian.listeners.welcome.WelcomeListener;
 import com.myra.dev.marian.management.commands.CommandService;
@@ -34,14 +35,24 @@ import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMuteEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-public class EventsManager extends ListenerAdapter {
+public class Listeners extends ListenerAdapter {
     private final CommandService commandService = Manager.COMMAND_SERVICE;
     private final ListenerService listenerService = Manager.LISTENER_SERVICE;
+
+    private final EventWaiter waiter;
+
+    public Listeners(final EventWaiter waiter) {
+        this.waiter = waiter;
+
+        new Manager().commandRegistry(waiter); // Load all commands
+    }
+
 
     // Errors
     private final String missingPermsMESSAGE_WRITE = "Cannot perform action due to a lack of Permission. Missing permission: MESSAGE_WRITE";
@@ -50,13 +61,11 @@ public class EventsManager extends ListenerAdapter {
     //  Run actions
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         try {
-            if (event.getMessage().getFlags().contains(Message.MessageFlag.IS_CROSSPOST))
-                return; // Message is a server announcement
+            if (event.getMessage().getFlags().contains(Message.MessageFlag.IS_CROSSPOST)) return; // Message is a server announcement
             if (event.getMessage().isWebhookMessage()) return; // Message is a WebHook
             if (event.getAuthor().isBot()) return; // Message is from another bot
 
-            new EventWaiter().buy(event);
-            commandService.processCommandExecution(event);
+            commandService.processCommandExecution(event, waiter);
             listenerService.processCommandExecution(event);
         } catch (Exception exception) {
             final String error = exception.getMessage(); // Get error
@@ -99,7 +108,7 @@ public class EventsManager extends ListenerAdapter {
     private final NotificationsList notificationsList = new NotificationsList();
     private final ReactionRolesAdd reactionRolesAdd = new ReactionRolesAdd();
     private final ReactionRoles reactionRoles = new ReactionRoles();
-    private final Commands commands = new Commands();
+    //private final Commands commands = new Commands(waiter);
     private final Help help = new Help();
     private final InformationServer informationServer = new InformationServer();
     private final TextFormatter textFormatter = new TextFormatter();
@@ -121,7 +130,7 @@ public class EventsManager extends ListenerAdapter {
 
             reactionRoles.reactionRoleAssign(event); // Reaction roles add listener
             // Help
-            commands.guildMessageReactionAddEvent(event);
+            //commands.guildMessageReactionAddEvent(event);
             help.guildMessageReactionAddEvent(event);
             // Commands
             informationServer.guildMessageReactionAddEvent(event);
@@ -183,11 +192,20 @@ public class EventsManager extends ListenerAdapter {
         }
     }
 
-    /**
-     * voice channel
-     */
+    // Voice channel //
+    private final VoiceCall voiceCall = new VoiceCall();
+
+    public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
+        try {
+            voiceCall.updateXpGain(event.getChannelJoined()); // Start xp gian
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
         try {
+            voiceCall.stopXpGain(event.getMember()); // Stop xp gain
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -195,10 +213,21 @@ public class EventsManager extends ListenerAdapter {
 
     public void onGuildVoiceMove(GuildVoiceMoveEvent event) {
         try {
+            voiceCall.updateXpGain(event.getChannelLeft()); // Update xp for users, who are still in old voice call
+            voiceCall.updateXpGain(event.getChannelJoined()); // Update xp for users in new voice call
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    public void onGuildVoiceMute(GuildVoiceMuteEvent event) {
+        try {
+            voiceCall.updateXpGain(event); // Update xp gain
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void onGuildJoin(GuildJoinEvent event) {
         try {
@@ -217,14 +246,6 @@ public class EventsManager extends ListenerAdapter {
         try {
             //delete guild document
             new MongoDbUpdate().guildLeaveEvent(event);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
-        try {
-            // Events
         } catch (Exception e) {
             e.printStackTrace();
         }
