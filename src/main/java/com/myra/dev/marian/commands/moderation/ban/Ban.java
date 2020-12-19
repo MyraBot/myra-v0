@@ -50,12 +50,18 @@ public class Ban implements Command {
                 .setDescription("\uD83D\uDD12 │ You got banned from `" + ctx.getGuild().getName() + "`")
                 .setFooter("requested by " + ctx.getAuthor().getAsTag(), ctx.getAuthor().getEffectiveAvatarUrl())
                 .setTimestamp(Instant.now());
+        
         // No reason is given
         if (ctx.getArguments().length == 1) {
             guildMessageBan.addField("\uD83D\uDCC4 │ no reason", "there was no reason given", false); // Set reason to none
             directMessageBan.addField("\uD83D\uDCC4 │ no reason", "there was no reason given", false); // Set reason to none
-
-            member.ban(7).queue(); // ban
+            // Send messages
+            ctx.getChannel().sendMessage(guildMessageBan.build()).queue(); // Guild message
+            user.openPrivateChannel().queue((channel) -> { // Direct message
+                channel.sendMessage(directMessageBan.build()).queue();
+            });
+            // ban
+            member.ban(7).queue(); // Without reason
         }
         //with reason
         else {
@@ -63,14 +69,13 @@ public class Ban implements Command {
 
             guildMessageBan.addField("\uD83D\uDCC4 │ reason:", reason, false); // Add reason
             directMessageBan.addField("\uD83D\uDCC4 │ reason:", reason, false); // Add reason
-
-            ctx.getGuild().getMember(user).ban(7, reason).queue(); // ban
+            // Send messages
+            ctx.getChannel().sendMessage(guildMessageBan.build()).queue(); // Guild message
+            user.openPrivateChannel().queue((channel) -> { // Direct message
+                channel.sendMessage(directMessageBan.build()).queue();
+            });
+            // ban
+            ctx.getGuild().getMember(user).ban(7, reason).queue(); // Add reason
         }
-
-        // Send messages
-        ctx.getChannel().sendMessage(guildMessageBan.build()).queue(); // Guild message
-        user.openPrivateChannel().queue((channel) -> { // Direct message
-            channel.sendMessage(directMessageBan.build()).queue();
-        });
     }
 }
