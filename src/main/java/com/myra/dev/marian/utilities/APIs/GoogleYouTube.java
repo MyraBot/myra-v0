@@ -170,6 +170,9 @@ public class GoogleYouTube {
             channelOutput = channelResponse.body().string();
         }
 
+        if (new JSONObject(channelOutput).isNull("items")) {
+            System.out.println(channelOutput);
+        }
         final JSONArray items = new JSONObject(channelOutput).getJSONArray("items"); // Create JSON object
         List<JSONObject> videos = new ArrayList<>(); // Create a list for all ids
         for (Object videoObject : items) { // Loop through every video
