@@ -1,5 +1,6 @@
 package com.myra.dev.marian.management;
 
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.myra.dev.marian.Bot;
 import com.myra.dev.marian.commands.general.Reminder;
 import com.myra.dev.marian.commands.moderation.ban.Tempban;
@@ -15,12 +16,10 @@ import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -37,6 +36,12 @@ public class Startup extends ListenerAdapter {
             this.getClass().getClassLoader().getResourceAsStream("profilePicture8.png"),
             this.getClass().getClassLoader().getResourceAsStream("profilePicture9.png")
     );
+
+    private final EventWaiter waiter ;
+
+    public Startup(final EventWaiter waiter) {
+        this.waiter = waiter;
+    }
 
     public void onReady(ReadyEvent event) {
         try {
@@ -65,10 +70,8 @@ public class Startup extends ListenerAdapter {
             new Roles().jdaReady(event);
 
             // Register features
-            Bot.shardManager.removeEventListener(new Startup()); // Remove this class from the events
-            Bot.shardManager.addEventListener(new EventsManager()); // Add all other classes
-            // Load all commands
-            new Manager().registerFeatures();
+            Bot.shardManager.removeEventListener(new Startup(waiter)); // Remove this class from the events
+            Bot.shardManager.addEventListener(new Listeners(waiter)); // Add all other classes
 
             online(); // Change profile picture and activity
         } catch (Exception e) {
