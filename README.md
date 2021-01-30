@@ -23,55 +23,6 @@
       Reaction roles is a must need for every bot. So how can I set up some? Honestly... It's very easy!
       <br\> **1.**  First write the message where your reaction role should go!
       [logo]: https://cdn.discordapp.com/attachments/805042473083731968/805043820869189642/unknown.png "Step 1"
-      
-      <!--
-      # 📚 So what can it do?
-      Here's a short list! Of course, the more Arrows you add to Quiver, the more features you can add to it (that's the whole point)!
-      <table width="100%" align="center" text-align="center">
-        <tr>
-          <th>Command</th>
-          <th>Short Description</th>
-          <th>Usage</th>
-        </tr>
-        <tr>
-          <td><a href="https://nestedvariables.tk/quiver/commands?cmd=set">set</a></td>
-          <td>Changes settings for the whole guild</td>
-          <td>[prefix]set prefix {prefix} <br/> set locale {<a href="#-languages">locale</a>}
-        </tr>
-        <tr>
-          <td><a href="https://nestedvariables.tk/quiver/commands?cmd=arrows">arrows</td>
-          <td>Displays a list of arrows that are currently loaded and enabled</td>
-          <td>[prefix]arrows</td>
-        </tr>
-        <tr>
-          <td><a href="https://nestedvariables.tk/quiver/commands?cmd=reload">reload</a></td>
-          <td>Reloads Quiver to integrate new changes</td>
-          <td>[prefix]reload</td>
-        </tr>
-      </table>
-
-      # 🏳 Languages!
-      We want to make Quiver accessible to anyone, so we aim to integrate as many languages as we can! Quiver has an _extremely super ultra simple_ translation system that supports any language! If you would like to contribute and translate Quiver to another language, we'd really appreciate it! Here's a cheeky link to some translation instructions: (coming soooooon, I swear).
-
-      <table width="100%" align="center" text-align="center">
-        <tr>
-          <th>Language</th>
-          <th>Locale Code</th>
-        </tr>
-        <tr>
-          <td>United States English</td>
-          <td>en_US</td>
-        </tr>
-        <tr>
-          <td>Israeli Hebrew</td>
-          <td>he_IL</td>
-        </tr>
-        <tr>
-          <td>Saudi Arabian Arabic</td>
-          <td>ar_SA</td>
-        </tr>
-      </table>
-      -->
 
       # 💡 I have a cool idea!
       Well, [I](https://discord.com/users/639544573114187797)'m still developing Myra, so if I found a bug or have a cool feature suggestion, please join my [Discord](https://discord.gg/nG4uKuB) and report/suggest i there!
