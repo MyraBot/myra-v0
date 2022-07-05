@@ -1,28 +1,92 @@
-      # 👋 Hey there!
-      I'm a multipurpose Discord bot, including some amazing features, like **leveling**, **music**, **economy** and **media notifications**! All this and much more for free!
+# ✨ Myra v1
 
-      # 📻 You like hearing music?
-      Me too! First you need to join a voice channel the bot should go into. For this use the command **~join**. Make sure I'm not in a voice channel yet. You don't want to disturb other people hearing music...<br/>
-      Once I joined your voice channel you're good to go. Use **~play** to play some amazing songs (or annoying). The music tracks will be added to an queue, which is played in the correct order.<br/>
-      You don't link the order? No problem! Use **~shuffle** to mix up the queue. Then noone knows where his favorite song was.<br/>
-      If you're done with the super mega music party use **~leave** to let the bot leave the voice channel. She then also wants to rest a little.
+This is the first version of Myra. It's written in Java, and it was my first ever project. I didn't use git from the start so
+this repository doesn't show the whole process. Because this was my first ever project you will
+find some very dirty code. I advise you to not copy code from here. Use the code snippets to get inspiration on how to do things,
+but not to just copy and paste in your project. Also, this Bot uses a very old Disocrd API version and probably won't work well with
+the new changes. Hope you can find some helpful things here!
 
-      # 🏆 Who's the most active?
-      Well, what would be a bot without leveling? Just write some messages and you'll gain experience. If you're in a voice call with your friends, you'll gain experience as well. With a certain amout of xp you reach a level. But don't take it too easy. It's getting harder to reach a level every time!
-      <br/> You wan't to check your level? Use `~rank` to see your current **xp**, **level** and **rank**. I'll display it to you on a nice image, which you can customise using **~leveling background**!<br/>
-      If you want to see who is the most active on your server, type in `~leaderboard`. This will show you the 10 most annoying users!
+![Warning](https://raw.githubusercontent.com/MyraBot/.github/main/code-advise.png)
 
-      # 🔔 Ping!
-      You missed the latest stream/video of your favorite content creator? Not anymroe! Add all your favorite streamers to a list using the command `~notifications twitch <streamer>`. The same works with YouTube! Use `~notifications youtube <YouTube channel>` to get notifications from a YouTuber!
-      <br\> If you want to see, who you added to your notifications list type in **~notifications list**. With the reaction below the message you can toggle between all YouTubers and Streamers.
-      <br\> If your favorite streamer banned you from the stream use the same command as you added the streamer: `~notifications twitch <streamer>`. This will remove the streamer from the notifications list! Now you won't be notified if the streamer goes live... For YouTubers its the same, just use **~notifications youtube <YouTube channel>** again.
-      <br\> You want to ping a role once you're live? Set up custom notification messages for YouTube and Twitch! Use `~notifications message twitch <message>` to add a custom message once you're streamers are live! As always, do the same for YouTube: `~notifications message youtube <message>`
-      <br\> Keep in mind, that this only works for Twitch streamers and YouTube channels.
+## 📚 Features
+* Twitch notifications
+* Youtube notifications
+* Reactionroles
+* Change prefix
+* Say command
+* Toggeling single commands
+* Economy
+  * Change currency
+  * Set members balance
+  * Shop roles
+  * Blackjack
+  * Member balance
+  * Daily reward
+  * Fishing
+  * Donating to other members
+* Fun
+  * Meme
+  * Text formatting
+  * Would you rather quiz
+* Miscellaneous
+  * Information
+    * User
+    * Server
+    * Bot
+  * Avatar
+  * Calculations
+  * Reminders
+  * Suggestions
+* Leveling
+  * Chat leveling
+  * Voice leveling
+  * Customizable rank cards
+  * Leveling roles
+  * Custom level up channel
+  * Change members level
+* Moderation
+  * Banning
+  * Temporary ban
+  * Unbanning
+  * Muting
+  * Temporary mute
+  * Unmute
+  * Clearing messages
+  * Kicking
+  * Change nickname
+* Music
+  * Live controller
+  * Clearing queue
+  * Track information
+  * Playing music lol
+  * Showing queue
+  * Repeating
+  * Shuffling
+  * Skipping
+* Leaderboards
+  * Level leaderboards
+  * Balance leaderboards
+  * Voice time leaderboards
+* Autorole
+* Welcoming
+  * Direct messages
+  * Images
+  * Embeds
+* @Someone
 
-      # Reaction roles!
-      Reaction roles is a must need for every bot. So how can I set up some? Honestly... It's very easy!
-      <br\> **1.**  First write the message where your reaction role should go!
-      [logo]: https://cdn.discordapp.com/attachments/805042473083731968/805043820869189642/unknown.png "Step 1"
+#### Bot owner only
+* Dashboard
+* Get invite for server
+* Custom embeds for own server
+* Server tracking
+* Set guild premium state
+* Shutdown
+* Server specific roles
 
-      # 💡 I have a cool idea!
-      Well, [I](https://discord.com/users/639544573114187797)'m still developing Myra, so if I found a bug or have a cool feature suggestion, please join my [Discord](https://discord.gg/nG4uKuB) and report/suggest i there!
+## 📌 Dependencies
+* [JDA](https://github.com/DV8FromTheWorld/JDA) Discord API wrapper
+* [JDA Utilities](https://github.com/JDA-Applications/JDA-Utilities) Event waiter
+* [json](https://mvnrepository.com/artifact/org.json/json) Json parsing
+* [mongodb](https://mvnrepository.com/artifact/org.mongodb/mongodb-driver) Mongodb driver
+* [Lavaplayer](https://github.com/sedmelluq/lavaplayer) Encoding opus audio
+* [Logback classic](https://mvnrepository.com/artifact/ch.qos.logback/logback-classic) Logging
