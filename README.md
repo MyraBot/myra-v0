@@ -8,6 +8,11 @@ the new changes. Hope you can find some helpful things here!
 
 ![Warning](https://raw.githubusercontent.com/MyraBot/.github/main/code-advise.png)
 
+## 📌 Table of content
+* [Features](#-features)
+* [Thanks to](#-thanks-to)
+* [Dependencies](#-dependencies)
+
 ## 📚 Features
 * Twitch notifications
 * Youtube notifications
