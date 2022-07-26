@@ -83,6 +83,10 @@ the new changes. Hope you can find some helpful things here!
 * Shutdown
 * Server specific roles
 
+## 💖 Thanks to
+* **ExZiByte** - Helped to set up the database
+* **Robyn** - Gave me advice for the YouTube notifications
+
 ## 📌 Dependencies
 * [JDA](https://github.com/DV8FromTheWorld/JDA) Discord API wrapper
 * [JDA Utilities](https://github.com/JDA-Applications/JDA-Utilities) Event waiter
