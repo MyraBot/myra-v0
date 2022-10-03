@@ -1,9 +1,9 @@
-# ✨ Myra v1
+# ✨ Myra v0
 
 This is the first version of Myra. It's written in Java, and it was my first ever project. I didn't use git from the start so
 this repository doesn't show the whole process. Because this was my first ever project you will
 find some very dirty code. I advise you to not copy code from here. Use the code snippets to get inspiration on how to do things,
-but not to just copy and paste in your project. Also, this Bot uses a very old Disocrd API version and probably won't work well with
+but not to just copy and paste in your project. Also, this Bot uses a very old Discord API version and probably won't work well with
 the new changes. Hope you can find some helpful things here!
 
 ![Warning](https://raw.githubusercontent.com/MyraBot/.github/main/code-advise.png)
